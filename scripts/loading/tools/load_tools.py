@@ -8,7 +8,7 @@ from scripts.loading.database_session import get_session
 __author__ = 'sweng66'
 
 CREATED_BY = os.environ['DEFAULT_USER']
-STATUS = 'Active'  ## 'current'?
+STATUS = 'Current'
 
 def load_data():
 
