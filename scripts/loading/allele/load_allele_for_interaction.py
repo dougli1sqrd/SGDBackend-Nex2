@@ -80,10 +80,10 @@ def load_data(infile):
                                        locus_allele_to_id, locus_allele_loaded,
                                        locus_allele_reference_to_id, ref_loaded)
 
-        if allele1_id is None and allele2_id is None:
-            continue
+        # if allele1_id is None and allele2_id is None:
+        #    continue
         
-        if allele1_id is None:
+        if allele1_id is None and allele2_id is not None:
             (allele1_id, allele2_id) = (allele2_id, allele1_id)
         
         if (allele1_id, allele2_id, interaction_id) not in allele_interaction_to_id and (allele1_id, allele2_id, interaction_id) not in allele_interaction_loaded:
@@ -109,13 +109,19 @@ def insert_allele_etc(nex_session, allele_name, gene1, name1, gene2, name2, refe
         
     if allele_name == 'None' or allele_name is None:
         return None
-    
-    locus_id = None
-    pieces = allele_name.split('-')
-    if len(pieces) == 1:
-        log.info("Warning: bad allele_name: " + allele_name)
-        return None
-    gene = pieces[0]
+
+    gene = None
+    if allele_name == 'smt3aiir':
+        gene = 'SMT3'
+    elif allele_name.startswith('ygr146c-a-'):
+        gene = 'YGR146C-A'
+    else:
+        pieces = allele_name.split('-')    
+        if len(pieces) == 1:
+            log.info("Warning: bad allele_name: " + allele_name)
+            return None
+        gene = pieces[0]
+        
     locus_id = None
     if gene.upper() == gene1.upper() or gene.upper() == name1.upper():
         locus_id = gene_to_locus_id.get(name1)
