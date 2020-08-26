@@ -44,7 +44,6 @@ def load_data(infile):
         if x.allele2_id:
             allele2_id = x.allele2_id
         allele_interaction_to_id[(x.allele1_id, allele2_id, x.interaction_id)] = x.allele_geninteraction_id
-
             
     f = open(infile)
     
@@ -80,12 +79,9 @@ def load_data(infile):
                                        locus_allele_to_id, locus_allele_loaded,
                                        locus_allele_reference_to_id, ref_loaded)
 
-        # if allele1_id is None and allele2_id is None:
-        #    continue
-        
-        if allele1_id is None and allele2_id is not None:
-            (allele1_id, allele2_id) = (allele2_id, allele1_id)
-        
+        if allele1_id is None or allele2_id is None:
+            continue
+                
         if (allele1_id, allele2_id, interaction_id) not in allele_interaction_to_id and (allele1_id, allele2_id, interaction_id) not in allele_interaction_loaded:
             log.info("loading data into allele_geninteraction table...")
             insert_allele_geninteraction(nex_session, allele1_id, allele2_id, interaction_id, score, pvalue, source_id, date_created)
@@ -99,7 +95,6 @@ def load_data(infile):
 
     # nex_session.rollback()
     nex_session.commit()
-
     nex_session.close()
     log.info("Done!")
     log.info(str(datetime.now()))
@@ -113,8 +108,12 @@ def insert_allele_etc(nex_session, allele_name, gene1, name1, gene2, name2, refe
     gene = None
     if allele_name == 'smt3aiir':
         gene = 'SMT3'
-    elif allele_name.startswith('ygr146c-a-'):
-        gene = 'YGR146C-A'
+    elif allele_name == 'cup1-2-Δ':
+        gene = allele_name.replace('-Δ', '').upper()
+    elif allele_name.startswith('asp3-') and allele_name.endswith('-Δ'):
+        gene = allele_name.replace('-Δ', '').upper()
+    elif allele_name.endswith('-a-Δ') or allele_name.endswith('-b-Δ') or allele_name.endswith('-c-Δ') or allele_name.endswith('-h-Δ'):
+        gene = allele_name.replace('-Δ', '').upper()
     else:
         pieces = allele_name.split('-')    
         if len(pieces) == 1:
