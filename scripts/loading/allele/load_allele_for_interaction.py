@@ -112,8 +112,12 @@ def insert_allele_etc(nex_session, allele_name, gene1, name1, gene2, name2, refe
         gene = allele_name.replace('-Δ', '').upper()
     elif allele_name.startswith('asp3-') and allele_name.endswith('-Δ'):
         gene = allele_name.replace('-Δ', '').upper()
-    elif allele_name.endswith('-a-Δ') or allele_name.endswith('-b-Δ') or allele_name.endswith('-c-Δ') or allele_name.endswith('-h-Δ'):
+    elif allele_name.startswith('yrf-1') or allele_name.startswith('yrf-5'):
         gene = allele_name.replace('-Δ', '').upper()
+    elif allele_name.endswith('-a-Δ') or allele_name.endswith('-b-Δ') or allele_name.endswith('-c-Δ') or allele_name.endswith('-g-Δ') or allele_name.endswith('-h-Δ'):
+        gene = allele_name.replace('-Δ', '').upper()
+    elif allele_name.endswith('-a-supp1'):
+        gene = allele_name.replace('-supp1', '').upper()
     else:
         pieces = allele_name.split('-')    
         if len(pieces) == 1:
