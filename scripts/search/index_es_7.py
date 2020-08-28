@@ -839,7 +839,7 @@ def index_complex_names():
 
 def index_alleles():
 
-    so_id_to_term = dict([(x.so_id, x.display_name) for x in nex_session.query(So).all()])
+    so_id_to_term = dict([(x.so_id, x.display_name) for x in DBSession.query(So).all()])
     
     alleles = DBSession.query(Alleledbentity).all()
     
