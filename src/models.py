@@ -9924,6 +9924,7 @@ class Alleledbentity(Dbentity):
                         network_edges.append({
                             "source": allele_format_name,
                             "target": pheno_id
+
                         })
                         network_edges_added[(allele_format_name, pheno_id)] = True
                                         
@@ -9945,36 +9946,19 @@ class Alleledbentity(Dbentity):
             if other_allele is None:
                 continue
             allele_format_name = other_allele.replace(' ', '_')
-            interaction_format_name = self.format_name + "|" + allele_format_name
-
-            if interaction_format_name not in network_nodes_ids:
-                network_nodes.append({
-                    "name": '',
-                    "id": interaction_format_name,
-                    "href": '',
-                    "category": "INTERACTION",
-                })
-                network_nodes_ids[interaction_format_name] = True
+            
             if allele_format_name not in network_nodes_ids:
                 network_nodes.append({
                     "name": other_allele,
                     "id": allele_format_name,
                     "href": "/allele/" + allele_format_name,
-                    "category": "ALLELE",
+                    "category": "INTERACTION",
                 })
                 network_nodes_ids[allele_format_name] = True      
-            if (self.format_name, interaction_format_name) not in network_edges_added:
                 network_edges.append({
                     "source": self.format_name,
-                    "target": interaction_format_name
+                    "target": allele_format_name
                 })
-                network_edges_added[(self.format_name, interaction_format_name)] = True
-            if (allele_format_name, interaction_format_name) not in network_edges_added:
-                network_edges.append({
-                    "source": allele_format_name,
-                    "target": interaction_format_name
-                })
-                network_edges_added[(allele_format_name, interaction_format_name)] = True
 
         data = { "edges": network_edges, "nodes": network_nodes }
         
