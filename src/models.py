@@ -9948,7 +9948,7 @@ class Alleledbentity(Dbentity):
                 all_linked_allele_ids.append(x.allele2_id)
             if other_allele is None:
                 continue
-            allele_format_name = other_allele.replace(' ', '_')
+            allele_format_name = other_allele.replace(' ', '_') + "_2"
 
             if allele_format_name not in network_nodes_ids:
                 network_nodes.append({
@@ -9964,8 +9964,8 @@ class Alleledbentity(Dbentity):
                 })
                 
         for x in DBSession.query(AlleleGeninteraction).filter(AlleleGeninteraction.allele1_id.in_(all_linked_allele_ids)).filter(AlleleGeninteraction.allele2_id.in_(all_linked_allele_ids)).all():
-            allele1_format_name = allele_id_to_name.get(x.allele1_id, '').replace(' ', '_')
-            allele2_format_name = allele_id_to_name.get(x.allele2_id, '').replace(' ', '_')
+            allele1_format_name = allele_id_to_name.get(x.allele1_id, '').replace(' ', '_') + "_2"
+            allele2_format_name = allele_id_to_name.get(x.allele2_id, '').replace(' ', '_') _ "_2"
             network_edges.append({
                 "source": allele1_format_name,
                 "target": allele2_format_name
