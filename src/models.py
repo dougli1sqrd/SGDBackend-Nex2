@@ -7001,7 +7001,7 @@ class Geninteractionannotation(Base):
 
         obj = {
             "id": self.annotation_id,
-            "note": self.description,
+            "note": self.description.split('|')[0],
             "bait_hit": self.bait_hit,
             "locus1": {
                 "id": self.dbentity1_id,
@@ -9929,17 +9929,11 @@ class Alleledbentity(Dbentity):
                                         
         ## interaction 
 
-        network_nodes_ids = {}
-        network_edges_added = {}
-        
         allele_id_to_name = dict([(x.dbentity_id, x.display_name) for x in DBSession.query(Dbentity).filter_by(subclass='ALLELE').all()])
-                  
-        # interaction_ids = DBSession.query(AlleleGeninteraction.interaction_id).distinct(AlleleGeninteraction.interaction_id).filter(or_(AlleleGeninteraction.allele1_id==self.dbentity_id, AlleleGeninteraction.allele2_id==self.dbentity_id)).all()
-        
-        # for x in DBSession.query(AlleleGeninteraction).filter(AlleleGeninteraction.interaction_id.in_(interaction_ids)).all():
 
         curr_allele = self.display_name
-        
+
+        all_linked_allele_ids = []
         for x in DBSession.query(AlleleGeninteraction).filter(or_(AlleleGeninteraction.allele1_id==self.dbentity_id, AlleleGeninteraction.allele2_id==self.dbentity_id)).all():
 
             if x.allele2_id is None:
@@ -9947,18 +9941,20 @@ class Alleledbentity(Dbentity):
             other_allele = None
             if x.allele1_id != self.dbentity_id:
                 other_allele = allele_id_to_name.get(x.allele1_id)
+                all_linked_allele_ids.append(x.allele1_id)
             else:
                 other_allele = allele_id_to_name.get(x.allele2_id)
+                all_linked_allele_ids.append(x.allele2_id)
             if other_allele is None:
                 continue
             allele_format_name = other_allele.replace(' ', '_')
-            interaction_format_name = curr_allele + "|" + allele_format_name
+            interaction_format_name = self.format_name + "|" + allele_format_name
 
             if interaction_format_name not in network_nodes_ids:
                 network_nodes.append({
                     "name": '',
                     "id": interaction_format_name,
-                    "href": '/allele/' + allele_format_name,
+                    "href": '',
                     "category": "INTERACTION",
                 })
                 network_nodes_ids[interaction_format_name] = True
@@ -9983,6 +9979,17 @@ class Alleledbentity(Dbentity):
                 })
                 network_edges_added[(allele_format_name, interaction_format_name)] = True
 
+        ### linking all other alleles:
+        
+        for x in DBSession.query(AlleleGeninteraction).filter(AlleleGeninteraction.allele1_id.in_(all_linked_allele_ids)).filter(AlleleGeninteraction.allele2_id.in_(all_linked_allele_ids)).all():
+
+            allele1_format_name = x.allele_id_to_name.get(x.allele1_id, '').replace(' ', '_')
+            allele2_format_name = x.allele_id_to_name.get(x.allele2_id, '').replace(' ', '_')
+            network_edges.append({
+                "source": allele1_format_name,
+                "target": allele2_format_name
+            })
+                
         data = { "edges": network_edges, "nodes": network_nodes }
         
         return data
