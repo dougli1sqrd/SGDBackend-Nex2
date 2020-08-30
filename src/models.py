@@ -9935,6 +9935,7 @@ class Alleledbentity(Dbentity):
 
         all_linked_allele_ids = []
         network_nodes_ids = {}
+
         for x in DBSession.query(AlleleGeninteraction).filter(or_(AlleleGeninteraction.allele1_id==self.dbentity_id, AlleleGeninteraction.allele2_id==self.dbentity_id)).all():
 
             if x.allele2_id is None:
@@ -9955,21 +9956,36 @@ class Alleledbentity(Dbentity):
                     "name": other_allele,
                     "id": allele_format_name,
                     "href": "/allele/" + allele_format_name,
+                    "category": "ALLELE",
+                })
+                network_nodes_ids[allele_format_name] = True
+
+                interaction_format_name = self.format_name + "_" + allele_format_name
+
+                network_nodes.append({
+                    "name": '',
+                    "id": interaction_format_name,
+                    "href": '',
                     "category": "INTERACTION",
                 })
-                network_nodes_ids[allele_format_name] = True      
+                
                 network_edges.append({
                     "source": self.format_name,
-                    "target": allele_format_name
+                    "target": interaction_format_name
                 })
                 
-        for x in DBSession.query(AlleleGeninteraction).filter(AlleleGeninteraction.allele1_id.in_(all_linked_allele_ids)).filter(AlleleGeninteraction.allele2_id.in_(all_linked_allele_ids)).all():
-            allele1_format_name = allele_id_to_name.get(x.allele1_id, '').replace(' ', '_') 
-            allele2_format_name = allele_id_to_name.get(x.allele2_id, '').replace(' ', '_') 
-            network_edges.append({
-                "source": allele1_format_name,
-                "target": allele2_format_name
-            })
+                network_edges.append({
+                    "source": allele_format_name,
+                    "target": interaction_format_name
+                })
+                
+        # for x in DBSession.query(AlleleGeninteraction).filter(AlleleGeninteraction.allele1_id.in_(all_linked_allele_ids)).filter(AlleleGeninteraction.allele2_id.in_(all_linked_allele_ids)).all():
+        #    allele1_format_name = allele_id_to_name.get(x.allele1_id, '').replace(' ', '_') 
+        #    allele2_format_name = allele_id_to_name.get(x.allele2_id, '').replace(' ', '_') 
+        #    network_edges.append({
+        #        "source": allele1_format_name,
+        #        "target": allele2_format_name
+        #    })
                 
         data = { "edges": network_edges, "nodes": network_nodes }
 
