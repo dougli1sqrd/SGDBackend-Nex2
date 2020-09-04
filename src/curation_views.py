@@ -557,8 +557,6 @@ def upload_spreadsheet(request):
         traceback.print_exc()
         return HTTPBadRequest(body=json.dumps({ 'error': 'Unable to process file upload. Please try again.' }), content_type='text/json')
 
-### WORK FROM HERE
-
 # not authenticated to allow the public submission
 @view_config(route_name='new_gene_name_reservation', renderer='json', request_method='POST')
 def new_gene_name_reservation(request):
@@ -658,7 +656,10 @@ def new_gene_name_reservation(request):
         transaction.abort()
         log.error(e)
         return HTTPBadRequest(body=json.dumps({ 'message': str(e) }), content_type='text/json')
-
+    finally:
+        if DBSession:
+            DBSession.close()
+            
 # not authenticated to allow the public submission
 @view_config(route_name='colleague_update', renderer='json', request_method='PUT')
 def colleague_update(request):
@@ -725,6 +726,10 @@ def colleague_update(request):
         transaction.abort()
         log.error(e)
         return HTTPBadRequest(body=json.dumps({ 'message': str(e) }), content_type='text/json')
+    finally:
+        if curator_session:
+            curator_session.remove()
+    
 '''
 # not authenticated to allow the public submission
 @view_config(route_name='new_colleague', renderer='json', request_method='POST')
@@ -791,31 +796,41 @@ def new_colleague(request):
 @view_config(route_name='reserved_name_index', renderer='json')
 @authenticate
 def reserved_name_index(request):
-    res_triages = DBSession.query(ReservednameTriage).all()
-    res_triages = [x.to_dict() for x in res_triages]
-    reses = DBSession.query(Reservedname).all()
-    reses = [x.to_curate_dict() for x in reses]
-    reses = res_triages + reses
-    return reses
+    try:
+        res_triages = DBSession.query(ReservednameTriage).all()
+        res_triages = [x.to_dict() for x in res_triages]
+        reses = DBSession.query(Reservedname).all()
+        reses = [x.to_curate_dict() for x in reses]
+        reses = res_triages + reses
+        return reses
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='reserved_name_curate_show', renderer='json')
 @authenticate
 def reserved_name_curate_show(request):
-    req_id = request.matchdict['id'].upper()
-    # may be either Reservedname or reservedname triage entry
-    res = DBSession.query(Reservedname).filter(Reservedname.reservedname_id == req_id).one_or_none()
-
-    res_dict = None
-    if res:
-        res_dict = res.to_curate_dict()
-    else:
-        res = DBSession.query(ReservednameTriage).filter(ReservednameTriage.curation_id == req_id).one_or_none()
-        res_dict = res.to_dict()
-
-    if res_dict:
-        return res_dict
-    else:
-        return HTTPNotFound()
+    try:
+        req_id = request.matchdict['id'].upper()
+        # may be either Reservedname or reservedname triage entry
+        res = DBSession.query(Reservedname).filter(Reservedname.reservedname_id == req_id).one_or_none()
+        res_dict = None
+        if res:
+            res_dict = res.to_curate_dict()
+        else:
+            res = DBSession.query(ReservednameTriage).filter(ReservednameTriage.curation_id == req_id).one_or_none()
+            res_dict = res.to_dict()
+        if res_dict:
+            return res_dict
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='reserved_name_update', renderer='json', request_method='PUT')
 @authenticate
@@ -825,17 +840,20 @@ def reserved_name_update(request):
     req_id = request.matchdict['id'].upper()
     params = request.json_body
     username = request.session['username']
-    res = DBSession.query(Reservedname).filter(Reservedname.reservedname_id == req_id).one_or_none()
-    if not res:
-        res = DBSession.query(ReservednameTriage).filter(ReservednameTriage.curation_id == req_id).one_or_none()
-    if not res:
-        return HTTPNotFound()
-
     try:
+        res = DBSession.query(Reservedname).filter(Reservedname.reservedname_id == req_id).one_or_none()
+        if not res:
+            res = DBSession.query(ReservednameTriage).filter(ReservednameTriage.curation_id == req_id).one_or_none()
+        if not res:
+            return HTTPNotFound()
         return res.update(params, username)
     except Exception as e:
         log.error(e)
         return HTTPBadRequest(body=json.dumps({ 'message': str(e) }), content_type='text/json')
+    finally:
+        if DBSession:
+            DBSession.remove()
+
 
 @view_config(route_name='reserved_name_standardize', renderer='json', request_method='POST')
 @authenticate
@@ -880,7 +898,9 @@ def reserved_name_standardize(request):
         traceback.print_exc()
         log.error(e)
         return HTTPBadRequest(body=json.dumps({ 'message': str(e) }), content_type='text/json')
-
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='reserved_name_delete', renderer='json', request_method='DELETE')
 @authenticate
@@ -938,7 +958,10 @@ def reserved_name_promote(request):
     except Exception as e:
         log.error(e)
         return HTTPBadRequest(body=json.dumps({ 'message': str(e) }), content_type='text/json')
-
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='extend_reserved_name', renderer='json', request_method='PUT')
 @authenticate
 def extend_reserved_name(request):
@@ -951,21 +974,35 @@ def extend_reserved_name(request):
     except Exception as e:
         log.error(e)
         return HTTPBadRequest(body=json.dumps({ 'message': str(e) }), content_type='text/json')
-
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='colleague_triage_index', renderer='json', request_method='GET')
 def colleague_triage_index(request):
-    c_triages = DBSession.query(Colleaguetriage).all()
-    return [x.to_dict() for x in c_triages]
+    try:
+        c_triages = DBSession.query(Colleaguetriage).all()
+        return [x.to_dict() for x in c_triages]
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='colleague_triage_show', renderer='json', request_method='GET')
 def colleague_triage_show(request):
     req_id = request.matchdict['id'].upper()
-    c_triage = DBSession.query(Colleaguetriage).filter(Colleaguetriage.curation_id == req_id).one_or_none()
-    if c_triage:
-        return c_triage.to_dict()
-    else:
-        return HTTPNotFound()
+    try:
+        c_triage = DBSession.query(Colleaguetriage).filter(Colleaguetriage.curation_id == req_id).one_or_none()
+        if c_triage:
+            return c_triage.to_dict()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='colleague_triage_update', renderer='json', request_method='PUT')
 @authenticate
@@ -1055,7 +1092,6 @@ def colleague_triage_promote(request):
     finally:
         if curator_session:
             curator_session.remove()
-
 
 @view_config(route_name='colleague_triage_delete', renderer='json', request_method='DELETE')
 @authenticate
@@ -1154,7 +1190,10 @@ def add_new_colleague_triage(request):
         transaction.abort()
         log.error(e)
         return HTTPBadRequest(body=json.dumps({'message': str(e) + ' something bad happened'}), content_type='text/json')
-
+    finally:
+        if curator_session:
+            curator_session.close()
+            
 # @view_config(route_name='upload', request_method='POST', renderer='json')
 # @authenticate
 # def upload_file(request):
@@ -1232,7 +1271,8 @@ def colleague_with_subscription(request):
         colleagues = models_helper.get_all_colleague_with_subscription()
         emails_string = ";\n".join([colleague.email for colleague in colleagues])  #[colleague.email for colleague in colleagues]
         return {'colleagues':emails_string}
-    except:
+    except Exception as e:
+        log.error(e)
         return HTTPBadRequest(body=json.dumps({'error': "Error retrieving colleagues"}))
 
 @view_config(route_name='get_newsletter_sourcecode',renderer='json',request_method='POST')
@@ -1279,7 +1319,8 @@ def get_newsletter_sourcecode(request):
             return {"code":body.prettify()}
         else:
             return HTTPBadRequest(body=json.dumps({'error': "URL must be from wiki.yeastgenome.org"}))
-    except:
+    except Exception as e:
+        log.error(e)
         return HTTPBadRequest(body=json.dumps({'error': "Unexpected error"}))
 
 @view_config(route_name='send_newsletter',renderer='json',request_method='POST')
@@ -1299,6 +1340,7 @@ def send_newsletter(request):
         else:
             return HTTPBadRequest(body=json.dumps(returnValue), content_type='text/json')
     except Exception as e:
+        log.error(e)
         return HTTPBadRequest(body=json.dumps({'error': "Error occured during sending newsletter"}), content_type='text/json')
 
 
@@ -1602,17 +1644,23 @@ def ptm_by_gene(request):
 
     if(gene is None):
         return HTTPBadRequest(body=json.dumps({'error': 'No gene provided'}), content_type='text/json')
-    
-    dbentity = None 
-    dbentity = DBSession.query(Dbentity).filter(or_(Dbentity.sgdid == gene,Dbentity.format_name == gene)).one_or_none()
 
-    if dbentity is None:
-        return HTTPBadRequest(body=json.dumps({'error': 'Gene not found in database'}), content_type='text/json')
-    
-    ptms = models_helper.get_all_ptms_by_dbentity(dbentity.dbentity_id)
-    list_of_ptms = get_list_of_ptms(ptms)
+    try:
+        dbentity = None
+        dbentity = DBSession.query(Dbentity).filter(or_(Dbentity.sgdid == gene,Dbentity.format_name == gene)).one_or_none()
 
-    return HTTPOk(body=json.dumps({'ptms' :list_of_ptms}),content_type='text/json')
+        if dbentity is None:
+            return HTTPBadRequest(body=json.dumps({'error': 'Gene not found in database'}), content_type='text/json')
+
+        ptms = models_helper.get_all_ptms_by_dbentity(dbentity.dbentity_id)
+        list_of_ptms = get_list_of_ptms(ptms)
+
+        return HTTPOk(body=json.dumps({'ptms' :list_of_ptms}),content_type='text/json')
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='get_observable', renderer='json', request_method='GET')
 def get_observable(request):
@@ -1626,8 +1674,12 @@ def get_observable(request):
 
         return HTTPOk(body=json.dumps(data),content_type='text/json')
     except Exception as e:
+        log.error(e)
         return HTTPBadRequest(body=json.dumps({'error': str(e)}))
-
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='get_allele', renderer='json', request_method='GET')
 def get_allele(request):
     try:
@@ -1640,7 +1692,12 @@ def get_allele(request):
 
         return HTTPOk(body=json.dumps(data),content_type='text/json')
     except Exception as e:
+        log.error(e)
         return HTTPBadRequest(body=json.dumps({'error': str(e)}))
+    finally:
+        if DBSession:
+            DBSession.remove()
+
 
 @view_config(route_name='get_reporter', renderer='json', request_method='GET')
 def get_reporter(request):
@@ -1654,8 +1711,11 @@ def get_reporter(request):
 
         return HTTPOk(body=json.dumps(data),content_type='text/json')
     except Exception as e:
+        log.error(e)
         return HTTPBadRequest(body=json.dumps({'error': str(e)}))
-
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='get_chebi', renderer='json', request_method='GET')
 def get_chebi(request):
@@ -1668,8 +1728,12 @@ def get_chebi(request):
                          "display_name": c.display_name})
         return HTTPOk(body=json.dumps(data),content_type='text/json')
     except Exception as e:
+        log.error(e)
         return HTTPBadRequest(body=json.dumps({'error': str(e)}))
-
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='get_eco', renderer='json', request_method='GET')
 def get_eco(request):
     try:
@@ -1683,8 +1747,12 @@ def get_eco(request):
                          "display_name": e.display_name})
         return HTTPOk(body=json.dumps(data),content_type='text/json')
     except Exception as e:
+        log.error(e)
         return HTTPBadRequest(body=json.dumps({'error': str(e)}))
-
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='get_apo', renderer='json', request_method='GET')
 def get_apo(request):
     try:
@@ -1698,8 +1766,12 @@ def get_apo(request):
         else:
             return [ {'display_name': x.display_name, 'apo_id': x.apo_id } for x in all_apo ]
     except Exception as e:
+        log.error(e)
         return HTTPBadRequest(body=json.dumps({'error': str(e)}))
-
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='get_publication_year', renderer='json', request_method='GET')
 def get_publication_year(request):
     try:
@@ -1707,8 +1779,12 @@ def get_publication_year(request):
         data = [x[0] for x in all_years]  
         return HTTPOk(body=json.dumps(data),content_type='text/json')
     except Exception as e:
+        log.error(e)
         return HTTPBadRequest(body=json.dumps({'error': str(e)}))
-
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='get_curation_tag', renderer='json', request_method='GET')
 def get_curation_tag(request):
     try:
@@ -1716,8 +1792,12 @@ def get_curation_tag(request):
         data = [x[0] for x in all_tags]
         return HTTPOk(body=json.dumps(data),content_type='text/json')
     except Exception as e:
+        log.error(e)
         return HTTPBadRequest(body=json.dumps({'error': str(e)}))
-
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='get_literature_topic', renderer='json', request_method='GET')
 def get_literature_topic(request):
     try:
@@ -1725,9 +1805,11 @@ def get_literature_topic(request):
         data = [x[0] for x in all_topics]
         return HTTPOk(body=json.dumps(data),content_type='text/json')
     except Exception as e:
+        log.error(e)
         return HTTPBadRequest(body=json.dumps({'error': str(e)}))
-
-
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='get_strains', renderer='json', request_method='GET')
 def get_strains(request):
@@ -1740,6 +1822,7 @@ def get_strains(request):
         return None
 
     except Exception as e:
+        log.error(e)
         return HTTPBadRequest(body=json.dumps({'error': str(e)}))
 
 
@@ -1774,8 +1857,11 @@ def get_psimod(request):
 
         return None
     except Exception as e:
+        log.error(e)
         return HTTPBadRequest(body=json.dumps({'error': str(e)}))
-
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name="ptm_update", renderer='json', request_method='POST')
 @authenticate
@@ -1943,7 +2029,9 @@ def ptm_update(request):
     except Exception as e:
         log.exception(e)
         return HTTPBadRequest(body=json.dumps({'error': str(e)}), content_type='text/json')
-
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name="ptm_delete", renderer='json', request_method='DELETE')
 @authenticate
@@ -1982,41 +2070,70 @@ def ptm_delete(request):
         return HTTPBadRequest(body=json.dumps({'error': 'ptm not found in database.'}), content_type='text/json')
 
     except Exception as e:
+        log.error(e)
         return HTTPBadRequest(body=json.dumps({'error': str(e)}), content_type='text/json')
 
 @view_config(route_name='get_all_go_for_regulations',renderer='json',request_method='GET')
 @authenticate
 def get_all_go_for_regulations(request):
-    go_in_db = models_helper.get_all_go()
-    obj = [{'go_id': g.go_id, 'format_name': g.format_name,'display_name': g.display_name} for g in go_in_db]
-    return HTTPOk(body=json.dumps({'success': obj}), content_type='text/json')
-
+    try:
+        go_in_db = models_helper.get_all_go()
+        obj = [{'go_id': g.go_id, 'format_name': g.format_name,'display_name': g.display_name} for g in go_in_db]
+        return HTTPOk(body=json.dumps({'success': obj}), content_type='text/json')
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='get_all_eco_for_regulations', renderer='json', request_method='GET')
 @authenticate
 def get_all_eco_for_regulations(request):
-    eco_in_db = models_helper.get_all_eco()
-    obj = [{'eco_id':e.eco_id, 'format_name': e.format_name,'display_name':e.display_name} for e in eco_in_db]
-    return HTTPOk(body=json.dumps({'success':obj}),content_type='text/json')
+    try:
+        eco_in_db = models_helper.get_all_eco()
+        obj = [{'eco_id':e.eco_id, 'format_name': e.format_name,'display_name':e.display_name} for e in eco_in_db]
+        return HTTPOk(body=json.dumps({'success':obj}),content_type='text/json')
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='get_papers_by_tag',renderer='json',request_method='GET')
 def get_papers_by_tag(request):
-
-    return get_list_of_papers(request)
+    try:
+        return get_list_of_papers(request)
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='get_all_eco', renderer='json', request_method='GET')
 @authenticate
 def get_all_eco(request):
-    eco_in_db = models_helper.get_all_eco()
-    obj = [{'eco_id':e.eco_id, 'format_name': e.format_name,'display_name':e.display_name} for e in eco_in_db]
-    return HTTPOk(body=json.dumps({'success':obj}),content_type='text/json')
+    try:
+        eco_in_db = models_helper.get_all_eco()
+        obj = [{'eco_id':e.eco_id, 'format_name': e.format_name,'display_name':e.display_name} for e in eco_in_db]
+        return HTTPOk(body=json.dumps({'success':obj}),content_type='text/json')
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='get_all_do', renderer='json', request_method='GET')
 @authenticate
 def get_all_do(request):
-    do_in_db = models_helper.get_all_do()
-    obj = [{'disease_id':d.disease_id, 'format_name': d.format_name,'display_name':d.display_name} for d in do_in_db]
-    return HTTPOk(body=json.dumps({'success': obj}), content_type='text/json')
+    try:
+        do_in_db = models_helper.get_all_do()
+        obj = [{'disease_id':d.disease_id, 'format_name': d.format_name,'display_name':d.display_name} for d in do_in_db]
+        return HTTPOk(body=json.dumps({'success': obj}), content_type='text/json')
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
     
 @view_config(route_name='phenotype_add', renderer='json', request_method='POST')
 @authenticate
@@ -2027,13 +2144,23 @@ def phenotype_add(request):
 
 @view_config(route_name='get_phenotypes',renderer='json',request_method='GET')
 def get_phenotypes(request):
-
-    return get_list_of_phenotypes(request)
+    try:
+        return get_list_of_phenotypes(request)
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='get_phenotype',renderer='json',request_method='GET')
 def get_phenotype(request):
-
-    return get_one_phenotype(request)
+    try:
+        return get_one_phenotype(request)
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='phenotype_update', renderer='json', request_method='POST')
 @authenticate
@@ -2077,9 +2204,14 @@ def all_author_responses(request):
 @view_config(route_name='one_author_response',renderer='json',request_method='GET')
 def one_author_response(request):
 
-    curation_id = request.matchdict['id']
-
-    return get_author_responses(curation_id)
+    try:
+        curation_id = request.matchdict['id']
+        return get_author_responses(curation_id)
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='edit_author_response',renderer='json',request_method='POST')
 @authenticate
@@ -2095,8 +2227,13 @@ def disease_insert_update(request):
 @view_config(route_name='diseases_by_filters',renderer='json',request_method='POST')
 @authenticate
 def diseases_by_filters(request):
-
-    return get_diseases_by_filters(request)
+    try:
+        return get_diseases_by_filters(request)
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='disease_delete',renderer='json',request_method='DELETE')
 @authenticate
@@ -2335,8 +2472,11 @@ def regulation_insert_update(request):
         return HTTPBadRequest(body=json.dumps({'error': returnValue}), content_type='text/json')
 
     except Exception as e:
+        log.error(e)
         return HTTPBadRequest(body=json.dumps({'error': str(e)}), content_type='text/json')
-
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='regulations_by_filters',renderer='json',request_method='POST')
 @authenticate
@@ -2421,8 +2561,11 @@ def regulations_by_filters(request):
         
         return HTTPOk(body=json.dumps({'success': list_of_regulations}), content_type='text/json')
     except Exception as e:
+        log.error(e)
         return HTTPBadRequest(body=json.dumps({'error': str(e)}), content_type='text/json')
-
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='regulation_delete',renderer='json',request_method='DELETE')
 @authenticate
@@ -2461,7 +2604,10 @@ def regulation_delete(request):
     except Exception as e:
         log.exception(str(e))
         return HTTPBadRequest(body=json.dumps({'error': str(e)}), content_type='text/json')
-
+    finally:
+        if curator_session:
+            curator_session.remove()
+            
 @view_config(route_name='regulation_file',renderer='json',request_method='POST')
 @authenticate
 def regulation_file(request):
@@ -2806,8 +2952,11 @@ def regulation_file(request):
         return HTTPBadRequest(body=json.dumps({'error': returnValue}), content_type='text/json')    
 
     except Exception as e:
+        log.error(e)
         return HTTPBadRequest(body=json.dumps({"error":str(e)}),content_type='text/json')
-
+    finally:
+        if curator_session:
+            curator_session.remove()
 
 @view_config(route_name='upload_file_curate', renderer='json', request_method='POST')
 def upload_file_curate(request):
@@ -2826,6 +2975,7 @@ def upload_file_curate(request):
         file_curate_update_readme(obj)
 
     except Exception as e:
+        log.error(e)
         pass
 
     return {}
@@ -2866,7 +3016,8 @@ def upload_tar_file(request):
         obj['source_id'] = SGD_SOURCE_ID
         return upload_new_file(obj)
     except Exception as e:
-         return HTTPBadRequest(body=json.dumps({'error': str(e)}), content_type='text/json')
+        log.error(e)
+        return HTTPBadRequest(body=json.dumps({'error': str(e)}), content_type='text/json')
 
 
 @view_config(route_name="file_curate_menus", renderer='json', request_method='GET')
