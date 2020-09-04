@@ -84,10 +84,15 @@ def account(request):
 
 @view_config(route_name='get_locus_curate', request_method='GET', renderer='json')
 def get_locus_curate(request):
-    id = extract_id_request(request, 'locus', param_name="sgdid")
-    locus = get_locus_by_id(id)
-    return locus.to_curate_dict()
-
+    try:
+        id = extract_id_request(request, 'locus', param_name="sgdid")
+        locus = get_locus_by_id(id)
+        return locus.to_curate_dict()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='locus_curate_summaries', request_method='PUT', renderer='json')
 @authenticate
@@ -124,8 +129,13 @@ def locus_curate_summaries(request):
         pusher.trigger('sgd', 'curateHomeUpdate', {})
         return locus.to_curate_dict()
     except ValueError as e:
+        log.error(e)
         return HTTPBadRequest(body=json.dumps({ 'error': str(e) }), content_type='text/json')
-
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='locus_curate_basic', request_method='PUT', renderer='json')
 @authenticate
@@ -144,6 +154,9 @@ def locus_curate_basic(request):
         traceback.print_exc()
         log.error(e)
         return HTTPBadRequest(body=json.dumps({ 'message': str(e) }), content_type='text/json')
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='get_new_reference_info', renderer='json', request_method='POST')
 @authenticate
@@ -188,7 +201,10 @@ def get_new_reference_info(request):
         log.error(e)
         DBSession.rollback()
         return HTTPBadRequest(body=json.dumps({ 'message': str(e) }), content_type='text/json')
-
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='new_reference', renderer='json', request_method='POST')
 @authenticate
 def new_reference(request):
@@ -213,7 +229,10 @@ def new_reference(request):
         transaction.abort()
         log.error(e)
         return HTTPBadRequest(body=json.dumps({ 'message': str(e) }), content_type='text/json')
-
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='reference_triage_id_delete', renderer='json', request_method='DELETE')
 @authenticate
 def reference_triage_id_delete(request):
@@ -253,12 +272,18 @@ def reference_triage_id_delete(request):
 
 @view_config(route_name='reference_triage_id', renderer='json', request_method='GET')
 def reference_triage_id(request):
-    id = request.matchdict['id'].upper()
-    triage = DBSession.query(Referencetriage).filter_by(curation_id=id).one_or_none()
-    if triage:
-        return triage.to_dict()
-    else:
-        return HTTPNotFound()
+    try:
+        id = request.matchdict['id'].upper()
+        triage = DBSession.query(Referencetriage).filter_by(curation_id=id).one_or_none()
+        if triage:
+            return triage.to_dict()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='reference_triage_id_update', renderer='json', request_method='PUT')
 @authenticate
@@ -334,9 +359,15 @@ def reference_triage_promote(request):
 
 @view_config(route_name='reference_triage_index', renderer='json', request_method='GET')
 def reference_triage_index(request):
-    total = DBSession.query(Referencetriage).count()
-    triages = DBSession.query(Referencetriage).order_by(Referencetriage.date_created.asc()).limit(150).all()
-    return { 'entries': [t.to_dict() for t in triages], 'total': total }
+    try:
+        total = DBSession.query(Referencetriage).count()
+        triages = DBSession.query(Referencetriage).order_by(Referencetriage.date_created.asc()).limit(150).all()
+        return { 'entries': [t.to_dict() for t in triages], 'total': total }
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='refresh_homepage_cache', request_method='POST', renderer='json')
 @authenticate
@@ -426,7 +457,9 @@ def sign_in(request):
         return {'username': curator.username}
     except crypt.AppIdentityError:
         return HTTPForbidden(body=json.dumps({'error': 'Authentication token is invalid'}))
-
+    except Exception as e:
+        log.error(e)
+        
 @view_config(route_name='sign_out', request_method='GET')
 def sign_out(request):
     request.session.invalidate()
@@ -435,12 +468,18 @@ def sign_out(request):
 @view_config(route_name='reference_tags', renderer='json', request_method='GET')
 # @authenticate
 def reference_tags(request):
-    id = extract_id_request(request, 'reference', 'id', True)
-    if id:
-        reference = DBSession.query(Referencedbentity).filter_by(dbentity_id=id).one_or_none()
-    else:
-        reference = DBSession.query(Referencedbentity).filter_by(sgdid=request.matchdict['id']).one_or_none()
-    return reference.get_tags()
+    try:
+        id = extract_id_request(request, 'reference', 'id', True)
+        if id:
+            reference = DBSession.query(Referencedbentity).filter_by(dbentity_id=id).one_or_none()
+        else:
+            reference = DBSession.query(Referencedbentity).filter_by(sgdid=request.matchdict['id']).one_or_none()
+        return reference.get_tags()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='update_reference_tags', renderer='json', request_method='PUT')
 @authenticate
@@ -466,19 +505,25 @@ def update_reference_tags(request):
 
 @view_config(route_name='get_recent_annotations', request_method='GET', renderer='json')
 def get_recent_annotations(request):
-    annotations = []
-    is_everyone = request.params.get('everyone', False)
-    username = request.session['username']
-    start_date = datetime.datetime.today() - datetime.timedelta(days=30)
-    end_date = datetime.datetime.today()
-    if is_everyone:
-        recent_activity = DBSession.query(CuratorActivity).filter(CuratorActivity.date_created >= start_date).order_by(CuratorActivity.date_created.desc()).all()
-    else:
-        recent_activity = DBSession.query(CuratorActivity).filter(and_(CuratorActivity.date_created >= start_date, CuratorActivity.created_by == username)).order_by(CuratorActivity.date_created.desc()).all() 
-    for d in recent_activity:
-        annotations.append(d.to_dict())
-    annotations = sorted(annotations, key=lambda r: r['time_created'], reverse=True)
-    return annotations
+    try:
+        annotations = []
+        is_everyone = request.params.get('everyone', False)
+        username = request.session['username']
+        start_date = datetime.datetime.today() - datetime.timedelta(days=30)
+        end_date = datetime.datetime.today()
+        if is_everyone:
+            recent_activity = DBSession.query(CuratorActivity).filter(CuratorActivity.date_created >= start_date).order_by(CuratorActivity.date_created.desc()).all()
+        else:
+            recent_activity = DBSession.query(CuratorActivity).filter(and_(CuratorActivity.date_created >= start_date, CuratorActivity.created_by == username)).order_by(CuratorActivity.date_created.desc()).all()
+        for d in recent_activity:
+            annotations.append(d.to_dict())
+        annotations = sorted(annotations, key=lambda r: r['time_created'], reverse=True)
+        return annotations
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='upload_spreadsheet', request_method='POST', renderer='json')
 @authenticate
@@ -507,9 +552,12 @@ def upload_spreadsheet(request):
             return HTTPBadRequest(body=json.dumps({'error': 'Unable to process file upload. Record already exists.'}), content_type='text/json')
         else:
             return HTTPBadRequest(body=json.dumps({'error': 'Unable to process file upload. Database error occured while updating your entry.'}), content_type='text/json')
-    except:
+    except Exception as e:
+        log.error(e)
         traceback.print_exc()
         return HTTPBadRequest(body=json.dumps({ 'error': 'Unable to process file upload. Please try again.' }), content_type='text/json')
+
+### WORK FROM HERE
 
 # not authenticated to allow the public submission
 @view_config(route_name='new_gene_name_reservation', renderer='json', request_method='POST')
