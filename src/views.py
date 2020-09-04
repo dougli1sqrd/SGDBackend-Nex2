@@ -459,8 +459,6 @@ def reference_this_week(request):
     finally:
         if DBSession:
             DBSession.remove()
-
-## WORK FROM HERE
             
 @view_config(route_name='reference_list', renderer='json', request_method='POST')
 def reference_list(request):
@@ -479,7 +477,11 @@ def reference_list(request):
             return [r.to_bibentry() for r in references]
         except ValueError:
             return HTTPBadRequest(body=json.dumps({'error': "IDs must be string format of integers. Example JSON object expected: {\"reference_ids\": [\"1\", \"2\"]}"}))
-
+        except Exception as e:
+            log.error(e)
+        finally:
+            if DBSession:
+                DBSession.remove()
 
 @view_config(route_name='get_all_variant_objects', request_method='GET')
 def get_all_variant_objects(request):
@@ -543,317 +545,489 @@ def get_sequence_object(request):
     
 @view_config(route_name='reserved_name', renderer='json', request_method='GET')
 def reserved_name(request):
-    id = extract_id_request(request, 'reservedname', 'id', True)
-    if id:
-        reserved_name = DBSession.query(Reservedname).filter_by(reservedname_id=id).one_or_none()
-    else:
-        reserved_name = DBSession.query(Reservedname).filter_by(display_name=request.matchdict['id']).one_or_none()
-    if reserved_name:
-        return reserved_name.to_dict()
-    else:
-        return HTTPNotFound()
-
+    try:
+        id = extract_id_request(request, 'reservedname', 'id', True)
+        if id:
+            reserved_name = DBSession.query(Reservedname).filter_by(reservedname_id=id).one_or_none()
+        else:
+            reserved_name = DBSession.query(Reservedname).filter_by(display_name=request.matchdict['id']).one_or_none()
+        if reserved_name:
+            return reserved_name.to_dict()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='strain', renderer='json', request_method='GET')
 def strain(request):
-    id = extract_id_request(request, 'strain')
+    try:
+        id = extract_id_request(request, 'strain')
 
-    strain = DBSession.query(Straindbentity).filter_by(dbentity_id=id).one_or_none()
+        strain = DBSession.query(Straindbentity).filter_by(dbentity_id=id).one_or_none()
 
-    if strain:
-        return strain.to_dict()
-    else:
-        return HTTPNotFound()
-
+        if strain:
+            return strain.to_dict()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='reference', renderer='json', request_method='GET')
 def reference(request):
-    id = extract_id_request(request, 'reference', 'id', True)
-    # allow reference to be accessed by sgdid even if not in disambig table
-    if id:
-        reference = DBSession.query(Referencedbentity).filter_by(dbentity_id=id).one_or_none()
-    else:
-        reference = DBSession.query(Referencedbentity).filter_by(sgdid=request.matchdict['id']).one_or_none()
+    try:
+        id = extract_id_request(request, 'reference', 'id', True)
+        # allow reference to be accessed by sgdid even if not in disambig table
+        if id:
+            reference = DBSession.query(Referencedbentity).filter_by(dbentity_id=id).one_or_none()
+        else:
+            reference = DBSession.query(Referencedbentity).filter_by(sgdid=request.matchdict['id']).one_or_none()
 
-    if reference:
-        return reference.to_dict()
-    else:
-        return HTTPNotFound()
+        if reference:
+            return reference.to_dict()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='reference_literature_details', renderer='json', request_method='GET')
 def reference_literature_details(request):
-    id = extract_id_request(request, 'reference', 'id', True)
-     # allow reference to be accessed by sgdid even if not in disambig table
-    if id:
-        reference = DBSession.query(Referencedbentity).filter_by(dbentity_id=id).one_or_none()
-    else:
-        reference = DBSession.query(Referencedbentity).filter_by(sgdid=request.matchdict['id']).one_or_none()
+    try:
+        id = extract_id_request(request, 'reference', 'id', True)
+        # allow reference to be accessed by sgdid even if not in disambig table
+        if id:
+            reference = DBSession.query(Referencedbentity).filter_by(dbentity_id=id).one_or_none()
+        else:
+            reference = DBSession.query(Referencedbentity).filter_by(sgdid=request.matchdict['id']).one_or_none()
 
-    if reference:
-        return reference.annotations_to_dict()
-    else:
-        return HTTPNotFound()
-
+        if reference:
+            return reference.annotations_to_dict()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='reference_interaction_details', renderer='json', request_method='GET')
 def reference_interaction_details(request):
-    id = extract_id_request(request, 'reference')
-    reference = DBSession.query(Referencedbentity).filter_by(dbentity_id=id).one_or_none()
+    try:
+        id = extract_id_request(request, 'reference')
+        reference = DBSession.query(Referencedbentity).filter_by(dbentity_id=id).one_or_none()
 
-    if reference:
-        return reference.interactions_to_dict()
-    else:
-        return HTTPNotFound()
-
+        if reference:
+            return reference.interactions_to_dict()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='reference_go_details', renderer='json', request_method='GET')
 def reference_go_details(request):
-    id = extract_id_request(request, 'reference')
-    reference = DBSession.query(Referencedbentity).filter_by(dbentity_id=id).one_or_none()
+    try:
+        id = extract_id_request(request, 'reference')
+        reference = DBSession.query(Referencedbentity).filter_by(dbentity_id=id).one_or_none()
 
-    if reference:
-        return reference.go_to_dict()
-    else:
-        return HTTPNotFound()
-
+        if reference:
+            return reference.go_to_dict()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='reference_phenotype_details', renderer='json', request_method='GET')
 def reference_phenotype_details(request):
-    id = extract_id_request(request, 'reference')
-    reference = DBSession.query(Referencedbentity).filter_by(dbentity_id=id).one_or_none()
+    try:
+        id = extract_id_request(request, 'reference')
+        reference = DBSession.query(Referencedbentity).filter_by(dbentity_id=id).one_or_none()
 
-    if reference:
-        return reference.phenotype_to_dict()
-    else:
-        return HTTPNotFound()
+        if reference:
+            return reference.phenotype_to_dict()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='reference_disease_details', renderer='json', request_method='GET')
 def reference_disease_details(request):
-    id = extract_id_request(request, 'reference')
-    reference = DBSession.query(Referencedbentity).filter_by(dbentity_id=id).one_or_none()
+    try:
+        id = extract_id_request(request, 'reference')
+        reference = DBSession.query(Referencedbentity).filter_by(dbentity_id=id).one_or_none()
 
-    if reference:
-        return reference.disease_to_dict()
-    else:
-        return HTTPNotFound()
-
+        if reference:
+            return reference.disease_to_dict()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='reference_regulation_details', renderer='json', request_method='GET')
 def reference_regulation_details(request):
-    id = extract_id_request(request, 'reference')
-    reference = DBSession.query(Referencedbentity).filter_by(dbentity_id=id).one_or_none()
+    try:
+        id = extract_id_request(request, 'reference')
+        reference = DBSession.query(Referencedbentity).filter_by(dbentity_id=id).one_or_none()
 
-    if reference:
-        return reference.regulation_to_dict()
-    else:
-        return HTTPNotFound()
+        if reference:
+            return reference.regulation_to_dict()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+
 @view_config(route_name='author', renderer='json', request_method='GET')
 def author(request):
-    format_name = extract_id_request(request, 'author', param_name="format_name")
+    try:
+        format_name = extract_id_request(request, 'author', param_name="format_name")
 
-    key = "/author/" + format_name.decode("utf-8")
+        key = "/author/" + format_name.decode("utf-8")
     
-    authors_ref = DBSession.query(Referenceauthor).filter_by(obj_url=key).all()
+        authors_ref = DBSession.query(Referenceauthor).filter_by(obj_url=key).all()
 
-    references_dict = sorted([author_ref.reference.to_dict_reference_related() for author_ref in authors_ref], key=lambda r: r["display_name"])
+        references_dict = sorted([author_ref.reference.to_dict_reference_related() for author_ref in authors_ref], key=lambda r: r["display_name"])
 
-    if len(authors_ref) > 0:
-        return {
-            "display_name": authors_ref[0].display_name,
-            "references": sorted(references_dict, key=lambda r: r["year"], reverse=True)
-        }
-    else:
-        return HTTPNotFound()
+        if len(authors_ref) > 0:
+            return {
+                "display_name": authors_ref[0].display_name,
+                "references": sorted(references_dict, key=lambda r: r["year"], reverse=True)
+            }
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='chemical', renderer='json', request_method='GET')
 def chemical(request):
-    id = extract_id_request(request, 'chebi', param_name="format_name")
-    chebi = DBSession.query(Chebi).filter_by(chebi_id=id).one_or_none()
-    if chebi:
-        return chebi.to_dict()
-    else:
-        return HTTPNotFound()
-
+    try:
+        id = extract_id_request(request, 'chebi', param_name="format_name")
+        chebi = DBSession.query(Chebi).filter_by(chebi_id=id).one_or_none()
+        if chebi:
+            return chebi.to_dict()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='chemical_phenotype_details', renderer='json', request_method='GET')
 def chemical_phenotype_details(request):
-    id = extract_id_request(request, 'chebi')
+    try:
+        id = extract_id_request(request, 'chebi')
 
-    chebi = DBSession.query(Chebi).filter_by(chebi_id=id).one_or_none()
-    if chebi:
-        return chebi.phenotype_to_dict()
-    else:
-        return HTTPNotFound()
-
+        chebi = DBSession.query(Chebi).filter_by(chebi_id=id).one_or_none()
+        if chebi:
+            return chebi.phenotype_to_dict()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='chemical_go_details', renderer='json', request_method='GET')
 def chemical_go_details(request):
-    id = extract_id_request(request, 'chebi')
+    try:
+        id = extract_id_request(request, 'chebi')
 
-    chebi = DBSession.query(Chebi).filter_by(chebi_id=id).one_or_none()
-    if chebi:
-        return chebi.go_to_dict()
-    else:
-        return HTTPNotFound()
+        chebi = DBSession.query(Chebi).filter_by(chebi_id=id).one_or_none()
+        if chebi:
+            return chebi.go_to_dict()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='chemical_proteinabundance_details', renderer='json', request_method='GET')
 def chemical_proteinabundance_details(request):
-    id = extract_id_request(request, 'chebi')
-    chebi = DBSession.query(Chebi).filter_by(chebi_id=id).one_or_none()
-    if chebi:
-        return chebi.proteinabundance_to_dict()
-    else:
-        return HTTPNotFound()
-
+    try:
+        id = extract_id_request(request, 'chebi')
+        chebi = DBSession.query(Chebi).filter_by(chebi_id=id).one_or_none()
+        if chebi:
+            return chebi.proteinabundance_to_dict()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='chemical_complex_details', renderer='json', request_method='GET')
 def chemical_complex_details(request):
-    id = extract_id_request(request, 'chebi')
+    try:
+        id = extract_id_request(request, 'chebi')
 
-    chebi = DBSession.query(Chebi).filter_by(chebi_id=id).one_or_none()
-    if chebi:
-        return chebi.complex_to_dict()
-    else:
-        return HTTPNotFound()
-
+        chebi = DBSession.query(Chebi).filter_by(chebi_id=id).one_or_none()
+        if chebi:
+            return chebi.complex_to_dict()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='chemical_network_graph', renderer='json', request_method='GET')
 def chemical_network_graph(request):
+    try:
+        id = extract_id_request(request, 'chebi')
 
-    id = extract_id_request(request, 'chebi')
-
-    chebi = DBSession.query(Chebi).filter_by(chebi_id=id).one_or_none()
-    if chebi:
-        return chebi.chemical_network()
-    else:
-        return HTTPNotFound()
-
+        chebi = DBSession.query(Chebi).filter_by(chebi_id=id).one_or_none()
+        if chebi:
+            return chebi.chemical_network()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='phenotype', renderer='json', request_method='GET')
 def phenotype(request):
-    id = extract_id_request(request, 'phenotype', param_name="format_name")
-    phenotype = DBSession.query(Phenotype).filter_by(phenotype_id=id).one_or_none()
-    if phenotype:
-        return phenotype.to_dict()
-    else:
-        return HTTPNotFound()
-
+    try:
+        id = extract_id_request(request, 'phenotype', param_name="format_name")
+        phenotype = DBSession.query(Phenotype).filter_by(phenotype_id=id).one_or_none()
+        if phenotype:
+            return phenotype.to_dict()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='phenotype_locus_details', renderer='json', request_method='GET')
 def phenotype_locus_details(request):
-    id = extract_id_request(request, 'phenotype')
-    phenotype = DBSession.query(Phenotype).filter_by(phenotype_id=id).one_or_none()
-    if phenotype:
-        return phenotype.annotations_to_dict()
-    else:
-        return HTTPNotFound()
-
+    try:
+        id = extract_id_request(request, 'phenotype')
+        phenotype = DBSession.query(Phenotype).filter_by(phenotype_id=id).one_or_none()
+        if phenotype:
+            return phenotype.annotations_to_dict()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='observable', renderer='json', request_method='GET')
 def observable(request):
-    if request.matchdict['format_name'].upper() == "YPO": # /ontology/phenotype/ypo -> root of APOs
-        return Apo.root_to_dict()
+    try:
+        if request.matchdict['format_name'].upper() == "YPO": # /ontology/phenotype/ypo -> root of APOs
+            return Apo.root_to_dict()
 
-    id = extract_id_request(request, 'apo', param_name="format_name")
-    observable = DBSession.query(Apo).filter_by(apo_id=id).one_or_none()
-    if observable:
-        return observable.to_dict()
-    else:
-        return HTTPNotFound()
-
+        id = extract_id_request(request, 'apo', param_name="format_name")
+        observable = DBSession.query(Apo).filter_by(apo_id=id).one_or_none()
+        if observable:
+            return observable.to_dict()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='observable_locus_details', renderer='json', request_method='GET')
 def observable_locus_details(request):
-    id = extract_id_request(request, 'apo')
-    observable = DBSession.query(Apo).filter_by(apo_id=id).one_or_none()
-    if observable:
-        return observable.annotations_to_dict()
-    else:
-        return HTTPNotFound()
-
+    try:
+        id = extract_id_request(request, 'apo')
+        observable = DBSession.query(Apo).filter_by(apo_id=id).one_or_none()
+        if observable:
+            return observable.annotations_to_dict()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='observable_ontology_graph', renderer='json', request_method='GET')
 def observable_ontology_graph(request):
-    id = extract_id_request(request, 'apo')
-    observable = DBSession.query(Apo).filter_by(apo_id=id).one_or_none()
-    if observable:
-        return observable.ontology_graph()
-    else:
-        return HTTPNotFound()
-
+    try:
+        id = extract_id_request(request, 'apo')
+        observable = DBSession.query(Apo).filter_by(apo_id=id).one_or_none()
+        if observable:
+            return observable.ontology_graph()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='observable_locus_details_all', renderer='json', request_method='GET')
 def observable_locus_details_all(request):
-    id = extract_id_request(request, 'apo')
-    observable = DBSession.query(Apo).filter_by(apo_id=id).one_or_none()
-    if observable:
-        return observable.annotations_and_children_to_dict()
-    else:
-        return HTTPNotFound()
-
+    try:
+        id = extract_id_request(request, 'apo')
+        observable = DBSession.query(Apo).filter_by(apo_id=id).one_or_none()
+        if observable:
+            return observable.annotations_and_children_to_dict()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='go', renderer='json', request_method='GET')
 def go(request):
-    id = extract_id_request(request, 'go', param_name="format_name")
-    go = get_go_by_id(id)
-    if go:
-        return go.to_dict()
-    else:
-        return HTTPNotFound()
-
+    try:
+        id = extract_id_request(request, 'go', param_name="format_name")
+        go = get_go_by_id(id)
+        if go:
+            return go.to_dict()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='go_ontology_graph', renderer='json', request_method='GET')
 def go_ontology_graph(request):
-    id = extract_id_request(request, 'go')
-    go = get_go_by_id(id)
-    if go:
-        return go.ontology_graph()
-    else:
-        return HTTPNotFound()
-
+    try:
+        id = extract_id_request(request, 'go')
+        go = get_go_by_id(id)
+        if go:
+            return go.ontology_graph()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='go_locus_details', renderer='json', request_method='GET')
 def go_locus_details(request):
-    id = extract_id_request(request, 'go')
-    go = get_go_by_id(id)
-    if go:
-        return go.annotations_to_dict()
-    else:
-        return HTTPNotFound()
-
+    try:
+        id = extract_id_request(request, 'go')
+        go = get_go_by_id(id)
+        if go:
+            return go.annotations_to_dict()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='go_locus_details_all', renderer='json', request_method='GET')
 def go_locus_details_all(request):
-    id = extract_id_request(request, 'go')
-    go = get_go_by_id(id)
-    if go:
-        return go.annotations_and_children_to_dict()
-    else:
-        return HTTPNotFound()
-
+    try:
+        id = extract_id_request(request, 'go')
+        go = get_go_by_id(id)
+        if go:
+            return go.annotations_and_children_to_dict()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='disease', renderer='json', request_method='GET')
 def disease(request):
-    #id = extract_id_request(request, 'disease', param_name="format_name")
-    #disease = get_disease_by_id(id)
-    disease_id = request.matchdict['id'].upper()
-    disease = DBSession.query(Disease).filter_by(doid=disease_id).one_or_none()
-    if disease:
-        return disease.to_dict()
-    else:
-        return HTTPNotFound()
-
+    try:
+        disease_id = request.matchdict['id'].upper()
+        disease = DBSession.query(Disease).filter_by(doid=disease_id).one_or_none()
+        if disease:
+            return disease.to_dict()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='disease_ontology_graph', renderer='json', request_method='GET')
 def disease_ontology_graph(request):
-    # id = extract_id_request(request, 'disease')
-    # disease = get_disease_by_id(id)
-    disease_id = request.matchdict['id'].upper()
-    disease = DBSession.query(Disease).filter_by(disease_id=disease_id).one_or_none()
-    if disease:
-        return disease.ontology_graph()
-    else:
-        return HTTPNotFound()
-
+    try:
+        disease_id = request.matchdict['id'].upper()
+        disease = DBSession.query(Disease).filter_by(disease_id=disease_id).one_or_none()
+        if disease:
+            return disease.ontology_graph()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+	if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='disease_locus_details', renderer='json', request_method='GET')
 def disease_locus_details(request):
-    # id = extract_id_request(request, 'disease')
-    # disease = get_disease_by_id(id)
-    disease_id = request.matchdict['id'].upper()
-    disease = DBSession.query(Disease).filter_by(disease_id=disease_id).one_or_none()
-    if disease:
-        return disease.annotations_to_dict()
-    else:
-        return HTTPNotFound()
-
+    try:
+        disease_id = request.matchdict['id'].upper()
+        disease = DBSession.query(Disease).filter_by(disease_id=disease_id).one_or_none()
+        if disease:
+            return disease.annotations_to_dict()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='disease_locus_details_all', renderer='json', request_method='GET')
 def disease_locus_details_all(request):
-    # id = extract_id_request(request, 'disease')
-    # disease = get_disease_by_id(id)
-    disease_id = request.matchdict['id'].upper()
-    disease = DBSession.query(Disease).filter_by(disease_id=disease_id).one_or_none()
-    if disease:
-        return disease.annotations_and_children_to_dict()
-    else:
-        return HTTPNotFound()
+    try:
+        disease_id = request.matchdict['id'].upper()
+        disease = DBSession.query(Disease).filter_by(disease_id=disease_id).one_or_none()
+        if disease:
+            return disease.annotations_and_children_to_dict()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='locus', renderer='json', request_method='GET')
 def locus(request):
@@ -865,28 +1039,43 @@ def locus(request):
         else:
             return HTTPNotFound()
     except Exception as e:
-        logging.exception(str(e))
-        return HTTPNotFound()
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
         
-
 @view_config(route_name='locus_tabs', renderer='json', request_method='GET')
 def locus_tabs(request):
-    id = extract_id_request(request, 'locus')
-    locus = get_locus_by_id(id)
-    if locus:
-        return locus.tabs()
-    else:
-        return HTTPNotFound()
-
+    try:
+        id = extract_id_request(request, 'locus')
+        locus = get_locus_by_id(id)
+        if locus:
+            return locus.tabs()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='locus_phenotype_details', renderer='json', request_method='GET')
 def locus_phenotype_details(request):
-    id = extract_id_request(request, 'locus')
-    locus = get_locus_by_id(id)
-    if locus:
-        return locus.phenotype_to_dict()
-    else:
-        return HTTPNotFound()
+    try:
+        id = extract_id_request(request, 'locus')
+        locus = get_locus_by_id(id)
+        if locus:
+            return locus.phenotype_to_dict()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
+## WORK FROM HERE
+            
 @view_config(route_name='locus_phenotype_graph', renderer='json', request_method='GET')
 def locus_phenotype_graph(request):
     id = extract_id_request(request, 'locus')
