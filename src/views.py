@@ -996,7 +996,7 @@ def disease_ontology_graph(request):
     except Exception as e:
         log.error(e)
     finally:
-	if DBSession:
+        if DBSession:
             DBSession.remove()
             
 @view_config(route_name='disease_locus_details', renderer='json', request_method='GET')
