@@ -1074,112 +1074,174 @@ def locus_phenotype_details(request):
         if DBSession:
             DBSession.remove()
 
-## WORK FROM HERE
-            
 @view_config(route_name='locus_phenotype_graph', renderer='json', request_method='GET')
 def locus_phenotype_graph(request):
-    id = extract_id_request(request, 'locus')
-    locus = get_locus_by_id(id)
-    if locus:
-        return locus.phenotype_graph()
-    else:
-        return HTTPNotFound()
-
+    try:
+        id = extract_id_request(request, 'locus')
+        locus = get_locus_by_id(id)
+        if locus:
+            return locus.phenotype_graph()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='locus_go_graph', renderer='json', request_method='GET')
 def locus_go_graph(request):
-    id = extract_id_request(request, 'locus')
-    locus = get_locus_by_id(id)
-    if locus:
-        return locus.go_graph()
-    else:
-        return HTTPNotFound()
-
+    try:
+        id = extract_id_request(request, 'locus')
+        locus = get_locus_by_id(id)
+        if locus:
+            return locus.go_graph()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='locus_disease_graph', renderer='json', request_method='GET')
 def locus_disease_graph(request):
-    id = extract_id_request(request, 'locus')
-    locus = get_locus_by_id(id)
-    if locus:
-        return locus.disease_graph()
-    else:
-        return HTTPNotFound()
-
+    try:
+        id = extract_id_request(request, 'locus')
+        locus = get_locus_by_id(id)
+        if locus:
+            return locus.disease_graph()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='locus_expression_graph', renderer='json', request_method='GET')
 def locus_expression_graph(request):
-    # TEMP disable
-    return {
-        'nodes': [],
-        'edges': []
-    }
-    id = extract_id_request(request, 'locus')
-    locus = get_locus_by_id(id)
-    if locus:
-        return locus.expression_graph()
-    else:
-        return HTTPNotFound()
-
+    try:
+        return {
+            'nodes': [],
+            'edges': []
+        }
+        id = extract_id_request(request, 'locus')
+        locus = get_locus_by_id(id)
+        if locus:
+            return locus.expression_graph()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='locus_literature_details', renderer='json', request_method='GET')
 def locus_literature_details(request):
-    id = extract_id_request(request, 'locus')
-    locus = get_locus_by_id(id)
-    if locus:
-        return locus.literature_to_dict()
-    else:
-        return HTTPNotFound()
-
+    try:
+        id = extract_id_request(request, 'locus')
+        locus = get_locus_by_id(id)
+        if locus:
+            return locus.literature_to_dict()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='locus_literature_graph', renderer='json', request_method='GET')
 def locus_literature_graph(request):
-    id = extract_id_request(request, 'locus')
-    locus = get_locus_by_id(id)
-    if locus:
-        return locus.literature_graph()
-    else:
-        return HTTPNotFound()
-
+    try:
+        id = extract_id_request(request, 'locus')
+        locus = get_locus_by_id(id)
+        if locus:
+            return locus.literature_graph()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='locus_interaction_graph', renderer='json', request_method='GET')
 def locus_interaction_graph(request):
-    id = extract_id_request(request, 'locus')
-    locus = get_locus_by_id(id)
-    if locus:
-        return locus.interaction_graph()
-    else:
-        return HTTPNotFound()
-
+    try:
+        id = extract_id_request(request, 'locus')
+        locus = get_locus_by_id(id)
+        if locus:
+            return locus.interaction_graph()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='locus_regulation_graph', renderer='json', request_method='GET')
 def locus_regulation_graph(request):
-    id = extract_id_request(request, 'locus')
-    locus = get_locus_by_id(id)
-    if locus:
-        return locus.regulation_graph()
-    else:
-        return HTTPNotFound()
+    try:
+        id = extract_id_request(request, 'locus')
+        locus = get_locus_by_id(id)
+        if locus:
+            return locus.regulation_graph()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='locus_go_details', renderer='json', request_method='GET')
 def locus_go_details(request):
-    id = extract_id_request(request, 'locus')
-    locus = get_locus_by_id(id)
-    if locus:
-        return locus.go_to_dict()
-    else:
-        return HTTPNotFound()
+    try:
+        id = extract_id_request(request, 'locus')
+        locus = get_locus_by_id(id)
+        if locus:
+            return locus.go_to_dict()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='locus_disease_details', renderer='json', request_method='GET')
 def locus_disease_details(request):
-    id = extract_id_request(request, 'locus')
-    locus = get_locus_by_id(id)
-    if locus:
-        return locus.disease_to_dict()
-    else:
-        return HTTPNotFound()
+    try:
+        id = extract_id_request(request, 'locus')
+        locus = get_locus_by_id(id)
+        if locus:
+            return locus.disease_to_dict()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='locus_interaction_details', renderer='json', request_method='GET')
 def locus_interaction_details(request):
-    id = extract_id_request(request, 'locus')
-    locus = get_locus_by_id(id)
-    if locus:
-        return locus.interactions_to_dict()
-    else:
-        return HTTPNotFound()
+    try:
+        id = extract_id_request(request, 'locus')
+        locus = get_locus_by_id(id)
+        if locus:
+            return locus.interactions_to_dict()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 # TEMP disable
 # @view_config(route_name='locus_expression_details', renderer='json', request_method='GET')
@@ -1193,21 +1255,33 @@ def locus_interaction_details(request):
 
 @view_config(route_name='locus_neighbor_sequence_details', renderer='json', request_method='GET')
 def locus_neighbor_sequence_details(request):
-    id = extract_id_request(request, 'locus')
-    locus = get_locus_by_id(id)
-    if locus:
-        return locus.neighbor_sequence_details()
-    else:
-        return HTTPNotFound()
+    try:
+        id = extract_id_request(request, 'locus')
+        locus = get_locus_by_id(id)
+        if locus:
+            return locus.neighbor_sequence_details()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='locus_sequence_details', renderer='json', request_method='GET')
 def locus_sequence_details(request):
-    id = extract_id_request(request, 'locus')
-    locus = get_locus_by_id(id)
-    if locus:
-        return locus.sequence_details()
-    else:
-        return HTTPNotFound()
+    try:
+        id = extract_id_request(request, 'locus')
+        locus = get_locus_by_id(id)
+        if locus:
+            return locus.sequence_details()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='bioentity_list', renderer='json', request_method='POST')
 def analyze(request):
@@ -1219,208 +1293,317 @@ def analyze(request):
     if "bioent_ids" not in data:
         return HTTPBadRequest(body=json.dumps({'error': 'Key \"bioent_ids\" missing'}))
 
-    loci = DBSession.query(Locusdbentity).filter(Locusdbentity.dbentity_id.in_(data['bioent_ids'])).all()
+    try:
+        loci = DBSession.query(Locusdbentity).filter(Locusdbentity.dbentity_id.in_(data['bioent_ids'])).all()
 
-    return [locus.to_dict_analyze() for locus in loci]
+        return [locus.to_dict_analyze() for locus in loci]
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='dataset', renderer='json', request_method='GET')
 def dataset(request):
-    id = extract_id_request(request, 'dataset')
-
-    dataset = DBSession.query(Dataset).filter_by(dataset_id=id).one_or_none()
-    if dataset:
-        return dataset.to_dict(add_conditions=True, add_resources=True)
-    else:
-        return HTTPNotFound()
+    try:
+        id = extract_id_request(request, 'dataset')
+        dataset = DBSession.query(Dataset).filter_by(dataset_id=id).one_or_none()
+        if dataset:
+            return dataset.to_dict(add_conditions=True, add_resources=True)
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='keyword', renderer='json', request_method='GET')
 def keyword(request):
-    id = extract_id_request(request, 'keyword')
-
-    keyword = DBSession.query(Keyword).filter_by(keyword_id=id).one_or_none()
-    if keyword:
-        return keyword.to_dict()
-    else:
-        return HTTPNotFound()
+    try:
+        id = extract_id_request(request, 'keyword')
+        keyword = DBSession.query(Keyword).filter_by(keyword_id=id).one_or_none()
+        if keyword:
+            return keyword.to_dict()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='keywords', renderer='json', request_method='GET')
 def keywords(request):
-    keyword_ids = DBSession.query(distinct(DatasetKeyword.keyword_id)).all()
-
-    keywords = DBSession.query(Keyword).filter(Keyword.keyword_id.in_(keyword_ids)).all()
-    simple_keywords = [k.to_simple_dict() for k in keywords]
-    for k in simple_keywords:
-        k['name'] = k['display_name']
-    return simple_keywords
+    try:
+        keyword_ids = DBSession.query(distinct(DatasetKeyword.keyword_id)).all()
+        keywords = DBSession.query(Keyword).filter(Keyword.keyword_id.in_(keyword_ids)).all()
+        simple_keywords = [k.to_simple_dict() for k in keywords]
+        for k in simple_keywords:
+            k['name'] = k['display_name']
+        return simple_keywords
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='contig', renderer='json', request_method='GET')
 def contig(request):
-    id = extract_id_request(request, 'contig', param_name="format_name")
-
-    contig = DBSession.query(Contig).filter_by(contig_id=id).one_or_none()
-    if contig:
-        return contig.to_dict()
-    else:
-        return HTTPNotFound()
+    try:
+        id = extract_id_request(request, 'contig', param_name="format_name")
+        contig = DBSession.query(Contig).filter_by(contig_id=id).one_or_none()
+        if contig:
+            return contig.to_dict()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='contig_sequence_details', renderer='json', request_method='GET')
 def contig_sequence_details(request):
-    id = extract_id_request(request, 'contig')
-
-    contig = DBSession.query(Contig).filter_by(contig_id=id).one_or_none()
-    if contig:
-        return contig.sequence_details()
-    else:
-        return HTTPNotFound()
+    try:
+        id = extract_id_request(request, 'contig')
+        contig = DBSession.query(Contig).filter_by(contig_id=id).one_or_none()
+        if contig:
+            return contig.sequence_details()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='locus_posttranslational_details', renderer='json', request_method='GET')
 def locus_posttranslational_details(request):
-    id = extract_id_request(request, 'locus')
-    locus = get_locus_by_id(id)
-    if locus:
-        return locus.posttranslational_details()
-    else:
-        return HTTPNotFound()
+    try:
+        id = extract_id_request(request, 'locus')
+        locus = get_locus_by_id(id)
+        if locus:
+            return locus.posttranslational_details()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='reference_posttranslational_details', renderer='json', request_method='GET')
 def reference_posttranslational_details(request):
-    id = extract_id_request(request, 'reference')
-    reference = DBSession.query(Referencedbentity).filter_by(dbentity_id = id).one_or_none()
-    if reference:
-        
-        ptms = DBSession.query(Posttranslationannotation).filter_by(reference_id = reference.dbentity_id).options(joinedload('psimod'),joinedload('modifier'),joinedload('dbentity')).all()
-        ptms_return_value = []
-        for ptm in ptms:
-            obj = {
+    try:
+        id = extract_id_request(request, 'reference')
+        reference = DBSession.query(Referencedbentity).filter_by(dbentity_id = id).one_or_none()
+        if reference:
+            ptms = DBSession.query(Posttranslationannotation).filter_by(reference_id = reference.dbentity_id).options(joinedload('psimod'),joinedload('modifier'),joinedload('dbentity')).all()
+            ptms_return_value = []
+            for ptm in ptms:
+                obj = {
                     'protein':ptm.dbentity.display_name,
                     'site_residue':ptm.site_residue,
                     'site_index':ptm.site_index,
                     'modification':ptm.psimod.display_name,
                     'modifier':None
-                  }
-            if ptm.modifier:
-                obj['modifier'] = ptm.modifier.display_name
-            ptms_return_value.append(obj)
-        return ptms_return_value
-    else:
-        return HTTPNotFound()
+                }
+                if ptm.modifier:
+                    obj['modifier'] = ptm.modifier.display_name
+                ptms_return_value.append(obj)
+            return ptms_return_value
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 
 @view_config(route_name='locus_ecnumber_details', renderer='json', request_method='GET')
 def locus_ecnumber_details(request):
-    id = extract_id_request(request, 'locus')
-    locus = get_locus_by_id(id)
-    if locus:
-        return locus.ecnumber_details()
-    else:
-        return HTTPNotFound()
+    try:
+        id = extract_id_request(request, 'locus')
+        locus = get_locus_by_id(id)
+        if locus:
+            return locus.ecnumber_details()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 
 @view_config(route_name='locus_protein_experiment_details', renderer='json', request_method='GET')
 def locus_protein_experiment_details(request):
-    id = extract_id_request(request, 'locus')
-    locus = get_locus_by_id(id)
-    if locus:
-        return locus.protein_experiment_details()
-    else:
-        return HTTPNotFound()
+    try:
+        id = extract_id_request(request, 'locus')
+        locus = get_locus_by_id(id)
+        if locus:
+            return locus.protein_experiment_details()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='locus_protein_abundance_details', renderer='json', request_method='GET')
 def locus_protein_abundance_details(request):
-    id = extract_id_request(request, 'locus')
-    locus = get_locus_by_id(id)
-    if locus:
-        return locus.protein_abundance_details()
-    else:
-        return HTTPNotFound()
+    try:
+        id = extract_id_request(request, 'locus')
+        locus = get_locus_by_id(id)
+        if locus:
+            return locus.protein_abundance_details()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='locus_protein_domain_details', renderer='json', request_method='GET')
 def locus_protein_domain_details(request):
-    id = extract_id_request(request, 'locus')
-    locus = get_locus_by_id(id)
-    if locus:
-        return locus.protein_domain_details()
-    else:
-        return HTTPNotFound()
+    try:
+        id = extract_id_request(request, 'locus')
+        locus = get_locus_by_id(id)
+        if locus:
+            return locus.protein_domain_details()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+
 
 @view_config(route_name='locus_binding_site_details', renderer='json', request_method='GET')
 def locus_binding_site_details(request):
-    id = extract_id_request(request, 'locus')
-    locus = get_locus_by_id(id)
-    if locus:
-        return locus.binding_site_details()
-    else:
-        return HTTPNotFound()
+    try:
+        id = extract_id_request(request, 'locus')
+        locus = get_locus_by_id(id)
+        if locus:
+            return locus.binding_site_details()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='locus_regulation_details', renderer='json', request_method='GET')
 def locus_regulation_details(request):
-    id = extract_id_request(request, 'locus')
-    locus = get_locus_by_id(id)
-
-    if locus:
-        return locus.regulation_details()
-    else:
-        return HTTPNotFound()
+    try:
+        id = extract_id_request(request, 'locus')
+        locus = get_locus_by_id(id)
+        if locus:
+            return locus.regulation_details()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='locus_regulation_target_enrichment', renderer='json', request_method='GET')
 def locus_regulation_target_enrichment(request):
-    id = extract_id_request(request, 'locus')
-    locus = get_locus_by_id(id)
-    if locus:
-        return locus.regulation_target_enrichment()
-    else:
-        return HTTPNotFound()
+    try:
+        id = extract_id_request(request, 'locus')
+        locus = get_locus_by_id(id)
+        if locus:
+            return locus.regulation_target_enrichment()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='locus_protein_domain_graph', renderer='json', request_method='GET')
 def locus_protein_domain_graph(request):
-    id = extract_id_request(request, 'locus')
-    locus = get_locus_by_id(id)
-    if locus:
-        return locus.protein_domain_graph()
-    else:
-        return HTTPNotFound()
+    try:
+        id = extract_id_request(request, 'locus')
+        locus = get_locus_by_id(id)
+        if locus:
+            return locus.protein_domain_graph()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='domain', renderer='json', request_method='GET')
 def domain(request):
-    id = extract_id_request(request, 'proteindomain', param_name="format_name")
-
-    proteindomain = DBSession.query(Proteindomain).filter_by(proteindomain_id=id).one_or_none()
-    if proteindomain:
-        return proteindomain.to_dict()
-    else:
-        return HTTPNotFound()
+    try:
+        id = extract_id_request(request, 'proteindomain', param_name="format_name")
+        proteindomain = DBSession.query(Proteindomain).filter_by(proteindomain_id=id).one_or_none()
+        if proteindomain:
+            return proteindomain.to_dict()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='domain_locus_details', renderer='json', request_method='GET')
 def domain_locus_details(request):
-    id = extract_id_request(request, 'proteindomain')
-
-    proteindomain = DBSession.query(Proteindomain).filter_by(proteindomain_id=id).one_or_none()
-    if proteindomain:
-        return proteindomain.locus_details()
-    else:
-        return HTTPNotFound()
+    try:
+        id = extract_id_request(request, 'proteindomain')
+        proteindomain = DBSession.query(Proteindomain).filter_by(proteindomain_id=id).one_or_none()
+        if proteindomain:
+            return proteindomain.locus_details()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='domain_enrichment', renderer='json', request_method='GET')
 def domain_enrichment(request):
-    id = extract_id_request(request, 'proteindomain')
-
-    proteindomain = DBSession.query(Proteindomain).filter_by(proteindomain_id=id).one_or_none()
-    if proteindomain:
-        return proteindomain.enrichment()
-    else:
-        return HTTPNotFound()
+    try:
+        id = extract_id_request(request, 'proteindomain')
+        proteindomain = DBSession.query(Proteindomain).filter_by(proteindomain_id=id).one_or_none()
+        if proteindomain:
+            return proteindomain.enrichment()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='ecnumber', renderer='json', request_method='GET')
 def ecnumber(request):
-    id = extract_id_request(request, 'ec')
-
-    ec = DBSession.query(Ec).filter_by(ec_id=id).one_or_none()
-
-    if ec:
-        return ec.to_dict()
-    else:
-        return HTTPNotFound()
-
-
+    try:
+        id = extract_id_request(request, 'ec')
+        ec = DBSession.query(Ec).filter_by(ec_id=id).one_or_none()
+        if ec:
+            return ec.to_dict()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+    
 @view_config(route_name='primer3', renderer='json', request_method='POST')
 def primer3(request):
     params = request.json_body
@@ -1680,39 +1863,48 @@ def primer3(request):
         return obj
 
     except Exception as e:
+        log.error(e)
         return HTTPBadRequest(body=json.dumps({'error': str(e) }))
 
 @view_config(route_name='ecnumber_locus_details', renderer='json', request_method='GET')
 def ecnumber_locus_details(request):
-    id = extract_id_request(request, 'ec')
-
-    ec = DBSession.query(Ec).filter_by(ec_id=id).one_or_none()
-
-    if ec:
-        return ec.locus_details()
-    else:
-        return HTTPNotFound()
+    try:
+        id = extract_id_request(request, 'ec')
+        ec = DBSession.query(Ec).filter_by(ec_id=id).one_or_none()
+        if ec:
+            return ec.locus_details()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='goslim', renderer='json', request_method='GET')
 def goslim(request):
+    try:
+        slim_data = DBSession.query(Goslim).all()
+        data = {}
+        for x in slim_data:
+            slim_type = x.slim_name + ": " + x.go.go_namespace.split(' ')[1]
+            slim_terms = []
+            if slim_type in data:
+                slim_terms = data[slim_type]
+            slim_terms.append(x.go.display_name + " ; " + x.go.goid)
+            data[slim_type] = slim_terms
 
-    slim_data = DBSession.query(Goslim).all()
-    data = {}
-    for x in slim_data:
-        slim_type = x.slim_name + ": " + x.go.go_namespace.split(' ')[1]
-        slim_terms = []
-        if slim_type in data:
-            slim_terms = data[slim_type]
-        slim_terms.append(x.go.display_name + " ; " + x.go.goid)
-        data[slim_type] = slim_terms
+        orderedData = []
+        for slim_type in sorted(data.keys()):
+            orderedData.append({"slim_type": slim_type,
+                                "terms": sorted(data[slim_type])})
 
-    orderedData = []
-    for slim_type in sorted(data.keys()):
-        orderedData.append({"slim_type": slim_type,
-                            "terms": sorted(data[slim_type])})
-
-    return orderedData
-
+        return orderedData
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='ambiguous_names', renderer='json', request_method='GET')
 def ambiguous_names(request):
@@ -1776,109 +1968,133 @@ def ambiguous_names(request):
 
 @view_config(route_name='complex', renderer='json', request_method='GET')
 def complex(request):
-    
-    complexAC = request.matchdict['id']
-
-    complex = DBSession.query(Complexdbentity).filter_by(format_name=complexAC).one_or_none() 
-
-    if complex is not None:
-        return complex.protein_complex_details()
-    else:
-        return {}
+    try:
+        complexAC = request.matchdict['id']
+        complex = DBSession.query(Complexdbentity).filter_by(format_name=complexAC).one_or_none()
+        if complex is not None:
+            return complex.protein_complex_details()
+        else:
+            return {}
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='allele', renderer='json', request_method='GET')
 def allele(request):
+    try:
+        allele = request.matchdict['id'].replace('SGD:S', 'S')
+        alleleObj = None
+        if allele.startswith('S0'):
+            alleleObj = DBSession.query(Alleledbentity).filter_by(sgdid=allele).one_or_none()
+        else:
+            alleleObj = DBSession.query(Alleledbentity).filter(Alleledbentity.format_name.ilike(allele)).one_or_none()
 
-    allele = request.matchdict['id'].replace('SGD:S', 'S')
-    alleleObj = None
-    if allele.startswith('S0'):
-        alleleObj = DBSession.query(Alleledbentity).filter_by(sgdid=allele).one_or_none()
-    else:
-        alleleObj = DBSession.query(Alleledbentity).filter(Alleledbentity.format_name.ilike(allele)).one_or_none()
-
-    if alleleObj is not None:
-        return alleleObj.to_dict()
-    else:
-        return {}
-
+        if alleleObj is not None:
+            return alleleObj.to_dict()
+        else:
+            return {}
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='allele_phenotype_details', renderer='json', request_method='GET')
 def allele_phenotype_details(request):
 
-    allele = request.matchdict['id'].replace('SGD:S', 'S')
+    try:
+        allele = request.matchdict['id'].replace('SGD:S', 'S')
 
-    alleleObj = None
-    if allele.startswith('S0'):
-        alleleObj = DBSession.query(Alleledbentity).filter_by(sgdid=allele).one_or_none()
-    else:
-        alleleObj = DBSession.query(Alleledbentity).filter(Alleledbentity.format_name.ilike(allele)).one_or_none()
+        alleleObj = None
+        if allele.startswith('S0'):
+            alleleObj = DBSession.query(Alleledbentity).filter_by(sgdid=allele).one_or_none()
+        else:
+            alleleObj = DBSession.query(Alleledbentity).filter(Alleledbentity.format_name.ilike(allele)).one_or_none()
 
-    if alleleObj is not None:
-        return alleleObj.phenotype_to_dict()
-    else:
-        return []
-    
+        if alleleObj is not None:
+            return alleleObj.phenotype_to_dict()
+        else:
+            return []
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='allele_interaction_details', renderer='json', request_method='GET')
 def allele_interaction_details(request):
+    try:
+        allele = request.matchdict['id'].replace('SGD:S', 'S')
 
-    allele = request.matchdict['id'].replace('SGD:S', 'S')
+        alleleObj = None
+        if allele.startswith('S0'):
+            alleleObj = DBSession.query(Alleledbentity).filter_by(sgdid=allele).one_or_none()
+        else:
+            alleleObj = DBSession.query(Alleledbentity).filter(Alleledbentity.format_name.ilike(allele)).one_or_none()
 
-    alleleObj = None
-    if allele.startswith('S0'):
-        alleleObj = DBSession.query(Alleledbentity).filter_by(sgdid=allele).one_or_none()
-    else:
-        alleleObj = DBSession.query(Alleledbentity).filter(Alleledbentity.format_name.ilike(allele)).one_or_none()
-
-    if alleleObj is not None:
-        return alleleObj.interaction_to_dict()
-    else:
-        return []
-
+        if alleleObj is not None:
+            return alleleObj.interaction_to_dict()
+        else:
+            return []
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='allele_network_graph', renderer='json', request_method='GET')
 def allele_network_graph(request):
+    try:
+        allele = request.matchdict['id'].replace('SGD:S', 'S')
 
-    allele = request.matchdict['id'].replace('SGD:S', 'S')
+        alleleObj = None
+        if allele.startswith('S0'):
+            alleleObj = DBSession.query(Alleledbentity).filter_by(sgdid=allele).one_or_none()
+        else:
+            alleleObj = DBSession.query(Alleledbentity).filter(Alleledbentity.format_name.ilike(allele)).one_or_none()
 
-    alleleObj = None
-    if allele.startswith('S0'):
-        alleleObj = DBSession.query(Alleledbentity).filter_by(sgdid=allele).one_or_none()
-    else:
-        alleleObj = DBSession.query(Alleledbentity).filter(Alleledbentity.format_name.ilike(allele)).one_or_none()
-
-    if alleleObj is not None:
-        return alleleObj.allele_network()
-    else:
-        # return HTTPNotFound()
-        return []
-
+        if alleleObj is not None:
+            return alleleObj.allele_network()
+        else:
+            return []
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='alignment', renderer='json', request_method='GET')
 def alignment(request):
+    try:
+        locus = request.matchdict['id']
+        files = DBSession.query(Filedbentity).filter(Filedbentity.previous_file_name.like(locus+'%')).all()
 
-    locus = request.matchdict['id']
-
-    files = DBSession.query(Filedbentity).filter(Filedbentity.previous_file_name.like(locus+'%')).all()
-    
-    if len(files) > 0:
-        data = {}
-        for file in files:
-            s3_url = file.s3_url.split("?versionId=")[0]
-            if file.previous_file_name not in [locus+".png", locus+".align", locus+"_dna.png", locus+"_dna.align"]:
-                continue
-            if '_dna' in file.previous_file_name:
-                if ".png" in file.previous_file_name:
-                    data['dna_images_url'] = s3_url
+        if len(files) > 0:
+            data = {}
+            for file in files:
+                s3_url = file.s3_url.split("?versionId=")[0]
+                if file.previous_file_name not in [locus+".png", locus+".align", locus+"_dna.png", locus+"_dna.align"]:
+                    continue
+                if '_dna' in file.previous_file_name:
+                    if ".png" in file.previous_file_name:
+                        data['dna_images_url'] = s3_url
+                    else:
+                        data['dna_align_url'] = s3_url
                 else:
-                    data['dna_align_url'] = s3_url
-            else:
-                if ".png" in file.previous_file_name:
-                    data['protein_images_url'] = s3_url
-                else:
-                    data['protein_align_url'] = s3_url
-        return data
-    else:
-        return {}
+                    if ".png" in file.previous_file_name:
+                        data['protein_images_url'] = s3_url
+                    else:
+                        data['protein_align_url'] = s3_url
+            return data
+        else:
+            return {}
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 # check for basic rad54 response
 @view_config(route_name='healthcheck', renderer='json', request_method='GET')
@@ -1908,13 +2124,20 @@ def healthcheck(request):
 # api portal with swagger
 @view_config(route_name='api_portal', renderer='json')
 def api_portal(request):
-    request.response.headers.update({
-       'Access-Control-Allow-Origin': '*',
-       'Access-Control-Allow-Methods': 'POST,GET,DELETE,PUT,OPTIONS',
-       'Access-Control-Allow-Headers': 'Origin, Content-Type, Accept, Authorization'
-    })
-    json_file = os.path.join(str(Path(__file__).parent.parent), "api_docs/swagger.json")
-    with open(json_file) as f:
-        data = json.load(f)
+    try:
+        request.response.headers.update({
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'POST,GET,DELETE,PUT,OPTIONS',
+            'Access-Control-Allow-Headers': 'Origin, Content-Type, Accept, Authorization'
+        })
+        json_file = os.path.join(str(Path(__file__).parent.parent), "api_docs/swagger.json")
+        with open(json_file) as f:
+            data = json.load(f)
 
-    return data
+        return data
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+
