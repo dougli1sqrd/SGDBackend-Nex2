@@ -49,6 +49,12 @@ class ResultsList extends Component {
     else { // if (d.category == 'allele' || d.category == 'Allele') {
 	href = "#/curate/allele/" + d.sgdid;
     }
+
+
+    console.log("category="+d.category + ", href=" + d.href + ", dname=" + d.display_name);
+
+      
+      
     return (
       <div className={style.resultContainer} key={`sr${i}`}>
         {this.renderHeader(d)}
