@@ -46,7 +46,7 @@ class ResultsList extends Component {
     if (d.href) {
 	href = d.href;
     }
-    else if (d.category == 'allele' or d.category == 'Allele') {
+    else if (d.category == 'allele' || d.category == 'Allele') {
 	href = "#/curate/allele/" + d.sgdid;
     }
     return (
