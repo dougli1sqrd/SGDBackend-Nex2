@@ -41,26 +41,14 @@ class ResultsList extends Component {
     }
     else{
       dname = d.displayName ? d.displayName : undefined;
-    }
-    let href = '';
-    if (d.href) {
-	href = d.href;
-    }
-    else { // if (d.category == 'allele' || d.category == 'Allele') {
-	href = "#/curate/allele/" + d.sgdid;
-    }
-
-
-    console.log("category="+d.category + ", href=" + d.href + ", dname=" + d.display_name);
-
-      
-      
+    }      
     return (
       <div className={style.resultContainer} key={`sr${i}`}>
         {this.renderHeader(d)}
         {this.renderDetailFromFields(d, fields)}
         {this.renderHighlightedValues(d.highlight)}
-        <ActionList category={d.category} href={href} display_name={dname} />
+        console.log('category='+d.category);
+        <ActionList category={d.category} href={d.href} display_name={dname} />
         <hr />
       </div>
     );
