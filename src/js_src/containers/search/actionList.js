@@ -16,10 +16,7 @@ class ActionList extends Component {
         </Link>);
       }
       else{
-        let href = `curate${this.props.href}`;
-
-	console.log("href=" + href);
-	  
+        let href = `curate${this.props.href}`;	  
         return <Link style={{ display: 'inline-block', minWidth: '6rem' }} to={href}><i className='fa fa-edit' /> Curate</Link>;
       }
 
