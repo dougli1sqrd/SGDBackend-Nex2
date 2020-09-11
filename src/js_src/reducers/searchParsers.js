@@ -31,6 +31,8 @@ export function parseResults(results) {
     switch (d.category) {
     case 'gene':
       return parseGeneResult(d);
+    case 'allele':
+      return parseAlleleResult(d);
     case 'go':
       return parseGoResult(d);
     case 'disease':
@@ -112,6 +114,15 @@ function parseGeneResult(_d) {
     homologs: parseLogs(d.homologs),
     paralogs: parseLogs(d.paralogs),
     genomic_coordinates: parseCoordinates(_d)
+  };
+}
+
+function parseAlleleResult(_d) {
+  let d = injectHighlightIntoResponse(_d);
+  return {
+    category: d.category || 'allele',
+    display_name: d.allele_name,
+    href: d.href
   };
 }
 
