@@ -1036,17 +1036,13 @@ CREATE INDEX transcriptreference_source_fk_index ON nex.transcript_reference (so
 DROP TABLE IF EXISTS nex.alleledbentity CASCADE;
 CREATE TABLE nex.alleledbentity (
 	dbentity_id bigint NOT NULL DEFAULT nextval('object_seq'),
-	allele_name varchar(500) NOT NULL,
+	so_id bigint NOT NULL,
 	description varchar(500),
-	structural_variant bigint NOT NULL,
 	CONSTRAINT alleledbentity_pk PRIMARY KEY (dbentity_id)
 ) ;
 COMMENT ON TABLE nex.alleledbentity IS 'Gene variants or alleles that show observable phenotypic traits.';
 COMMENT ON COLUMN nex.alleledbentity.description IS 'Description or comment.';
-COMMENT ON COLUMN nex.alleledbentity.allele_name IS 'Public display name.';
-COMMENT ON COLUMN nex.alleledbentity.structural_variant IS 'Structural variant FK to SO.ID.';
-ALTER TABLE nex.alleledbentity ADD CONSTRAINT alleledbentity_uk UNIQUE (allele_name);
-
+COMMENT ON COLUMN nex.alleledbentity.so_id IS 'so_id FK to SO.ID.';
 
 DROP TABLE IF EXISTS nex.allele_reference CASCADE;
 CREATE TABLE nex.allele_reference (
@@ -1054,6 +1050,7 @@ CREATE TABLE nex.allele_reference (
     allele_id bigint NOT NULL,
     reference_id bigint NOT NULL,
     source_id bigint NOT NULL,
+	reference_class varchar(40),
     date_created timestamp NOT NULL DEFAULT LOCALTIMESTAMP,
     created_by varchar(12) NOT NULL,
     CONSTRAINT allele_reference_pk PRIMARY KEY (allele_reference_id)
@@ -1063,9 +1060,11 @@ COMMENT ON COLUMN nex.allele_reference.date_created IS 'Date the record was ente
 COMMENT ON COLUMN nex.allele_reference.allele_id IS 'FK to ALLELEDBENTITY.DBENTITY_ID.';
 COMMENT ON COLUMN nex.allele_reference.allele_reference_id IS 'Unique identifier (serial number).';
 COMMENT ON COLUMN nex.allele_reference.source_id IS 'FK to SOURCE.SOURCE_ID.';
+COMMENT ON COLUMN nex.allele_reference.reference_class IS 'The column in ALLELEDBENTITY that is associated with the reference.';
 COMMENT ON COLUMN nex.allele_reference.created_by IS 'Username of the person who entered the record into the database.';
 COMMENT ON COLUMN nex.allele_reference.reference_id IS 'FK to REFERENCEDBENTITY.DBENTITY_ID.';
 ALTER TABLE nex.allele_reference ADD CONSTRAINT allele_reference_uk UNIQUE (allele_id,reference_id);
+ALTER TABLE nex.allele_reference ADD CONSTRAINT allelereference_class_ck CHECK (REFERENCE_CLASS is NULL or REFERENCE_CLASS in ('allele_name', 'so_term' , 'allele_description'));
 CREATE INDEX allelereference_source_fk_index ON nex.allele_reference (source_id);
 CREATE INDEX allelereference_ref_fk_index ON nex.allele_reference (reference_id);
 
