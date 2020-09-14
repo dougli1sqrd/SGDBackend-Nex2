@@ -47,7 +47,6 @@ class ResultsList extends Component {
         {this.renderHeader(d)}
         {this.renderDetailFromFields(d, fields)}
         {this.renderHighlightedValues(d.highlight)}
-        console.log('category='+d.category);
         <ActionList category={d.category} href={d.href} display_name={dname} />
         <hr />
       </div>

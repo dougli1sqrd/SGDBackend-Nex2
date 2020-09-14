@@ -49,7 +49,6 @@ class ResultsTable extends Component {
 
   renderActions(d) {
     let dname = d.display_name ? d.display_name : undefined;
-    console.log('category='+d.category);  
     return <ActionList category={d.category} href={d.href} id={d.id} display_name={dname} />;
   }
 
