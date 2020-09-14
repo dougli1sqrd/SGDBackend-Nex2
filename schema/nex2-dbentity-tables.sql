@@ -1096,9 +1096,9 @@ CREATE INDEX allelealias_source_fk_index ON nex.allele_alias (source_id);
 DROP TABLE IF EXISTS nex.allele_geninteraction CASCADE;
 CREATE TABLE nex.allele_geninteraction(
     allele_geninteraction_id bigint NOT NULL DEFAULT nextval('link_seq'),
-    allele1_id bigint NOT NULL,
-	allele2_id bigint NOT NULL,
-	sgd_score numeric,
+    allele1_id bigint,
+	allele2_id bigint,
+	sga_score numeric,
     pvalue numeric,
     interaction_id bigint NOT NULL,
     source_id bigint NOT NULL,
