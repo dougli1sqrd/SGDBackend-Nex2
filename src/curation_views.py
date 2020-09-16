@@ -55,8 +55,8 @@ from .tsv_parser import parse_tsv_annotations
 from .models_helpers import ModelsHelper
 from .phenotype_helpers import add_phenotype_annotations, update_phenotype_annotations,\
       delete_phenotype_annotations, get_list_of_phenotypes, get_one_phenotype
-from .allele_helpers import add_allele_data, get_list_of_alleles, get_one_allele, \
-      update_allele_data, delete_allele_data, get_all_allele_types 
+#from .allele_helpers import add_allele_data, get_list_of_alleles, get_one_allele, \
+#      update_allele_data, delete_allele_data, get_all_allele_types 
 from .author_response_helpers import insert_author_response, get_author_responses, update_author_response
 from .litguide_helpers import get_list_of_papers, update_litguide, add_litguide
 from .disease_helpers import insert_update_disease_annotations, delete_disease_annotation, get_diseases_by_filters, upload_disease_file
@@ -2178,18 +2178,21 @@ def phenotype_delete(request):
 @view_config(route_name='get_allele_types', renderer='json', request_method='POST')
 def get_allele_types(request):
 
-    return get_all_allele_types(request)
+    # return get_all_allele_types(request)
+    return []
 
 @view_config(route_name='allele_add', renderer='json', request_method='POST')
 @authenticate
 def allele_add(request):
 
-    return add_allele_data(request)
+    # return add_allele_data(request)
+    return {}
 
 @view_config(route_name='get_alleles',renderer='json',request_method='GET')
 def get_alleles(request):
     try:
-        return get_list_of_alleles(request)
+        # return get_list_of_alleles(request)
+        return []
     except Exception as e:
         log.error(e)
     finally:
@@ -2199,7 +2202,8 @@ def get_alleles(request):
 @view_config(route_name='get_allele',renderer='json',request_method='GET')
 def get_allele(request):
     try:
-        return get_one_allele(request)
+        # return get_one_allele(request)
+        return {}
     except Exception as e:
         log.error(e)
     finally:
@@ -2210,14 +2214,16 @@ def get_allele(request):
 @authenticate
 def allele_update(request):
 
-    return update_allele_data(request)
+    # return update_allele_data(request)
+    return {}
 
 @view_config(route_name='allele_delete',renderer='json',request_method='POST')
 @authenticate
 def allele_delete(request):
 
-    return delete_allele_data(request)
-            
+    # return delete_allele_data(request)
+    return {}
+
 @view_config(route_name='add_author_response',renderer='json',request_method='POST')
 def add_author_response(request):
 
