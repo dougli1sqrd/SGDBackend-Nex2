@@ -18,7 +18,7 @@ class TwoColTextField extends Component {
           <input type='text' name={this.props.name} value={this.props.value} onChange={this.props.onOptionChange} />
         </div>
         <div className='columns medium-6 small-6'>
-          <div> { this.state.sec_title2 } </div>
+          <div> <label> { this.state.sec_title2 } </label> </div>
           <input type='text' name={this.props.name2} value={this.props.value2} onChange={this.props.onOptionChange} />
         </div>
       </div>
