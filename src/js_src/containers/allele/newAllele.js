@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import fetchData from '../../lib/fetchData';
+// import fetchData from '../../lib/fetchData';
 import { connect } from 'react-redux';
-import { setError, setMessage } from '../../actions/metaActions';
-import { setAllele } from '../../actions/alleleActions';
+// import { setError, setMessage } from '../../actions/metaActions';
+// import { setAllele } from '../../actions/alleleActions';
 // import OneAllele from './oneAllele';
 
-const ADD_ALLELE = '/allele_add';
+// const ADD_ALLELE = '/allele_add';
 
 class NewAllele extends Component {
   constructor(props) {
