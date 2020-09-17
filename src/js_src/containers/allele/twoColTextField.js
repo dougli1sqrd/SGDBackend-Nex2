@@ -6,7 +6,8 @@ class TwoColTextField extends Component {
     super(props);
     this.state = {
       // just to have this section in case we need to do something here
-      sec_title: props.sec_title
+      sec_title: props.sec_title,
+      sec_title2: props.sec_title2
     };
   }
 
