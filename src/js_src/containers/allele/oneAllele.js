@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import CommentSection from '../phenotype/commentSection';
-//import TwoColTextField from './twoColTextField';
+import TwoColTextField from './twoColTextField';
 import OneColTextField from './oneColTextField';
 //import AutocompleteSection from './autocompleteSection';
 
@@ -19,7 +19,14 @@ class OneAllele extends Component {
     return (
 
       <div>
+	    
+        {/* allele name & references */}
+        <TwoColTextField sec_title='Allele name' name='allele_name' value={this.props.allele.allele_name} onOptionChange={this.props.onOptionChange} sec_title2='Allele name PMIDs (optional)' name2='allele_name_pmids' value={this.props.allele.allele_name_pmids} onOptionChange2={this.props.onOptionChange} />
 
+        {/* affected gene name & references*/}
+        <TwoColTextField sec_title='Affected gene name' name='affected_gene' value={this.props.allele.affected_gene} onOptionChange={this.props.onOptionChange} sec_title2='Affected gene name PMIDs (optional)' name2='affected_gene_pmids' value={this.props.allele.affected_gene_pmids} onOptionChange2={this.props.onOptionChange} />
+
+        {/* alias names & references*/}
 
 	
         {/* desctription */}
