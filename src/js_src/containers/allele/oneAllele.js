@@ -38,11 +38,11 @@ class OneAllele extends Component {
         <CommentSection sec_title='Description' name='desc' value={this.props.allele.desc} onOptionChange={this.props.onOptionChange} placeholder='Enter description' rows='3' cols='500' />
 
         {/* literature */}
-        <OneColTextField sec_title='Primary (space delimited PMIDs):' name='primary_pmids' value={this.props.allele.primary_pmids} onOptionChange={this.props.onOptionChange} />
+        <OneColTextField sec_title='Primary Literature (space delimited PMIDs):' name='primary_pmids' value={this.props.allele.primary_pmids} onOptionChange={this.props.onOptionChange} />
 
-        <OneColTextField sec_title='Additional (space delimited PMIDs):' name='additional_pmids' value={this.props.allele.primary_pmids} onOptionChange={this.props.onOptionChange} />
+        <OneColTextField sec_title='Additional Literature (space delimited PMIDs):' name='additional_pmids' value={this.props.allele.primary_pmids} onOptionChange={this.props.onOptionChange} />
 
-        <OneColTextField sec_title='Review (space delimited PMIDs):' name='review_pmids' value={this.props.allele.primary_pmids} onOptionChange={this.props.onOptionChange} />
+        <OneColTextField sec_title='Review Literature (space delimited PMIDs):' name='review_pmids' value={this.props.allele.primary_pmids} onOptionChange={this.props.onOptionChange} />
 	
       </div>
 
