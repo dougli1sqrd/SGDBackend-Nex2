@@ -2200,8 +2200,8 @@ def get_alleles(request):
 
     return []
 
-@view_config(route_name='get_allele', renderer='json', request_method='GET')
-def get_allele(request):
+@view_config(route_name='get_allele_data', renderer='json', request_method='GET')
+def get_allele_data(request):
     # return get_one_allele(request) 
     return []
 
