@@ -1,0 +1,163 @@
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import fetchData from '../../lib/fetchData';
+import Loader from '../../components/loader';
+import { connect } from 'react-redux';
+import { setError, setMessage } from '../../actions/metaActions';
+import { setAllele } from '../../actions/alleleActions';
+// import OneAllele from './oneAllele';
+// import CommentSection from '../phenotype/commentSection';
+
+const UPDATE_ALLELE = '/allele_update';
+const DELETE_ALLELE = '/allele_delete';
+// const GET_ALLELE = '/get_allele_data';
+
+const TIMEOUT = 300000;
+
+class EditAllele extends Component {
+  constructor(props) {
+    super(props);
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleUpdate = this.handleUpdate.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
+  
+    this.state = {
+      allele_id: null,
+      isLoading: false,
+      isComplete: false,
+    };
+  }
+
+  componentDidMount() {
+    let url = this.setVariables();
+    this.getData(url);
+  }
+
+  handleChange() {
+    let currentAllele = {};
+    let data = new FormData(this.refs.form);
+    for (let key of data.entries()) {
+      currentAllele[key[0]] = key[1];
+    }
+    this.props.dispatch(setAllele(currentAllele));
+  }
+
+  handleUpdateOnly(e) {
+    e.preventDefault();
+    this.handleUpdate(e, '0');
+  }
+    
+  handleUpdateAll(e) {
+    e.preventDefault();
+    this.handleUpdate(e, '1');
+  }
+
+  handleUpdate(e) {
+    e.preventDefault();
+    let formData = new FormData();
+    for(let key in this.props.allele){
+      formData.append(key,this.props.allele[key]);
+    }
+    fetchData(UPDATE_ALLELE, {
+      type: 'POST',
+      data: formData,
+      processData: false,
+      contentType: false,
+      timeout: TIMEOUT
+    }).then((data) => {
+      this.props.dispatch(setMessage(data.success));
+    }).catch((err) => {
+      this.props.dispatch(setError(err.error));
+    });
+  }
+
+  handleDelete(e) {
+    e.preventDefault();
+    let formData = new FormData();
+    fetchData(DELETE_ALLELE, {
+      type: 'POST',
+      data: formData,
+      processData: false,
+      contentType: false,
+      timeout: TIMEOUT
+    }).then((data) => {
+      this.props.dispatch(setMessage(data.success));
+    }).catch((err) => {
+      this.props.dispatch(setError(err.error));
+    });
+  }
+
+  addButtons() {
+    return (
+      <div>
+        <div className='row'>
+          <div className='columns medium-6 small-6'>
+            <button type='submit' id='submit' value='0' className="button expanded" onClick={this.handleUpdate.bind(this)} > Update Allele data </button>
+          </div>
+          <div className='columns medium-6 small-6'>
+            <button type='button' className="button alert expanded" onClick={(e) => { if (confirm('Are you sure you want to delete this allele along with all the data associated with it?')) this.handleDelete(e); }} > Delete this Allele </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  getData(url) {
+    this.setState({ isLoading: true });
+    fetchData(url).then( (data) => {
+      let currentAllele = {};
+      for (let key in data) {
+        currentAllele[key] = data[key];
+      }
+      this.props.dispatch(setAllele(currentAllele));
+    })
+    .catch(err => this.props.dispatch(setError(err.error)))
+    .finally(() => this.setState({ isComplete: true, isLoading: false }));
+  }
+
+  displayForm() {
+    return (
+      <div>
+        <form onSubmit={this.handleUpdate} ref='form'>
+          <input name='id' value={this.props.allele.id} className="hide" />
+
+          <OneAllele allele={this.props.allele} onOptionChange={this.handleChange} />
+
+        </form>
+
+      </div>
+    );
+  }
+
+  render() {
+    if (this.state.isLoading) {
+      return (
+        <div>
+          <div>Please wait while we are constructing the update form.</div>
+          <div><Loader /></div>
+        </div>
+      );
+    }
+    if (this.state.isComplete) {
+      return this.displayForm();
+    }
+    else {
+      return (<div>Something is wrong while we are constructing the update form.</div>);
+    }
+  }
+}
+
+EditAllele.propTypes = {
+  dispatch: PropTypes.func,
+  allele: PropTypes.object
+};
+
+
+function mapStateToProps(state) {
+  return {
+    allele: state.allele['currentAllele']
+  };
+}
+
+export default connect(mapStateToProps)(EditAllele);
