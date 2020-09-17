@@ -2181,9 +2181,9 @@ def get_allele_types(request):
     # return get_all_allele_types(request)
     return []
 
-#@view_config(route_name='allele_add', renderer='json', request_method='POST')
-#@authenticate
-#def allele_add(request):
+@view_config(route_name='allele_add', renderer='json', request_method='POST')
+@authenticate
+def allele_add(request):
 
 #    # return add_allele_data(request)
 #    return {}
@@ -2205,19 +2205,19 @@ def get_allele_data(request):
     # return get_one_allele(request) 
     return []
 
-#@view_config(route_name='allele_update', renderer='json', request_method='POST')
-#@authenticate
-#def allele_update(request):
+@view_config(route_name='allele_update', renderer='json', request_method='POST')
+@authenticate
+def allele_update(request):
 
     #return update_allele_data(request)
-#    return {}
+    return {}
 
-#@view_config(route_name='allele_delete',renderer='json',request_method='POST')
-#@authenticate
-#def allele_delete(request):
+@view_config(route_name='allele_delete',renderer='json',request_method='POST')
+@authenticate
+def allele_delete(request):
 
     #return delete_allele_data(request)
-#    return {}
+    return {}
 
 @view_config(route_name='add_author_response',renderer='json',request_method='POST')
 def add_author_response(request):
