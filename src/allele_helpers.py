@@ -19,7 +19,7 @@ def get_so_children(parent_id, so_id_list):
     for so_id in so_ids:
         get_so_children(so_id, so_id_list)
 
-def get_allele_types(request):
+def get_all_allele_types(request):
 
     try:
         s = DBSession.query(So).filter_by(display_name=PARENT_SO_TERM).one_or_none()
