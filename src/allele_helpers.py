@@ -95,7 +95,6 @@ def get_all_allele_types(request):
         
         return HTTPOk(body=json.dumps(data),content_type='text/json')
     except Exception as e:
-        log.error(e)
         return HTTPBadRequest(body=json.dumps({'error': str(e)}))
     finally:
         if DBSession:
