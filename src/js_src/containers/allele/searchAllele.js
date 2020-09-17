@@ -60,7 +60,7 @@ class SearchAllele extends Component {
         <div className='row'>
           <div className='columns medium-6'>
             <button type='submit' className="button expanded" > {name} </button>
-          </div>s
+          </div>
         </div>
       </div>
     );
