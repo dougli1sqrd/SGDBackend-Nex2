@@ -2210,16 +2210,14 @@ def get_allele_data(request):
 @authenticate
 def allele_update(request):
 
-    #return update_allele_data(request)
-    return {}
+    return update_allele_data(request)
 
 @view_config(route_name='allele_delete',renderer='json',request_method='POST')
 @authenticate
 def allele_delete(request):
 
-    #return delete_allele_data(request)
-    return {}
-
+    return delete_allele_data(request)
+    
 @view_config(route_name='add_author_response',renderer='json',request_method='POST')
 def add_author_response(request):
 
