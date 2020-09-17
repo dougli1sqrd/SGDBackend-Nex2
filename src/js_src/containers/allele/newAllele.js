@@ -4,7 +4,7 @@ import fetchData from '../../lib/fetchData';
 import { connect } from 'react-redux';
 import { setError, setMessage } from '../../actions/metaActions';
 import { setAllele } from '../../actions/alleleActions';
-// import OneAllele from './oneAllele';
+import OneAllele from './oneAllele';
 
 const ADD_ALLELE = '/allele_add';
 
@@ -83,7 +83,7 @@ class NewAllele extends Component {
           <input name='id' value={this.props.allele.id} className="hide" />
 
           NEW ALLELE FORM 
-
+          <OneAllele allele={this.props.allele} onOptionChange={this.handleChange} />
           {this.addButton()}
 
         </form>
