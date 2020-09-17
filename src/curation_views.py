@@ -2188,15 +2188,13 @@ def allele_add(request):
     
 @view_config(route_name='get_alleles', renderer='json', request_method='GET')
 def get_alleles(request):
-    #try:
-    #    return get_list_of_alleles(request)
-    #except Exception as e:
-    #    log.error(e)
-    #finally:
-    #    if DBSession:
-    #        DBSession.remove()
-
-    return []
+    try:
+        return get_list_of_alleles(request)
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
 
 @view_config(route_name='get_allele_data', renderer='json', request_method='GET')
 def get_allele_data(request):
