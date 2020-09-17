@@ -77,7 +77,7 @@ def get_all_allele_types(request):
 
     try:
         
-        so_id_to_so = dict([(x.so_id, x) for x in nex_session.query(So).all()])
+        so_id_to_so = dict([(x.so_id, x) for x in DBSession.query(So).all()])
         
         parent_id_to_child_ids = {}
         for x in nex_session.query(SoRelation).all():
