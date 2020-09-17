@@ -2175,11 +2175,11 @@ def phenotype_delete(request):
 
     return delete_phenotype_annotations(request)
 
-@view_config(route_name='get_allele_types', renderer='json', request_method='POST')
-def get_allele_types(request):
+#@view_config(route_name='get_allele_types', renderer='json', request_method='POST')
+#def get_allele_types(request):
 
-    # return get_all_allele_types(request)
-    return []
+#    # return get_all_allele_types(request)
+#    return []
 
 @view_config(route_name='add_author_response',renderer='json',request_method='POST')
 def add_author_response(request):
