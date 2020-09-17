@@ -18,6 +18,7 @@ class NewAllele extends Component {
   }
 
   render() {
+
     return (<div> NEW ALLELE FORM </div>);
   }
 }
