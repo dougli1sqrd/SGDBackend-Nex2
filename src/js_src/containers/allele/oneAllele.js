@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import CommentSection from '../phenotype/commentSection';
 import TwoColTextField from './twoColTextField';
 import OneColTextField from './oneColTextField';
-//import AutocompleteSection from './autocompleteSection';
+import AutocompleteSection from './autocompleteSection';
 
 class OneAllele extends Component {
   constructor(props) {
