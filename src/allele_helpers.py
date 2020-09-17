@@ -68,7 +68,7 @@ def get_so_children(parent_id, parent_id_to_child_ids, so_id_to_so, data, so_id_
         s = so_id_to_so[parent_id]
         data.append( { 'so_id': s.so_id,
                        'format_name': s.term_name,
-                       'display_name': s.display_name } ]
+                       'display_name': s.display_name } )
     child_ids = parent_id_to_child_ids[parent_id]
     for child_id in child_ids:
         get_so_children(child_id, parent_id_to_child_ids, so_id_to_so, data, so_id_list)
