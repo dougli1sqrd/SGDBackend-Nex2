@@ -2198,8 +2198,13 @@ def get_alleles(request):
 
 @view_config(route_name='get_allele_data', renderer='json', request_method='GET')
 def get_allele_data(request):
-    # return get_one_allele(request) 
-    return []
+    try:
+        return get_one_allele(request)
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()    
 
 @view_config(route_name='allele_update', renderer='json', request_method='POST')
 @authenticate
