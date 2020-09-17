@@ -2186,7 +2186,7 @@ def get_allele_types(request):
 def allele_add(request):
 
 #    # return add_allele_data(request)
-#    return {}
+    return {}
 
 @view_config(route_name='get_alleles', renderer='json', request_method='GET')
 def get_alleles(request):
