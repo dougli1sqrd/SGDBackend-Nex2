@@ -55,8 +55,6 @@ from .tsv_parser import parse_tsv_annotations
 from .models_helpers import ModelsHelper
 from .phenotype_helpers import add_phenotype_annotations, update_phenotype_annotations,\
       delete_phenotype_annotations, get_list_of_phenotypes, get_one_phenotype
-#from .allele_helpers import add_allele_data, get_list_of_alleles, get_one_allele, \
-#      update_allele_data, delete_allele_data, 
 from .allele_helpers import get_all_allele_types, get_one_allele, get_list_of_alleles,\
       add_allele_data, update_allele_data, delete_allele_data
 from .author_response_helpers import insert_author_response, get_author_responses, update_author_response
@@ -2180,9 +2178,8 @@ def phenotype_delete(request):
 @view_config(route_name='get_allele_types', renderer='json', request_method='GET')
 def get_allele_types(request):
 
-    # return get_all_allele_types(request)
-    return []
-
+    return get_all_allele_types(request)
+    
 @view_config(route_name='allele_add', renderer='json', request_method='POST')
 @authenticate
 def allele_add(request):
