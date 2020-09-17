@@ -82,8 +82,8 @@ class NewAllele extends Component {
         <form onSubmit={this.handleSubmit} ref='form'>
           <input name='id' value={this.props.allele.id} className="hide" />
 
-          NEW ALLELE FORM 
           <OneAllele allele={this.props.allele} onOptionChange={this.handleChange} />
+
           {this.addButton()}
 
         </form>
