@@ -2188,7 +2188,7 @@ def get_allele_types(request):
 #    # return add_allele_data(request)
 #    return {}
 
-@view_config(route_name='get_alleles',renderer='json', request_method='GET')
+@view_config(route_name='get_alleles', renderer='json', request_method='GET')
 def get_alleles(request):
     #try:
     #    return get_list_of_alleles(request)
@@ -2200,16 +2200,10 @@ def get_alleles(request):
 
     return []
 
-@view_config(route_name='get_allele',renderer='json', request_method='GET')
+@view_config(route_name='get_allele', renderer='json', request_method='GET')
 def get_allele(request):
-    #try:
-    #    return get_one_allele(request)
-    #except Exception as e:
-    #    log.error(e)
-    #finally:
-    #    if DBSession:
-    #        DBSession.remove()
-    return {}
+    # return get_one_allele(request) 
+    return []
 
 #@view_config(route_name='allele_update', renderer='json', request_method='POST')
 #@authenticate
