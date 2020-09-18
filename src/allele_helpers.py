@@ -60,17 +60,6 @@ def insert_allele(curator_session, CREATED_BY, source_id, allele_name, so_id):
     else:
         return returnValue
 
-
-def get_so_children(parent_id, parent_id_to_child_ids, so_id_list):
-
-    if parent_id in so_id_list:
-        return
-    so_id_list.append(parent_id)
-    
-    for so_id in parent_id_to_child_ids[parent_id]:
-        # so_id_list.append(so_id)
-        get_so_children(so_id, parent_id_to_child_ids, so_id_list)
-
         
 def get_all_allele_types(request):
 
@@ -85,8 +74,11 @@ def get_all_allele_types(request):
         
         s = DBSession.query(So).filter_by(display_name=PARENT_SO_TERM).one_or_none()
         so_id_list = [s.so_id]
-        for so_id in parent_id_to_child_ids[s.so_id]:
-            get_so_children(so_id, parent_id_to_child_ids, so_id_list)
+        for so_id in so_id_list:
+            child_ids = parent_id_to_child_ids.get(so_id, [])
+            for child_id in child_ids:
+                if child_id is not so_id_list:
+                    so_id_list.append(child_id)
         
         data = []
         so_id_to_so = dict([(x.so_id, x) for x in DBSession.query(So).all()])
