@@ -76,7 +76,6 @@ def get_so_children(parent_id, parent_id_to_child_ids, so_id_list):
 def get_all_allele_types(request):
 
     try:        
-        so_id_to_so = dict([(x.so_id, x) for x in DBSession.query(So).all()])
         parent_id_to_child_ids = {}
         for x in DBSession.query(SoRelation).all():
             child_ids = []
@@ -85,10 +84,13 @@ def get_all_allele_types(request):
             child_ids.append(x.child_id)
             parent_id_to_child_ids[x.parent_id] = child_ids
         so_id_list = []
-        data = []
         s = DBSession.query(So).filter_by(display_name=PARENT_SO_TERM).one_or_none()
         root_parent_id = s.so_id
-        get_so_children(root_parent_id, parent_id_to_child_ids, so_id_list)        
+        get_so_children(root_parent_id, parent_id_to_child_ids, so_id_list)
+
+        # data = []
+        # so_id_to_so = dict([(x.so_id, x) for x in DBSession.query(So).all()])
+        
         return HTTPOk(body=json.dumps(so_id_list), content_type='text/json')
         # return HTTPOk(body=json.dumps(data), content_type='text/json') 
     except Exception as e:
