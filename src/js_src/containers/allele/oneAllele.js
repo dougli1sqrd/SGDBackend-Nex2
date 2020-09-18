@@ -20,13 +20,13 @@ class OneAllele extends Component {
 
       <div>
 	
-        {/* allele name & references*/}
+        {/* allele name & references */}
         <TwoColTextField sec_title='Allele name' name='allele_name' value={this.props.allele.allele_name} onOptionChange={this.props.onOptionChange} sec_title2='Allele name PMIDs (optional)' name2='allele_name_pmids' value2={this.props.allele.allele_name_pmids} onOptionChange2={this.props.onOptionChange} />
 
-        {/* affected gene name & references*/}
+        {/* affected gene name & references */}
         <TwoColTextField sec_title='Affected gene name' name='affected_gene' value={this.props.allele.affected_gene} onOptionChange={this.props.onOptionChange} sec_title2='Affected gene name PMIDs (optional)' name2='affected_gene_pmids' value2={this.props.allele.affected_gene_pmids} onOptionChange2={this.props.onOptionChange} />
 	
-        {/* alias names & references*/}
+        {/* alias names & references */}
 
 
 
@@ -34,8 +34,8 @@ class OneAllele extends Component {
 
 
         {/* Allele */}
-        {/* <AutocompleteSection sec_title='Allele' id='allele_id' value1='display_name' value2='' selectedIdName='allele_id' placeholder='Enter allele' onOptionChange={this.props.onOptionChange} selectedId={this.props.phenotype.allele_id} setNewValue={true} /> */}
-
+        {/* <AutocompleteSection sec_title='Allele' id='allele_id' value1='display_name' value2='' selectedIdName='allele_id' placeholder='Enter allele' onOptionChange={this.props.onOptionChange} selectedId={this.props.phenotype.allele_id} setNewValue={false} /> */}
+        Autocomplete Section
 
         {/* desctription */}
         <CommentSection sec_title='Description' name='desc' value={this.props.allele.desc} onOptionChange={this.props.onOptionChange} placeholder='Enter description' rows='3' cols='500' />
