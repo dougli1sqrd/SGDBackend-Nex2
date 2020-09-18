@@ -68,8 +68,8 @@ def get_so_children(parent_id, parent_id_to_child_ids, so_id_list):
     so_id_list.append(parent_id)
     
     for so_id in parent_id_to_child_ids[parent_id]:
-        so_id_list.append(so_id)
-        # get_so_children(so_id, parent_id_to_child_ids, so_id_list)
+        # so_id_list.append(so_id)
+        get_so_children(so_id, parent_id_to_child_ids, so_id_list)
 
         
 def get_all_allele_types(request):
