@@ -33,8 +33,9 @@ class OneAllele extends Component {
 	
 
 
-        {/* Allele */}
-        <AutocompleteSection sec_title='Allele' id='allele_id' value1='display_name' value2='' selectedIdName='allele_id' placeholder='Enter allele' onOptionChange={this.props.onOptionChange} selectedId={this.props.allele.allele_id} setNewValue={false} /> 
+        {/* Allele type*/}
+        <AutocompleteSection sec_title='Allele type' id='so_id' value1='display_name' value2='' selectedIdName='so_id' placeholder='Enter allele type' onOptionChange={this.props.onOptionChange} selectedId={this.props.allele.so_id} setNewValue={false} /> 
+
         Autocomplete Section
 
         {/* desctription */}

@@ -54,7 +54,6 @@ class NewAllele extends Component {
       allele_name_pmids: '',
       affected_gene: '',
       affected_gene_pmids: '',
-      allele_id: '',
       so_id: '',
       desc: '',
       primary_pmids: '',
