@@ -90,7 +90,7 @@ def get_all_allele_types(request):
         root_parent_id = s.so_id
         # get_so_children(root_parent_id, parent_id_to_child_ids, so_id_to_so, data, so_id_list)        
         # return HTTPOk(body=json.dumps(data),content_type='text/json')
-        return HTTPOk(body=json.dumps(parent_id_to_child_ids),content_type='text/json') 
+        return HTTPOk(body=json.dumps(root_parent_id),content_type='text/json') 
     except Exception as e:
         return HTTPBadRequest(body=json.dumps({'error': str(e)}))
     finally:
