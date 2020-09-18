@@ -84,9 +84,10 @@ def get_all_allele_types(request):
             parent_id_to_child_ids[x.parent_id] = child_ids
         
         s = DBSession.query(So).filter_by(display_name=PARENT_SO_TERM).one_or_none()
-        so_id_list = []
-        get_so_children(s.so_id, parent_id_to_child_ids, so_id_list)
-
+        so_id_list = [s.so_id]
+        for so_id in parent_id_to_child_ids[s.so_id]:
+            get_so_children(so_id, parent_id_to_child_ids, so_id_list)
+        
         data = []
         so_id_to_so = dict([(x.so_id, x) for x in DBSession.query(So).all()])
         for so_id in so_id_list:
@@ -128,7 +129,7 @@ def get_one_allele(request):
             elif x.reference_class == 'description':
                 description_pmids.append(x.reference.pmid)
             elif x.reference_class == 'so_term':
-                allele_type_pmids.append(x.reference.pmid)
+                alleles_type_pmids.append(x.reference.pmid)
             else:
                 other_pmids.append(x.reference.pmid)
         data['allele_name_pmids'] = allele_name_pmids
