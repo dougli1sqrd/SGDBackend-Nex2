@@ -88,7 +88,7 @@ def get_all_allele_types(request):
                            'format_name': so.term_name,
                            'display_name': so.display_name } )
             
-        return HTTPOk(body=json.dumps(len(data)), content_type='text/json')
+        return HTTPOk(body=json.dumps(data), content_type='text/json')
         
     except Exception as e:
         return HTTPBadRequest(body=json.dumps({'error': str(e)}))
