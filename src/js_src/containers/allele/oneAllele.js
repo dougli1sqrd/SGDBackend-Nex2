@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import CommentSection from '../phenotype/commentSection';
 import TwoColTextField from './twoColTextField';
 import OneColTextField from './oneColTextField';
-// import AutocompleteSection from '../phenotype/autocompleteSection';
+import AutocompleteSection from '../phenotype/autocompleteSection';
 
 class OneAllele extends Component {
   constructor(props) {
@@ -34,7 +34,7 @@ class OneAllele extends Component {
 
 
         {/* Allele */}
-        {/* <AutocompleteSection sec_title='Allele' id='allele_id' value1='display_name' value2='' selectedIdName='allele_id' placeholder='Enter allele' onOptionChange={this.props.onOptionChange} selectedId={this.props.phenotype.allele_id} setNewValue={false} /> */}
+        <AutocompleteSection sec_title='Allele' id='allele_id' value1='display_name' value2='' selectedIdName='allele_id' placeholder='Enter allele' onOptionChange={this.props.onOptionChange} selectedId={this.props.phenotype.allele_id} setNewValue={false} /> 
         Autocomplete Section
 
         {/* desctription */}
