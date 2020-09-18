@@ -71,6 +71,8 @@ def get_so_children(parent_id, parent_id_to_child_ids, so_id_to_so, data, so_id_
     data.append( { 'so_id': s.so_id,
                    'format_name': s.term_name,
                    'display_name': s.display_name } )
+    return
+
     child_ids = parent_id_to_child_ids[parent_id]
     for child_id in child_ids:
         get_so_children(child_id, parent_id_to_child_ids, so_id_to_so, data, so_id_list)
@@ -91,8 +93,8 @@ def get_all_allele_types(request):
         s = DBSession.query(So).filter_by(display_name=PARENT_SO_TERM).one_or_none()
         root_parent_id = s.so_id
         get_so_children(root_parent_id, parent_id_to_child_ids, so_id_to_so, data, so_id_list)        
-        return HTTPOk(body=json.dumps(data),content_type='text/json')
-        # return HTTPOk(body=json.dumps(root_parent_id),content_type='text/json') 
+        return HTTPOk(body=json.dumps(data), content_type='text/json')
+        # return HTTPOk(body=json.dumps(root_parent_id), content_type='text/json') 
     except Exception as e:
         return HTTPBadRequest(body=json.dumps({'error': str(e)}))
     finally:
