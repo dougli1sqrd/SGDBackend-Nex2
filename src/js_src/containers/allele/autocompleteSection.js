@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { setError } from '../../actions/metaActions';
 import { DataList } from 'react-datalist-field';
 import fetchData from '../../lib/fetchData';
-const GET_ALLELE_TYPES = '/get_allele_types';
+// const GET_ALLELE_TYPES = '/get_allele_types';
+const GET_ALLELE_TYPES = '/get_allele';
 
 class AutocompleteSection extends Component {
   constructor(props) {
