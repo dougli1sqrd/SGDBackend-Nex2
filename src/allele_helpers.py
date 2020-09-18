@@ -70,7 +70,7 @@ def get_so_children(parent_id, parent_id_to_child_ids, so_id_list):
     child_ids = parent_id_to_child_ids[parent_id]
     
     for child_id in child_ids:
-        get_so_children(child_id, parent_id_to_child_ids, so_id_to_so, data, so_id_list)
+        get_so_children(child_id, parent_id_to_child_ids, so_id_list)
 
         
 def get_all_allele_types(request):
