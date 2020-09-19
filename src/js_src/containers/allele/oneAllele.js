@@ -28,15 +28,14 @@ class OneAllele extends Component {
 	
         {/* alias names & references */}
 
-
+	
 
 	
 
+	
 
         {/* Allele type*/}
         <AutocompleteSection sec_title='Allele type' id='so_id' value1='display_name' value2='' selectedIdName='so_id' placeholder='Enter allele type' onOptionChange={this.props.onOptionChange} selectedId={this.props.allele.so_id} setNewValue={false} /> 
-
-        Autocomplete Section
 
         {/* desctription */}
         <CommentSection sec_title='Description' name='desc' value={this.props.allele.desc} onOptionChange={this.props.onOptionChange} placeholder='Enter description' rows='3' cols='500' />
