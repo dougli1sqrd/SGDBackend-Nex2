@@ -54,7 +54,6 @@ class AlleleBasic extends Component {
     let aliasLayout = locals => {
       return (
         <div className='row'>
-          {this.renderAliasWarning()}
           <div className='columns small-2 hide'>{locals.inputs.alias_id}</div>
           <div className='columns small-4'>{locals.inputs.alias}</div>
           <div className='columns small-3'>{locals.inputs.type}</div>
