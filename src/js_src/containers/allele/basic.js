@@ -21,12 +21,7 @@ class AlleleBasic extends Component {
       let d = data.aliases[i];
       if (!d) continue;
       let pmids = d.pmids;
-      if (!pmids) {
-        $(`#${ALIAS_WARNING_ID}`).css('display', 'block');
-        return;
-      }
     }
-    $(`#${ALIAS_WARNING_ID}`).css('display', 'none');
   }
 
   handleSuccess(data) {
@@ -55,7 +50,6 @@ class AlleleBasic extends Component {
       description: t.maybe(t.String),
       description_pmids: t.maybe(t.String),
       aliases: t.list(Alias),
-      description_pmids: t.maybe(t.String),
     });
     let aliasLayout = locals => {
       return (
