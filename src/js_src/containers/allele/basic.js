@@ -8,7 +8,7 @@ import { setMessage, setError } from '../../actions/metaActions';
 import { updateData } from './alleleActions';
 
 const DESCRIPTION_LENGTH = 500;
-const ALIAS_WARNING_ID = 'sgdAliasWarning';
+// const ALIAS_WARNING_ID = 'sgdAliasWarning';
 
 class AlleleBasic extends Component {
   handleChange(data) {
@@ -17,11 +17,11 @@ class AlleleBasic extends Component {
       this.props.dispatch(setError(`Description cannot be greater than ${DESCRIPTION_LENGTH} characters.`));
     }
     // manually hide/show warning for 
-    for (var i = data.aliases.length - 1; i >= 0; i--) {
-      let d = data.aliases[i];
-      if (!d) continue;
-      let pmids = d.pmids;
-    }
+    // for (var i = data.aliases.length - 1; i >= 0; i--) {
+    //  let d = data.aliases[i];
+    //  if (!d) continue;
+    //  let pmids = d.pmids;
+    // }
   }
 
   handleSuccess(data) {
