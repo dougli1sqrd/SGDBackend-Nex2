@@ -45,7 +45,6 @@ class OneAllele extends Component {
             <input type='text' name='allele_type_pmids' value={this.props.allele.allele_type_pmids} onChange={this.props.onOptionChange} />
           </div>
         </div>
-
 	
 	
         {/* desctription & references */}
@@ -59,8 +58,6 @@ class OneAllele extends Component {
             <input type='text' name='desc_pmids' value={this.props.allele.desc_pmids} onChange={this.props.onOptionChange} />
           </div>
         </div>
-
-
 
 	
         {/* literature */}
