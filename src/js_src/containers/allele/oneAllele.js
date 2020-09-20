@@ -55,14 +55,13 @@ class OneAllele extends Component {
             <textarea placeholder='Enter description' name='desc' value={this.props.allele.desc} onChange={this.props.onOptionChange} rows='3' cols='200' />
           </div>
           <div className='columns medium-6 small-6'>
-            <div> <label> Description PMIDs (optional) </label> </div>
+          <div> <label> Description PMIDs (optional) </label> </div>
             <input type='text' name='desc_pmids' value={this.props.allele.desc_pmids} onChange={this.props.onOptionChange} />
           </div>
         </div>
 	    
+
 	
-        {/* desctription & references */}
-        <CommentSection sec_title='Description' name='desc' value={this.props.allele.desc} onOptionChange={this.props.onOptionChange} placeholder='Enter description' rows='3' cols='500' />
 
         {/* literature */}
         <OneColTextField sec_title='Primary Literature (space delimited PMIDs):' name='primary_pmids' value={this.props.allele.primary_pmids} onOptionChange={this.props.onOptionChange} />
