@@ -13,10 +13,10 @@ class OneColTextField extends Component {
   render() {
     return (
       <div className='row'>
-        <div className='columns medium-3 small-3'>
+        <div className='columns medium-4 small-4'>
           <label> { this.state.sec_title } </label> 
         </div>
-        <div className='columns medium-9 small-9'>
+        <div className='columns medium-8 small-8'>
           <input type='text' name={this.props.name} value={this.props.value} onChange={this.props.onOptionChange} />
         </div>
       </div>
