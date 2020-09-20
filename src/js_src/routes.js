@@ -45,7 +45,6 @@ import NewPhenotype from './containers/phenotype/new';
 import SearchPhenotype from './containers/phenotype/search';
 import EditPhenotype from './containers/phenotype/edit';
 import NewAllele from './containers/allele/new';
-import SearchAllele from './containers/allele/search';
 import EditAllele from './containers/allele/edit';
 import SubmitData from './containers/authorResponse/index';
 import AuthorResponseShow from './containers/authorResponse/show';
@@ -83,8 +82,7 @@ export default (
 	  <Route component={requireAuthentication(SearchPhenotype)} path='/search_phenotype' />  
           <Route component={requireAuthentication(EditPhenotype)} path='/edit_phenotype/:id' />
           <Route component={requireAuthentication(NewAllele)} path='/new_allele' />
-          <Route component={requireAuthentication(SearchAllele)} path='/search_allele' />
-          <Route component={requireAuthentication(EditAllele)} path='/edit_allele/:id' />	     
+          <Route component={requireAuthentication(EditAllele)} path='/curate/allele/:id' />	     
           <Route component={requireAuthentication(LitGuide)} path='/litguide_todo' />
           <Route component={requireAuthentication(AddLitGuide)} path='/add_litguide' />
           <Route component={requireAuthentication(EditLitGuide)} path='/edit_litguide' />
