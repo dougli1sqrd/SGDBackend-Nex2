@@ -5,9 +5,7 @@ import Loader from '../../components/loader';
 import { connect } from 'react-redux';
 import { setError, setMessage } from '../../actions/metaActions';
 import { setAllele } from '../../actions/alleleActions';
-// import OneAllele from './oneAllele';
-// import CommentSection from '../phenotype/commentSection';
-
+import OneAllele from './oneAllele';
 const UPDATE_ALLELE = '/allele_update';
 const DELETE_ALLELE = '/allele_delete';
 // const GET_ALLELE = '/get_allele_data';
@@ -122,8 +120,9 @@ class EditAllele extends Component {
         <form onSubmit={this.handleUpdate} ref='form'>
           <input name='id' value={this.props.allele.id} className="hide" />
 
-          UPDATE ALLELE FORM
-
+          <OneAllele allele={this.props.allele} onOptionChange={this.handleChange} />
+          {this.addButtons()}
+          	
         </form>
 
       </div>
