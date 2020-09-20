@@ -35,13 +35,13 @@ class OneAllele extends Component {
 	
 
         {/* Allele type & references */}
-	<div className='row'>
+        <div className='row'>
           <div className='columns medium-6 small-6'>
             <AutocompleteSection sec_title='Allele type' id='so_id' value1='display_name' value2='' selectedIdName='so_id' placeholder='Enter allele type' onOptionChange={this.props.onOptionChange} selectedId={this.props.allele.so_id} setNewValue={false} /> 
           </div>
-          <div className='columns medium-6 small-6'>	
-	    <div> <label> Allele type PMIDs (optional) </label> </div>
-	    <input type='text' name='allele_type_pmids' value={this.props.allele.allele_type_pmids} onChange={this.props.onOptionChange} />
+          <div className='columns medium-6 small-6'>
+            <div> <label> Allele type PMIDs (optional) </label> </div>
+            <input type='text' name='allele_type_pmids' value={this.props.allele.allele_type_pmids} onChange={this.props.onOptionChange} />
           </div>
         </div>
 
