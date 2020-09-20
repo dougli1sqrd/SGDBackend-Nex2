@@ -6,6 +6,7 @@ import fetchData from '../../lib/fetchData';
 const GET_OBSERVABLES = '/get_observable';
 const GET_ALLELES = '/get_allele';
 const GET_REPORTERS = '/get_reporter';
+const GET_ALLELE_TYPES = '/get_allele_types';
 
 class AutocompleteSection extends Component {
   constructor(props) {
@@ -24,6 +25,9 @@ class AutocompleteSection extends Component {
     }
     else if (this.props.id == 'reporter_id') {
       this.getData(GET_REPORTERS);
+    }
+    else if (this.props.id == 'so_id') {
+      this.getData(GET_ALLELE_TYPES);
     }
     else {
       this.props.dispatch(setError('Unknown ID: ' + this.props.id));
