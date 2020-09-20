@@ -27,7 +27,7 @@ class OneAllele extends Component {
         <TwoColTextField sec_title='Affected gene name' name='affected_gene' value={this.props.allele.affected_gene} onOptionChange={this.props.onOptionChange} sec_title2='PMID(s) for affected gene name (optional)' name2='affected_gene_pmids' value2={this.props.allele.affected_gene_pmids} onOptionChange2={this.props.onOptionChange} />
 	
         {/* alias names & references */}
-        <TwoColTextField sec_title='Alias Names ("|" delimited, example: act1-abc|act1-bcd)' name='aliases' value={this.props.allele.aliases} onOptionChange={this.props.onOptionChange} sec_title2='PMID(s) for aliases (optional, "|" delimited, example: 123888 8976654|9867668)' name2='alias_pmids' value2={this.props.allele.alias_pmids} onOptionChange2={this.props.onOptionChange} />
+        <TwoColTextField sec_title='Alias names ("|" delimited, example: act1-abc|act1-bcd)' name='aliases' value={this.props.allele.aliases} onOptionChange={this.props.onOptionChange} sec_title2='PMID(s) for aliases (optional, "|" delimited, example: 123888 8976654|9867668)' name2='alias_pmids' value2={this.props.allele.alias_pmids} onOptionChange2={this.props.onOptionChange} />
         
         {/* Allele type & references */}
         <div className='row'>
