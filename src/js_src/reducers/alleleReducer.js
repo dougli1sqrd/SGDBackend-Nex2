@@ -2,17 +2,18 @@ const DEFAULT_STATE = {
   currentAllele: {
     dbentity_id: 0,
     allele_name: '',
-    description: '',
     allele_name_pmids: '',
-    description_pmids: '',
-    allele_type_pmids: '',
-    other_pmids: '',
     affected_gene: '',
-    affected_gene_pmids: '', 
+    affected_gene_pmids:'',
     so_id: '',
+    allele_type_pmids: '',
+    desc: '',
+    desc_pmids:'',
+    aliases: '',
+    alias_pmids: '',
     primary_pmids: '',
     additional_pmids: '',
-    review_pmids: ''
+    review_pmids: ''  
   }
 };
 
