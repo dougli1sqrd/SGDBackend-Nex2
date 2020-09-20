@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import CurateLayout from '../curateHome/layout';
-// import NewALLELE from './newAllele';
-import AlleleBasic from './basic';
+import NewALLELE from './newAllele';
 
 class NewAllele extends Component {
   constructor(props) {
@@ -12,7 +11,7 @@ class NewAllele extends Component {
     return (
       <CurateLayout>
         <h1>Add Allele</h1>
-        <AlleleBasic /> 
+        <NewALLELE />
       </CurateLayout>
     );
   }
