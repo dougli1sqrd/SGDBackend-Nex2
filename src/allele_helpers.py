@@ -102,8 +102,10 @@ def get_one_allele(request):
     try:
         
         data = {}
-        allele_name = request.params.get('allele_name')
-        a = DBSession.query(Alleledbentity).filter_by(format_name=allele_name).one_or_none()
+        allele_format_name = request.params.get('allele_format_name')
+        a = DBSession.query(Alleledbentity).filter_by(format_name=allele_format_name).one_or_none()
+        if a is None:
+            return HTTPBadRequest(body=json.dumps({'error': "The allele format_name " + allele_format_name + " is not in the database."}))
         data['allele_name'] = a.display_name
         data['format_name'] = a.format_name
         data['sgdid'] = a.sgdid
