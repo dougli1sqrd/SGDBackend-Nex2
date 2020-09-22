@@ -103,6 +103,9 @@ def get_one_allele(request):
         
         data = {}
         allele_format_name = request.params.get('allele_format_name')
+
+        return allele_format_name
+    
         a = DBSession.query(Alleledbentity).filter_by(format_name=allele_format_name).one_or_none()
         if a is None:
             return HTTPBadRequest(body=json.dumps({'error': "The allele format_name " + allele_format_name + " is not in the database."}))
