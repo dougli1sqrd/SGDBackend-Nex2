@@ -111,7 +111,11 @@ def get_one_allele(request):
         data['sgdid'] = a.sgdid
         data['allele_type'] = a.so.display_name
         data['description'] = a.description
-        
+
+        return data
+
+
+    
         ## get pmids from allele_reference
         allele_name_pmids = []
         description_pmids = []
