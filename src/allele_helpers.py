@@ -103,8 +103,6 @@ def get_one_allele(request):
         
         data = {}
 
-        return data
-    
         allele_format_name = request.params.get('allele_format_name')
 
         return allele_format_name
