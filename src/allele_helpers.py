@@ -103,8 +103,8 @@ def get_one_allele(request):
         
         data = {}
         
-        allele_format_name = request.params.get('allele_format_name')
-
+        allele_format_name = str(request.matchdict['allele_format_name'])
+    
         return [allele_format_name]
     
         a = DBSession.query(Alleledbentity).filter_by(format_name=allele_format_name).one_or_none()
