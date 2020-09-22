@@ -143,10 +143,7 @@ def get_one_allele(request):
         data['affected_gene'] = { 'display_name': x.locus.display_name,
                                   'sgdid': x.locus.sgdid,
                                   'pmids': pmids } 
-
-        return data
-
-    
+   
         ## get aliases and pmids from allele_alias & allelealias_reference
         aliases = []
         for x in DBSession.query(AlleleAlias).filter_by(allele_id=a.dbentity_id).order_by(AlleleAlias.display_name).all():
