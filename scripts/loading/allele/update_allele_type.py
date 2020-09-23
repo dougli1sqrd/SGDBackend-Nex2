@@ -2,7 +2,7 @@ import logging
 import os
 from datetime import datetime
 import sys
-from src.models import Source, So, Dbentity, Alleledbentity, So
+from src.models import Source, So, Dbentity, Alleledbentity
 from scripts.loading.database_session import get_session
 
 __author__ = 'sweng66'
@@ -28,7 +28,6 @@ def load_data(infile):
     
     count = 0
 
-    allele_id_to_so_id_desc = {}
     allele_id_to_so_id_desc = {}
     for line in f:
         pieces = line.strip().split("\t")
