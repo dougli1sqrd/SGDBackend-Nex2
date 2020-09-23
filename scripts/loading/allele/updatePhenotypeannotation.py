@@ -13,7 +13,7 @@ def update_data():
 
     nex_session = get_session()
 
-    allele_to_id = dict([(x.display_name, x.dbentity_id) for x in nex_session.query(Dbentity).filter_by(subclass='ALLELE').all()])
+    allele_to_id = dict([(x.display_name.upper(), x.dbentity_id) for x in nex_session.query(Dbentity).filter_by(subclass='ALLELE').all()])
 
     f = open(mapping_file)
     annotation_id_to_allele = {}
@@ -27,7 +27,7 @@ def update_data():
     for x in allPheno:
         if x.annotation_id in annotation_id_to_allele:
             allele = annotation_id_to_allele[x.annotation_id]
-            allele_id = allele_to_id.get(allele)
+            allele_id = allele_to_id.get(allele.upper())
             if allele_id is None:
                 print ("The allele: " + allele + " is not in the database")
                 continue
