@@ -8,7 +8,8 @@ import os
 import logging
 import traceback
 
-from src.models import Apo, DBSession, Dnasequenceannotation, Go, Locusdbentity, Phenotype, Referencedbentity, Straindbentity
+from src.models import Apo, DBSession, Dnasequenceannotation, Go, Locusdbentity, Phenotype, \
+                       Referencedbentity, Straindbentity, Alleledbentity
 
 HEADER_OBJ = {'X-Forwarded-Proto': 'https'}
 
@@ -78,6 +79,21 @@ class GenesSpider(BaseSpider):
                 attempts += 1
         return all_genes
 
+class AlleleSpider(BaseSpider):    
+    name = 'alleles'
+    
+    def get_entities(self):
+        self.logger.info('getting alleles')
+        attempts = 0
+        while attempts < 3:
+            try:
+                alleles = DBSession.query(Alleledbentity).all()
+                break
+            except:
+                traceback.print_exc()
+                DBSession.rollback()
+                attempts += 1
+        return alleles
 
 class GoSpider(BaseSpider):
     name = 'go'
@@ -138,6 +154,7 @@ def crawl():
     yield runner.crawl(ObservableSpider)
     yield runner.crawl(PhenotypeSpider)
     yield runner.crawl(GenesSpider)
+    yield runner.crawl(AlleleSpider)
     reactor.stop()
 
 if __name__ == '__main__':
