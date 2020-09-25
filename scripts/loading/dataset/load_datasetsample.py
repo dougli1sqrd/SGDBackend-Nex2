@@ -9,7 +9,7 @@ CREATED_BY = os.environ['DEFAULT_USER']
 
 log_file = "scripts/loading/dataset/logs/load_datasetsample.log"
 
-files_to_load = ["scripts/loading/dataset/data/datasamplesFromGEOtoload.tsv"]
+files_to_load = ["scripts/loading/dataset/data/datasample2020-01to07.tsv"]
 
 def load_data():
 
