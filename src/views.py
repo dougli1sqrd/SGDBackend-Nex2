@@ -191,6 +191,33 @@ def search(request):
         'phenotype_loci', 'gene_ontology_loci', 'reference_loci', 'aliases', 'year',
         'keyword', 'format', 'status', 'file_size', 'readme_url', 'topic', 'data', 'is_quick_flag'
     ]
+
+
+    
+    ## added for allele search
+    if is_quick_flag == 'true' and terms_digits_flag == False and ( '-' in query or 'delta' in query or 'Δ' in query):
+        allele_name = query.strip().replace('delta', 'Δ').upper()
+        maybe_allele_url = DBSession.query(Dbentity.obj_url).filter_by(display_name.upper() = allele_name).one_or_none()
+        if maybe_allele_url is None:
+            aa = DBSession.query(AlleleAlias).filter_by(display_name.upper() = allele_name).one_or_none()
+            if aa is not None:
+                maybe_allele_url = aa.allele.obj_url
+        if maybe_allele_url:
+            allele_search_obj = {
+                'href': maybe_allele_url,
+                'is_quick': True
+            }
+            return {
+                'total': 1,
+                'results': [allele_search_obj],
+                'aggregations': []
+            }
+
+    ## end of allele search section
+
+
+
+            
     # see if we can search for a simple gene name in db without using ES
 
     aliases_count = 0
