@@ -2018,7 +2018,11 @@ def allele(request):
             alleleObj = DBSession.query(Alleledbentity).filter_by(sgdid=allele).one_or_none()
         else:
             alleleObj = DBSession.query(Alleledbentity).filter(Alleledbentity.format_name.ilike(allele)).one_or_none()
-
+        if alleleObj is None:
+            aa = DBSession.query(AlleleAlias).filter(AlleleAlias.display_name.ilike(allele)).one_or_none()
+            if aa is not None:
+                alleleObj = aa.allele
+                
         if alleleObj is not None:
             return alleleObj.to_dict()
         else:
