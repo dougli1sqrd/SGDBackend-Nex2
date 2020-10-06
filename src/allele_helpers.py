@@ -332,7 +332,7 @@ def add_allele_data(request):
 
         desc = request.params.get('desc')
 
-        return HTTPBadRequest(body=json.dumps({'error': "ALLELE_NAME"}), content_type='text/json')
+        # return HTTPBadRequest(body=json.dumps({'error': "ALLELE_NAME"}), content_type='text/json')
         
         returnValue = insert_allele(curator_session, CREATED_BY, source_id, allele_name, so_id, desc)
         allele_id = None
@@ -343,6 +343,10 @@ def add_allele_data(request):
         else:
             return HTTPBadRequest(body=json.dumps({'error': returnValue}), content_type='text/json')
 
+        
+        return HTTPBadRequest(body=json.dumps({'error': "allele_id="+str(allele_id)}), content_type='text/json')
+    
+        
         allele_name_pmids = request.params.get('allele_name_pmids')
 
         pmid_to_reference_id = dict([(x.pmid, x.dbentity_id) for x in DBSession.query(Referencedbentity).all()])
