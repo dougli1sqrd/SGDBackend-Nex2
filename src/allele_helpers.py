@@ -464,7 +464,13 @@ def add_allele_data(request):
 
         taxonomy = DBSession.query(Taxonomy).filter_by(taxid=TAXON).one_or_none()
         taxonomy_id = taxonomy.taxonomy_id
+
         
+
+        return HTTPBadRequest(body=json.dumps({'error': "PRIMARY LITERATURE"}), content_type='text/json')
+
+
+    
         primary_pmids = request.params.get('primary_pmids')
 
         (reference_ids, err_message) = check_pmids(primary_pmids, pmid_to_reference_id)
