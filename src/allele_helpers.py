@@ -342,7 +342,7 @@ def add_allele_data(request):
 
         allele_name_pmids = request.params.get('allele_name_pmids')
 
-        pmid_to_reference_id = dict([(x.pmid, x.dbentity_id) for x in nex_session.query(Referencedbentity).all()])
+        pmid_to_reference_id = dict([(x.pmid, x.dbentity_id) for x in DBSession.query(Referencedbentity).all()])
 
         (reference_ids, err_message) = check_pmids(allele_name_pmids, pmid_to_reference_id)
 
