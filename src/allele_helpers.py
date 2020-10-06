@@ -325,7 +325,7 @@ def add_allele_data(request):
             return HTTPBadRequest(body=json.dumps({'error': "Allele name field is blank"}), content_type='text/json')
         so_id = request.params.get('so_id')
         if so_id and str(so_id).isdigit():
-            so_id - int(so_id)
+            so_id = int(so_id)
         else:
             return HTTPBadRequest(body=json.dumps({'error': "Allele type field is blank"}), content_type='text/json')
 
