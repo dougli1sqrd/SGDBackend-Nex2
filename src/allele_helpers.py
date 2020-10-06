@@ -336,7 +336,7 @@ def add_allele_data(request):
         success_message = ""
         if str(returnValue).isdigit():
             allele_id = returnValue
-            success_message = success_message + "<br>" + "The new allele '" + allele + "' has been added into DBENTITY/ALLELEDBENTITY tables. "
+            success_message = success_message + "<br>" + "The new allele '" + allele_name + "' has been added into DBENTITY/ALLELEDBENTITY tables. "
         else:
             return HTTPBadRequest(body=json.dumps({'error': returnValue}), content_type='text/json')
 
