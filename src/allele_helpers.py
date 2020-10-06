@@ -4,7 +4,7 @@ import transaction
 import json
 from src.models import DBSession, So, SoRelation, Dbentity, Alleledbentity, AlleleReference,\
                        Literatureannotation, AlleleAlias, AllelealiasReference, LocusAllele,\
-                       LocusalleleReference, Referencedbentity, Locusdbentity, Taxonomy
+                       LocusalleleReference, Referencedbentity, Locusdbentity, Taxonomy, Source
 from src.curation_helpers import get_curator_session
 
 
