@@ -463,7 +463,7 @@ def add_allele_data(request):
         ## papers for primary literacture
 
         taxonomy = DBSession.query(Taxonomy).filter_by(taxid=TAXON).one_or_none()
-        taxonomy_id = sgd.taxonomy_id
+        taxonomy_id = taxonomy.taxonomy_id
         
         primary_pmids = request.params.get('primary_pmids')
 
