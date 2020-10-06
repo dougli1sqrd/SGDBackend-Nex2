@@ -1,3 +1,4 @@
+from sqlalchemy import or_
 from pyramid.httpexceptions import HTTPBadRequest, HTTPOk
 from sqlalchemy.exc import IntegrityError, DataError
 import transaction
