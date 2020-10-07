@@ -355,6 +355,9 @@ def add_allele_data(request):
 
         (reference_ids, err_message) = check_pmids(allele_name_pmids, pmid_to_reference_id)
 
+        return HTTPBadRequest(body=json.dumps({'error': "reference_ids="+str(reference_ids)}), content_type='text/json')
+    
+        
         if err_message != '':
             return err_message
 
