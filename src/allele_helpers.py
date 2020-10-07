@@ -307,7 +307,7 @@ def check_pmids(pmids, pmid_to_reference_id):
         reference_ids.append(pmid_to_reference_id[int(pmid)])
     err_message = ''
     if len(bad_pmids) > 0:
-        err_message = HTTPBadRequest(body=json.dumps({'error': "The PMID(s):" + ', '.join(bad_pmids) + " are not in the database"}), content_type='text/json')
+        err_message = "The PMID(s):" + ', '.join(bad_pmids) + " are not in the database"
     return (reference_ids, err_message)
 
 
@@ -354,12 +354,9 @@ def add_allele_data(request):
         pmid_to_reference_id = dict([(x.pmid, x.dbentity_id) for x in DBSession.query(Referencedbentity).all()])
 
         (reference_ids, err_message) = check_pmids(allele_name_pmids, pmid_to_reference_id)
-
-        return HTTPBadRequest(body=json.dumps({'error': "reference_ids="+str(reference_ids)}), content_type='text/json')
     
-        
         if err_message != '':
-            return err_message
+            return HTTPBadRequest(body=json.dumps({'error': err_message}), content_type='text/json')
 
         for reference_id in reference_ids:
             returnValue = insert_allele_reference(curator_session, CREATED_BY, source_id,
