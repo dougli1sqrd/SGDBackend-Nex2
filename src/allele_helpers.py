@@ -114,7 +114,7 @@ def insert_locus_allele(curator_session, CREATED_BY, source_id, allele_id, locus
                         source_id = source_id,
                         created_by = CREATED_BY)
         curator_session.add(x)
-        transaction.commit()    
+        # transaction.commit()    
     except Exception as e:
         transaction.abort()
         if curator_session:
@@ -145,7 +145,7 @@ def insert_allele(curator_session, CREATED_BY, source_id, allele_name, so_id, de
                            description = desc,
                            created_by = CREATED_BY)
         curator_session.add(x)
-        transaction.commit()
+        # transaction.commit()
         isSuccess = True
         returnValue = "Allele: '" + allele_name + "' added successfully."
     except IntegrityError as e:
@@ -397,7 +397,10 @@ def add_allele_data(request):
 
 
             
+            
             return HTTPBadRequest(body=json.dumps({'error': "locus_id="+str(locus_id)}), content_type='text/json')
+
+
 
         
             
