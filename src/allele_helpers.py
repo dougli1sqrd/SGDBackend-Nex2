@@ -304,6 +304,7 @@ def check_pmids(pmids, pmid_to_reference_id):
             continue
         if int(pmid) not in pmid_to_reference_id:
             bad_pmids.append(pmid)
+            continue
         reference_ids.append(pmid_to_reference_id[int(pmid)])
     err_message = ''
     if len(bad_pmids) > 0:
