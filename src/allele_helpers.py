@@ -305,7 +305,7 @@ def check_pmids(pmids, pmid_to_reference_id):
         if int(pmid) not in pmid_to_reference_id:
             bad_pmids.append(pmid)
             continue
-        reference_ids.append(pmid_to_reference_id[int(pmid)])
+        reference_ids.append((pmid_to_reference_id[int(pmid)], pmid))
     err_message = ''
     if len(bad_pmids) > 0:
         err_message = "The PMID(s):" + ', '.join(bad_pmids) + " are not in the database"
@@ -349,9 +349,11 @@ def add_allele_data(request):
     
         
         allele_name_pmids = request.params.get('allele_name_pmids')
+
         
         # return HTTPBadRequest(body=json.dumps({'error': "allele_name_pmids="+str(allele_name_pmids)}), content_type='text/json')
 
+        
         pmid_to_reference_id = dict([(x.pmid, x.dbentity_id) for x in DBSession.query(Referencedbentity).all()])
 
         (reference_ids, err_message) = check_pmids(allele_name_pmids, pmid_to_reference_id)
@@ -359,7 +361,7 @@ def add_allele_data(request):
         if err_message != '':
             return HTTPBadRequest(body=json.dumps({'error': err_message}), content_type='text/json')
 
-        for reference_id in reference_ids:
+        for (reference_id, pmid) in reference_ids:
             returnValue = insert_allele_reference(curator_session, CREATED_BY, source_id,
                                                   allele_id, reference_id, "allele_name")
             if returnValue != 1:
@@ -395,7 +397,7 @@ def add_allele_data(request):
             if err_message != '':
                 return HTTPBadRequest(body=json.dumps({'error': err_message}), content_type='text/json')
 
-            for reference_id in reference_ids:
+            for (reference_id, pmid) in reference_ids:
                 returnValue = insert_locusallele_reference(curator_session, CREATED_BY, source_id,
                                                            locus_allele_id, reference_id)
                 if returnValue != 1:
@@ -414,7 +416,7 @@ def add_allele_data(request):
         if err_message != '':
             return HTTPBadRequest(body=json.dumps({'error': err_message}), content_type='text/json')
 
-        for reference_id in reference_ids:
+        for (reference_id, pmid) in reference_ids:
             returnValue = insert_allele_reference(curator_session, CREATED_BY, source_id,
                                                   allele_id, reference_id, "so_term")
             if returnValue != 1:
@@ -430,7 +432,7 @@ def add_allele_data(request):
         if err_message != '':
             return HTTPBadRequest(body=json.dumps({'error': err_message}), content_type='text/json')
 
-        for reference_id in reference_ids:
+        for (reference_id, pmid) in reference_ids:
             returnValue = insert_allele_reference(curator_session, CREATED_BY, source_id,
                                                   allele_id, reference_id, "description")
             if returnValue != 1:
@@ -467,7 +469,7 @@ def add_allele_data(request):
 
             reference_ids = aliases_reference_ids[i]
 
-            for reference_id in reference_ids:
+            for (reference_id, pmid) in reference_ids:
                 returnValue = insert_allelealias_reference(curator_session, CREATED_BY, source_id,
                                                            allele_alias_id, reference_id)
                 if returnValue != 1:
@@ -491,7 +493,7 @@ def add_allele_data(request):
         if err_message != '':
             return HTTPBadRequest(body=json.dumps({'error': err_message}), content_type='text/json')
 
-        for reference_id in reference_ids:
+        for (reference_id, pmid) in reference_ids:
             returnValue = insert_literatureannotation(curator_session, CREATED_BY, source_id, allele_id,
                                                       reference_id, 'Primary Literature', taxonomy_id) 
             if returnValue != 1:
@@ -506,7 +508,7 @@ def add_allele_data(request):
         if err_message != '':
             return HTTPBadRequest(body=json.dumps({'error': err_message}), content_type='text/json')
 
-        for reference_id in reference_ids:
+        for (reference_id, pmid) in reference_ids:
             returnValue = insert_literatureannotation(curator_session, CREATED_BY, source_id, allele_id,
                                                       reference_id, 'Additional Literature', taxonomy_id)
             if returnValue != 1:
@@ -521,7 +523,7 @@ def add_allele_data(request):
         if err_message != '':
             return HTTPBadRequest(body=json.dumps({'error': err_message}), content_type='text/json')
 
-        for reference_id in reference_ids:
+        for (reference_id, pmid) in reference_ids:
             returnValue = insert_literatureannotation(curator_session, CREATED_BY, source_id, allele_id,
                                                       reference_id, 'Reviews', taxonomy_id)
             if returnValue != 1:
