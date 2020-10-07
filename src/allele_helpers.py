@@ -303,9 +303,12 @@ def check_pmids(pmids, pmid_to_reference_id):
         if pmid == '':
             continue
         if int(pmid) not in pmid_to_reference_id:
-            bad_pmids.append(pmid)
+            if pmid not in bad_pmids:
+                bad_pmids.append(pmid)
             continue
-        reference_ids.append((pmid_to_reference_id[int(pmid)], pmid))
+        reference_id = pmid_to_reference_id[int(pmid)]
+        if (reference_id, pmid) not in reference_ids:
+            reference_ids.append((pmid_to_reference_id[int(pmid)], pmid))
     err_message = ''
     if len(bad_pmids) > 0:
         err_message = "The PMID(s):" + ', '.join(bad_pmids) + " are not in the database"
