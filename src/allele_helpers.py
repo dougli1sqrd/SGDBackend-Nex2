@@ -374,7 +374,7 @@ def add_allele_data(request):
             success_message = success_message + "<br>" + "The paper for PMID= " + pmid + " has been added into ALLELE_REFERENCE table. "
 
 
-        return HTTPBadRequest(body=json.dumps({'error': "reference_ids="+str(reference_ids)}), content_type='text/json')
+        # return HTTPBadRequest(body=json.dumps({'error': "reference_ids="+str(reference_ids)}), content_type='text/json')
 
     
             
@@ -394,6 +394,12 @@ def add_allele_data(request):
                 success_message = success_message + "<br>" + "The affected gene" + affected_gene + "' has been added into LOCUS_ALLELE table. "
             else:
                 return HTTPBadRequest(body=json.dumps({'error': returnValue}), content_type='text/json')
+
+
+            
+            return HTTPBadRequest(body=json.dumps({'error': "gene="+affected_gene + ", locus_id="+str(locus_id)}), content_type='text/json') 
+
+            
             
             affected_gene_pmids = request.params.get('affected_gene_pmids')
 
