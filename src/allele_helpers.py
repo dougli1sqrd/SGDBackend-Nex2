@@ -21,7 +21,7 @@ def insert_locusallele_reference(curator_session, CREATED_BY, source_id, locus_a
                                  source_id = source_id,
                                  created_by = CREATED_BY)
         curator_session.add(x)
-        transaction.commit()
+        # transaction.commit()
         return 1
     except Exception as e:
         transaction.abort()
@@ -38,7 +38,7 @@ def insert_allelealias_reference(curator_session, CREATED_BY, source_id, allele_
                                  source_id = source_id,
                                  created_by = CREATED_BY)
         curator_session.add(x)
-        transaction.commit()
+        # transaction.commit()
         return 1
     except Exception as e:
         transaction.abort()
@@ -56,7 +56,7 @@ def insert_allele_reference(curator_session, CREATED_BY, source_id, allele_id, r
                             source_id = source_id,
                             created_by = CREATED_BY)
         curator_session.add(x)
-        transaction.commit()
+        # transaction.commit()
         return 1
     except Exception as e:
         transaction.abort()
@@ -76,7 +76,7 @@ def insert_literatureannotation(curator_session, CREATED_BY, source_id, allele_i
                                  source_id = source_id,
                                  created_by = CREATED_BY)
         curator_session.add(x)
-        transaction.commit()
+        # transaction.commit()
         return 1
     except Exception as e:
         transaction.abort()
@@ -93,7 +93,9 @@ def insert_allele_alias(curator_session, CREATED_BY, source_id, allele_id, alias
                         source_id = source_id,
                         created_by = CREATED_BY)
         curator_session.add(x)
-        transaction.commit()
+        curator_session.flush()
+        curator_session.refresh(x)
+        # transaction.commit()
     except Exception as e:
         transaction.abort()
         if curator_session:
