@@ -236,7 +236,7 @@ def search(request):
                 break
         if is_unmapped == 1:
             unmapped_search_obj = {
-                'href': '/search?q='+query,
+                'href': '/search?q=' + query + '&category=locus',
                 'is_quick': True
             }
             return {
