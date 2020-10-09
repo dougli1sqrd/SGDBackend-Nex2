@@ -223,12 +223,12 @@ def search(request):
         
         ## adding code to check if it is an unmapped gene
         is_unmapped = 0
-        with open("./scripts/search/not_mapped.json", "r") as json_data:
-            _data = json.load(json_data)
-            for item in _data:
-                if item["FEATURE_NAME"] == t_query:
-	            is_unmapped = 1
-                    break
+        # with open("./scripts/search/not_mapped.json", "r") as json_data:
+        #    _data = json.load(json_data)
+        #    for item in _data:
+        #        if item["FEATURE_NAME"] == t_query:
+	#            is_unmapped = 1
+        #            break
         ## end of unmapped gene check
         
         if Locusdbentity.is_valid_gene_name(t_query) or is_sys_name_match:
