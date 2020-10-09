@@ -235,7 +235,7 @@ def search(request):
                 is_unmapped = 1
                 break
         if is_unmapped == 1:
-            unmappedsearch_obj = {
+            unmapped_search_obj = {
                 'href': '/search?q='+query,
                 'is_quick': True
             }
