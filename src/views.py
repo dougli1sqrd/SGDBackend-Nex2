@@ -233,14 +233,24 @@ def search(request):
             pieces = line.split('\t')
             if pieces[0] == t_query:
                 is_unmapped = 1
-                alias_flag = True
                 break
+        if is_unmapped == 1:
+            unmappedsearch_obj = {
+                'href': '/search?q='+query,
+                'is_quick': True
+            }
+            return {
+                'total': 1,
+                'results': [unmapped_search_obj],
+                'aggregations': []
+            }
+        
         ## end of unmapped gene check
         
         if Locusdbentity.is_valid_gene_name(t_query) or is_sys_name_match:
             maybe_gene_url = DBSession.query(Locusdbentity.obj_url).filter(or_(Locusdbentity.gene_name == t_query, Locusdbentity.systematic_name == t_query)).scalar()
             aliases_count = DBSession.query(LocusAlias).filter(and_(LocusAlias.alias_type.in_(['Uniform', 'Non-uniform']),LocusAlias.display_name == t_query)).count()
-            if aliases_count == 0 and is_unmapped == 0 and  maybe_gene_url:
+            if aliases_count == 0 and maybe_gene_url:
                 fake_search_obj = {
                     'href': maybe_gene_url,
                     'is_quick': True
