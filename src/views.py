@@ -9,6 +9,7 @@ from datetime import timedelta
 from primer3 import bindings, designPrimers
 from collections import defaultdict
 from sqlalchemy.orm import joinedload
+from urllib.request import Request, urlopen
 
 import os
 import re
@@ -223,14 +224,17 @@ def search(request):
         
         ## adding code to check if it is an unmapped gene
         is_unmapped = 0
-        # with open("./scripts/search/not_mapped.json", "r") as json_data:
-        #    _data = json.load(json_data)
-        #    for item in _data:
-        #        if item["FEATURE_NAME"] == t_query:
-	#            is_unmapped = 1
-        #            break
-        ## end of unmapped gene check
-        
+        unmapped_url = "https://downloads.yeastgenome.org/curation/literature/genetic_loci.tab"
+        response = urlopen(unmapped_url)
+        unmapped_data = response.read().decode('utf-8').split("\n")
+        for line in unmapped_data:
+            if line == '' or line.startswith('#') or line.startswith('FEATURE_NAME'):
+                continue
+            pieces = line.split('\t')
+            if pieces[0] == t_query:
+                is_unmapped = 1
+                break
+        ## end of unmapped gene check  
         if Locusdbentity.is_valid_gene_name(t_query) or is_sys_name_match:
             maybe_gene_url = DBSession.query(Locusdbentity.obj_url).filter(or_(Locusdbentity.gene_name == t_query, Locusdbentity.systematic_name == t_query)).scalar()
             aliases_count = DBSession.query(LocusAlias).filter(and_(LocusAlias.alias_type.in_(['Uniform', 'Non-uniform']),LocusAlias.display_name == t_query)).count()
