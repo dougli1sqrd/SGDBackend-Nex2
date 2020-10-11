@@ -354,13 +354,13 @@ def add_allele_data(request):
             return HTTPBadRequest(body=json.dumps({'error': returnValue}), content_type='text/json')
 
         
-        return HTTPBadRequest(body=json.dumps({'error': "allele_id="+str(allele_id)}), content_type='text/json')
+        # return HTTPBadRequest(body=json.dumps({'error': "allele_id="+str(allele_id)}), content_type='text/json')
     
         
         allele_name_pmids = request.params.get('allele_name_pmids')
 
         
-        # return HTTPBadRequest(body=json.dumps({'error': "allele_name_pmids="+str(allele_name_pmids)}), content_type='text/json')
+        return HTTPBadRequest(body=json.dumps({'error': "allele_name_pmids="+str(allele_name_pmids)}), content_type='text/json')
 
         
         pmid_to_reference_id = dict([(x.pmid, x.dbentity_id) for x in DBSession.query(Referencedbentity).all()])
