@@ -398,19 +398,17 @@ def add_allele_data(request):
                 return HTTPBadRequest(body=json.dumps({'error': returnValue}), content_type='text/json')
 
 
-            
-            
-            return HTTPBadRequest(body=json.dumps({'error': "locus_id="+str(locus_id)}), content_type='text/json')
+            # return HTTPBadRequest(body=json.dumps({'error': "locus_id="+str(locus_id)}), content_type='text/json')
 
-
-
-        
             
             affected_gene_pmids = request.params.get('affected_gene_pmids')
+
 
             
             return HTTPBadRequest(body=json.dumps({'error': "affected_gene_pmids="+affected_gene_pmids}), content_type='text/json')
 
+
+        
         
             (reference_ids, err_message) = check_pmids(affected_gene_pmids, pmid_to_reference_id)
 
