@@ -338,7 +338,7 @@ def add_allele_data(request):
 
         desc = request.params.get('desc')
 
-        # return HTTPBadRequest(body=json.dumps({'error': "ALLELE_NAME"}), content_type='text/json')
+        return HTTPBadRequest(body=json.dumps({'error': "ALLELE_NAME"}), content_type='text/json')
         
         returnValue = insert_allele(curator_session, CREATED_BY, source_id, allele_name, so_id, desc)
         allele_id = None
