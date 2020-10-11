@@ -377,11 +377,9 @@ def add_allele_data(request):
                 return HTTPBadRequest(body=json.dumps({'error': returnValue}), content_type='text/json')
             success_message = success_message + "<br>" + "The paper for PMID= " + pmid + " has been added into ALLELE_REFERENCE table. "
 
+        # return HTTPBadRequest(body=json.dumps({'error': "allele_name reference_ids="+str(reference_ids)}), content_type='text/json')
 
-        return HTTPBadRequest(body=json.dumps({'error': "allele_name reference_ids="+str(reference_ids)}), content_type='text/json')
-
-    
-            
+      
         ## affected gene & reference(s)
         
         affected_gene = request.params.get('affected_gene')
