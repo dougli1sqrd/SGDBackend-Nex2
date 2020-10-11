@@ -93,8 +93,6 @@ def insert_allele_alias(curator_session, CREATED_BY, source_id, allele_id, alias
                         source_id = source_id,
                         created_by = CREATED_BY)
         curator_session.add(x)
-        curator_session.flush()
-        curator_session.refresh(x)
         # transaction.commit()
     except Exception as e:
         transaction.abort()
@@ -102,6 +100,8 @@ def insert_allele_alias(curator_session, CREATED_BY, source_id, allele_id, alias
             curator_session.rollback()
         return str(e)
     finally:
+        curator_session.flush()
+        curator_session.refresh(x)
         return x.allele_alias_id
 
     
@@ -121,6 +121,8 @@ def insert_locus_allele(curator_session, CREATED_BY, source_id, allele_id, locus
             curator_session.rollback()
         return str(e)
     finally:
+        curator_session.flush()
+        curator_session.refresh(x)
         return x.locus_allele_id
 
 def insert_allele(curator_session, CREATED_BY, source_id, allele_name, so_id, desc):
@@ -167,6 +169,8 @@ def insert_allele(curator_session, CREATED_BY, source_id, allele_name, so_id, de
         isSuccess = False
         returnValue = 'Insert allele failed' + ' ' + str(e.orig.pgerror)
     finally:
+        curator_session.flush()
+        curator_session.refresh(x)
         allele_id = x.dbentity_id
 
     if isSuccess:
