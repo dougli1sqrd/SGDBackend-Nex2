@@ -450,12 +450,8 @@ def add_allele_data(request):
 
         (reference_ids, err_message) = check_pmids(desc_pmids, pmid_to_reference_id)
 
-        
-        return HTTPBadRequest(body=json.dumps({'error': "description reference_ids="+str(reference_ids)}), content_type='text/json')
-        
-
-    
-        
+        # return HTTPBadRequest(body=json.dumps({'error': "description reference_ids="+str(reference_ids)}), content_type='text/json')
+                
         if err_message != '':
             return HTTPBadRequest(body=json.dumps({'error': err_message}), content_type='text/json')
 
@@ -474,6 +470,7 @@ def add_allele_data(request):
         aliases_reference_ids = []
         for alias_pmids in  aliases_pmids.strip().split('|'):
             (reference_ids, err_message) = check_pmids(alias_pmids, pmid_to_reference_id)
+
             if err_message != '':
                 return HTTPBadRequest(body=json.dumps({'error': err_message}), content_type='text/json')
             aliases_reference_ids.append(reference_ids)
@@ -493,9 +490,15 @@ def add_allele_data(request):
                 success_message = success_message + "<br>" + "The new alias " + alias_name + " has been added into ALLELE_ALIAS table. "
             else:
                 return HTTPBadRequest(body=json.dumps({'error': returnValue}), content_type='text/json')
-
+            
             reference_ids = aliases_reference_ids[i]
 
+
+            
+            return HTTPBadRequest(body=json.dumps({'error': "allele_alias_id="+str(allele_alias_id) + ", reference_ids="+str(reference_ids)}), content_type='text/json')
+
+        
+            
             for (reference_id, pmid) in reference_ids:
                 returnValue = insert_allelealias_reference(curator_session, CREATED_BY, source_id,
                                                            allele_alias_id, reference_id)
