@@ -408,12 +408,12 @@ def add_allele_data(request):
             (reference_ids, err_message) = check_pmids(affected_gene_pmids, pmid_to_reference_id)
 
             
-            return HTTPBadRequest(body=json.dumps({'error': "reference_ids="+str(reference_ids)}), content_type='text/json')
+            # return HTTPBadRequest(body=json.dumps({'error': "reference_ids="+str(reference_ids)}), content_type='text/json')
 
-        
+            
             if err_message != '':
                 return HTTPBadRequest(body=json.dumps({'error': err_message}), content_type='text/json')
-
+            
             for (reference_id, pmid) in reference_ids:
                 returnValue = insert_locusallele_reference(curator_session, CREATED_BY, source_id,
                                                            locus_allele_id, reference_id)
