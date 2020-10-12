@@ -91,6 +91,7 @@ def insert_allele_alias(curator_session, CREATED_BY, source_id, allele_id, alias
         x = AlleleAlias(allele_id = allele_id,
                         display_name = alias_name,
                         source_id = source_id,
+                        alias_type = 'Synonym',
                         created_by = CREATED_BY)
         curator_session.add(x)
         # transaction.commit()
