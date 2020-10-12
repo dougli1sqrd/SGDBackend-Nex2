@@ -491,11 +491,12 @@ def add_allele_data(request):
                 success_message = success_message + "<br>" + "The new alias " + alias_name + " has been added into ALLELE_ALIAS table. "
             else:
                 return HTTPBadRequest(body=json.dumps({'error': returnValue}), content_type='text/json')
-            
-            reference_ids = aliases_reference_ids[i]
 
+            reference_ids = []
+            if len(aliases_reference_ids) >= i:
+                reference_ids = aliases_reference_ids[i]
 
-            
+                
             return HTTPBadRequest(body=json.dumps({'error': "allele_alias_id="+str(allele_alias_id) + ", reference_ids="+str(reference_ids)}), content_type='text/json')
 
         
