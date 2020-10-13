@@ -47,10 +47,20 @@ def load_data():
         sgdid = pieces[0].replace('SGD:', '')
         gene = pieces[1]
         db = pieces[2]
-        ids = pieces[3].split('|')
+        query = pieces[3]
+        ids = pieces[4].split('|')
         link_url = ''
+        link_url2 = ''
         if len(ids) > 1:
-            link_url = db2linkTemplate[db].replace("_SUBSTITUTE_", gene)
+            link_url = db2linkTemplate[db].replace("_SUBSTITUTE_", pieces[4].replace('|', '+'))
+            link_url2 = db2linkTemplate[db].replace("_SUBSTITUTE_", query)
+            if len(link_url) > 500:
+                # print ("TOO LONG ID LIST: len=", len(link_url),  link_url)
+                if len(link_url2) <= 500:
+                    link_url = link_url2
+                else:
+                    # print ("TOO LONG QUERY LIST: len=", len(link_url2),  link_url2)
+                    link_url = db2linkTemplate[db].replace("_SUBSTITUTE_", gene)
         else:
             link_url = root_url + "gene/" + ids[0]
         key = (sgdid, db)
