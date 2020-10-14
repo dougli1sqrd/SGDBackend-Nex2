@@ -129,7 +129,7 @@ def search(request):
         "reference": [("author", "author"), ("journal", "journal"),
                       ("year", "year"), ("reference_locus", "reference_loci")],
         "contig": [("strain", "strain")],
-        "complex": [("references", "references")],
+        "complex": [("references", "references"), ("complex_loci", "complex_loci"), ("go_terms", "go_terms")],
         "colleague": [("last_name", "last_name"), ("position", "position"),
                       ("institution", "institution"), ("country", "country"),
                       ("keywords", "keywords"), ("colleague_loci",
