@@ -185,9 +185,7 @@ def search(request):
         "ref_citation",
         "chemical_name",
         "resource_name",
-        "locus_summary",
-        "go_terms",
-        "complex_loci"
+        "locus_summary"
     ]  # year not inserted, have to change to str in mapping
 
     json_response_fields = [
