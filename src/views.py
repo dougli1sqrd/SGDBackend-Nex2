@@ -133,7 +133,8 @@ def search(request):
                       ("institution", "institution"), ("country", "country"),
                       ("keywords", "keywords"), ("colleague_loci",
                                                  "colleague_loci")],
-        "download": [("topic", "topic"), ("data", "data"), ("keyword", "keyword"), ("format", "format"),
+        "complex": [("go_terms", "go_terms"), ("complex_loci", "complex_loci"), ("references", "references")],
+        "download": [("topic", "togpic"), ("data", "data"), ("keyword", "keyword"), ("format", "format"),
                      ("status", "status"), ("year", "year")]
     }
 
