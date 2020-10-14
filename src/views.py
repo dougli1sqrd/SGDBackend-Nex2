@@ -129,12 +129,12 @@ def search(request):
         "reference": [("author", "author"), ("journal", "journal"),
                       ("year", "year"), ("reference_locus", "reference_loci")],
         "contig": [("strain", "strain")],
+        "complex": [("complex_loci", "complex_loci"), ("go_terms", "go_terms"), ("references", "references")],
         "colleague": [("last_name", "last_name"), ("position", "position"),
                       ("institution", "institution"), ("country", "country"),
                       ("keywords", "keywords"), ("colleague_loci",
                                                  "colleague_loci")],
-        "complex": [("go_terms", "go_terms"), ("complex_loci", "complex_loci"), ("references", "references")],
-        "download": [("topic", "togpic"), ("data", "data"), ("keyword", "keyword"), ("format", "format"),
+        "download": [("topic", "topic"), ("data", "data"), ("keyword", "keyword"), ("format", "format"),
                      ("status", "status"), ("year", "year")]
     }
 
