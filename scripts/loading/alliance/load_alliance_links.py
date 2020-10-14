@@ -1,4 +1,5 @@
 import urllib.request, urllib.parse, urllib.error
+from urllib.request import urlopen
 import gzip
 import shutil
 import logging
@@ -7,7 +8,7 @@ from datetime import datetime
 import sys
 import importlib
 importlib.reload(sys)  # Reload does the trick!
-from src.models import Source, Locusdbentity, LocusUrl
+from src.models import Source, Dbentity, LocusUrl
 from scripts.loading.database_session import get_session
 
 __author__ = 'sweng66'
@@ -18,11 +19,11 @@ log.setLevel(logging.INFO)
 
 CREATED_BY = os.environ['DEFAULT_USER']
 PLACEMENT = 'LOCUS_ALLIANCE_ICONS'
-# URL_TYPE = 'internal web service'
 URL_TYPE = 'Alliance'
 
 root_url = 'https://www.alliancegenome.org/'
 infile = 'scripts/loading/alliance/data/alliance_orthologs_sorted.txt'
+sgdidFile = 'scripts/loading/alliance/data/genes_submitted_to_alliance.txt'
 db_list = ['WB', 'FB', 'MGI', 'RGD', 'ZFIN', 'HGNC']
 
 def load_data():
@@ -31,7 +32,8 @@ def load_data():
 
     src = nex_session.query(Source).filter_by(display_name='SGD').one_or_none()
     source_id = src.source_id
-
+    sgdid_to_dbentity_id = dict([(x.sgdid, x.dbentity_id) for x in nex_session.query(Dbentity).filter_by(subclass='LOCUS').all()])
+    
     log.info(str(datetime.now()))
     
     log.info("Loading data...\n") 
@@ -65,41 +67,41 @@ def load_data():
             link_url = root_url + "gene/" + ids[0]
         key = (sgdid, db)
         key_to_link[key] = link_url
-        # print (sgdid, db, link_url)
 
     f.close()
 
     i = 0
-    for x in nex_session.query(Locusdbentity).filter_by(has_summary='true').all():
-        has_link = 0
-        if x.has_protein:
-            has_link = 1
-        elif x.systematic_name.startswith('t'):
-            has_link = 1
-        if has_link == 0:
+    
+    f = open(sgdidFile)
+    
+    for line in f:
+        
+        sgdid = line.strip()
+        dbentity_id = sgdid_to_dbentity_id.get(sgdid)
+        if dbentity_id is None:
             continue
         
-        # print (x.systematic_name, x.gene_name)
-
         i = i + 1
         
         ## link to alliance sgd page
-        sgd_link_url = root_url + 'gene/SGD:' + x.sgdid 
-        insert_locus_url(nex_session, x.dbentity_id, source_id, 'SGD', sgd_link_url)
+        sgd_link_url = root_url + 'gene/SGD:' + sgdid 
+        insert_locus_url(nex_session, dbentity_id, source_id, 'SGD', sgd_link_url)
 
         ## link to other db pages
         for db in db_list:
             key = (x.sgdid, db)
             if key in key_to_link:
-                insert_locus_url(nex_session, x.dbentity_id, source_id, db, key_to_link[key])
+                insert_locus_url(nex_session, dbentity_id, source_id, db, key_to_link[key])
 
         if i > 300:        
-            # nex_session.rollback()
-            nex_session.commit()
+            nex_session.rollback()
+            # nex_session.commit()
             i = 0
 
-    # nex_session.rollback()
-    nex_session.commit()
+    f.close()
+    
+    nex_session.rollback()
+    # nex_session.commit()
     
     nex_session.close()
 
