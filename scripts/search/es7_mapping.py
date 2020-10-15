@@ -408,17 +408,6 @@ mapping = {
                     }
                 }
             },
-            "go_terms": {
-                "type": "text",
-                "fielddata": True,
-                "analyzer": "keyword",
-                "fields": {
-                    "engram": {
-                        "type": "text",
-                        "analyzer": "other_search"
-                    }
-                }
-            },
             "chemical": {
                 "type": "keyword"
             },

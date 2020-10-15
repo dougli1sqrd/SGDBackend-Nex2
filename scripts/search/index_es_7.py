@@ -790,12 +790,19 @@ def index_complex_names():
             complex_id=c.dbentity_id).all()
         for ref in refs:
             references.add(ref.reference.display_name)
-
-        go_terms = set([])
+            
         all_go = DBSession.query(ComplexGo).filter_by(
                         complex_id=c.dbentity_id).all()
+        process = set([])
+        component = set([])
+        function = set([])
         for x in all_go:
-            go_terms.add(x.go.display_name)
+            if x.go.go_namespace == 'P':
+                process.add(x.go.display_name)
+            elif x.go.go_namespace == 'C':
+                component.add(x.go.display_name)
+            else:
+                function.add(x.go.display_name)
             
         complex_loci = set([])
         annotations = DBSession.query(Complexbindingannotation).filter_by(
@@ -825,7 +832,9 @@ def index_complex_names():
             "intact_id": c.intact_id,
             "complex_accession": c.complex_accession,
             "complex_loci": sorted(list(complex_loci)),
-            "go_terms": sorted(list(go_terms)),
+            "cellular_component": sorted(list(component)),
+            "biological_process": sorted(list(process)),
+            "molecular_function": sorted(list(function)),
             "references": list(references),
             "keys": list(keys)
         }
