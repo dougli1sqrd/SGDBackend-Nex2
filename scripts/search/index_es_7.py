@@ -797,9 +797,9 @@ def index_complex_names():
         component = set([])
         function = set([])
         for x in all_go:
-            if x.go.go_namespace == 'P':
+            if x.go.go_namespace == 'biological process':
                 process.add(x.go.display_name)
-            elif x.go.go_namespace == 'C':
+            elif x.go.go_namespace == 'cellular component':
                 component.add(x.go.display_name)
             else:
                 function.add(x.go.display_name)
