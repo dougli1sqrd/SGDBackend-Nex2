@@ -194,12 +194,13 @@ def search(request):
     ]
 
     ## added for allele search
-    query2 = query.replace('Δ', "delta").replace('-', "delta")
-    if is_quick_flag == 'true' and ('delta' in query2):
-        allele_name = query.strip().lower()
-        maybe_allele_url = DBSession.query(Dbentity.obj_url).filter_by(subclass='ALLELE').filter_by(display_name=allele_name).one_or_none()
+    # query2 = query.replace('Δ', "delta").replace('-', "delta")
+    # if is_quick_flag == 'true' and ('delta' in query2):
+    if is_quick_flag:
+        allele_name = query.strip()
+        maybe_allele_url = DBSession.query(Dbentity.obj_url).filter_by(subclass='ALLELE').filter(Dbentity.display_name.ilike(query)).one_or_none()
         if maybe_allele_url is None:
-            aa = DBSession.query(AlleleAlias).filter_by(display_name=allele_name).one_or_none()
+            aa = DBSession.query(AlleleAlias).filter(AlleleAlias.display_name.ilike(allele_name)).one_or_none()
             if aa is not None:
                 maybe_allele_url = aa.allele.obj_url
         if maybe_allele_url:
