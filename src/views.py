@@ -194,9 +194,9 @@ def search(request):
     ]
 
     ## added for allele search
-    if is_quick_flag == 'true' and terms_digits_flag == False and ( '-' in query or 'delta' in query or '\u0394' in query):
+    if is_quick_flag == 'true' and terms_digits_flag == False and ( '-' in query or 'delta' in query or 'Δ' in query):
         allele_name = query.strip().lower()
-        maybe_allele_url = DBSession.query(Dbentity.obj_url).filter_by(display_name=allele_name).one_or_none()
+        maybe_allele_url = DBSession.query(Dbentity.obj_url).filter_by(subclass='ALLELE').filter_by(display_name=allele_name).one_or_none()
         if maybe_allele_url is None:
             aa = DBSession.query(AlleleAlias).filter_by(display_name=allele_name).one_or_none()
             if aa is not None:
