@@ -1352,3 +1352,10 @@ REVOKE ALL ON nex.allele_geninteraction FROM PUBLIC;
 GRANT SELECT,INSERT,UPDATE,DELETE ON nex.allele_geninteraction TO curator;
 GRANT SELECT ON nex.allele_geninteraction TO PUBLIC;
 GRANT SELECT ON nex.allele_geninteraction TO DBSELECT;
+
+ALTER TAble functionalcomplementannotation OWNER TO nex;
+GRANT ALL ON nex.functionalcomplementannotation TO nex;
+REVOKE ALL ON nex.functionalcomplementannotation FROM PUBLIC;
+GRANT SELECT,INSERT,UPDATE,DELETE ON nex.functionalcomplementannotation TO curator;
+GRANT SELECT ON nex.functionalcomplementannotation TO PUBLIC;
+GRANT SELECT ON nex.functionalcomplementannotation TO DBSELECT;

@@ -58,6 +58,7 @@ from .phenotype_helpers import add_phenotype_annotations, update_phenotype_annot
 from .author_response_helpers import insert_author_response, get_author_responses, update_author_response
 from .litguide_helpers import get_list_of_papers, update_litguide, add_litguide
 from .disease_helpers import insert_update_disease_annotations, delete_disease_annotation, get_diseases_by_filters, upload_disease_file
+from .funccomp_helpers import insert_update_funccomp_annotations, delete_funccomp_annotation, get_funccomp_by_filters, upload_funccomp_file
 
 # logging.getLogger('sqlalchemy.engine').setLevel(logging.ERROR)
 log = logging.getLogger('curation')
@@ -2134,7 +2135,20 @@ def get_all_do(request):
     finally:
         if DBSession:
             DBSession.remove()
-    
+
+@view_config(route_name='get_all_ro', renderer='json', request_method='GET')
+@authenticate
+def get_all_ro(request):
+    try:
+        ro_in_db = models_helper.get_all_ro()
+        obj = [{'format_name': r.format_name,'display_name':r.display_name} for r in ro_in_db]
+        return HTTPOk(body=json.dumps({'success': obj}), content_type='text/json')
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+
 @view_config(route_name='phenotype_add', renderer='json', request_method='POST')
 @authenticate
 def phenotype_add(request):
@@ -3271,3 +3285,32 @@ def delete_reference(request):
     finally:
         if curator_session:
             curator_session.close()
+
+@view_config(route_name='funccomp_insert_update', renderer='json', request_method='POST')
+@authenticate
+def funccomp_insert_update(request):
+
+    return insert_update_funccomp_annotations(request)
+
+@view_config(route_name='funccomp_by_filters',renderer='json',request_method='POST')
+@authenticate
+def funccomp_by_filters(request):
+    try:
+        return get_funccomp_by_filters(request)
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+
+@view_config(route_name='funccomp_delete',renderer='json',request_method='DELETE')
+@authenticate
+def funccomp_delete(request):
+
+    return delete_funccomp_annotation(request)
+
+@view_config(route_name='funccomp_file',renderer='json',request_method='POST')
+@authenticate
+def funccomp_file(request):
+
+    return upload_funccomp_file(request)

@@ -6962,6 +6962,33 @@ class FileKeyword(Base):
     keyword = relationship('Keyword')
     source = relationship('Source')
 
+class Functionalcomplementannotation(Base):
+    __tablename__ = 'functionalcomplementannotation'
+    __table_args__ = (
+        UniqueConstraint('dbentity_id', 'taxonomy_id', 'dbxref_id', 'direction', 'eco_id', 'reference_id'),
+        {'schema': 'nex'}
+    )
+
+    annotation_id = Column(BigInteger, primary_key=True, server_default=text("nextval('nex.annotation_seq'::regclass)"))
+    dbentity_id = Column(ForeignKey('nex.dbentity.dbentity_id', ondelete='CASCADE'), nullable=False)
+    source_id = Column(ForeignKey('nex.source.source_id', ondelete='CASCADE'), nullable=False, index=True)
+    taxonomy_id = Column(ForeignKey('nex.taxonomy.taxonomy_id', ondelete='CASCADE'), nullable=False, index=True)
+    reference_id = Column(ForeignKey('nex.referencedbentity.dbentity_id', ondelete='CASCADE'), index=True)
+    eco_id = Column(ForeignKey('nex.eco.eco_id', ondelete='CASCADE'), nullable=False, index=True)
+    ro_id = Column(ForeignKey('nex.ro.ro_id', ondelete='CASCADE'), nullable=False, index=True)
+    date_created = Column(DateTime, nullable=False, server_default=text("('now'::text)::timestamp without time zone"))
+    created_by = Column(String(12), nullable=False)
+    obj_url = Column(String(500), nullable=False)
+    direction = Column(String(50), nullable=False)
+    dbxref_id = Column(String(40), nullable=False)
+    curator_comment = Column(String(700), nullable=True)
+    dbentity = relationship('Dbentity')
+    eco = relationship('Eco')
+    ro = relationship('Ro')
+    reference = relationship('Referencedbentity', foreign_keys=[reference_id])
+    source = relationship('Source')
+    taxonomy = relationship('Taxonomy')
+
 class Geninteractionannotation(Base):
     __tablename__ = 'geninteractionannotation'
     __table_args__ = (

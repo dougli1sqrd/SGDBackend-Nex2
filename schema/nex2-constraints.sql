@@ -637,3 +637,10 @@ ALTER TABLE nex.locus_allele ADD CONSTRAINT locusallele_locus_fk FOREIGN KEY (lo
 ALTER TABLE nex.allelealias_reference ADD CONSTRAINT allelealiasreference_ref_fk FOREIGN KEY (reference_id) REFERENCES referencedbentity(dbentity_id) ON DELETE RESTRICT NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE nex.allelealias_reference ADD CONSTRAINT allelealiasreference_source_fk FOREIGN KEY (source_id) REFERENCES source(source_id) ON DELETE RESTRICT NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE nex.allelealias_reference ADD CONSTRAINT allelealiasreference_alias_fk FOREIGN KEY (alias_id) REFERENCES allele_alias(allele_alias_id) ON DELETE RESTRICT NOT DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE nex.functionalcomplementannotation ADD CONSTRAINT functionalcomplementanno_source_fk FOREIGN KEY (source_id) REFERENCES source(source_id) ON DELETE RESTRICT NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE nex.functionalcomplementannotation ADD CONSTRAINT functionalcomplementanno_dbentity_fk FOREIGN KEY (dbentity_id) REFERENCES dbentity(dbentity_id) ON DELETE RESTRICT NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE nex.functionalcomplementannotation ADD CONSTRAINT functionalcomplementanno_ref_fk FOREIGN KEY (reference_id) REFERENCES referencedbentity(dbentity_id) ON DELETE RESTRICT NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE nex.functionalcomplementannotation ADD CONSTRAINT functionalcomplementanno_tax_fk FOREIGN KEY (taxonomy_id) REFERENCES taxonomy(taxonomy_id) ON DELETE RESTRICT NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE nex.functionalcomplementannotation ADD CONSTRAINT functionalcomplementanno_eco_fk FOREIGN KEY (eco_id) REFERENCES eco(eco_id) ON DELETE RESTRICT NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE nex.functionalcomplementannotation ADD CONSTRAINT functionalcomplementanno_ro_fk FOREIGN KEY (ro_id) REFERENCES ro(ro_id) ON DELETE RESTRICT NOT DEFERRABLE INITIALLY IMMEDIATE;

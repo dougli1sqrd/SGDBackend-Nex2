@@ -524,3 +524,21 @@ class ModelsHelper(object):
             do_formatname_to_id[do.format_name] = do.disease_id
         
         return do_formatname_to_id
+    
+    def get_all_ro(self):
+        '''
+        Get all RO data
+        '''
+        ro_in_db = DBSession.query(Ro).all()
+        return ro_in_db
+    
+    def get_all_ro_mapping(self):
+        '''
+        Get all RO data as dictionary with key as display_name
+        ''' 
+        ro_formatname_to_id = {}
+        ro_in_db = self.get_all_ro()
+        for ro in ro_in_db:
+            ro_formatname_to_id[ro.format_name] = ro.ro_id
+        
+        return ro_formatname_to_id

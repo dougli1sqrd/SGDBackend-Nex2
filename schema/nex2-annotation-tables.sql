@@ -1077,3 +1077,43 @@ ALTER TABLE nex.sequencevariant ADD CONSTRAINT sequencevariant_seqtype_ck CHECK 
 ALTER TABLE nex.sequencevariant ADD CONSTRAINT sequencevariant_varianttype_ck CHECK (VARIANT_TYPE IN ('Deletion', 'Insertion', 'SNP'));
 ALTER TABLE nex.sequencevariant ADD CONSTRAINT sequencevariant_snptype_ck CHECK (SNP_TYPE IN ('synonymous', 'nonsynonymous', 'intron', 'untranslatable','intergenic'));
 CREATE INDEX sequencevariant_locus_fk_index ON nex.sequencevariant (locus_id);
+
+
+DROP TABLE IF EXISTS nex.functionalcomplementannotation CASCADE;
+CREATE TABLE nex.functionalcomplementannotation (
+	annotation_id bigint NOT NULL DEFAULT nextval('annotation_seq'),
+	dbentity_id bigint NOT NULL,
+	source_id bigint NOT NULL,
+	taxonomy_id bigint NOT NULL,
+	reference_id bigint,
+	ro_id bigint NOT NULL,
+	eco_id bigint NOT NULL,
+	obj_url varchar(500) NOT NULL,
+	direction varchar(50) NOT NULL,
+	dbxref_id varchar(40) NOT NULL,
+	curator_comment varchar(500),
+	date_created timestamp NOT NULL DEFAULT LOCALTIMESTAMP,
+	created_by varchar(12) NOT NULL,
+	CONSTRAINT functionalcomplementannotation_pk PRIMARY KEY (annotation_id)
+) ;
+COMMENT ON TABLE nex.functionalcomplementannotation IS 'Curated Functional complement of a yeast gene in humans';
+COMMENT ON COLUMN nex.functionalcomplementannotation.annotation_id IS 'Unique identifier (serial number).';
+COMMENT ON COLUMN nex.functionalcomplementannotation.dbentity_id IS 'FK to DBENTITY.DBENTITY_ID.';
+COMMENT ON COLUMN nex.functionalcomplementannotation.source_id IS 'FK to SOURCE.SOURCE_ID.';
+COMMENT ON COLUMN nex.functionalcomplementannotation.taxonomy_id IS 'FK to TAXONOMY.TAXONOMY_ID.';
+COMMENT ON COLUMN nex.functionalcomplementannotation.reference_id IS 'FK to REFERENCEBENTITY.DBENTITY_ID.';
+COMMENT ON COLUMN nex.functionalcomplementannotation.ro_id IS 'FK to RO.RO_ID.';
+COMMENT ON COLUMN nex.functionalcomplementannotation.eco_id IS 'FK to ECO.ECO_ID.';
+COMMENT ON COLUMN nex.functionalcomplementannotation.obj_url IS 'URL of the object (relative for local links or complete for external links).';
+COMMENT ON COLUMN nex.functionalcomplementannotation.direction IS 'direction of complementation.';
+COMMENT ON COLUMN nex.functionalcomplementannotation.dbxref_id IS 'HGNC ID of the complement.';
+COMMENT ON COLUMN nex.functionalcomplementannotation.curator_comment IS 'Additional notes by curator.';
+COMMENT ON COLUMN nex.functionalcomplementannotation.date_created IS 'Date the record was entered into the database.';
+COMMENT ON COLUMN nex.functionalcomplementannotation.created_by IS 'Username of the person who entered the record into the database.';
+ALTER TABLE nex.functionalcomplementannotation ADD CONSTRAINT functionalcomplementannotation_uk UNIQUE (dbentity_id,taxonomy_id,dbxref_id,direction,eco_id,reference_id);
+CREATE INDEX functionalcomplementanno_tax_fk_index ON nex.functionalcomplementannotation (taxonomy_id);
+CREATE INDEX functionalcomplementanno_ref_fk_index ON nex.functionalcomplementannotation (reference_id);
+CREATE INDEX functionalcomplementanno_eco_fk_index ON nex.functionalcomplementannotation (eco_id);
+CREATE INDEX functionalcomplementanno_source_fk_index ON nex.functionalcomplementannotation (source_id);
+CREATE INDEX functionalcomplementanno_ro_fk_index ON nex.functionalcomplementannotation (ro_id);
+

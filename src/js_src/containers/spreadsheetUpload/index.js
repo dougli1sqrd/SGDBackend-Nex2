@@ -203,5 +203,6 @@ const TEMPLATE_OPTIONS = [
     value: 'disease_summaries',
     tempalateUrl: 'https://docs.google.com/spreadsheets/d/1E4gj7P7SADnRc0GJOMMTCz4foTX46kcAnZmWkmKw4mE/edit?usp=sharing'
   }
+
 ];
 const DEFAULT_VALUE = TEMPLATE_OPTIONS[0].value;

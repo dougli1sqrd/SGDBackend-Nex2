@@ -1,0 +1,471 @@
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import fetchData from '../../lib/fetchData';
+import { setError, setMessage } from '../../actions/metaActions';
+import { setFunccomp } from '../../actions/funccompActions';
+import { DataList } from 'react-datalist-field';
+import Loader from '../../components/loader';
+import PropTypes from 'prop-types';
+const GET_ECO = '/eco';
+const GET_RO = '/ro';
+const FUNCCOMPS = '/funccomp';
+const GET_STRAINS = '/get_strains';
+const GET_FUNCCOMPS = 'get_funccomps';
+const DIRECTION = [null, 'yeast complements other', 'other complements yeast'];
+const SOURCES = [null, 'SGD', 'P-POD'];
+//const ROIDS = [null, 'RO:HOM0000065', 'RO:HOM0000062'];
+//const ECOIDS = [null, 'ECO:0000064', 'ECO:0007584', 'ECO:0006097'];
+const SKIP = 5;
+const TIMEOUT = 120000;
+
+
+class FuncCompForm extends Component {
+  constructor(props) {
+    super(props);
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleToggleInsertUpdate = this.handleToggleInsertUpdate.bind(this);
+    this.handleResetForm = this.handleResetForm.bind(this);
+    this.renderActions = this.renderActions.bind(this);
+    this.handleGetFunccomps = this.handleGetFunccomps.bind(this);
+    this.handleSelectFunccomp = this.handleSelectFunccomp.bind(this);
+    this.handleNextPrevious = this.handleNextPrevious.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
+
+    this.state = {
+      list_of_eco: [],
+      list_of_ro: [],
+      list_of_taxonomy: [],
+      isUpdate: false,
+      pageIndex: 0,
+      currentIndex: -1,
+      list_of_funccomps: [],
+      isLoading: false
+    };
+
+    this.getEco();
+    this.getRo();
+    this.getTaxonomy();
+  }
+
+  getEco() {
+    fetchData(GET_ECO, { type: 'GET' })
+      .then((data) => {
+        this.setState({ list_of_eco: data.success });
+      })
+      .catch((err) => this.props.dispatch(setError(err.message)));
+  }
+
+  getRo() {
+    fetchData(GET_RO, { type: 'GET' })
+      .then((data) => {
+        this.setState({ list_of_ro: data.success });
+      })
+      .catch((err) => this.props.dispatch(setError(err.message)));
+  }
+
+  getTaxonomy() {
+    fetchData(GET_STRAINS, {
+      type: 'GET'
+    }).then(data => {
+      var values = data['strains'].map((strain, index) => {
+        return <option value={strain.taxonomy_id} key={index}> {strain.display_name} </option>;
+      });
+      this.setState({ list_of_taxonomy: [<option value='' key='-1'> -----select taxonomy----- </option>, ...values] });
+    }).catch(err => this.props.dispatch(setError(err.error)));
+  }
+
+  handleGetFunccomps() {
+    this.setState({ list_of_funccomps: [], isLoading: true, currentIndex: -1, pageIndex: 0 });
+    fetchData(GET_FUNCCOMPS, {
+      type: 'POST',
+      data: {
+        dbentity_id: this.props.funccomp.dbentity_id,
+        reference_id: this.props.funccomp.reference_id
+      },
+      timeout: TIMEOUT
+    })
+      .then(data => {
+        if (data['success'].length == 0) {
+          this.props.dispatch(setMessage('No complements found for given input.'));
+        }
+        else {
+          this.setState({ list_of_funccomps: data['success'] });
+          this.handleResetForm();
+        }
+      })
+      .catch(err => this.props.dispatch(setError(err.error)))
+      .finally(() => this.setState({ isLoading: false }));
+  }
+
+  handleSelectFunccomp(index) {
+    var funccomp = this.state.list_of_funccomps[index];
+    var currentFunccomp = {
+      annotation_id: funccomp['annotation_id'],
+      dbentity_id: funccomp.dbentity_id['id'],
+      taxonomy_id: funccomp.taxonomy_id,
+      reference_id: funccomp.reference_id,
+      eco_id: funccomp.eco_id,
+      ro_id: funccomp.ro_id,
+      source_id: funccomp.source_id,
+      obj_url: funccomp.obj_url,
+      dbxref_id: funccomp.dbxref_id,
+      direction: funccomp.direction,
+      comments: funccomp.curator_comment
+    };
+
+    this.props.dispatch(setFunccomp(currentFunccomp));
+    this.setState({ currentIndex: index });
+  }
+
+  handleResetForm() {
+    var currentFunccomp = {
+      annotation_id: 0,
+      dbentity_id: '',
+      taxonomy_id: '',
+      reference_id: '',
+      eco_id: '',
+      source_id: '',
+      ro_id: '',
+      obj_url: '',
+      dbxref_id: '',
+      direction: '',
+      comments: ''
+    };
+    this.props.dispatch(setFunccomp(currentFunccomp));
+  }
+
+  handleToggleInsertUpdate() {
+    this.setState((prevState) => {
+      return { isUpdate: !prevState.isUpdate, list_of_funccomps: [], currentIndex: -1, pageIndex: 0 };
+    });
+    this.handleResetForm();
+  }
+
+
+  handleNextPrevious(value) {
+    this.setState((prevState) => {
+      return { pageIndex: prevState.pageIndex + value };
+    });
+  }
+
+  handleChange() {
+
+    var data = new FormData(this.refs.form);
+    var currentFunccomp = {};
+    for (var key of data.entries()) {
+      currentFunccomp[key[0]] = key[1];
+    }
+    this.props.dispatch(setFunccomp(currentFunccomp));
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+    this.setState({ isLoading: true });
+    fetchData(FUNCCOMPS, {
+      type: 'POST',
+      data: this.props.funccomp
+    })
+      .then(data => {
+        this.props.dispatch(setMessage(data.success));
+        var list_of_funccomps = this.state.list_of_funccomps;
+        list_of_funccomps[this.state.currentIndex] = data.funccomp;
+        this.setState({ list_of_funccomps: list_of_funccomps });
+      })
+      .catch(err => this.props.dispatch(setError(err.error)))
+      .finally(() => this.setState({ isLoading: false }));
+  }
+
+  handleDelete(e) {
+    e.preventDefault();
+    this.setState({ isLoading: true });
+    if (this.props.funccomp.annotation_id > 0) {
+
+      fetchData(`${FUNCCOMPS}/${this.props.funccomp.annotation_id}/${this.props.funccomp.dbentity_id}`, {
+        type: 'DELETE'
+      })
+        .then((data) => {
+          this.props.dispatch(setMessage(data.success));
+          var new_list_of_funccomps = this.state.list_of_funccomps;
+          new_list_of_funccomps.splice(this.state.currentIndex, 1);
+          this.setState({ list_of_funccomps: new_list_of_funccomps, currentIndex: -1, pageIndex: 0 });
+          this.handleResetForm();
+        })
+        .catch((err) => {
+          this.props.dispatch(setError(err.error));
+        })
+        .finally(() => this.setState({ isLoading: false }));
+    }
+    else {
+      this.setState({ isLoading: false });
+      this.props.dispatch(setError('No complement is selected to delete.'));
+    }
+  }
+
+  renderActions() {
+    var pageIndex = this.state.pageIndex;
+    var count_of_funccomps = this.state.list_of_funccomps.length;
+    var totalPages = Math.ceil(count_of_funccomps / SKIP) - 1;
+
+    if (this.state.isLoading) {
+      return (
+        <Loader />
+      );
+    }
+
+    if (this.state.isUpdate) {
+      var buttons = this.state.list_of_funccomps.filter((i, index) => {
+        return index >= (pageIndex * SKIP) && index < (pageIndex * SKIP) + SKIP;
+      })
+        .map((funccomp, index) => {
+          var new_index = index + pageIndex * SKIP;
+          return <li key={new_index} onClick={() => this.handleSelectFunccomp(new_index)} className={`button medium-only-expanded ${this.state.currentIndex == new_index ? 'success' : ''}`}>{funccomp.dbentity_id.display_name}</li>;
+        }
+        );
+      return (
+        <div>
+          <div className='row'>
+            <div className='columns medium-12'>
+              <div className='expanded button-group'>
+                <li type='button' className='button warning' disabled={count_of_funccomps < 0 || pageIndex <= 0 ? true : false} onClick={() => this.handleNextPrevious(-1)}> <i className="fa fa-chevron-circle-left"></i> </li>
+                {buttons}
+                <li type='button' className='button warning' disabled={count_of_funccomps == 0 || pageIndex >= totalPages ? true : false} onClick={() => this.handleNextPrevious(1)}> <i className="fa fa-chevron-circle-right"></i></li>
+              </div>
+            </div>
+          </div>
+          <div className='row'>
+            <div className='columns medium-6'>
+              <button type='submit' className="button expanded" disabled={this.state.currentIndex > -1 ? '' : 'disabled'}>Update</button>
+            </div>
+            <div className='columns medium-3'>
+              <button type='button' className="button alert expanded" disabled={this.state.currentIndex > -1 ? '' : 'disabled'} onClick={(e) => { if (confirm('Are you sure, you want to delete selected Complement ?')) this.handleDelete(e); }}>Delete</button>
+            </div>
+          </div>
+        </div >
+
+      );
+    }
+    else {
+      return (
+        <div className='row'>
+          <div className='columns medium-6'>
+            <button type='submit' className='button expanded'>Add</button>
+          </div>
+        </div>
+      );
+    }
+  }
+
+  render() {
+
+    var directions = DIRECTION.map((item) => <option key={item}>{item}</option>);
+    var sources = SOURCES.map((item) => <option key={item}>{item}</option>);
+
+    return (
+      <div>
+
+        <div className='row'>
+          <div className='columns medium-6 small-6'>
+            <button type="button" className="button expanded" onClick={this.handleToggleInsertUpdate} disabled={!this.state.isUpdate}>Add new complement</button>
+          </div>
+          <div className='columns medium-6 small-6 end'>
+            <button type="button" className="button expanded" onClick={this.handleToggleInsertUpdate} disabled={this.state.isUpdate}>Update existing complement</button>
+          </div>
+        </div>
+
+        <form ref='form' onSubmit={this.handleSubmit}>
+
+           <input name='annotation_id' className="hide" value={this.props.funccomp.annotation_id} readOnly />
+
+          {this.state.isUpdate &&
+            <ul>
+              <li>Filter complements by target gene,regulator gene or reference</li>
+              <li>Click Get database value</li>
+              <li>Click on the value to edit</li>
+              <li>Edit the field and click update to save</li>
+            </ul>
+          }
+
+          <div className='row'>
+            <div className='columns medium-12'>
+              <div className='row'>
+                <div className='columns medium-12'>
+                  <label> Gene (sgdid, systematic name) </label>
+                </div>
+              </div>
+              <div className='row'>
+                <div className='columns medium-12'>
+                                <input type='text' name='dbentity_id' onChange={this.handleChange} value={this.props.funccomp.dbentity_id} />
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div className='row'>
+            <div className='columns medium-12'>
+              <div className='row'>
+                <div className='columns medium-12'>
+                  <label> Reference (sgdid, pubmed id, reference no) </label>
+                </div>
+              </div>
+              <div className='row'>
+                <div className='columns medium-12'>
+                                <input type='text' name='reference_id' onChange={this.handleChange} value={this.props.funccomp.reference_id} />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {this.state.isUpdate &&
+            <div className='row'>
+              <div className='columns medium-12'>
+                <div className='row'>
+                  <div className='columns medium-6'>
+                    <button type='button' className='button expanded' onClick={this.handleGetFunccomps}>Get database value</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+
+
+          <div className='row'>
+            <div className='columns medium-12'>
+              <div className='row'>
+                <div className='columns medium-12'>
+                  <label> Taxonomy </label>
+                </div>
+              </div>
+              <div className='row'>
+                <div className='columns medium-12'>
+                                <select value={this.props.funccomp.taxonomy_id} onChange={this.handleChange} name='taxonomy_id'>
+                    {this.state.list_of_taxonomy}
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div className='row'>
+            <div className='columns medium-12'>
+              <div className='row'>
+                <div className='columns medium-12'>
+                  <label> ROID </label>
+                </div>
+              </div>
+              <div className='row'>
+                <div className='columns medium-12'>
+                                <DataList options={this.state.list_of_ro} id='ro_id' left='display_name' right='format_name' selectedIdName='ro_id' onOptionChange={this.handleChange} selectedId={this.props.funccomp.ro_id} />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className='row'>
+            <div className='columns medium-12'>
+              <div className='row'>
+                <div className='columns medium-12'>
+                  <label> Human gene HGNC ID </label>
+                </div>
+              </div>
+              <div className='row'>
+                <div className='columns medium-12'>
+                                <input type='text' name='with_ortholog' onChange={this.handleChange} value={this.props.funccomp.dbxref_id} />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className='row'>
+            <div className='columns medium-12'>
+              <div className='row'>
+                <div className='columns medium-12'>
+                  <label> Direction </label>
+                </div>
+              </div>
+              <div className='row'>
+                <div className='columns medium-12'>
+                                <select onChange={this.handleChange} name='annotation_type' value={this.props.funccomp.direction || ''}>
+                    {directions}
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className='row'>
+            <div className='columns medium-12'>
+              <div className='row'>
+                <div className='columns medium-12'>
+                  <label> Evidence Eco </label>
+                </div>
+              </div>
+              <div className='row'>
+                <div className='columns medium-12'>
+                                <DataList options={this.state.list_of_eco} id='eco_id' left='display_name' right='format_name' selectedIdName='eco_id' onOptionChange={this.handleChange} selectedId={this.props.funccomp.eco_id} />
+                </div>
+              </div>
+            </div>
+          </div>
+          
+        
+
+           <div className='row'>
+                    <div className='columns medium-12'>
+                        <div className='row'>
+                            <div className='columns medium-12'>
+                                <label> Source </label>
+                            </div>
+                        </div>
+                        <div className='row'>
+                            <div className='columns medium-12'>
+                                <select onChange={this.handleChange} name='annotation_type' value={this.props.funccomp.source_id || ''}>
+                                    {sources}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+
+        
+            <div className='row'>
+            <div className='columns medium-12'>
+              <div className='row'>
+                <div className='columns medium-12'>
+                  <label> Comments </label>
+                </div>
+              </div>
+              <div className='row'>
+                <div className='columns medium-12'>
+                                <input type='text' name='comments' onChange={this.handleChange} value={this.props.funccomp.comments} />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {this.renderActions()}
+
+        </form>
+
+       </div>
+
+    );
+  }
+}
+
+FuncCompForm.propTypes = {
+  dispatch: PropTypes.func,
+  funccomp: PropTypes.object
+};
+
+function mapStateToProps(state) {
+
+  return {
+    funccomp: state.funccomp['currentFunccomp']
+  };
+}
+
+export default connect(mapStateToProps)(FuncCompForm);
