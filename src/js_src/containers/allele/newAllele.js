@@ -77,17 +77,17 @@ class NewAllele extends Component {
     );
   }
 
-  render() {
+  add_aliases() {
+    var form = document.getElementById('form');
+    var input = document.createElement('input');
+    input.type = 'text';
+    var br = document.createElement('br');
+    form.appendChild(input);
+    form.appendChild(br);
+  };
 
-    document.getElementById('addAlias').onclick = function() {
-      var form = document.getElementById('form');
-      var input = document.createElement('input');
-      input.type = 'text';
-      var br = document.createElement('br');
-      form.appendChild(input);
-      form.appendChild(br);
-    };
-      
+  render() {
+	  
     return (
       <div>
         <form onSubmit={this.handleSubmit} ref='form' id='form'>
@@ -96,7 +96,7 @@ class NewAllele extends Component {
           <OneAllele allele={this.props.allele} onOptionChange={this.handleChange} />
 
           <input type="text" id="alias" />
-          <input type="button" id="addAlias" value="Add Alias Name" />
+          <input type="button" id="addAlias" onClick={this.add_aliases()} value="Add Alias Name" />
 	
           {this.addButton()}
 
