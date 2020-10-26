@@ -84,10 +84,10 @@ class NewAllele extends Component {
     var br = document.createElement('br');
     form.appendChild(input);
     form.appendChild(br);
-  };
+  }
 
   render() {
-	  
+
     return (
       <div>
         <form onSubmit={this.handleSubmit} ref='form' id='form'>
