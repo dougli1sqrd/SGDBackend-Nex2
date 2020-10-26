@@ -80,7 +80,7 @@ class NewAllele extends Component {
   render() {
 
     document.getElementById("addAlias").onclick = function() {
-      var form = document.getElementById("myForm");
+      var form = document.getElementById("form");
       var input = document.createElement("input");
       input.type = "text";
       var br = document.createElement("br");
