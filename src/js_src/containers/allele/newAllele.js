@@ -96,7 +96,7 @@ class NewAllele extends Component {
           <OneAllele allele={this.props.allele} onOptionChange={this.handleChange} />
 
           <input type="text" id="alias" />
-          <input type="button" id="addAlias" onClick={this.add_aliases()} value="Add Alias Name" />
+          <input type="button" id="addAlias" onclick={this.add_aliases()} value="Add Alias Name" />
 	
           {this.addButton()}
 
