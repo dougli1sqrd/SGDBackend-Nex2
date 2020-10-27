@@ -98,7 +98,7 @@ class NewAllele extends Component {
           
           <p><a href='#' onClick={this.handleAddingAliasRow()}>Add Alias</a></p>
 
-          for (var i = 1; i <= this.state.alias_count; i++) {
+          for (var i = 0; i < this.state.alias_count; i++) {
             <AliasRow set_title='Alias name' name='alias_name' value='' onOptionChange={this.handleChange} />
           }
 	
