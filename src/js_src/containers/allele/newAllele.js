@@ -79,8 +79,8 @@ class NewAllele extends Component {
 
   handleAddingAliasRow(e) {
     e.preventDefault();
-    import $ from 'jquery';  
-    $('#alias-pane').append(<AliasRow />);  
+    var aliasSection = document.getElementById('alias-pane');
+    aliasSection.appendChild(<AliasRow />);  
   }
 
   render() {
