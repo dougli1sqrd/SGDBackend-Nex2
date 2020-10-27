@@ -77,8 +77,7 @@ class NewAllele extends Component {
     );
   }
 
-  addAlias(i) {
-    i = i + 1
+  addAlias() {
     var thisForm = document.getElementById('myForm');
     var input = document.createElement('input');
     input.type = 'text';
@@ -88,7 +87,6 @@ class NewAllele extends Component {
   }
 
   render() {
-    var i = 0;
     return (
       <div>
         <form onSubmit={this.handleSubmit} name='myForm' id='myForm'>
@@ -97,7 +95,7 @@ class NewAllele extends Component {
           <OneAllele allele={this.props.allele} onOptionChange={this.handleChange} />
 
           <input type="text" id="alias" />
-          <input type="button" id="add_alias" onclick={this.addAlias(i)} value="Add Alias Name" />
+          <input type="button" id="add_alias" onclick={this.addAlias()} value="Add Alias Name" />
 	
           {this.addButton()}
 
