@@ -77,26 +77,27 @@ class NewAllele extends Component {
     );
   }
 
-  add_aliases() {
-    var form = document.getElementById('form');
+  addAlias(i) {
+    i = i + 1
+    var thisForm = document.getElementById('myForm');
     var input = document.createElement('input');
     input.type = 'text';
     var br = document.createElement('br');
-    form.appendChild(input);
-    form.appendChild(br);
+    thisForm.appendChild(input);
+    thisForm.appendChild(br);
   }
 
   render() {
-
+    var i = 0;
     return (
       <div>
-        <form onSubmit={this.handleSubmit} ref='form' id='form'>
+        <form onSubmit={this.handleSubmit} name='myForm' id='myForm'>
           <input name='id' value={this.props.allele.id} className="hide" />
 
           <OneAllele allele={this.props.allele} onOptionChange={this.handleChange} />
 
           <input type="text" id="alias" />
-          <input type="button" id="addAlias" onclick={this.add_aliases()} value="Add Alias Name" />
+          <input type="button" id="add_alias" onclick={this.addAlias(i)} value="Add Alias Name" />
 	
           {this.addButton()}
 
