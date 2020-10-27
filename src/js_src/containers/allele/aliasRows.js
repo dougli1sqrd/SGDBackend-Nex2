@@ -14,19 +14,15 @@ class AliasRows extends Component {
       <div className='row'>
         <div className='columns medium-6 small-6'>
           <div> <label> Alias name </label> </div>
-
           {countMap.map(i => {
-            return <input type='text' name='alias_name{i}' value={this.props.value} onChange={this.props.onOptionChange} />
+            return <input type='text' name='alias_name{i}' value={this.props.value} onChange={this.props.onOptionChange} />;
           })}
-	    
         </div>
         <div className='columns medium-6 small-6'>
           <div> <label> PMID(s) for alias name (optional) </label> </div>
-
           {countMap.map(i => {
-            return <input type='text' name='alias_pmids' value={this.props.value2} onChange={this.props.onOptionChange} />
+            return <input type='text' name='alias_pmids{i}' value={this.props.value2} onChange={this.props.onOptionChange} />;≈ß≈ß
           })}
-	
         </div>
       </div>
     );
@@ -34,7 +30,7 @@ class AliasRows extends Component {
 }
 
 AliasRows.propTypes = {
-  count: PropTypres.interger,    
+  count: PropTypes.interger,    
   value: PropTypes.string,
   onOptionChange: PropTypes.func,
   sec_title2: PropTypes.string,
