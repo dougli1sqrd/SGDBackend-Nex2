@@ -15,7 +15,8 @@ class NewAllele extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleResetForm = this.handleResetForm.bind(this);
-          
+    
+    // this.state = {};
   }
 
   handleChange() {
@@ -82,7 +83,7 @@ class NewAllele extends Component {
       <div>
         <form onSubmit={this.handleSubmit} ref='form'>
           <input name='id' value={this.props.allele.id} className="hide" />
-	
+
           <OneAllele allele={this.props.allele} onOptionChange={this.handleChange} />
 
           {this.addButton()}
