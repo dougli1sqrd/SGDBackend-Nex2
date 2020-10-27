@@ -100,10 +100,9 @@ class NewAllele extends Component {
           
           <p><a href='#' onClick={this.handleAddingAliasRow()}>Add Alias</a></p>
 /Users/shuai/Downloads/gene_association.sgd.gaf.gz 
-          for (var i = 0; i < count; i++) {
-            <AliasRow set_title='Alias name' name='alias_name' value='' onOptionChange={this.handleChange} />
-          }
-	
+          
+          <AliasRow set_title='Alias name' name='alias_name' value='' onOptionChange={this.handleChange} multiple={count} />
+          	
           {this.addButton()}
 
         </form>
