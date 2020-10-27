@@ -85,7 +85,9 @@ class NewAllele extends Component {
   }
 
   render() {
-	
+
+    var count = this.state.alias_count;
+      
     return (
       <div>
         <form onSubmit={this.handleSubmit} ref='form'>
@@ -97,8 +99,8 @@ class NewAllele extends Component {
 
           
           <p><a href='#' onClick={this.handleAddingAliasRow()}>Add Alias</a></p>
-
-          for (var i = 0; i < this.state.alias_count; i++) {
+/Users/shuai/Downloads/gene_association.sgd.gaf.gz 
+          for (var i = 0; i < count; i++) {
             <AliasRow set_title='Alias name' name='alias_name' value='' onOptionChange={this.handleChange} />
           }
 	
