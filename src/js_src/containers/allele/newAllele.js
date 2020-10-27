@@ -81,7 +81,7 @@ class NewAllele extends Component {
   handleAddingAliasRow() {
     //e.preventDefault();
     //var aliasSection = document.getElementById('alias-pane');
-    var aliasSection = document.querySelector('#alias-pane');  
+    var aliasSection = document.querySelector('alias-pane');  
     aliasSection.appendChild(<AliasRow set_title='Alias name' name='alias_name' value='' onOptionChange={this.handleChange} />);  
   }
 
