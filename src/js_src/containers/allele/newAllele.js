@@ -1,4 +1,4 @@
-import $ from 'jquery';
+import $ from 'jQuery';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import fetchData from '../../lib/fetchData';
