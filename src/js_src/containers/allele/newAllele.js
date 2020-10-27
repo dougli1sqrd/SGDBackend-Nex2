@@ -1,4 +1,3 @@
-import $ from './jquery';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import fetchData from '../../lib/fetchData';
@@ -80,6 +79,7 @@ class NewAllele extends Component {
 
   handleAddingAliasRow(e) {
     e.preventDefault();
+    import $ from 'jquery';  
     $('#alias-pane').append(<AliasRow />);  
   }
 
