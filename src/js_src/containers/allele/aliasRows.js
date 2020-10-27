@@ -15,9 +15,9 @@ class AliasRows extends Component {
         <div className='columns medium-6 small-6'>
           <div> <label> Alias name </label> </div>
 
-        {countMap.map(i => {
+          {countMap.map(i => {
             return <input type='text' name='alias_name{i}' value={this.props.value} onChange={this.props.onOptionChange} />
-        }}}
+          })}
 	    
         </div>
         <div className='columns medium-6 small-6'>
