@@ -78,8 +78,8 @@ class NewAllele extends Component {
     );
   }
 
-  handleAddingAliasRow(e) {
-    e.preventDefault();
+  handleAddingAliasRow() {
+    //e.preventDefault();
     var aliasSection = document.getElementById('alias-pane');
     aliasSection.appendChild(<AliasRow set_title='Alias name' name='alias_name' value='' onOptionChange={this.handleChange} />);  
   }
