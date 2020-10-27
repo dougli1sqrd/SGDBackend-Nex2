@@ -8,20 +8,27 @@ class AliasRows extends Component {
     
   render() {
 
-    let countMap = [0,1,2,3,4];
+    let countMap = [];
+    let alias_pmids = [];
+    let alias_name = [];
+    for (let i = 0; i < this.props.count; i++) {
+      countMap.push(i)
+      alias_pmids.push("alias_pmid" + i)
+      alias_pmids.push("alias_name" + i)
+    }
       
     return (
       <div className='row'>
         <div className='columns medium-6 small-6'>
           <div> <label> Alias name </label> </div>
           {countMap.map(i => {
-            return <input type='text' name='alias_name{i}' value={this.props.value} onChange={this.props.onOptionChange} />;
+            return <input type='text' name={this.props.alias_name[i]} value={this.props.value[i]} onChange={this.props.onOptionChange} />;
           })}
         </div>
         <div className='columns medium-6 small-6'>
           <div> <label> PMID(s) for alias name (optional) </label> </div>
           {countMap.map(i => {
-            return <input type='text' name='alias_pmids{i}' value={this.props.value2} onChange={this.props.onOptionChange} />;
+            return <input type='text' name={this.props.alias_pmids[i]} value={this.props.value2[i]} onChange={this.props.onOptionChange} />;
           })}
         </div>
       </div>
@@ -30,12 +37,8 @@ class AliasRows extends Component {
 }
 
 AliasRows.propTypes = {
-  count: PropTypes.interger,    
-  value: PropTypes.string,
+  count: PropTypes.interger,
   onOptionChange: PropTypes.func,
-  sec_title2: PropTypes.string,
-  value2: PropTypes.string,
-  onOptionChange2: PropTypes.func, 
 };
 
 export default AliasRows;
