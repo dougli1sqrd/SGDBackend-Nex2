@@ -78,26 +78,29 @@ class NewAllele extends Component {
     );
   }
 
-  handleAddingAliasRow(e) {
+    handleAddingAliasRow(e, i) {
     e.preventDefault();
     var aliasSection = document.getElementById('alias-pane');
-    aliasSection.appendChild(<AliasRow />);  
+    aliasSection.appendChild(<AliasRow set_title='Alias name' name='alias_name{i}' value='' onOptionChange={this.handleChange} />);  
   }
 
   render() {
+
+    var i = 1;
+	
     return (
       <div>
         <form onSubmit={this.handleSubmit} ref='form'>
           <input name='id' value={this.props.allele.id} className="hide" />
 
-          <AliasRow />
+          <AliasRow set_title='Alias name' name='alias_name' value='' onOptionChange={this.handleChange} />
 	
           <OneAllele allele={this.props.allele} onOptionChange={this.handleChange} />
 
           
-          <p><a href='#' onClick={this.handleAddingAliasRow}>Add Alias</a></p>
+          <p><a href='#' onClick={this.handleAddingAliasRow(i)}>Add Alias</a></p>
           <div id='alias-pane'>
-            <AliasRow />
+            <AliasRow set_title='Alias name' name='alias_name' value='' onOptionChange={this.handleChange} />
           </div>
 
 	
