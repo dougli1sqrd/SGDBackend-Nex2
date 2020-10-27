@@ -79,8 +79,7 @@ class NewAllele extends Component {
     );
   }
 
-  handleAddingAliasRow() {
-    var count = this.state.alias_count + 1;
+  handleAddingAliasRow(count) {
     this.setState({ alias_count: count });
   }
 
@@ -98,7 +97,7 @@ class NewAllele extends Component {
           <OneAllele allele={this.props.allele} onOptionChange={this.handleChange} />
 
           
-          <p><a href='#' onClick={this.handleAddingAliasRow()}>Add Alias</a></p>
+          <p><a href='#' onClick={this.handleAddingAliasRow(count+1)}>Add Alias</a></p>
 /Users/shuai/Downloads/gene_association.sgd.gaf.gz 
           
           <AliasRow set_title='Alias name' name='alias_name' value='' onOptionChange={this.handleChange} multiple={count} />  
