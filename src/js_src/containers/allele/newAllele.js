@@ -17,7 +17,8 @@ class NewAllele extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleResetForm = this.handleResetForm.bind(this);
     
-    // this.state = {};
+    this.state = { alias_count:  1 };
+      
   }
 
   handleChange() {
@@ -79,15 +80,11 @@ class NewAllele extends Component {
   }
 
   handleAddingAliasRow() {
-    //e.preventDefault();
-    //var aliasSection = document.getElementById('alias-pane');
-    var aliasSection = document.querySelector('alias-pane');  
-    aliasSection.appendChild(<AliasRow set_title='Alias name' name='alias_name' value='' onOptionChange={this.handleChange} />);  
+    var count = this.state.alias_count + 1;
+    this.setState({ alias_count: count });
   }
 
   render() {
-
-    
 	
     return (
       <div>
@@ -100,10 +97,10 @@ class NewAllele extends Component {
 
           
           <p><a href='#' onClick={this.handleAddingAliasRow()}>Add Alias</a></p>
-          <div id='alias-pane'>
-            <AliasRow set_title='Alias name' name='alias_name' value='' onOptionChange={this.handleChange} />
-          </div>
 
+          for (var i = 1; i <= this.state.alias_count; i++) {
+            <AliasRow set_title='Alias name' name='alias_name' value='' onOptionChange={this.handleChange} />
+          }
 	
           {this.addButton()}
 
