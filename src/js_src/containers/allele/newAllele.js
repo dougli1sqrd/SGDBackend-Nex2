@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { setError, setMessage } from '../../actions/metaActions';
 import { setAllele } from '../../actions/alleleActions';
 import OneAllele from './oneAllele';
-import AliasRow from './aliasRow';
 
 const ADD_ALLELE = '/allele_add';
 
@@ -16,9 +15,7 @@ class NewAllele extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleResetForm = this.handleResetForm.bind(this);
-    
-    this.state = { alias_count:  5 };
-      
+          
   }
 
   handleChange() {
@@ -79,24 +76,15 @@ class NewAllele extends Component {
     );
   }
 
-  handleAddingAliasRow() {
-    var count = this.state.alias_count;
-    this.setState({ alias_count: count });
-  }
-
   render() {
 
-    var count = this.state.alias_count;  
     return (
       <div>
         <form onSubmit={this.handleSubmit} ref='form'>
           <input name='id' value={this.props.allele.id} className="hide" />
 	
           <OneAllele allele={this.props.allele} onOptionChange={this.handleChange} />
-          
-          <p><a href='#' onClick={this.handleAddingAliasRow}>Add Alias</a></p>
-          
-          <AliasRow set_title='Alias name' name='alias_name' value='' onOptionChange={this.handleChange} multiple={count} />  
+
           {this.addButton()}
 
         </form>
