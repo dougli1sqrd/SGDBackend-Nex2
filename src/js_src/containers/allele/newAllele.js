@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { setError, setMessage } from '../../actions/metaActions';
 import { setAllele } from '../../actions/alleleActions';
 import OneAllele from './oneAllele';
+import AliasRow from './aliasRow';
 
 const ADD_ALLELE = '/allele_add';
 
