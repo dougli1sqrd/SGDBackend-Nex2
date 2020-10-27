@@ -102,7 +102,7 @@ class NewAllele extends Component {
 /Users/shuai/Downloads/gene_association.sgd.gaf.gz 
           
           <AliasRow set_title='Alias name' name='alias_name' value='' onOptionChange={this.handleChange} multiple={count} />
-          	
+	    
           {this.addButton()}
 
         </form>
