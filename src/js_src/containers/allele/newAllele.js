@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import fetchData from '../../lib/fetchData';
@@ -77,9 +78,9 @@ class NewAllele extends Component {
     );
   }
 
-  addAlias(e) {
+  handleAddingAliasRow(e) {
     e.preventDefault();
-    $('#alias-pane').append(<AliasRow/>);  
+    $('#alias-pane').append(<AliasRow />);  
   }
 
   render() {
@@ -91,9 +92,9 @@ class NewAllele extends Component {
           <OneAllele allele={this.props.allele} onOptionChange={this.handleChange} />
 
           
-          <p><a href='#' onClick={this.addAlias}>Add Alias</a></p>
+          <p><a href='#' onClick={this.handleAddingAliasRow}>Add Alias</a></p>
           <div id='alias-pane'>
-            <AliasRow/>
+            <AliasRow />
           </div>
 
 	
