@@ -78,15 +78,15 @@ class NewAllele extends Component {
     );
   }
 
-    handleAddingAliasRow(e, i) {
+  handleAddingAliasRow(e) {
     e.preventDefault();
     var aliasSection = document.getElementById('alias-pane');
-    aliasSection.appendChild(<AliasRow set_title='Alias name' name='alias_name{i}' value='' onOptionChange={this.handleChange} />);  
+    aliasSection.appendChild(<AliasRow set_title='Alias name' name='alias_name' value='' onOptionChange={this.handleChange} />);  
   }
 
   render() {
 
-    var i = 1;
+    
 	
     return (
       <div>
@@ -98,7 +98,7 @@ class NewAllele extends Component {
           <OneAllele allele={this.props.allele} onOptionChange={this.handleChange} />
 
           
-          <p><a href='#' onClick={this.handleAddingAliasRow(i)}>Add Alias</a></p>
+          <p><a href='#' onClick={this.handleAddingAliasRow()}>Add Alias</a></p>
           <div id='alias-pane'>
             <AliasRow set_title='Alias name' name='alias_name' value='' onOptionChange={this.handleChange} />
           </div>
