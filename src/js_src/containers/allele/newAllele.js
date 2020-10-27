@@ -22,7 +22,7 @@ class NewAllele extends Component {
 
   handleChange() {
     let currentAllele = {};
-    let data = new FormData(this.refs.myForm);
+    let data = new FormData(this.refs.form);
     for (let key of data.entries()) {
       currentAllele[key[0]] = key[1];
     }
@@ -87,9 +87,11 @@ class NewAllele extends Component {
   render() {
     return (
       <div>
-        <form onSubmit={this.handleSubmit} name='myForm' id='myForm' ref='myForm'>
+        <form onSubmit={this.handleSubmit} ref='form'>
           <input name='id' value={this.props.allele.id} className="hide" />
 
+          <AliasRow />
+	
           <OneAllele allele={this.props.allele} onOptionChange={this.handleChange} />
 
           
