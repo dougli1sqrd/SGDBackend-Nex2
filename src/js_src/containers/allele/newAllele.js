@@ -17,7 +17,7 @@ class NewAllele extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleResetForm = this.handleResetForm.bind(this);
     
-    this.state = { alias_count:  1 };
+    this.state = { alias_count:  5 };
       
   }
 
@@ -86,20 +86,15 @@ class NewAllele extends Component {
 
   render() {
 
-    var count = this.state.alias_count;
-      
+    var count = this.state.alias_count;  
     return (
       <div>
         <form onSubmit={this.handleSubmit} ref='form'>
           <input name='id' value={this.props.allele.id} className="hide" />
-
-          <AliasRow set_title='Alias name' name='alias_name' value='' onOptionChange={this.handleChange} />
 	
           <OneAllele allele={this.props.allele} onOptionChange={this.handleChange} />
-
           
           <p><a href='#' onClick={this.handleAddingAliasRow}>Add Alias</a></p>
-/Users/shuai/Downloads/gene_association.sgd.gaf.gz 
           
           <AliasRow set_title='Alias name' name='alias_name' value='' onOptionChange={this.handleChange} multiple={count} />  
           {this.addButton()}
