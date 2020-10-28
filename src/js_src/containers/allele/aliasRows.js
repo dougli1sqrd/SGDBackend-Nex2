@@ -11,15 +11,16 @@ class AliasRows extends Component {
     return (
       <div className='row'>
         <div className='columns medium-6 small-6'>
-          <div> <label> Alias name </label> </div>
+          <div> <label> Alias name(s) </label> </div>
           <input type='text' name='alias_name_1' value='' onChange={this.props.onOptionChange} />
           <input type='text' name='alias_name_2' value='' onChange={this.props.onOptionChange} />
+          (use | to separate multiple aliases)
         </div>
         <div className='columns medium-6 small-6'>
           <div> <label> PMID(s) for alias name (optional) </label> </div>
           <input type='text' name='alias_pmids-1' value='' onChange={this.props.onOptionChange} />
           <input type='text' name='alias_pmids-2' value='' onChange={this.props.onOptionChange} />
-          })}
+          (use | to separate pmid sets for multiple aliases)
         </div>
       </div>
     );
