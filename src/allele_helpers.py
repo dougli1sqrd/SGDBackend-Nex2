@@ -334,7 +334,7 @@ def process_aliases(request):
 
     if alias_name_1 is not None:
         aliases = alias_name_1.strip().split('|')
-        alias_pmids = aliase_pmids_1.strip().split('|')
+        alias_pmids = alias_pmids_1.strip().split('|')
     if alias_name_2 is not None:
         aliases = aliases + alias_name_2.strip().split('|')
         alias_pmids = alias_pmids + alias_pmids_2.strip().split('|')
