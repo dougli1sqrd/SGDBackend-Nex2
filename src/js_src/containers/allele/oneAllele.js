@@ -60,6 +60,17 @@ class OneAllele extends Component {
         <OneColTextField sec_title='PMID(s) for Primary Literature:' name='primary_pmids' value={this.props.allele.primary_pmids} onOptionChange={this.props.onOptionChange} />
         <OneColTextField sec_title='PMID(s) for Additional Literature:' name='additional_pmids' value={this.props.allele.primary_pmids} onOptionChange={this.props.onOptionChange} />
         <OneColTextField sec_title='PMID(s) for Review Literature:' name='review_pmids' value={this.props.allele.primary_pmids} onOptionChange={this.props.onOptionChange} />
+
+
+
+        <div className='row'>
+          <div> <label> Note: </label> </div>
+          <div>1. Separate PMIDs with space for all PMID(s) fields. eg "32426863 32421706"</div>
+          <div>2. For multiple aliases, separate aliases and their corresponding PMIDs with '|'</div>
+          <div>Example: </div>
+          <div>Aliases field: "act1-abc-1|act1-abc-2"</div>
+          <div>PMID(s) field: "32426863 32421706|32426863" OR "32421706|" OR "|32426863 32421706"</div>
+        </div>	    
 	
       </div>
 
