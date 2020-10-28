@@ -321,6 +321,26 @@ def check_pmids(pmids, pmid_to_reference_id):
         err_message = "The PMID(s):" + ', '.join(bad_pmids) + " are not in the database"
     return (reference_ids, err_message)
 
+def process_aliases(request):
+
+    aliases = []
+    alias_pmids = []
+    
+    alias_name_1 = request.params.get('alias_name_1')
+    aliase_pmids_1 = request.params.get('alias_pmids_1')
+
+    alias_name_2 = request.params.get('alias_name_2')
+    aliase_pmids_2 = request.params.get('alias_pmids_2')
+
+    if alias_name_1 is not None:
+        aliases = alias_name_1.strip().split('|')
+        alias_pmids = aliase_pmids_1.strip().split('|')
+    if alias_name_2 is not None:
+        aliases = aliases + alias_name_2.strip().split('|')
+        alias_pmids = alias_pmids + alias_pmids_2.strip().split('|')
+        
+    return (aliases, alias_pmids)
+
 
 def add_allele_data(request):
 
@@ -464,24 +484,20 @@ def add_allele_data(request):
             success_message = success_message + "<br>" + "The paper for PMID= " + pmid + " has been added into ALLELE_REFERENCE table. "
 
         ## aliases & reference(s)
+        (aliases, alias_pmids) = process_aliases(request)
+
+        if len(aliases) != len(alias_pmids):
+            return HTTPBadRequest(body=json.dumps({'error': "Provide same number of PMID sets for alias(es)"}), content_type='text/json')
         
-        aliases = request.params.get('aliases')
-        aliases_pmids = request.params.get('alias_pmids')
-
-        aliases_reference_ids = []
-        for alias_pmids in  aliases_pmids.strip().split('|'):
-            (reference_ids, err_message) = check_pmids(alias_pmids, pmid_to_reference_id)
-
-            if err_message != '':
-                return HTTPBadRequest(body=json.dumps({'error': err_message}), content_type='text/json')
-            aliases_reference_ids.append(reference_ids)
-
         i = 0
-        for alias_name in aliases.strip().split('|'):
-            alias_name = alias_name.replace(' ', '')
+        for alias_name in aliases:
+            alias_name = alias_name.strip()
             if alias_name == '':
                 i = i + 1
-                continue
+                continue       
+            (reference_ids, err_message) = check_pmids(alias_pmids[i], pmid_to_reference_id)
+            if err_message != '':
+                return HTTPBadRequest(body=json.dumps({'error': err_message}), content_type='text/json')
             returnValue = insert_allele_alias(curator_session, CREATED_BY, source_id,
                                               allele_id, alias_name)
             i = i + 1
@@ -492,21 +508,20 @@ def add_allele_data(request):
             else:
                 return HTTPBadRequest(body=json.dumps({'error': returnValue}), content_type='text/json')
 
-            reference_ids = []
-            if len(aliases_reference_ids) >= i:
-                reference_ids = aliases_reference_ids[i]
 
-                
+            
             return HTTPBadRequest(body=json.dumps({'error': "allele_alias_id="+str(allele_alias_id) + ", reference_ids="+str(reference_ids)}), content_type='text/json')
 
         
-            
+    
             for (reference_id, pmid) in reference_ids:
                 returnValue = insert_allelealias_reference(curator_session, CREATED_BY, source_id,
                                                            allele_alias_id, reference_id)
                 if returnValue != 1:
                     return HTTPBadRequest(body=json.dumps({'error': returnValue}), content_type='text/json')
                 success_message = success_message + "<br>" + "The paper for PMID= " + pmid + " has been added into ALLELEALIAS_REFERENCE table for alias " + alias_name + ". "
+
+
                 
         ## papers for primary literacture
 
