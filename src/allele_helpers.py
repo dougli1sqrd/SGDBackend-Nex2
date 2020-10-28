@@ -458,7 +458,7 @@ def add_allele_data(request):
 
         for (reference_id, pmid) in reference_ids:
             returnValue = insert_allele_reference(curator_session, CREATED_BY, source_id,
-                                                  allele_id, reference_id, "description")
+                                                  allele_id, reference_id, "allele_description")
             if returnValue != 1:
                 return HTTPBadRequest(body=json.dumps({'error': returnValue}), content_type='text/json')
             success_message = success_message + "<br>" + "The paper for PMID= " + pmid + " has been added into ALLELE_REFERENCE table. "
