@@ -20,13 +20,13 @@ class AliasRows extends Component {
           <input type='text' name='alias_pmids-1' value='' onChange={this.props.onOptionChange} />
           <input type='text' name='alias_pmids-2' value='' onChange={this.props.onOptionChange} />
         </div>
-       </div>
-       <div>
-         (use | to separate multiple alias names or pmid sets for multiple aliases)
-       </div>
-       <div>
-         <hr></hr>
-       </div>	    
+      </div>
+      <div className='row'>
+        (use | to separate multiple alias names or pmid sets for multiple aliases)
+      </div>
+      <div className='row'>
+        <hr></hr>
+      </div>
     );
   }
 }
