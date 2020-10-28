@@ -77,6 +77,20 @@ class NewAllele extends Component {
     );
   }
 
+  addNote() {
+
+    return (
+      <div className='row'>
+        <div> <h2> Note: </h2> </div>
+        <div>1. Separate PMIDs with space for all PMID(s) fields. eg "32426863 32421706"</div>
+        <div>2. For multiple aliases, separate aliases and their corresponding PMIDs with '|'</div>
+        <div>Example for multiple aliases: </div>
+        <div>Aliases field: "act1-abc-1|act1-abc-2"</div>
+        <div>PMID(s) field: "32426863 32421706|32426863" OR "32421706|" OR "|32426863 32421706"</div>
+      </div>
+    );
+  }
+    
   render() {
 
     return (
@@ -88,6 +102,8 @@ class NewAllele extends Component {
 
           {this.addButton()}
 
+          {this.addNote()}
+	
         </form>
 
       </div>
