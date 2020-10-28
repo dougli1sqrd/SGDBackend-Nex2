@@ -320,27 +320,7 @@ def check_pmids(pmids, pmid_to_reference_id):
     if len(bad_pmids) > 0:
         err_message = "The PMID(s):" + ', '.join(bad_pmids) + " are not in the database"
     return (reference_ids, err_message)
-
-def process_aliases(request):
-
-    aliases = []
-    alias_pmids = []
     
-    alias_name_1 = request.params.get('alias_name_1')
-    alias_pmids_1 = request.params.get('alias_pmids_1')
-
-    alias_name_2 = request.params.get('alias_name_2')
-    alias_pmids_2 = request.params.get('alias_pmids_2')
-
-    if alias_name_1 is not None:
-        aliases = alias_name_1.strip().split('|')
-        alias_pmids = alias_pmids_1.strip().split('|')
-    if alias_name_2 is not None:
-        aliases = aliases + alias_name_2.strip().split('|')
-        alias_pmids = alias_pmids + alias_pmids_2.strip().split('|')
-        
-    return (aliases, alias_pmids)
-
 
 def add_allele_data(request):
 
@@ -484,8 +464,13 @@ def add_allele_data(request):
             success_message = success_message + "<br>" + "The paper for PMID= " + pmid + " has been added into ALLELE_REFERENCE table. "
 
         ## aliases & reference(s)
-        (aliases, alias_pmids) = process_aliases(request)
+        
+        alias_list = request.params.get('aliases', '')
+        alias_pmid_list = request.params.get('alias_pmids', '')
 
+        aliases = alias_list.strip().split('|')
+        alias_pmids = alias_pmid_list.strip().split('|')
+                    
         if len(aliases) != len(alias_pmids):
             return HTTPBadRequest(body=json.dumps({'error': "Provide same number of PMID sets for alias(es)"}), content_type='text/json')
         
