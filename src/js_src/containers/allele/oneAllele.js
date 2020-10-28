@@ -5,13 +5,12 @@ import PropTypes from 'prop-types';
 import TwoColTextField from './twoColTextField';
 import OneColTextField from './oneColTextField';
 import AutocompleteSection from '../phenotype/autocompleteSection';
-import AliasRows from './aliasRows';
 
 class OneAllele extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: this.props.allele,
+      data: this.props.allele
     };
   }
 
@@ -28,8 +27,8 @@ class OneAllele extends Component {
         <TwoColTextField sec_title='Affected gene name' name='affected_gene' value={this.props.allele.affected_gene} onOptionChange={this.props.onOptionChange} sec_title2='PMID(s) for affected gene name (optional)' name2='affected_gene_pmids' value2={this.props.allele.affected_gene_pmids} onOptionChange2={this.props.onOptionChange} />
 	
         {/* alias names & references */}
-        <AliasRows onOptionChange={this.props.onOptionChange} />
-                    
+        <TwoColTextField sec_title='Alias names ("|" delimited)' name='aliases' value={this.props.allele.aliases} onOptionChange={this.props.onOptionChange} sec_title2='PMID(s) for aliases (optional, "|" delimited)' name2='alias_pmids' value2={this.props.allele.alias_pmids} onOptionChange2={this.props.onOptionChange} />
+        
         {/* Allele type & references */}
         <div className='row'>
           <div className='columns medium-6 small-6'>
