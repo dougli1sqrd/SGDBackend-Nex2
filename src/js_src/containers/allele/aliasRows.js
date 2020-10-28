@@ -22,10 +22,10 @@ class AliasRows extends Component {
         </div>
       </div>
       <div className='row'>
-        (use | to separate multiple alias names or pmid sets for multiple aliases)
+        <div>(use | to separate multiple alias names or pmid sets for multiple aliases)</div>
       </div>
       <div className='row'>
-        <hr></hr>
+        <div><hr></hr></div>
       </div>
     );
   }
