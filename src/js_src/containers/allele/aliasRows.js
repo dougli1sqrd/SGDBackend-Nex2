@@ -21,9 +21,7 @@ class AliasRows extends Component {
           <input type='text' name='alias_pmids_2' value='' onChange={this.props.onOptionChange} />
         </div>
       </div>
-      <div className='row'>
-        <div><hr></hr></div>
-      </div>
+
     );
       
   }
