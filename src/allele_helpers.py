@@ -327,10 +327,10 @@ def process_aliases(request):
     alias_pmids = []
     
     alias_name_1 = request.params.get('alias_name_1')
-    aliase_pmids_1 = request.params.get('alias_pmids_1')
+    alias_pmids_1 = request.params.get('alias_pmids_1')
 
     alias_name_2 = request.params.get('alias_name_2')
-    aliase_pmids_2 = request.params.get('alias_pmids_2')
+    alias_pmids_2 = request.params.get('alias_pmids_2')
 
     if alias_name_1 is not None:
         aliases = alias_name_1.strip().split('|')
