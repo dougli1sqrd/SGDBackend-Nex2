@@ -29,7 +29,9 @@ class OneAllele extends Component {
 	
         {/* alias names & references */}
         <AliasRows onOptionChange={this.props.onOptionChange} />
-
+        (use | to separate multiple alias names or pmid sets for aliases)
+        <hr></hr>
+	    
         {/* Allele type & references */}
         <div className='row'>
           <div className='columns medium-6 small-6'>
