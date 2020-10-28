@@ -12,7 +12,6 @@ class OneAllele extends Component {
     super(props);
     this.state = {
       data: this.props.allele,
-      count: 5
     };
   }
 
@@ -29,7 +28,7 @@ class OneAllele extends Component {
         <TwoColTextField sec_title='Affected gene name' name='affected_gene' value={this.props.allele.affected_gene} onOptionChange={this.props.onOptionChange} sec_title2='PMID(s) for affected gene name (optional)' name2='affected_gene_pmids' value2={this.props.allele.affected_gene_pmids} onOptionChange2={this.props.onOptionChange} />
 	
         {/* alias names & references */}
-        <AliasRows onOptionChange={this.props.onOptionChange} count={this.state.count} />
+        <AliasRows onOptionChange={this.props.onOptionChange} />
 
         {/* Allele type & references */}
         <div className='row'>
