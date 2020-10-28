@@ -495,7 +495,7 @@ def add_allele_data(request):
 
 
             
-            return HTTPBadRequest(body=json.dumps({'error': "allele_alias_id="+str(allele_alias_id) + ", reference_ids="+str(reference_ids)}), content_type='text/json')
+            # return HTTPBadRequest(body=json.dumps({'error': "allele_alias_id="+str(allele_alias_id) + ", reference_ids="+str(reference_ids)}), content_type='text/json')
 
         
     
