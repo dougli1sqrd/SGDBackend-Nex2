@@ -239,8 +239,6 @@ def get_one_allele(request):
         description_pmids = []
         allele_type_pmids = []
         other_pmids = []
-
-        return HTTPOk(body=json.dumps(data),content_type='text/json')
     
         for x in DBSession.query(AlleleReference).filter_by(allele_id=a.dbentity_id).all():
             if x.reference_class == 'allele_name':
