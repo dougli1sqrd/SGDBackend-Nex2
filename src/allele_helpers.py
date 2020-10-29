@@ -273,6 +273,21 @@ def get_one_allele(request):
             aliases.append( { 'display_name': x.display_name,
                               'pmids': pmids } )
         data['aliases'] = aliases
+
+        ## get pmids from literatureannotation table
+        primary_pmids = []
+        additional_pmids = []
+        review_pmids = []
+        for x in DBSession.query(Literatureannotation).filter_by(dbentity_id=a.dbentity_id).all():
+            if x.topic == 'Primary Literature':
+                primary_pmids.append(x.reference.pmid)
+            elif x.topic == 'Additional Literature':
+                additional_pmids.append(x.reference.pmid)
+            elif x.topic == 'Reviews':
+                review_pmids.append(x.reference.pmid)
+        data['primary_pmids'] = primary_pmids
+        data['additional_pmids'] = additional_pmids
+        data['review_pmids'] = review_pmids        
         
         return HTTPOk(body=json.dumps(data),content_type='text/json')
     except Exception as e:
