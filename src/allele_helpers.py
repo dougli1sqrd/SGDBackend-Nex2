@@ -69,7 +69,7 @@ def insert_literatureannotation(curator_session, CREATED_BY, source_id, allele_i
 
     x = None
     try:
-        x = LiteratureAnnotation(dbentity_id = allele_id,
+        x = Literatureannotation(dbentity_id = allele_id,
                                  reference_id = reference_id,
                                  topic = topic,
                                  taxonomy_id = taxonomy_id,
