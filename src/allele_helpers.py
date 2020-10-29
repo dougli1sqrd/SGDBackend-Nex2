@@ -328,7 +328,7 @@ def get_reference_id_by_pmid(pmid):
     ref = DBSession.query(Referencedbentity).filter_by(pmid=pmid).one_or_none()
 
     if ref:
-        return ref.reference_id
+        return ref.dbentity_id
     return None
 
 def check_pmids(pmids, pmid_to_reference_id):
