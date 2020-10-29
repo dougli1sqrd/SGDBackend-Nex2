@@ -239,11 +239,16 @@ def get_one_allele(request):
         description_pmids = []
         allele_type_pmids = []
         other_pmids = []
-    
         for x in DBSession.query(AlleleReference).filter_by(allele_id=a.dbentity_id).all():
+
+            
+            other_pmids.append(x.reference.pmid)
+            continue
+
+        
             if x.reference_class == 'allele_name':
                 allele_name_pmids.append(x.reference.pmid)
-            elif x.reference_class == 'allele_description':
+            celif x.reference_class == 'allele_description':
                 description_pmids.append(x.reference.pmid)
             elif x.reference_class == 'so_term':
                 alleles_type_pmids.append(x.reference.pmid)
@@ -251,7 +256,7 @@ def get_one_allele(request):
                 other_pmids.append(x.reference.pmid)        
         data['allele_name_pmids'] = allele_name_pmids
         data['description_pmids'] = description_pmids
-        data['allele_type_pmids'] = allele_type_pmids
+        data[o'allele_type_pmids'] = allele_type_pmids
         data['other_pmids'] = other_pmids
 
         return HTTPOk(body=json.dumps(data),content_type='text/json')
