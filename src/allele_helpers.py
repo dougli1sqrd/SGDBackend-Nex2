@@ -244,8 +244,8 @@ def get_one_allele(request):
                 allele_name_pmids.append(x.reference.pmid)
             elif x.reference_class == 'allele_description':
                 description_pmids.append(x.reference.pmid)
-            #elif x.reference_class == 'so_term':
-            #    alleles_type_pmids.append(x.reference.pmid)
+            elif x.reference_class == 'so_term':
+                allele_type_pmids.append(x.reference.pmid)
             else:
                 other_pmids.append(x.reference.pmid)        
         data['allele_name_pmids'] = allele_name_pmids
