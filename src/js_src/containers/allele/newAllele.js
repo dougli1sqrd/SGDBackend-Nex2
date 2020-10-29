@@ -58,6 +58,7 @@ class NewAllele extends Component {
       allele_type_pmids: '',
       description: '',
       description_pmids: '',
+      other_pmids: '',
       primary_pmids: '',
       additional_pmids: '',
       review_pmids: ''
