@@ -105,8 +105,7 @@ class EditAllele extends Component {
     this.setState({ isLoading: true });
     fetchData(url).then( (data) => {
       let currentAllele = {};
-      for (let key in data) {
-        	    
+      for (let key in data) {        	    
         currentAllele[key] = data[key];
       }
       this.props.dispatch(setAllele(currentAllele));
