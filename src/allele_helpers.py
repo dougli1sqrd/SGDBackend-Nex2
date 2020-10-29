@@ -376,7 +376,7 @@ def add_allele_data(request):
                                                   allele_id, reference_id, "allele_name")
             if returnValue != 1:
                 return HTTPBadRequest(body=json.dumps({'error': returnValue}), content_type='text/json')
-            success_message = success_message + "<br>" + "The paper for PMID= " + pmid + " has been added into ALLELE_REFERENCE table. "
+            success_message = success_message + "<br>" + "The paper for PMID= " + pmid + " has been added into ALLELE_REFERENCE table for 'allele_name'. "
 
         # return HTTPBadRequest(body=json.dumps({'error': "allele_name reference_ids="+str(reference_ids)}), content_type='text/json')
 
@@ -394,7 +394,7 @@ def add_allele_data(request):
             locus_allele_id = None
             if str(returnValue).isdigit():
                 locus_allele_id = returnValue
-                success_message = success_message + "<br>" + "The affected gene" + affected_gene + "' has been added into LOCUS_ALLELE table. "
+                success_message = success_message + "<br>" + "The affected gene '" + affected_gene + "' has been added into LOCUS_ALLELE table. "
             else:
                 return HTTPBadRequest(body=json.dumps({'error': returnValue}), content_type='text/json')
 
@@ -443,7 +443,7 @@ def add_allele_data(request):
                                                   allele_id, reference_id, "so_term")
             if returnValue != 1:
                 return HTTPBadRequest(body=json.dumps({'error': returnValue}), content_type='text/json')
-            success_message = success_message + "<br>" + "The paper for PMID= " + pmid + " has been added into ALLELE_REFERENCE table. "
+            success_message = success_message + "<br>" + "The paper for PMID= " + pmid + " has been added into ALLELE_REFERENCE table for 'so_term'. "
             
         ## references for description
         
@@ -461,7 +461,7 @@ def add_allele_data(request):
                                                   allele_id, reference_id, "allele_description")
             if returnValue != 1:
                 return HTTPBadRequest(body=json.dumps({'error': returnValue}), content_type='text/json')
-            success_message = success_message + "<br>" + "The paper for PMID= " + pmid + " has been added into ALLELE_REFERENCE table. "
+            success_message = success_message + "<br>" + "The paper for PMID= " + pmid + " has been added into ALLELE_REFERENCE table for 'allele_description'. "
 
         ## aliases & reference(s)
         
