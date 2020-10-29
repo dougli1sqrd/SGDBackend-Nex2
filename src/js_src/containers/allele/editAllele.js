@@ -109,7 +109,29 @@ class EditAllele extends Component {
         let res = key.match(/pmids/g);
         if (res == 'pmids') {      
           currentAllele[key] = data[key].join(' ');
-        } else {
+        }
+        else if (key == 'affected_gene') {
+          let gene = data[key];
+          currentAllele[key] = gene['display_name'];
+          currentAllele['affected_gene_pmids'] = gene['pmids'].join(' ');
+        }
+        else if (key == 'aliases') {
+          let aliases = data[key];
+          let alias_list = '';
+          let pmids = '';
+          for (let i = 0; i < aliases.length; i++) {
+            let alias = aliases[i];
+            if (alias_list != '') {
+              alias_list = alias_list + '|';
+              pmids = pmids + '|';
+            }
+            alias_list = alias_list + alias['display_name'];
+            pmids = pmids + alias['pmids'].join(' ');
+          }
+          currentAllele['aliases'] = alias_list;
+          currentAllele['alias_pmids'] = pmids;
+        }   
+        else {
           currentAllele[key] = data[key];
         }
       }
