@@ -322,6 +322,13 @@ def check_pmids(pmids, pmid_to_reference_id):
     return (reference_ids, err_message)
     
 
+def get_pmid_to_reference_id():
+
+    pmid_to_reference_id = dict([(x.pmid, x.dbentity_id) for x in DBSession.query(Referencedbentity).all()])
+
+    return pmid_to_reference_id
+
+
 def add_allele_data(request):
 
     try:
@@ -363,8 +370,7 @@ def add_allele_data(request):
         
         # return HTTPBadRequest(body=json.dumps({'error': "allele_name_pmids="+str(allele_name_pmids)}), content_type='text/json')
 
-        
-        pmid_to_reference_id = dict([(x.pmid, x.dbentity_id) for x in DBSession.query(Referencedbentity).all()])
+        pmid_to_reference_id = get_pmid_to_reference_id()
 
         (reference_ids, err_message) = check_pmids(allele_name_pmids, pmid_to_reference_id)
     

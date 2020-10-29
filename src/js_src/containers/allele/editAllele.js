@@ -8,7 +8,7 @@ import { setAllele } from '../../actions/alleleActions';
 import OneAllele from './oneAllele';
 const UPDATE_ALLELE = '/allele_update';
 const DELETE_ALLELE = '/allele_delete';
-// const GET_ALLELE = '/get_allele_data';
+const GET_ALLELE = '/get_allele_data';
 
 const TIMEOUT = 300000;
 
@@ -114,6 +114,16 @@ class EditAllele extends Component {
     .finally(() => this.setState({ isComplete: true, isLoading: false }));
   }
 
+  setVariables() {
+    let urlList = window.location.href.split('/');
+    let allele_name = urlList[urlList.length-1];
+    let url = GET_ALLELE + '/' + allele_name;  
+    this.setState({
+      allele_name: id
+    });
+    return url;
+  }
+    
   displayForm() {
     return (
       <div>
