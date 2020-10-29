@@ -323,6 +323,13 @@ def get_list_of_alleles(request):
         if DBSession:
             DBSession.remove()    
 
+def get_reference_id_by_pmid(pmid):
+
+    ref = DBSession.query(Referencedbentity).filter_by(pmid=pmid).one_or_none()
+
+    if ref:
+        return ref.pmid
+    return None
 
 def check_pmids(pmids, pmid_to_reference_id):
 
@@ -331,24 +338,21 @@ def check_pmids(pmids, pmid_to_reference_id):
     for pmid in pmids.split(' '):
         if pmid == '':
             continue
-        if int(pmid) not in pmid_to_reference_id:
+        reference_id = pmid_to_reference_id.get(int(pmid))
+        if reference_id is None:
+            reference_id = get_reference_id_by_pmid(int(pmid))
+        if reference_id is None:
             if pmid not in bad_pmids:
                 bad_pmids.append(pmid)
             continue
-        reference_id = pmid_to_reference_id[int(pmid)]
+        else:
+            pmid_to_reference_id[int(pmid)] = reference_id
         if (reference_id, pmid) not in reference_ids:
-            reference_ids.append((pmid_to_reference_id[int(pmid)], pmid))
+            reference_ids.append((reference_id, pmid))
     err_message = ''
     if len(bad_pmids) > 0:
         err_message = "The PMID(s):" + ', '.join(bad_pmids) + " are not in the database"
     return (reference_ids, err_message)
-    
-
-def get_pmid_to_reference_id():
-
-    pmid_to_reference_id = dict([(x.pmid, x.dbentity_id) for x in DBSession.query(Referencedbentity).all()])
-
-    return pmid_to_reference_id
 
 
 def add_allele_data(request):
@@ -392,7 +396,7 @@ def add_allele_data(request):
         
         # return HTTPBadRequest(body=json.dumps({'error': "allele_name_pmids="+str(allele_name_pmids)}), content_type='text/json')
 
-        pmid_to_reference_id = get_pmid_to_reference_id()
+        pmid_to_reference_id = {}
 
         (reference_ids, err_message) = check_pmids(allele_name_pmids, pmid_to_reference_id)
     
