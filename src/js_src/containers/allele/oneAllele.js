@@ -46,7 +46,7 @@ class OneAllele extends Component {
         <div className='row'>
           <div className='columns medium-6 small-6'>
             <div> <label> Allele Description </label> </div>
-            <textarea placeholder='Enter description' name='description' value={this.props.allele.description} onChange={this.props.onOptionChange} rows='5' cols='200' />
+            <textarea placeholder='Enter description' name='description' value={this.props.allele.description} onChange={this.props.onOptionChange} rows='4' cols='200' />
           </div>
           <div className='columns medium-6 small-6'>
             <div> <label> PMID(s) for description (optional) </label> </div>
