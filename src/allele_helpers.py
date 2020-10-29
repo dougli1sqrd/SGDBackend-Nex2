@@ -250,10 +250,7 @@ def get_one_allele(request):
             elif x.reference_class == 'so_term':
                 alleles_type_pmids.append(x.reference.pmid)
             else:
-                other_pmids.append(x.reference.pmid)
-
-        return HTTPOk(body=json.dumps(data),content_type='text/json')≈ß
-                
+                other_pmids.append(x.reference.pmid)        
         data['allele_name_pmids'] = allele_name_pmids
         data['description_pmids'] = description_pmids
         data['allele_type_pmids'] = allele_type_pmids
