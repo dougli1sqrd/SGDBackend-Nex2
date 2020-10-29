@@ -233,7 +233,9 @@ def get_one_allele(request):
         data['sgdid'] = a.sgdid
         data['allele_type'] = a.so.display_name
         data['description'] = a.description
-    
+
+        return HTTPOk(body=json.dumps(data),content_type='text/json')
+        
         ## get pmids from allele_reference
         allele_name_pmids = []
         description_pmids = []
