@@ -233,8 +233,6 @@ def get_one_allele(request):
         data['sgdid'] = a.sgdid
         data['allele_type'] = a.so.display_name
         data['description'] = a.description
-
-        return HTTPOk(body=json.dumps(data),content_type='text/json')
         
         ## get pmids from allele_reference
         allele_name_pmids = []
@@ -244,7 +242,7 @@ def get_one_allele(request):
         for x in DBSession.query(AlleleReference).filter_by(allele_id=a.dbentity_id).all():
             if x.reference_class == 'allele_name':
                 allele_name_pmids.append(x.reference.pmid)
-            elif x.reference_class == 'description':
+            elif x.reference_class == 'allele_description':
                 description_pmids.append(x.reference.pmid)
             elif x.reference_class == 'so_term':
                 alleles_type_pmids.append(x.reference.pmid)
@@ -255,6 +253,8 @@ def get_one_allele(request):
         data['allele_type_pmids'] = allele_type_pmids
         data['other_pmids'] = other_pmids
 
+        return HTTPOk(body=json.dumps(data),content_type='text/json')
+    
         ## get affected_gene and pmids from locus_allele & locusallele_reference
         x = DBSession.query(LocusAllele).filter_by(allele_id=a.dbentity_id).one_or_none()
         pmids = []
