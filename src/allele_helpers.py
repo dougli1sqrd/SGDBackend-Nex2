@@ -242,8 +242,8 @@ def get_one_allele(request):
         for x in DBSession.query(AlleleReference).filter_by(allele_id=a.dbentity_id).all():        
             if x.reference_class == 'allele_name':
                 allele_name_pmids.append(x.reference.pmid)
-            #elif x.reference_class == 'allele_description':
-            #    description_pmids.append(x.reference.pmid)
+            elif x.reference_class == 'allele_description':
+                description_pmids.append(x.reference.pmid)
             #elif x.reference_class == 'so_term':
             #    alleles_type_pmids.append(x.reference.pmid)
             else:
