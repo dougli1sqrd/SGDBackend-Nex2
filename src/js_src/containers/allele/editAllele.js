@@ -105,8 +105,13 @@ class EditAllele extends Component {
     this.setState({ isLoading: true });
     fetchData(url).then( (data) => {
       let currentAllele = {};
-      for (let key in data) {        	    
-        currentAllele[key] = data[key];
+      for (let key in data) {
+        let res = key.match(/pmids/g);
+        if (res == 'pmids') {      
+          currentAllele[key] = data[key].join(' ');
+        } else {
+          currentAllele[key] = data[key];
+        }
       }
       this.props.dispatch(setAllele(currentAllele));
     })
