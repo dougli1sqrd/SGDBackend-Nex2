@@ -256,7 +256,7 @@ def get_one_allele(request):
                 other_pmids.append(x.reference.pmid)        
         data['allele_name_pmids'] = allele_name_pmids
         data['description_pmids'] = description_pmids
-        data[o'allele_type_pmids'] = allele_type_pmids
+        data['allele_type_pmids'] = allele_type_pmids
         data['other_pmids'] = other_pmids
 
         return HTTPOk(body=json.dumps(data),content_type='text/json')
