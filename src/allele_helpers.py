@@ -50,11 +50,17 @@ def insert_allele_reference(curator_session, CREATED_BY, source_id, allele_id, r
 
     x = None
     try:
-        x = AlleleReference(allele_id = allele_id,
-                            reference_id = reference_id,
-                            reference_class = reference_class,
-                            source_id = source_id,
-                            created_by = CREATED_BY)
+        if reference_class is None:
+            x = AlleleReference(allele_id = allele_id,
+                                reference_id = reference_id,
+                                source_id = source_id,
+                                created_by = CREATED_BY)
+        else:
+            x = AlleleReference(allele_id = allele_id,
+                                reference_id = reference_id,
+                                reference_class = reference_class,
+                                source_id = source_id,
+                                created_by = CREATED_BY)
         curator_session.add(x)
         # transaction.commit()
         return 1
@@ -364,7 +370,7 @@ def add_allele_data(request):
         else:
             return HTTPBadRequest(body=json.dumps({'error': "Allele type field is blank"}), content_type='text/json')
 
-        desc = request.params.get('desc')
+        desc = request.params.get('description')
 
         # return HTTPBadRequest(body=json.dumps({'error': "ALLELE_NAME"}), content_type='text/json')
         
@@ -469,7 +475,7 @@ def add_allele_data(request):
             
         ## references for description
         
-        desc_pmids = request.params.get('desc_pmids')
+        desc_pmids = request.params.get('description_pmids')
 
         (reference_ids, err_message) = check_pmids(desc_pmids, pmid_to_reference_id)
 
@@ -485,6 +491,22 @@ def add_allele_data(request):
                 return HTTPBadRequest(body=json.dumps({'error': returnValue}), content_type='text/json')
             success_message = success_message + "<br>" + "The paper for PMID= " + pmid + " has been added into ALLELE_REFERENCE table for 'allele_description'. "
 
+            
+        ## references for OTHER
+        other_pmids = request.params.get('other_pmids')
+
+        (reference_ids, err_message) = check_pmids(other_pmids, pmid_to_reference_id)
+
+        if err_message != '':
+            return HTTPBadRequest(body=json.dumps({'error': err_message}), content_type='text/json')
+
+        for (reference_id, pmid) in reference_ids:
+            returnValue = insert_allele_reference(curator_session, CREATED_BY, source_id,
+                                                  allele_id, reference_id, None)
+            if returnValue != 1:
+                return HTTPBadRequest(body=json.dumps({'error': returnValue}), content_type='text/json')
+            success_message = success_message + "<br>" + "The paper for PMID= " + pmid + " has been added into ALLELE_REFERENCE table for OTHER. "
+            
         ## aliases & reference(s)
         
         alias_list = request.params.get('aliases', '')
