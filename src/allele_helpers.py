@@ -248,7 +248,7 @@ def get_one_allele(request):
         
             if x.reference_class == 'allele_name':
                 allele_name_pmids.append(x.reference.pmid)
-            celif x.reference_class == 'allele_description':
+            elif x.reference_class == 'allele_description':
                 description_pmids.append(x.reference.pmid)
             elif x.reference_class == 'so_term':
                 alleles_type_pmids.append(x.reference.pmid)
