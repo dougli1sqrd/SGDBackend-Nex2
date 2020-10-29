@@ -119,7 +119,7 @@ class EditAllele extends Component {
     let allele_name = urlList[urlList.length-1];
     let url = GET_ALLELE + '/' + allele_name;  
     this.setState({
-      allele_name: id
+      allele_name: allele_name
     });
     return url;
   }
