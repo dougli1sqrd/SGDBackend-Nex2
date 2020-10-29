@@ -231,6 +231,7 @@ def get_one_allele(request):
         data['allele_name'] = a.display_name
         data['format_name'] = a.format_name
         data['sgdid'] = a.sgdid
+        data['so_id'] = a.so.so_id
         data['allele_type'] = a.so.display_name
         data['description'] = a.description
         
