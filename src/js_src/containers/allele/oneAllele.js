@@ -46,7 +46,7 @@ class OneAllele extends Component {
         <div className='row'>
           <div className='columns medium-6 small-6'>
             <div> <label> Allele Description </label> </div>
-            <textarea placeholder='Enter description' name='description' value={this.props.allele.description} onChange={this.props.onOptionChange} rows='3' cols='200' />
+            <textarea placeholder='Enter description' name='description' value={this.props.allele.description} onChange={this.props.onOptionChange} rows='5' cols='200' />
           </div>
           <div className='columns medium-6 small-6'>
             <div> <label> PMID(s) for description (optional) </label> </div>
@@ -57,7 +57,7 @@ class OneAllele extends Component {
         </div>
 
 	
-        /* literature */}
+        {/* literature */}
         <OneColTextField sec_title='PMID(s) for Primary Literature:' name='primary_pmids' value={this.props.allele.primary_pmids} onOptionChange={this.props.onOptionChange} />
         <OneColTextField sec_title='PMID(s) for Additional Literature:' name='additional_pmids' value={this.props.allele.additional_pmids} onOptionChange={this.props.onOptionChange} />
         <OneColTextField sec_title='PMID(s) for Review Literature:' name='review_pmids' value={this.props.allele.review_pmids} onOptionChange={this.props.onOptionChange} />
