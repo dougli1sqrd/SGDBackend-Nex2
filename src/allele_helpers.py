@@ -394,7 +394,7 @@ def add_allele_data(request):
         allele_name_pmids = request.params.get('allele_name_pmids')
 
         
-        # return HTTPBadRequest(body=json.dumps({'error': "allele_name_pmids="+str(allele_name_pmids)}), content_type='text/json')
+        return HTTPBadRequest(body=json.dumps({'error': "allele_name_pmids="+str(allele_name_pmids)}), content_type='text/json')
 
         pmid_to_reference_id = {}
 
