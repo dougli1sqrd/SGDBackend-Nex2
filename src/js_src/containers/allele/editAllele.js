@@ -155,7 +155,7 @@ class EditAllele extends Component {
     return (
       <div>
         <form onSubmit={this.handleUpdate} ref='form'>
-          <input name='id' value={this.props.allele.id} className="hide" />
+          <input name='sgdid' value={this.props.allele.sgdid} className="hide" />
           <OneAllele allele={this.props.allele} onOptionChange={this.handleChange} />
           {this.addButtons()}          	
         </form>
