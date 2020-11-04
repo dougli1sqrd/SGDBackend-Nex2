@@ -44,6 +44,8 @@ import FileCurateUpdate from './containers/fileCurate/updateFile.js';
 import NewPhenotype from './containers/phenotype/new';
 import SearchPhenotype from './containers/phenotype/search';
 import EditPhenotype from './containers/phenotype/edit';
+import SearchFileMetadata from './containers/fileMetadata/search';
+import EditFileMetadata from './containers/fileMetadata/edit';
 import NewAllele from './containers/allele/new';
 import EditAllele from './containers/allele/edit';
 import SubmitData from './containers/authorResponse/index';
@@ -81,6 +83,8 @@ export default (
 	  <Route component={requireAuthentication(NewPhenotype)} path='/new_phenotype' />
 	  <Route component={requireAuthentication(SearchPhenotype)} path='/search_phenotype' />  
           <Route component={requireAuthentication(EditPhenotype)} path='/edit_phenotype/:id' />
+          <Route component={requireAuthentication(SearchFileMetadata)} path='/search_file_metadata' />
+          <Route component={requireAuthentication(EditFileMetadata)} path='/edit_file_metadata/:id' />		     
           <Route component={requireAuthentication(NewAllele)} path='/new_allele' />
           <Route component={requireAuthentication(EditAllele)} path='/curate/allele/:id' />	     
           <Route component={requireAuthentication(LitGuide)} path='/litguide_todo' />

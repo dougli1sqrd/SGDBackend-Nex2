@@ -11,6 +11,7 @@ import phenotypeReducer from './phenotypeReducer';
 import alleleReducer from './alleleReducer';
 import authorResponseReducer from './authorResponseReducer';
 import litguideReducer from './litguideReducer';
+import fileMetadataReducer from './fileMetadataReducer';
 
 export default {
   auth: authReducer,
@@ -25,5 +26,6 @@ export default {
   phenotype:phenotypeReducer,
   allele:alleleReducer,
   authorResponse:authorResponseReducer,
-  litguide:litguideReducer
+  litguide:litguideReducer,
+  fileMetadata: fileMetadataReducer        
 };
