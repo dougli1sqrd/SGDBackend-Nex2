@@ -5,7 +5,7 @@ const DEFAULT_STATE = {
     previous_file_name: '',
     is_in_browser: '',
     is_in_spell: '',
-    is_public: ''
+    is_public: '',
     topic_id: '',
     data_id: '',
     format_id: '',
