@@ -9699,16 +9699,18 @@ class Alleledbentity(Dbentity):
         return obj
 
     def get_basic_info(self, display_text, reference_class, reference_mapping, ref_order):
-        
+
+        ref_index = ref_order
         references = []
         alleleRefs = DBSession.query(AlleleReference).filter_by(allele_id=self.dbentity_id, reference_class=reference_class).all()
         for x in alleleRefs:
             reference = x.reference.to_dict_citation()
             references.append(reference)
             if reference["id"] not in reference_mapping:
-                reference_mapping[reference["id"]] = ref_order
-                ref_order += 1
-
+                reference_mapping[reference["id"]] = ref_index
+                ref_index = ref_index + 1
+        ref_order = ref_index
+        
         return { "display_text": display_text,
                  "references": references }
     
