@@ -9700,7 +9700,7 @@ class Alleledbentity(Dbentity):
 
     def get_basic_info(self, display_text, reference_class, reference_mapping, ref_order):
 
-        ref_index = ref_order
+        ref_index = 1
         references = []
         alleleRefs = DBSession.query(AlleleReference).filter_by(allele_id=self.dbentity_id, reference_class=reference_class).all()
         for x in alleleRefs:
