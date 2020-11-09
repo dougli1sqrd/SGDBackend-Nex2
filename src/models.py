@@ -9679,15 +9679,14 @@ class Alleledbentity(Dbentity):
     
     def to_dict(self):
 
-        obj = { "sgdid": self.sgdid,
-                "allele_type": self.so.display_name,
-                "description": self.description,
-        }
         reference_mapping = {}
         ref_order = 1
-        obj["name"] = self.get_name(reference_mapping, ref_order)
+        obj = { "sgdid": self.sgdid }
+        obj["name"] = self.get_basic_info(self.display_name, 'allele_name', reference_mapping, ref_order)
         obj['aliases'] = self.get_aliases(reference_mapping, ref_order)
-        obj['affected_gene'] = self.get_gene_name_info(reference_mapping, ref_order)     
+        obj['affected_gene'] = self.get_gene_name_info(reference_mapping, ref_order)
+        obj['allele_type'] = self.get_basic_info(self.so.display_name, 'so_term', reference_mapping, ref_order)
+        obj['description'] = self.get_basic_info(self.description, 'allele_description', reference_mapping, ref_order)
         obj['phenotype'] = self.phenotype_to_dict()
         obj['interaction'] = self.interaction_to_dict()
         obj['network_graph'] = self.allele_network()
@@ -9699,10 +9698,10 @@ class Alleledbentity(Dbentity):
         
         return obj
 
-    def get_name(self, reference_mapping, ref_order):
+    def get_basic_info(self, display_text, reference_class, reference_mapping, ref_order):
         
         references = []
-        alleleRefs = DBSession.query(AlleleReference).filter_by(allele_id=self.dbentity_id).all()
+        alleleRefs = DBSession.query(AlleleReference).filter_by(allele_id=self.dbentity_id, reference_class=reference_class).all()
         for x in alleleRefs:
             reference = x.reference.to_dict_citation()
             references.append(reference)
@@ -9710,9 +9709,9 @@ class Alleledbentity(Dbentity):
                 reference_mapping[reference["id"]] = ref_order
                 ref_order += 1
 
-        return { "display_name": self.display_name,
+        return { "display_text": display_text,
                  "references": references }
-
+    
     def get_resource_urls(self):
         
         gene_name = self.get_gene_name()
