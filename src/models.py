@@ -9752,6 +9752,8 @@ class Alleledbentity(Dbentity):
         # allele_reference
         alleleRefs = DBSession.query(AlleleReference).filter_by(allele_id=self.dbentity_id).all()
         for x in alleleRefs:
+            if x.reference.dbentity_id in found:
+                continue
             references.append(x.reference.to_dict_citation())
             found[x.reference.dbentity_id] = 1
             
