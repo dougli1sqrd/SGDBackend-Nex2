@@ -9783,9 +9783,15 @@ class Alleledbentity(Dbentity):
             for x in locusalleleRefs:
                 if x.reference.dbentity_id not in found:
                     references.append(x.reference.to_dict_citation())
+        
+        # literatureannotation
+        all_la = DBSession.query(Literatureannotation).filter_by(dbentity_id=self.dbentity_id).all() 
+        for x in all_la:
+            if x.reference.dbentity_id not in found:
+                references.append(x.reference.to_dict_citation())
         return references
-
-    def interaction_to_dict(self):
+        
+    def intecraction_to_dict(self):
 
         interaction_ids = DBSession.query(AlleleGeninteraction.interaction_id).distinct(AlleleGeninteraction.interaction_id).filter(or_(AlleleGeninteraction.allele1_id==self.dbentity_id, AlleleGeninteraction.allele2_id==self.dbentity_id)).all()
         
