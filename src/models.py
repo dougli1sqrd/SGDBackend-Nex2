@@ -8541,8 +8541,11 @@ class Phenotypeannotation(Base):
 
         mt = {}
         for annotation in annotations:
-            if annotation.mutant.display_name not in mt:
-                mt[annotation.mutant.display_name] = {
+            # if annotation.mutant.display_name not in mt:
+            #    mt[annotation.mutant.display_name] = {
+            mutant = annotation.mutant.display_name.replace("null mutant", "null")
+            if mutant not in mt:
+                mt[mutant] = {
                     "classical genetics": 0,
                     "large-scale survey": 0
                 }
@@ -8553,8 +8556,8 @@ class Phenotypeannotation(Base):
                 add = number_conditions.get(annotation.annotation_id, 0)
 
             if annotation.experiment.namespace_group:
-                mt[annotation.mutant.display_name][annotation.experiment.namespace_group] += add
-
+                # mt[annotation.mutant.display_name][annotation.experiment.namespace_group] += add
+                mt[mutant][annotation.experiment.namespace_group] += add
         experiment_categories = []
         for key in list(mt.keys()):
             experiment_categories.append([key, mt[key]["classical genetics"], mt[key]["large-scale survey"]])
@@ -8583,7 +8586,7 @@ class Phenotypeannotation(Base):
 
         return {
             "experiment_category": experiment_category,
-            "mutant": self.mutant.display_name,
+            "mutant": self.mutant.display_name.replace("null mutant", 'null'),
             "phenotype": {
                 "display_name": self.phenotype.display_name,
                 "link": self.phenotype.obj_url,
@@ -8644,6 +8647,8 @@ class Phenotypeannotation(Base):
 
         experiment = Apo.get_apo_by_id(self.experiment_id)
         mutant = Apo.get_apo_by_id(self.mutant_id)
+        if mutant is not None:
+            mutant = mutant.replace('null mutant', 'null')
 
         experiment_obj = None
 
@@ -8657,7 +8662,7 @@ class Phenotypeannotation(Base):
 
         obj = {
             "id": self.annotation_id,
-            "mutant_type": mutant.display_name,
+            "mutant_type": mutant.display_name.replace('null mutant', 'null'),
             "locus": {
                 "display_name": locus.display_name,
                 "id": locus.dbentity_id,
@@ -9829,7 +9834,7 @@ class Alleledbentity(Dbentity):
     
     def get_aliases(self, reference_mapping, ref_order):
 
-        alleleAliases = DBSession.query(AlleleAlias).filter_by(allele_id = self.dbentity_id, alias_type='Synonym').all()
+        alleleAliases = DBSession.query(AlleleAlias).filter_by(allele_id = self.dbentity_id).all()
         objs = []
         for x in alleleAliases:
             allelealiasRefs = DBSession.query(AllelealiasReference).filter_by(allele_alias_id=x.allele_alias_id).all()
