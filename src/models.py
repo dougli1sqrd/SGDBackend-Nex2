@@ -8647,9 +8647,7 @@ class Phenotypeannotation(Base):
 
         experiment = Apo.get_apo_by_id(self.experiment_id)
         mutant = Apo.get_apo_by_id(self.mutant_id)
-        if mutant is not None:
-            mutant = mutant.replace('null mutant', 'null')
-
+        
         experiment_obj = None
 
         if experiment:
