@@ -9794,8 +9794,7 @@ class Alleledbentity(Dbentity):
             
         return references
 
-    
-    def intecraction_to_dict(self):
+    def interaction_to_dict(self):
 
         interaction_ids = DBSession.query(AlleleGeninteraction.interaction_id).distinct(AlleleGeninteraction.interaction_id).filter(or_(AlleleGeninteraction.allele1_id==self.dbentity_id, AlleleGeninteraction.allele2_id==self.dbentity_id)).all()
         
