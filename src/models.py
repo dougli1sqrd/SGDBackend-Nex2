@@ -9693,6 +9693,9 @@ class Alleledbentity(Dbentity):
         obj['references'] = self.get_references()
         obj['phenotype_references'] = self.get_phenotype_references()
         obj['interaction_references'] = self.get_interaction_references()
+        obj['primary_references'] = self.get_literatureannotation_references("Primary Literature")
+        obj['additional_references'] = self.get_literatureannotation_references("Additional Literature")
+        obj['review_references'] = self.get_literatureannotation_references("Reviews")
         obj['urls'] = self.get_resource_urls()
         obj["reference_mapping"] = reference_mapping
         
@@ -9727,7 +9730,14 @@ class Alleledbentity(Dbentity):
             if x['category'] in ['LOCUS_PHENOTYPE_RESOURCES_MUTANT_STRAINS', 'LOCUS_PHENOTYPE_RESOURCES_PHENOTYPE_RESOURCES', 'LOCUS_PHENOTYPE_RESOURCES_ONTOLOGY', 'LOCUS_INTERACTION']:
                 urls.append(x)
         return urls
-  
+
+    def get_literatureannotation_references(self, topic):
+        references = []
+        for x in DBSession.query(Literatureannotation).filter_by(dbentity_id=self.dbentity_id, topic=topic).all():
+            if x.reference.to_dict_citation() not in references:
+                references.append(x.reference.to_dict_citation())
+        return references
+        
     def get_phenotype_references(self):
         references = []
         for x in DBSession.query(Phenotypeannotation).filter_by(allele_id=self.dbentity_id).all():
