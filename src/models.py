@@ -9703,7 +9703,8 @@ class Alleledbentity(Dbentity):
         (obj['aliases'], ref_order) = self.get_aliases(reference_mapping, ref_order)
         obj['affected_gene'] = self.get_gene_name_info()
         (obj['allele_type'], ref_order) = self.get_basic_info(self.so.display_name, 'so_term', reference_mapping, ref_order)
-        (obj['description'], ref_order) = self.get_basic_info(self.description, 'allele_description', reference_mapping, ref_order)
+        if self.description:
+            (obj['description'], ref_order) = self.get_basic_info(self.description, 'allele_description', reference_mapping, ref_order)
         obj['phenotype'] = self.phenotype_to_dict()
         obj['interaction'] = self.interaction_to_dict()
         obj['network_graph'] = self.allele_network()
