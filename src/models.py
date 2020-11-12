@@ -9820,7 +9820,7 @@ class Alleledbentity(Dbentity):
         #            references.append(x.reference.to_dict_citation())
         #            found[x.reference.dbentity_id] = 1
                     
-        literatureannotation
+        # literatureannotation
         all_la = DBSession.query(Literatureannotation).filter_by(dbentity_id=self.dbentity_id).all() 
         for x in all_la:
             if x.reference.dbentity_id not in found:
