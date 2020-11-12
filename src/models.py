@@ -9693,19 +9693,16 @@ class Alleledbentity(Dbentity):
     description = Column(String(500), nullable=True)
 
     so = relationship('So')
-
-    ref_order = 1
     
     def to_dict(self):
 
-        reference_mapping = {}
-        # ref_order = 1
+        obj["reference_mapping"] = {}
         obj = { "sgdid": self.sgdid }
-        obj["name"] = self.get_basic_info(self.display_name, 'allele_name', reference_mapping, ref_order)
-        obj['aliases'] = self.get_aliases(reference_mapping, ref_order)
-        obj['affected_gene'] = self.get_gene_name_info(reference_mapping, ref_order)
-        obj['allele_type'] = self.get_basic_info(self.so.display_name, 'so_term', reference_mapping, ref_order)
-        obj['description'] = self.get_basic_info(self.description, 'allele_description', reference_mapping, ref_order)
+        obj["name"] = self.get_basic_info(self.display_name, 'allele_name', obj)
+        obj['aliases'] = self.get_aliases(obj)
+        obj['affected_gene'] = self.get_gene_name_info(obj)
+        obj['allele_type'] = self.get_basic_info(self.so.display_name, 'so_term', obj)
+        obj['description'] = self.get_basic_info(self.description, 'allele_description', obj)
         obj['phenotype'] = self.phenotype_to_dict()
         obj['interaction'] = self.interaction_to_dict()
         obj['network_graph'] = self.allele_network()
@@ -9720,17 +9717,16 @@ class Alleledbentity(Dbentity):
         
         return obj
 
-    def get_basic_info(self, display_text, reference_class, reference_mapping, ref_order):
+    def get_basic_info(self, display_text, reference_class, obj):
 
         references = []
         alleleRefs = DBSession.query(AlleleReference).filter_by(allele_id=self.dbentity_id, reference_class=reference_class).all()
         for x in alleleRefs:
             reference = x.reference.to_dict_citation()
             references.append(reference)
-            if reference["id"] not in reference_mapping:
-                reference_mapping[reference["id"]] = ref_order
-                ref_order = ref_order + 1
-
+            if reference["id"] not in obj["reference_mapping"]:
+                reference_mapping[reference["id"]] = len(list(obj["reference_mapping"].keys())) + 1
+                
         return { "display_text": display_text,
                  "references": references }
     
@@ -9844,7 +9840,7 @@ class Alleledbentity(Dbentity):
             return ''
         return la.locus.display_name
     
-    def get_gene_name_info(self, reference_mapping, ref_order):
+    def get_gene_name_info(self, obj):
         
         gene = self.get_gene_name()
         if gene is None:
@@ -9858,15 +9854,14 @@ class Alleledbentity(Dbentity):
             for x in locusalleleRefs:
                 reference = x.reference.to_dict_citation()
                 references.append(reference)
-                if reference["id"] not in reference_mapping:
-                    reference_mapping[reference["id"]] = ref_order
-                    ref_order += 1
+                if reference["id"] not in obj["reference_mapping"]:
+		    reference_mapping[reference["id"]] = len(list(obj["reference_mapping"].keys())) + 1
                                     
         return { "display_name": gene,
                  "references": references }
 
     
-    def get_aliases(self, reference_mapping, ref_order):
+    def get_aliases(self, obj):
 
         alleleAliases = DBSession.query(AlleleAlias).filter_by(allele_id = self.dbentity_id, alias_type='Synonym').all()
         objs = []
@@ -9876,9 +9871,8 @@ class Alleledbentity(Dbentity):
             for y in allelealiasRefs:
                 reference = y.reference.to_dict_citation()
                 references.append(reference)
-                if reference["id"] not in reference_mapping:
-                    reference_mapping[reference["id"]] = ref_order
-                    ref_order += 1
+                if reference["id"] not in obj["reference_mapping"]:
+		    reference_mapping[reference["id"]] = len(list(obj["reference_mapping"].keys())) + 1
             objs.append({ "display_name": x.display_name,
                           "references": references })
         return objs
