@@ -551,7 +551,7 @@ def add_allele_data(request):
         
         ## add all papers to Literatureannotation table
         for reference_id in all_reference_id:
-            returnValue = insert_literatureannotation(curator_session, CREATED_BY, source_id, allele_id, 'Additional Literature', taxonomy_id)
+            returnValue = insert_literatureannotation(curator_session, CREATED_BY, source_id, allele_id, reference_id, 'Additional Literature', taxonomy_id)
             if returnValue != 1:
                 return HTTPBadRequest(body=json.dumps({'error': returnValue}), content_type='text/json')
         if len(all_reference_id) > 0:
