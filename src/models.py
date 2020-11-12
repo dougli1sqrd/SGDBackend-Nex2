@@ -9792,13 +9792,13 @@ class Alleledbentity(Dbentity):
                     found[x.reference.dbentity_id] = 1
             
         # locusallele_reference
-        locusAllele = DBSession.query(LocusAllele).filter_by(allele_id=self.dbentity_id).one_or_none()
-        if locusAllele is not None:
-            locusalleleRefs = DBSession.query(LocusalleleReference).filter_by(locus_allele_id=locusAllele.locus_allele_id).all()
-            for x in locusalleleRefs:
-                if x.reference.dbentity_id not in found:
-                    references.append(x.reference.to_dict_citation())
-                    found[x.reference.dbentity_id] = 1
+        # locusAllele = DBSession.query(LocusAllele).filter_by(allele_id=self.dbentity_id).one_or_none()
+        # if locusAllele is not None:
+        #    locusalleleRefs = DBSession.query(LocusalleleReference).filter_by(locus_allele_id=locusAllele.locus_allele_id).all()
+        #    for x in locusalleleRefs:
+        #        if x.reference.dbentity_id not in found:
+        #            references.append(x.reference.to_dict_citation())
+        #            found[x.reference.dbentity_id] = 1
                     
         # literatureannotation
         all_la = DBSession.query(Literatureannotation).filter_by(dbentity_id=self.dbentity_id).all() 
