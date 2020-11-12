@@ -9714,7 +9714,6 @@ class Alleledbentity(Dbentity):
         obj['additional_references'] = self.get_literatureannotation_references("Additional Literature")
         obj['review_references'] = self.get_literatureannotation_references("Reviews")
         obj['urls'] = self.get_resource_urls()
-        obj["reference_mapping"] = reference_mapping
         
         return obj
 
@@ -9726,7 +9725,7 @@ class Alleledbentity(Dbentity):
             reference = x.reference.to_dict_citation()
             references.append(reference)
             if reference["id"] not in obj["reference_mapping"]:
-                reference_mapping[reference["id"]] = len(list(obj["reference_mapping"].keys())) + 1
+                obj["reference_mapping"][reference["id"]] = len(list(obj["reference_mapping"].keys())) + 1
                 
         return { "display_text": display_text,
                  "references": references }
@@ -9856,7 +9855,7 @@ class Alleledbentity(Dbentity):
                 reference = x.reference.to_dict_citation()
                 references.append(reference)
                 if reference["id"] not in obj["reference_mapping"]:
-                    reference_mapping[reference["id"]] = len(list(obj["reference_mapping"].keys())) + 1
+                    ob["reference_mapping"][reference["id"]] = len(list(obj["reference_mapping"].keys())) + 1
                                     
         return { "display_name": gene,
                  "references": references }
@@ -9873,7 +9872,7 @@ class Alleledbentity(Dbentity):
                 reference = y.reference.to_dict_citation()
                 references.append(reference)
                 if reference["id"] not in obj["reference_mapping"]:
-                    reference_mapping[reference["id"]] = len(list(obj["reference_mapping"].keys())) + 1
+                    obj["reference_mapping"][reference["id"]] = len(list(obj["reference_mapping"].keys())) + 1
             objs.append({ "display_name": x.display_name,
                           "references": references })
         return objs
