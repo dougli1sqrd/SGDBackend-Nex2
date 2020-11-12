@@ -9693,11 +9693,13 @@ class Alleledbentity(Dbentity):
     description = Column(String(500), nullable=True)
 
     so = relationship('So')
+
+    ref_order = 1
     
     def to_dict(self):
 
         reference_mapping = {}
-        ref_order = 1
+        # ref_order = 1
         obj = { "sgdid": self.sgdid }
         obj["name"] = self.get_basic_info(self.display_name, 'allele_name', reference_mapping, ref_order)
         obj['aliases'] = self.get_aliases(reference_mapping, ref_order)
