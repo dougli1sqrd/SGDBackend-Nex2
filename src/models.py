@@ -9696,6 +9696,7 @@ class Alleledbentity(Dbentity):
     
     def to_dict(self):
 
+        obj = {}
         obj["reference_mapping"] = {}
         obj = { "sgdid": self.sgdid }
         obj["name"] = self.get_basic_info(self.display_name, 'allele_name', obj)
