@@ -9776,8 +9776,8 @@ class Alleledbentity(Dbentity):
 
         references = []
         found = {}
-        # allele_reference
-        alleleRefs = DBSession.query(AlleleReference).filter_by(allele_id=self.dbentity_id).all()
+        # allele_reference for allele_name
+        alleleRefs = DBSession.query(AlleleReference).filter_by(allele_id=self.dbentity_id, reference_class='allele_name').all()
         for x in alleleRefs:
             if x.reference.dbentity_id in found:
                 continue
@@ -9792,6 +9792,23 @@ class Alleledbentity(Dbentity):
                 if x.reference.dbentity_id not in found:
                     references.append(x.reference.to_dict_citation())
                     found[x.reference.dbentity_id] = 1
+
+        # allele_reference for so term                                                                                                          
+        alleleRefs = DBSession.query(AlleleReference).filter_by(allele_id=self.dbentity_id, reference_class='so_term').all()
+        for x in alleleRefs:
+            if x.reference.dbentity_id in found:
+                continue
+            references.append(x.reference.to_dict_citation())
+            found[x.reference.dbentity_id] = 1
+
+        # allele_reference for allele_description
+        alleleRefs = DBSession.query(AlleleReference).filter_by(allele_id=self.dbentity_id, reference_class='allele_description').all()
+        for x in alleleRefs:
+            if x.reference.dbentity_id in found:
+                continue
+            references.append(x.reference.to_dict_citation())
+            found[x.reference.dbentity_id] = 1
+
             
         # locusallele_reference
         # locusAllele = DBSession.query(LocusAllele).filter_by(allele_id=self.dbentity_id).one_or_none()
@@ -9803,11 +9820,11 @@ class Alleledbentity(Dbentity):
         #            found[x.reference.dbentity_id] = 1
                     
         # literatureannotation
-        all_la = DBSession.query(Literatureannotation).filter_by(dbentity_id=self.dbentity_id).all() 
-        for x in all_la:
-            if x.reference.dbentity_id not in found:
-                references.append(x.reference.to_dict_citation())
-            found[x.reference.dbentity_id] = 1
+        # all_la = DBSession.query(Literatureannotation).filter_by(dbentity_id=self.dbentity_id).all() 
+        # for x in all_la:
+        #    if x.reference.dbentity_id not in found:
+        #        references.append(x.reference.to_dict_citation())
+        #    found[x.reference.dbentity_id] = 1
             
         return references
 
