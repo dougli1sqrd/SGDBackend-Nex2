@@ -9725,7 +9725,8 @@ class Alleledbentity(Dbentity):
             reference = x.reference.to_dict_citation()
             references.append(reference)
             if reference["id"] not in obj["reference_mapping"]:
-                obj["reference_mapping"][reference["id"]] = len(list(obj["reference_mapping"].keys())) + 1
+                order = len(list(obj["reference_mapping"].keys())) + 1
+                obj["reference_mapping"][reference["id"]] = order
                 
         return { "display_text": display_text,
                  "references": references }
@@ -9855,7 +9856,8 @@ class Alleledbentity(Dbentity):
                 reference = x.reference.to_dict_citation()
                 references.append(reference)
                 if reference["id"] not in obj["reference_mapping"]:
-                    ob["reference_mapping"][reference["id"]] = len(list(obj["reference_mapping"].keys())) + 1
+                    order = len(list(obj["reference_mapping"].keys())) + 1
+                    obj["reference_mapping"][reference["id"]] = order
                                     
         return { "display_name": gene,
                  "references": references }
@@ -9872,7 +9874,9 @@ class Alleledbentity(Dbentity):
                 reference = y.reference.to_dict_citation()
                 references.append(reference)
                 if reference["id"] not in obj["reference_mapping"]:
-                    obj["reference_mapping"][reference["id"]] = len(list(obj["reference_mapping"].keys())) + 1
+                    order = len(list(obj["reference_mapping"].keys())) + 1
+                    obj["reference_mapping"][reference["id"]] = order
+                    
             objs.append({ "display_name": x.display_name,
                           "references": references })
         return objs
