@@ -9699,29 +9699,26 @@ class Alleledbentity(Dbentity):
         reference_mapping = {}
         ref_order = 1
         obj = { "sgdid": self.sgdid }
-        basic_references = []
-        all_references = []
-        (obj["name"], ref_order) = self.get_basic_info(self.display_name, 'allele_name', reference_mapping, ref_order, basic_references)
-        (obj['aliases'], ref_order) = self.get_aliases(reference_mapping, ref_order, basic_references)
+        (obj["name"], ref_order) = self.get_basic_info(self.display_name, 'allele_name', reference_mapping, ref_order)
+        (obj['aliases'], ref_order) = self.get_aliases(reference_mapping, ref_order)
         obj['affected_gene'] = self.get_gene_name_info()
-        (obj['allele_type'], ref_order) = self.get_basic_info(self.so.display_name, 'so_term', reference_mapping, ref_order, basic_references)
-        (obj['description'], ref_order) = self.get_basic_info(self.description, 'allele_description', reference_mapping, ref_order, basic_references)
+        (obj['allele_type'], ref_order) = self.get_basic_info(self.so.display_name, 'so_term', reference_mapping, ref_order)
+        (obj['description'], ref_order) = self.get_basic_info(self.description, 'allele_description', reference_mapping, ref_order)
         obj['phenotype'] = self.phenotype_to_dict()
         obj['interaction'] = self.interaction_to_dict()
         obj['network_graph'] = self.allele_network()
-        obj['phenotype_references'] = self.get_phenotype_references(all_references)
-        obj['interaction_references'] = self.get_interaction_references(all_references)
-        obj['primary_references'] = self.get_literatureannotation_references("Primary Literature", all_references)
-        obj['additional_references'] = self.get_literatureannotation_references("Additional Literature", all_references)
-        obj['review_references'] = self.get_literatureannotation_references("Reviews", all_references)
+        obj['references'] = self.get_references()
+        obj['phenotype_references'] = self.get_phenotype_references()
+        obj['interaction_references'] = self.get_interaction_references()
+        obj['primary_references'] = self.get_literatureannotation_references("Primary Literature")
+        obj['additional_references'] = self.get_literatureannotation_references("Additional Literature")
+        obj['review_references'] = self.get_literatureannotation_references("Reviews")
         obj['urls'] = self.get_resource_urls()
         obj["reference_mapping"] = reference_mapping
-        obj['basic_references'] = basic_references
-        obj['unique_references'] = all_references
         
         return obj
 
-    def get_basic_info(self, display_text, reference_class, reference_mapping, ref_order, basic_references):
+    def get_basic_info(self, display_text, reference_class, reference_mapping, ref_order):
 
         references = []
         alleleRefs = DBSession.query(AlleleReference).filter_by(allele_id=self.dbentity_id, reference_class=reference_class).all()
@@ -9731,9 +9728,6 @@ class Alleledbentity(Dbentity):
             if reference["id"] not in reference_mapping:
                 reference_mapping[reference["id"]] = ref_order
                 ref_order = ref_order + 1
-            
-            if x.reference.to_dict_citation() not in basic_references:
-                basic_references.append(x.reference.to_dict_citation())
 
         return ({ "display_text": display_text,
                   "references": references }, ref_order)
@@ -9754,25 +9748,21 @@ class Alleledbentity(Dbentity):
                 urls.append(x)
         return urls
 
-    def get_literatureannotation_references(self, topic, all_references):
+    def get_literatureannotation_references(self, topic):
         references = []
         for x in DBSession.query(Literatureannotation).filter_by(dbentity_id=self.dbentity_id, topic=topic).all():
             if x.reference.to_dict_citation() not in references:
                 references.append(x.reference.to_dict_citation())
-            if x.reference.to_dict_citation() not in all_references:
-                all_references.append(x.reference.to_dict_citation())
         return references
         
-    def get_phenotype_references(self, all_references):
+    def get_phenotype_references(self):
         references = []
         for x in DBSession.query(Phenotypeannotation).filter_by(allele_id=self.dbentity_id).all():
             if x.reference.to_dict_citation() not in references:
                 references.append(x.reference.to_dict_citation())
-            if x.reference.to_dict_citation() not in all_references:
-                all_references.append(x.reference.to_dict_citation())
         return references
 
-    def get_interaction_references(self, all_references):
+    def get_interaction_references(self):
 
         interaction_ids = DBSession.query(AlleleGeninteraction.interaction_id).distinct(AlleleGeninteraction.interaction_id).filter(or_(AlleleGeninteraction.allele1_id==self.dbentity_id, AlleleGeninteraction.allele2_id==self.dbentity_id)).all()
         
@@ -9780,11 +9770,65 @@ class Alleledbentity(Dbentity):
         for x in DBSession.query(Geninteractionannotation).filter(Geninteractionannotation.annotation_id.in_(interaction_ids)).all():
             if x.reference.to_dict_citation() not in references:
                 references.append(x.reference.to_dict_citation())
-            if x.reference.to_dict_citation() not in all_references:
-                all_references.append(x.reference.to_dict_citation())
+        return references
+    
+    def get_references(self):
+
+        references = []
+        found = {}
+        # allele_reference for allele_name
+        alleleRefs = DBSession.query(AlleleReference).filter_by(allele_id=self.dbentity_id, reference_class='allele_name').all()
+        for x in alleleRefs:
+            if x.reference.dbentity_id in found:
+                continue
+            references.append(x.reference.to_dict_citation())
+            found[x.reference.dbentity_id] = 1
+            
+        # allelealias_reference
+        alleleAliases = DBSession.query(AlleleAlias).filter_by(allele_id=self.dbentity_id).all()
+        for x in alleleAliases:
+            allelealiasRefs = DBSession.query(AllelealiasReference).filter_by(allele_alias_id=x.allele_alias_id).all()
+            for x in allelealiasRefs:
+                if x.reference.dbentity_id not in found:
+                    references.append(x.reference.to_dict_citation())
+                    found[x.reference.dbentity_id] = 1
+
+        # allele_reference for so term                                                                                                          
+        alleleRefs = DBSession.query(AlleleReference).filter_by(allele_id=self.dbentity_id, reference_class='so_term').all()
+        for x in alleleRefs:
+            if x.reference.dbentity_id in found:
+                continue
+            references.append(x.reference.to_dict_citation())
+            found[x.reference.dbentity_id] = 1
+                 
+        # allele_reference for allele_description
+        if self.description:
+            alleleRefs = DBSession.query(AlleleReference).filter_by(allele_id=self.dbentity_id, reference_class='allele_description').all()
+            for x in alleleRefs:
+                if x.reference.dbentity_id in found:
+                    continue
+                references.append(x.reference.to_dict_citation())
+                found[x.reference.dbentity_id] = 1
+
+            
+        # locusallele_reference
+        # locusAllele = DBSession.query(LocusAllele).filter_by(allele_id=self.dbentity_id).one_or_none()
+        # if locusAllele is not None:
+        #    locusalleleRefs = DBSession.query(LocusalleleReference).filter_by(locus_allele_id=locusAllele.locus_allele_id).all()
+        #    for x in locusalleleRefs:
+        #        if x.reference.dbentity_id not in found:
+        #            references.append(x.reference.to_dict_citation())
+        #            found[x.reference.dbentity_id] = 1
+                    
+        # literatureannotation
+        # all_la = DBSession.query(Literatureannotation).filter_by(dbentity_id=self.dbentity_id).all() 
+        # for x in all_la:
+        #    if x.reference.dbentity_id not in found:
+        #        references.append(x.reference.to_dict_citation())
+        #        found[x.reference.dbentity_id] = 1
+                
         return references
 
-    
     def interaction_to_dict(self):
 
         interaction_ids = DBSession.query(AlleleGeninteraction.interaction_id).distinct(AlleleGeninteraction.interaction_id).filter(or_(AlleleGeninteraction.allele1_id==self.dbentity_id, AlleleGeninteraction.allele2_id==self.dbentity_id)).all()
@@ -9838,7 +9882,7 @@ class Alleledbentity(Dbentity):
                  "references": references }
 
     
-    def get_aliases(self, reference_mapping, ref_order, basic_references):
+    def get_aliases(self, reference_mapping, ref_order):
 
         alleleAliases = DBSession.query(AlleleAlias).filter_by(allele_id = self.dbentity_id, alias_type='Synonym').all()
         objs = []
@@ -9851,8 +9895,6 @@ class Alleledbentity(Dbentity):
                 if reference["id"] not in reference_mapping:
                     reference_mapping[reference["id"]] = ref_order
                     ref_order += 1
-                if x.reference.to_dict_citation() not in basic_references:
-                    basic_references.append(x.reference.to_dict_citation())
             objs.append({ "display_name": x.display_name,
                           "references": references })
         return (objs, ref_order)
