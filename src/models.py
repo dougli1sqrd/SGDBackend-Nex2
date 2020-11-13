@@ -9755,8 +9755,8 @@ class Alleledbentity(Dbentity):
         for x in DBSession.query(Literatureannotation).filter_by(dbentity_id=self.dbentity_id, topic=topic).all():
             if x.reference.to_dict_citation() not in references:
                 references.append(x.reference.to_dict_citation())
-            if x.reference.reference_id not in unique_references:
-                unique_references.append(x.reference.reference_id)
+            if x.reference.dbentity_id not in unique_references:
+                unique_references.append(x.dbentity.reference_id)
                 
         return references
         
@@ -9765,8 +9765,8 @@ class Alleledbentity(Dbentity):
         for x in DBSession.query(Phenotypeannotation).filter_by(allele_id=self.dbentity_id).all():
             if x.reference.to_dict_citation() not in references:
                 references.append(x.reference.to_dict_citation())
-            if x.reference.reference_id not in unique_references:
-                unique_references.append(x.reference.reference_id)
+            if x.reference.dbentity_id not in unique_references:
+                unique_references.append(x.reference.dbentity_id)
                 
         return references
 
@@ -9778,8 +9778,8 @@ class Alleledbentity(Dbentity):
         for x in DBSession.query(Geninteractionannotation).filter(Geninteractionannotation.annotation_id.in_(interaction_ids)).all():
             if x.reference.to_dict_citation() not in references:
                 references.append(x.reference.to_dict_citation())
-            if x.reference.reference_id	not in unique_references:
-                unique_references.append(x.reference.reference_id)
+            if x.reference.dbentity_id	not in unique_references:
+                unique_references.append(x.reference.dbentity_id)
                 
         return references
     
