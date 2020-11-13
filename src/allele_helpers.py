@@ -951,7 +951,7 @@ def update_allele_data(request):
 
 
             
-        tranrsaction.commit()
+        transaction.commit()
         return HTTPOk(body=json.dumps({'success': success_message, 'allele': "ALLELE"}), content_type='text/json')
     except Exception as e:
         return HTTPBadRequest(body=json.dumps({'error': str(e)}), content_type='text/json')
