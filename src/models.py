@@ -9707,7 +9707,7 @@ class Alleledbentity(Dbentity):
         obj['phenotype'] = self.phenotype_to_dict()
         obj['interaction'] = self.interaction_to_dict()
         obj['network_graph'] = self.allele_network()
-        obj['references'] = self.get_references()
+        obj['basic_references'] = self.get_references()
         obj['phenotype_references'] = self.get_phenotype_references()
         obj['interaction_references'] = self.get_interaction_references()
         obj['primary_references'] = self.get_literatureannotation_references("Primary Literature")
