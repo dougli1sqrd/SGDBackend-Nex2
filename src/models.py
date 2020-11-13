@@ -9698,17 +9698,16 @@ class Alleledbentity(Dbentity):
 
         reference_mapping = {}
         ref_order = 1
-        basic_references = []
         obj = { "sgdid": self.sgdid }
-        (obj["name"], ref_order) = self.get_basic_info(self.display_name, 'allele_name', reference_mapping, ref_order, basic_references)
-        (obj['aliases'], ref_order) = self.get_aliases(reference_mapping, ref_order, basic_references)
+        (obj["name"], ref_order) = self.get_basic_info(self.display_name, 'allele_name', reference_mapping, ref_order)
+        (obj['aliases'], ref_order) = self.get_aliases(reference_mapping, ref_order)
         obj['affected_gene'] = self.get_gene_name_info()
-        (obj['allele_type'], ref_order) = self.get_basic_info(self.so.display_name, 'so_term', reference_mapping, ref_order, basic_references)
-        (obj['description'], ref_order) = self.get_basic_info(self.description, 'allele_description', reference_mapping, ref_order, basic_references)
+        (obj['allele_type'], ref_order) = self.get_basic_info(self.so.display_name, 'so_term', reference_mapping, ref_order)
+        (obj['description'], ref_order) = self.get_basic_info(self.description, 'allele_description', reference_mapping, ref_order)
         obj['phenotype'] = self.phenotype_to_dict()
         obj['interaction'] = self.interaction_to_dict()
         obj['network_graph'] = self.allele_network()
-        # obj['basic_references'] = self.get_references()
+        obj['references'] = self.get_references()
         obj['phenotype_references'] = self.get_phenotype_references()
         obj['interaction_references'] = self.get_interaction_references()
         obj['primary_references'] = self.get_literatureannotation_references("Primary Literature")
@@ -9716,11 +9715,10 @@ class Alleledbentity(Dbentity):
         obj['review_references'] = self.get_literatureannotation_references("Reviews")
         obj['urls'] = self.get_resource_urls()
         obj["reference_mapping"] = reference_mapping
-        obj['basic_references'] = basic_references
         
         return obj
 
-    def get_basic_info(self, display_text, reference_class, reference_mapping, ref_order, basic_references):
+    def get_basic_info(self, display_text, reference_class, reference_mapping, ref_order):
 
         references = []
         alleleRefs = DBSession.query(AlleleReference).filter_by(allele_id=self.dbentity_id, reference_class=reference_class).all()
@@ -9730,9 +9728,7 @@ class Alleledbentity(Dbentity):
             if reference["id"] not in reference_mapping:
                 reference_mapping[reference["id"]] = ref_order
                 ref_order = ref_order + 1
-            if x.reference.to_dict_citation() not in basic_references:
-                basic_references.append(x.reference.to_dict_citation())
-            
+
         return ({ "display_text": display_text,
                   "references": references }, ref_order)
     
@@ -9813,6 +9809,23 @@ class Alleledbentity(Dbentity):
                     continue
                 references.append(x.reference.to_dict_citation())
                 found[x.reference.dbentity_id] = 1
+
+            
+        # locusallele_reference
+        # locusAllele = DBSession.query(LocusAllele).filter_by(allele_id=self.dbentity_id).one_or_none()
+        # if locusAllele is not None:
+        #    locusalleleRefs = DBSession.query(LocusalleleReference).filter_by(locus_allele_id=locusAllele.locus_allele_id).all()
+        #    for x in locusalleleRefs:
+        #        if x.reference.dbentity_id not in found:
+        #            references.append(x.reference.to_dict_citation())
+        #            found[x.reference.dbentity_id] = 1
+                    
+        # literatureannotation
+        # all_la = DBSession.query(Literatureannotation).filter_by(dbentity_id=self.dbentity_id).all() 
+        # for x in all_la:
+        #    if x.reference.dbentity_id not in found:
+        #        references.append(x.reference.to_dict_citation())
+        #        found[x.reference.dbentity_id] = 1
                 
         return references
 
@@ -9869,8 +9882,8 @@ class Alleledbentity(Dbentity):
                  "references": references }
 
     
-    def get_aliases(self, reference_mapping, ref_order, basic_references):
-        
+    def get_aliases(self, reference_mapping, ref_order):
+
         alleleAliases = DBSession.query(AlleleAlias).filter_by(allele_id = self.dbentity_id, alias_type='Synonym').all()
         objs = []
         for x in alleleAliases:
@@ -9882,8 +9895,6 @@ class Alleledbentity(Dbentity):
                 if reference["id"] not in reference_mapping:
                     reference_mapping[reference["id"]] = ref_order
                     ref_order += 1
-                if x.reference.to_dict_citation() not in basic_references:
-                    basic_references.append(x.reference.to_dict_citation())
             objs.append({ "display_name": x.display_name,
                           "references": references })
         return (objs, ref_order)
