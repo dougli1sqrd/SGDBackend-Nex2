@@ -9852,7 +9852,7 @@ class Alleledbentity(Dbentity):
                     reference_mapping[reference["id"]] = ref_order
                     ref_order += 1
                 if x.reference.to_dict_citation() not in basic_references:
-		    basic_references.append(x.reference.to_dict_citation())
+                    basic_references.append(x.reference.to_dict_citation())
             objs.append({ "display_name": x.display_name,
                           "references": references })
         return (objs, ref_order)
