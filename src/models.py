@@ -9756,7 +9756,7 @@ class Alleledbentity(Dbentity):
             if x.reference.to_dict_citation() not in references:
                 references.append(x.reference.to_dict_citation())
             if x.reference.dbentity_id not in unique_references:
-                unique_references.append(x.dbentity.reference_id)
+                unique_references.append(x.reference.dbentity_id)
                 
         return references
         
