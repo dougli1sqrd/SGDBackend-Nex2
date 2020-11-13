@@ -9697,8 +9697,8 @@ class Alleledbentity(Dbentity):
     def to_dict(self):
 
         reference_mapping = {}
-        ref_order = 1
         unique_references = []
+        ref_order = 1
         obj = { "sgdid": self.sgdid }
         (obj["name"], ref_order) = self.get_basic_info(self.display_name, 'allele_name', reference_mapping, ref_order)
         (obj['aliases'], ref_order) = self.get_aliases(reference_mapping, ref_order)
@@ -9716,6 +9716,7 @@ class Alleledbentity(Dbentity):
         obj['review_references'] = self.get_literatureannotation_references("Reviews", unique_references)
         obj['urls'] = self.get_resource_urls()
         obj["reference_mapping"] = reference_mapping
+        obj['unique_references'] = unique_references
         
         return obj
 
