@@ -1,21 +1,17 @@
-from datetime import datetime
+import os
 import sys
-import importlib
-importlib.reload(sys)  # Reload does the trick!
-sys.setdefaultencoding('utf-8')
-sys.path.insert(0, '../../../src/')
-from models import Source, Proteindomain, ProteindomainUrl
-sys.path.insert(0, '../')
-from config import CREATED_BY
-from database_session import get_nex_session as get_session
+from src.models import Source, Proteindomain, ProteindomainUrl
+from scripts.loading.database_session import get_session
                  
 __author__ = 'sweng66'
 
 ## Created on June 2017
 ## This script is used to update protein domains in NEX2.
 
-domain_file = 'data/protein_domains.lst'
-log_file = 'logs/protein_domain.log'
+domain_file = 'scripts/loading/protein_domain/data/orf_trans_all.fasta_full.tvs'
+log_file = 'scripts/loading/protein_domain/logs/protein_domain.log'
+
+CREATED_BY = os.environ['DEFAULT_USER']
 
 def load_domains():
 
@@ -38,23 +34,37 @@ def read_data_and_update_database(nex_session, fw):
     f = open(domain_file)
 
     loaded = {}
+    updated = {}
+    inNew = []
     for line in f:
         items = line.strip().split("\t")
-        source_id = source_to_id.get(items[2])
+        source = items[3]
+        if source.startswith('ProSite'):
+            source = 'PROSITE'
+        elif source == 'Hamap':
+            source = 'HAMAP'
+        source_id = source_to_id.get(source)
         if source_id is None:
-            print("SOURCE:", items[2], " is not in the database.")
+            print("SOURCE:", source, " is not in the database.")
             continue
-        display_name = items[1]
-        format_name = items[1].replace(' ', '_')
-        if format_name in loaded:
+        display_name = items[4]
+        format_name = items[4].replace(' ', '_')
+        if format_name in loaded or format_name in updated:
             continue
-            
-        interpro_id = ""
-        desc = ""
-        if len(items) > 5:
-            interpro_id = items[5]
-        if len(items) > 6:
-            desc = items[6]
+
+        interspro_id = None
+        desc = None
+        if len(items) > 11:
+            interpro_id = items[11]
+        if len(items) > 12:
+            if items[5] and items[12]:
+                desc = items[5] + "; " + items[12]
+            elif items[5]:
+                desc = items[5]
+            elif items[12]:
+                desc = items[12]
+        elif len(items) > 5:
+            desc = items[5]
             
         x = format_name_to_domain.get(format_name)
 
@@ -62,31 +72,31 @@ def read_data_and_update_database(nex_session, fw):
             proteindomain_id = insert_new_domain(nex_session, fw, format_name,
                                                  display_name, source_id, 
                                                  interpro_id, desc)
-            insert_url(nex_session, fw, display_name, items[2],  proteindomain_id, 
+            insert_url(nex_session, fw, display_name, source, proteindomain_id, 
                        source_id)
             nex_session.commit()
             loaded[format_name] = 1
-            continue
+        else:            
+            if x.interpro_id != interpro_id or x.description != desc:
+                x.interpro_id = interpro_id
+                x.description = desc
+                nex_session.add(x)
+                nex_session.commit()
+                fw.write("Update domain: " + display_name + "\n")
+                updated[format_name] = 1
 
-        ## the format_name is in the database so remove it from the dictionary
-        ## and the rest can be deleted later
-        format_name_to_domain.pop(format_name)
-
-        if x.interpro_id != interpro_id or x.description != desc:
-            x.interpro_id = interpro_id
-            x.description = desc
-            nex_session.add(x)
-            nex_session.commit()
-            fw.write("Update domain: " + display_name + "\n")
+        inNew.append(format_name)
                 
     f.close()
 
-    delete_old_domains(nex_session, fw, format_name_to_domain)
+    delete_old_domains(nex_session, fw, format_name_to_domain, inNew)
 
 
-def delete_old_domains(nex_session, fw, format_name_to_domain):
+def delete_old_domains(nex_session, fw, format_name_to_domain, inNew):
 
     for key in format_name_to_domain:
+        if key in inNew:
+            continue
         x = format_name_to_domain[key]
         nex_session.query(ProteindomainUrl).filter_by(proteindomain_id=x.proteindomain_id).delete()
         nex_session.query(Proteindomainannotation).filter_by(proteindomain_id=x.proteindomain_id).delete()
@@ -123,6 +133,7 @@ def insert_url(nex_session, fw, display_name, source, proteindomain_id, source_i
     elif source == 'Pfam':
         link = "http://pfam.xfam.org/family/" + display_name
     elif source == 'GENE3D' or source == 'Gene3D':
+        source = 'GENE3D'
         link = "http://www.cathdb.info/version/latest/superfamily/" + display_name[6:]
     elif source == 'SUPERFAMILY':
         link = "http://supfam.org/SUPERFAMILY/cgi-bin/scop.cgi?ipid=" + display_name
