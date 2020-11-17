@@ -50,6 +50,7 @@ import AuthorResponseProcess from './containers/authorResponse/process';
 import LitGuide from './containers/litguide/search';
 import AddLitGuide from './containers/litguide/add';
 import EditLitGuide from './containers/litguide/edit';
+import FileMetadata from './containers/fileMetadata';
 
 //TODO: Fix the Routes.
 export default (
@@ -91,6 +92,7 @@ export default (
           <Route component={requireAuthentication(AuthorResponseShow)} path='/author_responses' exact />
           <Route component={requireAuthentication(AuthorResponseProcess)} path='/author_responses/:id' exact/>
           <Route component={requireAuthentication(CurateHome)} path='/' exact/>
+          <Route component={requireAuthentication(FileMetadata)} path='/file_metadata' />
           <Route component={NotFound} path='*' />
         </Switch>
 

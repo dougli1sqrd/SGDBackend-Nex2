@@ -87,7 +87,8 @@
     "jest-coverage": "jest --coverage --colors",
     "clean-node": "rm -rf node_modules",
     "reinstall": "npm run clean-node && npm install",
-    "rebuild": "npm run clean-node && npm install && npm run build"
+    "rebuild": "npm run clean-node && npm install && npm run build",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "engines": {
     "node": "10.16.0",
