@@ -691,6 +691,11 @@ def update_allele_data(request):
         if allele_name == '':
             return HTTPBadRequest(body=json.dumps({'error': "Allele name field is blank"}), content_type='text/json')
 
+
+        return HTTPBadRequest(body=json.dumps({'error': "Allele name:" + d.display_name}), content_type='text/json')
+
+        
+        
         success_message = ""
         if allele_name != d.display_name:
             success_message = "The allele name has been updated from '" + d.display_name + "' to '" + allele_name + "'."
