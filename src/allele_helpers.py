@@ -765,10 +765,14 @@ def update_allele_data(request):
                                                                source_id, allele_id, reference_class,
                                                                all_reference_id )
         if error != '':
-            return HTTPBadRequest(body=json.dumps({'error': str(error)}), content_type='text/json')
+            return HTTPBadRequest(body=json.dumps({'error': error}), content_type='text/json')
         if message != '':
             success_message = success_message + message
+
+
+        return HTTPBadRequest(body=json.dumps({'error': "HELLO"}), content_type='text/json')
     
+            
         ## update papers for allele_type (so term)
         
         allele_type_pmids = request.params.get('allele_type_pmids')
