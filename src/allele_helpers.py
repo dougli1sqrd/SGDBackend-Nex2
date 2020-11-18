@@ -752,13 +752,10 @@ def update_allele_data(request):
         allele_name_pmids = request.params.get('allele_name_pmids')
         (reference_ids, err_message) = check_pmids(allele_name_pmids, pmid_to_reference_id)    
         if err_message != '':
-            return HTTPBadRequest(body=json.dumps({'error': str(err_message)}), content_type='text/json')
+            return HTTPBadRequest(body=json.dumps({'error': err_message}), content_type='text/json')
 
         (ref_ids_to_insert, ref_ids_to_delete) = check_old_new_references(old_allele_name_ref_ids, reference_ids)
 
-
-        
-        
         all_reference_id = []
 
         
@@ -768,7 +765,7 @@ def update_allele_data(request):
                                                                source_id, allele_id, reference_class,
                                                                all_reference_id )
         if error != '':
-            return HTTPBadRequest(body=json.dumps({'error': error}), content_type='text/json')
+            return HTTPBadRequest(body=json.dumps({'error': str(error)}), content_type='text/json')
         if message != '':
             success_message = success_message + message
     
