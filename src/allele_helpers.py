@@ -710,7 +710,7 @@ def update_allele_data(request):
             return HTTPBadRequest(body=json.dumps({'error': "Allele type field is blank"}), content_type='text/json')
 
         
-        return HTTPBadRequest(body=json.dumps({'error': "HELLO-1"}), content_type='text/json')
+        # return HTTPBadRequest(body=json.dumps({'error': "HELLO-1"}), content_type='text/json')
     
         
         allele_update = 0
