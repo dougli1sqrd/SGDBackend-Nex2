@@ -697,6 +697,10 @@ def update_allele_data(request):
             d.display_name = allele_name
             curator_session.add(d)
 
+            
+        return HTTPBadRequest(body=json.dumps({'error': "HELLO"}), content_type='text/json')
+
+    
         ## update so_id
         
         a = curator_session.query(Alleledbentity).filter_by(dbentity_id=allele_id).one_or_none()
@@ -708,6 +712,10 @@ def update_allele_data(request):
             so_id = int(so_id)
         else:
             return HTTPBadRequest(body=json.dumps({'error': "Allele type field is blank"}), content_type='text/json')
+
+        
+        return HTTPBadRequest(body=json.dumps({'error': "HELLO-1"}), content_type='text/json')
+    
         
         allele_update = 0
         if so_id != old_so_id:
