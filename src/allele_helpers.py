@@ -696,10 +696,6 @@ def update_allele_data(request):
             success_message = "The allele name has been updated from '" + d.display_name + "' to '" + allele_name + "'."
             d.display_name = allele_name
             curator_session.add(d)
-
-            
-        return HTTPBadRequest(body=json.dumps({'error': "HELLO"}), content_type='text/json')
-
     
         ## update so_id
         
