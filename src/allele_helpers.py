@@ -690,11 +690,6 @@ def update_allele_data(request):
         allele_name = request.params.get('allele_name')
         if allele_name == '':
             return HTTPBadRequest(body=json.dumps({'error': "Allele name field is blank"}), content_type='text/json')
-
-
-        return HTTPBadRequest(body=json.dumps({'error': "Allele name:" + d.display_name}), content_type='text/json')
-
-        
         
         success_message = ""
         if allele_name != d.display_name:
@@ -713,7 +708,7 @@ def update_allele_data(request):
             so_id = int(so_id)
         else:
             return HTTPBadRequest(body=json.dumps({'error': "Allele type field is blank"}), content_type='text/json')
-
+        
         allele_update = 0
         if so_id != old_so_id:
             success_message = "The so_id has been updated from " + str(old_so_id) + " to " + str(so_id) + "."
@@ -757,10 +752,12 @@ def update_allele_data(request):
         allele_name_pmids = request.params.get('allele_name_pmids')
         (reference_ids, err_message) = check_pmids(allele_name_pmids, pmid_to_reference_id)    
         if err_message != '':
-            return HTTPBadRequest(body=json.dumps({'error': err_message}), content_type='text/json')
+            return HTTPBadRequest(body=json.dumps({'error': str(err_message)}), content_type='text/json')
 
         (ref_ids_to_insert, ref_ids_to_delete) = check_old_new_references(old_allele_name_ref_ids, reference_ids)
 
+
+        
         
         all_reference_id = []
 
