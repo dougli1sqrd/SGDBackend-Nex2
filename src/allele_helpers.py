@@ -724,7 +724,11 @@ def update_allele_data(request):
             
         if allele_update > 0:
             curator_session.add(a)
- 
+
+
+        return HTTPBadRequest(body=json.dumps({'error': "HELLO2"}), content_type='text/json')
+    
+            
         ## get all allele_reference rows
         
         old_allele_name_ref_ids = []
@@ -743,6 +747,10 @@ def update_allele_data(request):
             else:
                 old_other_ref_ids.append(ar.reference_id)
 
+                
+        return HTTPBadRequest(body=json.dumps({'error': "HELLO3"}), content_type='text/json')
+
+    
         ##############################
         pmid_to_reference_id = {}
         ##############################
@@ -758,7 +766,10 @@ def update_allele_data(request):
 
         all_reference_id = []
 
-        
+
+        return HTTPBadRequest(body=json.dumps({'error': "HELLO4"}), content_type='text/json')
+
+    
         reference_class = 'allele_name'
         (message, error) = insert_delete_allele_reference_rows(curator_session, CREATED_BY,
                                                                ref_ids_to_insert, ref_ids_to_delete,
@@ -769,8 +780,9 @@ def update_allele_data(request):
         if message != '':
             success_message = success_message + message
 
+            
 
-        return HTTPBadRequest(body=json.dumps({'error': "HELLO"}), content_type='text/json')
+        return HTTPBadRequest(body=json.dumps({'error': "HELLO5"}), content_type='text/json')
     
             
         ## update papers for allele_type (so term)
