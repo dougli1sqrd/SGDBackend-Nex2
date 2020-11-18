@@ -690,13 +690,13 @@ def update_allele_data(request):
         allele_name = request.params.get('allele_name')
         if allele_name == '':
             return HTTPBadRequest(body=json.dumps({'error': "Allele name field is blank"}), content_type='text/json')
-        
+
         success_message = ""
         if allele_name != d.display_name:
             success_message = "The allele name has been updated from '" + d.display_name + "' to '" + allele_name + "'."
             d.display_name = allele_name
             curator_session.add(d)
-    
+
         ## update so_id
         
         a = curator_session.query(Alleledbentity).filter_by(dbentity_id=allele_id).one_or_none()
@@ -709,10 +709,6 @@ def update_allele_data(request):
         else:
             return HTTPBadRequest(body=json.dumps({'error': "Allele type field is blank"}), content_type='text/json')
 
-        
-        # return HTTPBadRequest(body=json.dumps({'error': "HELLO-1"}), content_type='text/json')
-    
-        
         allele_update = 0
         if so_id != old_so_id:
             success_message = "The so_id has been updated from " + str(old_so_id) + " to " + str(so_id) + "."
@@ -728,11 +724,7 @@ def update_allele_data(request):
             
         if allele_update > 0:
             curator_session.add(a)
-
-
-        return HTTPBadRequest(body=json.dumps({'error': "HELLO2"}), content_type='text/json')
-    
-            
+ 
         ## get all allele_reference rows
         
         old_allele_name_ref_ids = []
@@ -751,10 +743,6 @@ def update_allele_data(request):
             else:
                 old_other_ref_ids.append(ar.reference_id)
 
-                
-        return HTTPBadRequest(body=json.dumps({'error': "HELLO3"}), content_type='text/json')
-
-    
         ##############################
         pmid_to_reference_id = {}
         ##############################
@@ -768,12 +756,10 @@ def update_allele_data(request):
 
         (ref_ids_to_insert, ref_ids_to_delete) = check_old_new_references(old_allele_name_ref_ids, reference_ids)
 
+        
         all_reference_id = []
 
-
-        return HTTPBadRequest(body=json.dumps({'error': "HELLO4"}), content_type='text/json')
-
-    
+        
         reference_class = 'allele_name'
         (message, error) = insert_delete_allele_reference_rows(curator_session, CREATED_BY,
                                                                ref_ids_to_insert, ref_ids_to_delete,
@@ -783,12 +769,7 @@ def update_allele_data(request):
             return HTTPBadRequest(body=json.dumps({'error': error}), content_type='text/json')
         if message != '':
             success_message = success_message + message
-
-            
-
-        return HTTPBadRequest(body=json.dumps({'error': "HELLO5"}), content_type='text/json')
     
-            
         ## update papers for allele_type (so term)
         
         allele_type_pmids = request.params.get('allele_type_pmids')
