@@ -57,6 +57,7 @@ from .phenotype_helpers import add_phenotype_annotations, update_phenotype_annot
       delete_phenotype_annotations, get_list_of_phenotypes, get_one_phenotype
 from .allele_helpers import get_all_allele_types, get_one_allele, get_list_of_alleles,\
       add_allele_data, update_allele_data, delete_allele_data
+from .metadata_helpers import get_list_of_file_metadata, get_metadata_for_one_file, update_metadata
 from .author_response_helpers import insert_author_response, get_author_responses, update_author_response
 from .litguide_helpers import get_list_of_papers, update_litguide, add_litguide
 from .disease_helpers import insert_update_disease_annotations, delete_disease_annotation, get_diseases_by_filters, upload_disease_file
@@ -2225,7 +2226,33 @@ def allele_update(request):
 def allele_delete(request):
 
     return delete_allele_data(request)
-    
+
+@view_config(route_name='get_file_metadata', renderer='json', request_method='GET')
+def get_file_metadata(request):
+    try:
+        return get_list_of_file_metadata(request)
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+
+@view_config(route_name='get_one_file_metadata', renderer='json', request_method='GET')
+def get_one_file_metadata(request):
+    try:
+        return get_metadata_for_one_file(request)
+    except Exception as e:
+        log.error(e)
+    finally:
+	if DBSession:
+            DBSession.remove()
+
+@view_config(route_name='file_metadata_update', renderer='json', request_method='POST')
+@authenticate
+def file_metadata_update(request):
+
+    return update_metadata(request)
+
 @view_config(route_name='add_author_response',renderer='json',request_method='POST')
 def add_author_response(request):
 
