@@ -10,7 +10,7 @@ import diseaseReducer from './diseaseReducer';
 import phenotypeReducer from './phenotypeReducer';
 import alleleReducer from './alleleReducer';
 import authorResponseReducer from './authorResponseReducer';
-import litguideReducer from './litguideReducer';
+import litGuideReducer from './litGuideReducer';
 import fileMetadataReducer from './fileMetadataReducer';
 
 export default {
@@ -26,6 +26,6 @@ export default {
   phenotype:phenotypeReducer,
   allele:alleleReducer,
   authorResponse:authorResponseReducer,
-  litguide:litguideReducer,
+  litguide:litGuideReducer,
   fileMetadata: fileMetadataReducer
 };
