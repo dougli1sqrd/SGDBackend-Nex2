@@ -86,7 +86,7 @@ class SearchMetadata extends Component {
           <td>{ d.year }</td>
           <td>{ d.s3_url }</td>
           <td>{ d.description }</td>
-          <td><Link to={`/edit_metadata/${id}`} target='new'><i className='fa fa-edit' /> Curate </Link></td> 
+          <td><Link to={`/edit_metadata/${d.sgdid}`} target='new'><i className='fa fa-edit' /> Curate </Link></td> 
         </tr>
       );
     });
@@ -132,7 +132,6 @@ class SearchMetadata extends Component {
       <div>
         <form onSubmit={this.handleGetMetadata} ref='form'>
           <h4>Search file metadata by file name:</h4>
-	    
           {this.addSubmitButton('Search')}    
         </form>
       </div>
