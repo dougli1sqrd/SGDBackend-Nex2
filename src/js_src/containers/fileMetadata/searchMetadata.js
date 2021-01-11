@@ -131,9 +131,8 @@ class SearchMetadata extends Component {
     return (
       <div>
         <form onSubmit={this.handleGetMetadata} ref='form'>
-          <h4>Search metadata by gene name(s) and/or reference:</h4>
-          <TextFieldSection sec_title='Gene(s) (SGDID, Systematic Name, eg. YFL039C, S000002429) ("|" delimited)' name='genes' value={this.props.phenotype.genes} onOptionChange={this.handleChange} />
-          <TextFieldSection sec_title='Reference (SGDID, PMID, Reference_id, eg. SGD:S000185012, 27650253, reference_id:307729)' name='reference' value={this.props.phenotype.reference} onOptionChange={this.handleChange} />
+          <h4>Search file metadata by file name:</h4>
+	    
           {this.addSubmitButton('Search')}    
         </form>
       </div>
