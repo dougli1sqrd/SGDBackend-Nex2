@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { setError, setMessage } from '../../actions/metaActions';
 import { setFileMetadata } from '../../actions/fileMetadataActions';
 // import { PREVIEW_URL } from '../../constants.js';
-import OneMetadata from './oneMetadata';
+// import OneMetadata from './oneMetadata';
 const UPDATE_METADATA = '/file_metadata_update';
 const GET_METADATA = '/get_one_file_metadata';
 
@@ -102,7 +102,7 @@ class EditMetadata extends Component {
       <div>
         <form onSubmit={this.handleUpdate} ref='form'>
           <input name='sgdid' value={this.state.sgdid} className="hide" />
-          <OneMetadata metadata={this.props.metadata} onOptionChange={this.handleChange} />
+          // <OneMetadata metadata={this.props.metadata} onOptionChange={this.handleChange} />
           {this.addButtons()}          	
         </form>
       </div>
