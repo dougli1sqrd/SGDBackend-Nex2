@@ -188,7 +188,7 @@ class SearchMetadata extends Component {
   }
 }
 
-SearchFileMetadata.propTypes = {
+SearchMetadata.propTypes = {
   dispatch: PropTypes.func,
   metadata: PropTypes.object
 };
