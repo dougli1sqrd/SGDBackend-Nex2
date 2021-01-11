@@ -29,7 +29,7 @@ class CurateLayout extends Component {
             <li><Link className={(location === '/regulation') ? style.activeLink : null} to='/regulation'><span><i className="fa fa-upload" /> Regulation</span></Link></li>
             <li><Link className={(location === '/disease') ? style.activeLink : null} to='/disease'><span><i className="fa fa-upload" /> Disease</span></Link></li>
 
-	    <li><Link className={(location === '/file_curate') ? style.activeLink : null} to='/file_curate'><span><i className='fa fa-file-text' />File Curate</Link> | <Link className={(location === '/search_file_metadata') ? style.activeLink : null} to='/search_file_metadata'>Edit Metadata</Link></span></li>
+	    <li><span><Link className={(location === '/file_curate') ? style.activeLink : null} to='/file_curate'><i className='fa fa-file-text' />File Curate</Link> | <Link className={(location === '/search_file_metadata') ? style.activeLink : null} to='/search_file_metadata'>Edit Metadata</Link></span></li>
 	    
             <li><span><Link className={(location === '/new_allele') ? style.activeLink : null} to='/new_allele'><i className="fa fa-upload" />Allele NEW</Link> | <Link className={(location === '/search_allele') ? style.activeLink : null} to='/search_allele'>UPDATE</Link></span></li>
 
