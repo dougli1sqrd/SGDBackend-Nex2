@@ -5,7 +5,7 @@ import Loader from '../../components/loader';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setError, setMessage } from '../../actions/metaActions';
-import { setFileMetadta} from '../../actions/fileMetadataActions';
+import { setFileMetadata} from '../../actions/fileMetadataActions';
 // import TextFieldSection from './textFieldSection';
 const GET_FILE_METADATA = '/get_file_metadata/';
 
