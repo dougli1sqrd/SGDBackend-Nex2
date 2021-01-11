@@ -73,52 +73,25 @@ class SearchMetadata extends Component {
       </form>
     );
   }
-
-  // WORK FROM HERE
     
   getDataRows(data) {
 
     window.localStorage.clear();
 
     let rows = data.map((d, i) => {
-      let identifier_list = d.annotation_identifier_list;
-      let genes = [];
-      let annotation_id = 0;
-      for (let j = 0; j < identifier_list.length; j++) {
-        let identifiers = identifier_list[j].split('|');
-        genes.push(identifiers[0]);
-        if (annotation_id == 0) {
-          annotation_id = identifiers[1];
-        }
-      }
-      let gene_list = genes.join(' ');
-      let gene_identifier_list = identifier_list.join(' ');
-      let details = this.format_details(d.details);
-      let min = 1;
-      let max = 1000;
-      let id =  min + (Math.random() * (max-min));
-      let genesID = 'genes_' + id;
-      let annotID = 'annotation_id_' + id;
-      let groupID = 'group_id_' + id;
-      window.localStorage.setItem(genesID, gene_identifier_list);
-      window.localStorage.setItem(annotID, annotation_id);
-      window.localStorage.setItem(groupID, d.group_id);
       return (
         <tr key={i}>
-          <td>{ gene_list }</td>
-          <td>{ d.phenotype}</td>
-          <td>{ d.experiment_type }</td>
-          <td>{ d.mutant_type}</td>
-          <td>{ d.strain_background }</td>
-          <td>{ details }</td>
-          <td>{ d.paper }</td>
-          <td><Link to={`/edit_phenotype/${id}`} target='new'><i className='fa fa-edit' /> Curate </Link></td> 
+          <td>{ d.display_name }</td>
+          <td>{ d.previous_file_name}</td>
+          <td>{ d.year }</td>
+          <td>{ d.s3_url }</td>
+          <td>{ d.description }</td>
+          <td><Link to={`/edit_metadata/${id}`} target='new'><i className='fa fa-edit' /> Curate </Link></td> 
         </tr>
       );
     });
     return rows;
   }
-
 
   displayMetadata() {
     let data = this.state.metadata;
@@ -130,14 +103,11 @@ class SearchMetadata extends Component {
           <table>
             <thead>
               <tr>
-                <th>Gene(s)</th> 
-                <th>FileMetadata</th>
-                <th>Experiment Type</th>
-                <th>Mutant Type</th>
-                <th>Strain Background</th>
-                <th>Chemicals/Details</th>
-                <th>Reference</th>
-                <th>Actions</th>
+                <th>Display name</th> 
+                <th>Previous file name</th>
+                <th>Year</th>
+                <th>s3_url</th>
+                <th>Description</th>
               </tr>
             </thead>
             <tbody>
