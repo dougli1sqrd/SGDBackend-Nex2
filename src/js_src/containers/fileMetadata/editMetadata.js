@@ -5,7 +5,7 @@ import Loader from '../../components/loader';
 import { connect } from 'react-redux';
 import { setError, setMessage } from '../../actions/metaActions';
 import { setFileMetadata } from '../../actions/fileMetadataActions';
-import { PREVIEW_URL } from '../../constants.js';
+// import { PREVIEW_URL } from '../../constants.js';
 import OneMetadata from './oneMetadata';
 const UPDATE_METADATA = '/file_metadata_update';
 const GET_METADATA = '/get_one_file_metadata';
