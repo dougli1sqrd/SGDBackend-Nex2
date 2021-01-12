@@ -2244,7 +2244,7 @@ def get_one_file_metadata(request):
     except Exception as e:
         log.error(e)
     finally:
-	if DBSession:
+        if DBSession:
             DBSession.remove()
 
 @view_config(route_name='file_metadata_update', renderer='json', request_method='POST')
