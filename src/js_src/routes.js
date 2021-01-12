@@ -53,7 +53,8 @@ import AuthorResponseProcess from './containers/authorResponse/process';
 import LitGuide from './containers/litguide/search';
 import AddLitGuide from './containers/litguide/add';
 import EditLitGuide from './containers/litguide/edit';
-
+import SearchFileMetadata from './containers/fileMetadata/search';
+import EditFileMetadata from './containers/fileMetadata/edit';
 
 //TODO: Fix the Routes.
 export default (
@@ -91,6 +92,8 @@ export default (
           <Route component={requireAuthentication(LocusLayout)} path='/curate/locus/:id' />
           <Route component={requireAuthentication(FileCurate)} path='/file_curate' />
           <Route component={requireAuthentication(FileCurateUpdate)} path='/file_curate_update' />
+          <Route component={requireAuthentication(SearchFileMetadata)} path='/search_file_metadata' />
+          <Route component={requireAuthentication(EditFileMetadata)} path='/edit_file_metadata/:id' />
           <Route component={requireAuthentication(GeneNameReservationIndex)} path='/reservations' exact />
           <Route component={requireAuthentication(GeneNameReservation)} path='/reservations/:id' exact />
           <Route component={requireAuthentication(GeneNameReservationEdit)} path='/reservations/:id/edit' exact />
