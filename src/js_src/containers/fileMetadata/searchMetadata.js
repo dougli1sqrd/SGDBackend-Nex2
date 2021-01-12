@@ -132,7 +132,7 @@ class SearchMetadata extends Component {
       <div>
         <form onSubmit={this.handleGetMetadata} ref='form'>
           <h4>Search file metadata by file name:</h4>
-          <TextFieldSection sec_title='' name='file_name' value={this.props.metadata.display_name} onOptionChange={this.handleChange} />
+          <TextFieldSection sec_title='' name='display_name' value={this.props.metadata.display_name} onOptionChange={this.handleChange} />
           {this.addSubmitButton('Search')}    
         </form>
       </div>
