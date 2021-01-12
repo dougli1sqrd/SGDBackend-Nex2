@@ -31,7 +31,7 @@ def get_metadata_for_one_file(request):
         data['previous_file_name'] = x.previous_file_name
         data['sgdid'] = x.sgdid
         data['file_extension'] = x.file_extension
-        data['file_date'] = str(x.file_date)
+        data['file_date'] = str(x.file_date).split(' ')[0]
         data['is_public'] = x.is_public
         data['is_in_spell'] = x.is_in_spell
         data['is_in_browser'] = x.is_in_browser
