@@ -61,7 +61,7 @@ def get_list_of_file_metadata(request):
         data = []
         for x in DBSession.query(Filedbentity).filter(or_(Filedbentity.display_name.ilike('%'+query+'%'), Filedbentity.previous_file_name.ilike('%'+query+'%'))).order_by(Filedbentity.display_name).all():        
             data.append({ 'display_name': x.display_name,
-                          'previous_file_name': x.previous_name,
+                          'previous_file_name': x.previous_file_name,
                           'sgdid': x.sgdid,
                           'is_in_browser': x.is_in_browser,
                           'is_in_spell': x.is_in_spell,
