@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setError, setMessage } from '../../actions/metaActions';
 import { setFileMetadata} from '../../actions/fileMetadataActions';
-// import TextFieldSection from './textFieldSection';
+import TextFieldSection from '../phenotype/textFieldSection';
 const GET_FILE_METADATA = '/get_file_metadata/';
 
 const TIMEOUT = 240000;
@@ -131,7 +131,8 @@ class SearchMetadata extends Component {
     return (
       <div>
         <form onSubmit={this.handleGetMetadata} ref='form'>
-          <h4>Search file metadata by file name:</h4>
+            <h4>Search file metadata by file name:</h4>
+	    <TextFieldSection sec_title='file_name' name='file_name' value={this.props.metadata.display_name} onOptionChange={this.handleChange} />
           {this.addSubmitButton('Search')}    
         </form>
       </div>
