@@ -67,6 +67,7 @@ def get_list_of_file_metadata(request):
                           'is_in_spell': x.is_in_spell,
                           'is_public': x.is_public,
                           'year': x.year,
+                          's3_url': x.s3_url,
                           'description': x.description })
         return HTTPOk(body=json.dumps(data),content_type='text/json')
     except Exception as e:
