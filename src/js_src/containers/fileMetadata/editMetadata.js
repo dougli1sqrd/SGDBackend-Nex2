@@ -102,7 +102,8 @@ class EditMetadata extends Component {
       <div>
         <form onSubmit={this.handleUpdate} ref='form'>
           <input name='sgdid' value={this.state.sgdid} className="hide" />
-          // <OneMetadata metadata={this.props.metadata} onOptionChange={this.handleChange} />
+             HELLO THERE
+            // <OneMetadata metadata={this.props.metadata} onOptionChange={this.handleChange} />
           {this.addButtons()}          	
         </form>
       </div>
