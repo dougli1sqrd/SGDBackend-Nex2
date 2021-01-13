@@ -93,7 +93,7 @@ export default (
           <Route component={requireAuthentication(FileCurate)} path='/file_curate' />
           <Route component={requireAuthentication(FileCurateUpdate)} path='/file_curate_update' />
           <Route component={requireAuthentication(SearchFileMetadata)} path='/search_file_metadata' />
-          <Route component={requireAuthentication(EditFileMetadata)} path='/edit_file_metadata/:id' />
+          <Route component={requireAuthentication(EditFileMetadata)} path='/edit_metadata/:id' />
           <Route component={requireAuthentication(GeneNameReservationIndex)} path='/reservations' exact />
           <Route component={requireAuthentication(GeneNameReservation)} path='/reservations/:id' exact />
           <Route component={requireAuthentication(GeneNameReservationEdit)} path='/reservations/:id/edit' exact />
