@@ -18,7 +18,6 @@ class EditMetadata extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleUpdate = this.handleUpdate.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
   
     this.state = {
       display_name: null,
