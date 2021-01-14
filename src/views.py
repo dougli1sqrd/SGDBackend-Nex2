@@ -714,6 +714,8 @@ def reference_phenotype_details(request):
     try:    
         id = extract_id_request(request, 'reference', 'id', True)
 
+        return "HELLO " + id
+    
         reference = None
         if id is not None:
             reference = DBSession.query(Referencedbentity).filter_by(dbentity_id=id).one_or_none()
