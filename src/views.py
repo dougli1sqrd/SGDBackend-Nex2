@@ -712,7 +712,8 @@ def reference_go_details(request):
 @view_config(route_name='reference_phenotype_details', renderer='json', request_method='GET')
 def reference_phenotype_details(request):
     try:
-        id = extract_id_request(request, 'reference')
+        id = extract_id_request(request, 'reference', 'id', True)
+        return id
         reference = DBSession.query(Referencedbentity).filter_by(dbentity_id=id).one_or_none()
 
         if reference:
