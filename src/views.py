@@ -713,7 +713,8 @@ def reference_go_details(request):
 def reference_phenotype_details(request):
     try:
         # id = extract_id_request(request, 'reference')
-        
+        return "Hello WORLD"
+    
         id = str(request.matchdict['id'])
         return "Hello " + id
     
