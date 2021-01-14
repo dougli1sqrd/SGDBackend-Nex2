@@ -711,26 +711,16 @@ def reference_go_details(request):
             
 @view_config(route_name='reference_phenotype_details', renderer='json', request_method='GET')
 def reference_phenotype_details(request):
-    try:    
-        id = extract_id_request(request, 'reference')    
+    try:
+        # id = extract_id_request(request, 'reference')
         
-        reference = DBSession.query(Referencedbentity).filter_by(dbentity_id=id).one_or_none()
-                
+        id = str(request.matchdict['id'])
+        reference = DBSession.query(Referencedbentity).filter(or_(Referencedbentity.sgdid=id, Referencedbentity.pmid=int(id))).one_or_none()
+        
         if reference:
             return reference.phenotype_to_dict()
         else:
-            id = str(request.matchdict['id'])
-            
-            return id
-        
-            if id.startswith('S00'):
-                reference = DBSession.query(Referencedbentity).filter_by(sgdid=id).one_or_none()
-                if reference:
-                    return reference.phenotype_to_dict()
-                else:
-                    return HTTPNotFound()
-            else:
-                return HTTPNotFound()
+            return HTTPNotFound()
     except Exception as e:
         log.error(e)
     finally:
