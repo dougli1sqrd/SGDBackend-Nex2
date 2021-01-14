@@ -715,6 +715,8 @@ def reference_phenotype_details(request):
         # id = extract_id_request(request, 'reference')
         
         id = str(request.matchdict['id'])
+        return "Hello " + id
+    
         reference = DBSession.query(Referencedbentity).filter(or_(Referencedbentity.sgdid=id, Referencedbentity.pmid=int(id))).one_or_none()
         
         if reference:
