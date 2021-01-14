@@ -52,6 +52,8 @@ else:
 # safe return returns None if not found instead of 404 exception
 def extract_id_request(request, prefix, param_name='id', safe_return=False):
     id = str(request.matchdict[param_name])
+    raise id
+
     db_id = None
     if prefix == 'reference' and id.startswith('S00'):
         ref = DBSession.query(Referencedbentity).filter(or_(Referencedbentity.sgdid==id, Referencedbentity.pmid==str(id))).one_or_none()
