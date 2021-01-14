@@ -713,15 +713,14 @@ def reference_go_details(request):
 def reference_phenotype_details(request):
     try:
         # id = extract_id_request(request, 'reference')
-        id = str(request.matchdict['id']
-        return "Hi " + id
-                 
+        id = str(request.matchdict['id'])
+        
         reference = DBSession.query(Referencedbentity).filter_by(dbentity_id=id).one_or_none()
 
         if reference:
             return reference.phenotype_to_dict()
         else:
-            return HTTPNotFound()
+            return "ID: " + str(id) + " is not found in our database".
     except Exception as e:
         log.error(e)
     finally:
