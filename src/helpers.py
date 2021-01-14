@@ -59,13 +59,15 @@ def extract_id_request(request, prefix, param_name='id', safe_return=False):
         return None
     elif db_id is None:
         if prefix == 'reference' and id.startswith('S00'):
-            ref = DBSession.query(Referencedbentity).filter(or_(Referencedbentity.sgdid==id, Referencedbentity.pmid==str(id))).one_or_none()
+            ref = DBSession.query(Referencedbentity).filter(or_(Referencedbentity.sgdid==id,Referencedbentity.pmid==str(id))).one_or_none()
             if ref:
                 return ref.dbentity_id
             else:
-                raise HTTPNotFound()
+                # raise HTTPNotFound()
+                return None
         else:
-            raise HTTPNotFound()
+            # raise HTTPNotFound()
+            return None
     else:
         if prefix == 'author':
             return db_id
