@@ -2338,6 +2338,10 @@ class Referencedbentity(Dbentity):
     def phenotype_to_dict(self):
         phenotypes = DBSession.query(Phenotypeannotation).filter_by(reference_id=self.dbentity_id).all()
 
+        ## testing
+        return phenotypes
+        ##
+        
         obj = []
         for phenotype in phenotypes:
             obj += phenotype.to_dict(reference=self)
