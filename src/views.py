@@ -712,6 +712,8 @@ def reference_go_details(request):
 @view_config(route_name='reference_phenotype_details', renderer='json', request_method='GET')
 def reference_phenotype_details(request):
     try:
+        return "HELLO"
+    
         id = extract_id_request(request, 'reference')
 
         return {"id": id}
