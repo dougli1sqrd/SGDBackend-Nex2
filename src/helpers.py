@@ -1,3 +1,4 @@
+from sqlalchemy import or_
 from math import pi, sqrt, acos
 import datetime
 import hashlib
@@ -52,19 +53,15 @@ else:
 # safe return returns None if not found instead of 404 exception
 def extract_id_request(request, prefix, param_name='id', safe_return=False):
     id = str(request.matchdict[param_name])
-    raise id
-
-    db_id = None
-    if prefix == 'reference' and id.startswith('S00'):
-        ref = DBSession.query(Referencedbentity).filter(or_(Referencedbentity.sgdid==id, Referencedbentity.pmid==str(id))).one_or_none()
-        if ref:
-            return ref.dbentity_id
-    else:
-        db_id = disambiguation_table.get(("/" + prefix + "/" + id).upper())
+    db_id = disambiguation_table.get(("/" + prefix + "/" + id).upper())
 
     if db_id is None and safe_return:
         return None
     elif db_id is None:
+        if prefix == 'reference' and id.startswith('S00'):
+            ref = DBSession.query(Referencedbentity).filter(or_(Referencedbentity.sgdid==id, Referencedbentity.pmid==str(id))).one_or_none()
+            if ref:
+                return ref.dbentity_id
         raise HTTPNotFound()
     else:
         if prefix == 'author':
