@@ -712,15 +712,13 @@ def reference_go_details(request):
 @view_config(route_name='reference_phenotype_details', renderer='json', request_method='GET')
 def reference_phenotype_details(request):
     try:
-        # id = extract_id_request(request, 'reference')
-        id = str(request.matchdict['id'])
-        
+        id = extract_id_request(request, 'reference')
         reference = DBSession.query(Referencedbentity).filter_by(dbentity_id=id).one_or_none()
 
         if reference:
             return reference.phenotype_to_dict()
         else:
-            return "ID: " + str(id) + " is not found in our database".
+            return HTTPNotFound()
     except Exception as e:
         log.error(e)
     finally:
