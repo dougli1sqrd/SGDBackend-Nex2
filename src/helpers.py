@@ -1,4 +1,3 @@
-from sqlalchemy import or_
 from math import pi, sqrt, acos
 import datetime
 import hashlib
@@ -19,7 +18,8 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import re
 from sqlalchemy import and_, inspect
-from src.models import DBSession, Dbentity, Dbuser, Go, Referencedbentity,\
+
+from .models import DBSession, Dbentity, Dbuser, Go, Referencedbentity,\
     Keyword, Locusdbentity, FilePath, Edam, Filedbentity, FileKeyword,\
     ReferenceFile, Disease, CuratorActivity, Source, LocusAlias
 from src.curation_helpers import ban_from_cache, get_curator_session
@@ -52,22 +52,20 @@ else:
 # safe return returns None if not found instead of 404 exception
 def extract_id_request(request, prefix, param_name='id', safe_return=False):
     id = str(request.matchdict[param_name])
+
     db_id = disambiguation_table.get(("/" + prefix + "/" + id).upper())
 
+    ###
+    if db_id is None and prefix == 'reference' and id.startswith('S00'):
+        ref = DBSession.query(Referencedbentity).filter(or_(Referencedbentity.sgdid==id, Referencedbentity.pmid==str(id))).one_or_none()
+        if ref:
+            return ref.dbentity_id
+    ###
+    
     if db_id is None and safe_return:
         return None
     elif db_id is None:
-        if prefix == 'reference' and id.startswith('S00'):
-            ref = DBSession.query(Referencedbentity).filter(or_(Referencedbentity.sgdid==id,Referencedbentity.pmid==str(id))).one_or_none()
-            
-            if ref:
-                return ref.dbentity_id
-            else:
-                # raise HTTPNotFound()
-                return None
-        else:
-            # raise HTTPNotFound()
-            return None
+        raise HTTPNotFound()
     else:
         if prefix == 'author':
             return db_id
