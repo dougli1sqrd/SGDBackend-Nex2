@@ -713,7 +713,8 @@ def reference_go_details(request):
 def reference_phenotype_details(request):
     try:
         id = extract_id_request(request, 'reference')
-        return id
+        return "Hello"
+    
         # reference = None
         # if id.startswith('S00'):
         #    reference = DBSession.query(Dbentity).filter_by(subclass='REFERENCE', sgdid=id).one_or_none()
