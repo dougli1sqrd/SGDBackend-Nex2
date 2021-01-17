@@ -16,6 +16,10 @@ class OneMetadata extends Component {
     return (
 
       <div>
+
+        {this.props.metadata.sgdid}
+	
+        {this.props.metadata.s3_url}
 	
         {/* file display name & previous file name*/}
         <TwoColTextField sec_title='File display name' name='display_name' value={this.props.metadata.display_name} onOptionChange={this.props.onOptionChange} sec_title2='Previous file name' name2='previous_file_name' value2={this.props.metadata.previous_file_name} onOptionChange2={this.props.onOptionChange} />
@@ -23,7 +27,7 @@ class OneMetadata extends Component {
         {/* year & file size */}
         <TwoColTextField sec_title='Year' name='year' value={this.props.metadata.year} onOpctionChange={this.props.onOptionChange} sec_title2='File size' name2='file_size' value2={this.props.metadata.file_size} onOptionChange2={this.props.onOptionChange} />
 
-
+	
 
 
 	
