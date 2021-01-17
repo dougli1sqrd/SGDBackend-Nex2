@@ -27,5 +27,5 @@ export default {
   allele:alleleReducer,
   authorResponse:authorResponseReducer,
   litguide:litGuideReducer,
-  fileMetadata: fileMetadataReducer
+  metadata: fileMetadataReducer
 };
