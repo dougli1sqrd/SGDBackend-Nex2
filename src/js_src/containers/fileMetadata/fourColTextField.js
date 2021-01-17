@@ -8,8 +8,8 @@ class FourColTextField extends Component {
       // just to have this section in case we need to do something here
       sec_title: props.sec_title,
       sec_title2: props.sec_title2,
-      sec_title2: props.sec_title3,
-      sec_title2: props.sec_title4,
+      sec_title3: props.sec_title3,
+      sec_title4: props.sec_title4,
     };
   }
 
