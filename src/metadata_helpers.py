@@ -5,7 +5,8 @@ from pyramid.httpexceptions import HTTPBadRequest, HTTPOk
 from sqlalchemy.exc import IntegrityError, DataError
 import transaction
 import json
-from src.models import DBSession, Dbentity, Filedbentity
+from src.models import DBSession, Dbentity, Filedbentity, FilePath, Path,\
+                       FileKeyword, Keyword
 from src.curation_helpers import get_curator_session
 
 # PREVIEW_URL = os.environ['PREVIEW_URL']
@@ -22,7 +23,6 @@ def get_metadata_for_one_file(request):
         sgdid = str(request.matchdict['sgdid'])
     
         x = DBSession.query(Filedbentity).filter_by(sgdid=sgdid).one_or_none()
-
         
         if x is None:
             return HTTPBadRequest(body=json.dumps({'error': "The file sgdid " + sgdid + " is not in the database."}))
@@ -30,6 +30,7 @@ def get_metadata_for_one_file(request):
         data['display_name'] = x.display_name
         data['previous_file_name'] = x.previous_file_name
         data['sgdid'] = x.sgdid
+        data['dbentity_status'] = x.dbentity_status
         data['file_extension'] = x.file_extension
         data['file_date'] = str(x.file_date).split(' ')[0]
         data['is_public'] = x.is_public
@@ -44,7 +45,19 @@ def get_metadata_for_one_file(request):
         data['topic_id'] = x.topic_id
         data['data_id'] = x.data_id
         data['format_id'] = x.format_id
-              
+
+        all_kw = DBSession.query(FileKeyword).filter_by(file_id=x.dbentity_id).all()
+        keywords = []
+        for kw in all_kw:
+            keywords.append(kw.keyword.display_name)
+        data['keywords'] = '|'.join(keywords)
+
+        fp = DBSession.query(FilePath).filter_by(file_id=x.dbentity_id).one_or_none()
+        path = ''
+        if fp is not None:
+            path = fp.path.path
+        data['path'] = path
+        
         return HTTPOk(body=json.dumps(data),content_type='text/json')
     except Exception as e:
         log.error(e)
