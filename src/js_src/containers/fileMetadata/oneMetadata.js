@@ -27,7 +27,7 @@ class OneMetadata extends Component {
 
 
 	
-      </div>r
+      </div>
 
     );
   }
