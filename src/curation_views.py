@@ -1797,10 +1797,22 @@ def get_edam(request):
         if DBSession:
             DBSession.remove()
 
+@view_config(route_name='get_path', renderer='json', request_method='GET')
+def get_path(request):
+    try:
+        all_path = DBSession.query(Path).order_by(Path.path).all()
+        return [ {'display_name': x.path, id: x.path_id } for x in all_edam ]
+    except Exception as e:
+        log.error(e)
+        return HTTPBadRequest(body=json.dumps({'error': str(e)}))
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='get_readme', renderer='json', request_method='GET')
 def get_readme(request):
     try:
-        all_readme = DBSession.query(Filedbentity).filter(Filedbentity.display_name.ilike('%.README')).all()
+        all_readme = DBSession.query(Filedbentity).filter(Filedbentity.display_name.ilike('%.README')).order_by(Filedbentity.display_name).all()
         return [ {'display_name': x.display_name, 'readme_file_id': x.dbentity_id } for x in all_readme ]
     except Exception as e:
         log.error(e)
