@@ -102,7 +102,7 @@ class EditMetadata extends Component {
     return (
       <div>
         <form onSubmit={this.handleUpdate} ref='form'>
-          <input name='sgdid' value={this.props.metadata.sgdid} className="hide" />
+          // <input name='sgdid' value={this.props.metadata.sgdid} className="hide" />
           HELLO
           // <OneAllele allele={this.props.allele} onOptionChange={this.handleChange} />
           {this.addButtons()}          	
