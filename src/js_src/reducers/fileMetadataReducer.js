@@ -16,7 +16,6 @@ const DEFAULT_STATE = {
     file_size: '',
     readme_file_id: '',
     s3_url: '',
-    file_size: '',
     path: '',
     keywords: '',
     sgdid: '',
