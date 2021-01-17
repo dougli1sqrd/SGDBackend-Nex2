@@ -1,5 +1,5 @@
 const DEFAULT_STATE = {
-  currentFileMetadata: {
+  currentMetadata: {
     dbentity_id: 0,
     display_name: '',
     previous_file_name: '',
