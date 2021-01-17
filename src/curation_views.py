@@ -50,7 +50,7 @@ from .models import DBSession, Dbentity, Dbuser, CuratorActivity, Colleague,\
      DatasetReference,LocusReferences,LocusAliasReferences,\
      LocusRelationReference,LocussummaryReference,PathwaysummaryReference,\
      Referenceauthor,StrainsummaryReference,ReferenceAlias,ReferenceUrl,\
-     Referencedocument,Referencetype,Referenceunlink,ReferenceFile
+     Referencedocument,Referencetype,Referenceunlink,ReferenceFile, Edam, Filedbentity
 from .tsv_parser import parse_tsv_annotations
 from .models_helpers import ModelsHelper
 from .phenotype_helpers import add_phenotype_annotations, update_phenotype_annotations,\
