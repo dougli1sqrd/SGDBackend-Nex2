@@ -1801,7 +1801,7 @@ def get_edam(request):
 def get_readme(request):
     try:
         all_readme = DBSession.query(Filedbentity).filter(Filedbentity.display_name.ilike('%.README')).all()
-	return [ {'display_name': x.display_name, 'readme_file_id': x.dbentity_id } for x in all_readme ]
+        return [ {'display_name': x.display_name, 'readme_file_id': x.dbentity_id } for x in all_readme ]
     except Exception as e:
         log.error(e)
         return HTTPBadRequest(body=json.dumps({'error': str(e)}))
@@ -2270,7 +2270,7 @@ def get_one_file_metadata(request):
     except Exception as e:
         log.error(e)
     finally:
-	if DBSession:
+        if DBSession:
             DBSession.remove()
 
 @view_config(route_name='file_metadata_update', renderer='json', request_method='POST')
