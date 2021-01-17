@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { setError, setMessage } from '../../actions/metaActions';
 import { setFileMetadata } from '../../actions/fileMetadataActions';
 // import { PREVIEW_URL } from '../../constants.js';
-// import OneMetadata from './oneMetadata';
+// import OneAllele from './oneAllele';
 const UPDATE_METADATA = '/file_metadata_update';
 const GET_METADATA = '/get_one_file_metadata';
 
@@ -18,11 +18,12 @@ class EditMetadata extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleUpdate = this.handleUpdate.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
-  
+    
     this.state = {
       display_name: null,
       previous_file_name: null,
+      year: null,
+      sgdid: null,
       s3_url: null,	
       isLoading: false,
       isComplete: false,
@@ -67,7 +68,7 @@ class EditMetadata extends Component {
       <div>
         <div className='row'>
           <div className='columns medium-6 small-6'>
-            <button type='submit' id='submit' value='0' className="button expanded" onClick={this.handleUpdate.bind(this)} > Update File Metadata </button>
+            <button type='submit' id='submit' value='0' className="button expanded" onClick={this.handleUpdate.bind(this)} > Update Metadata </button>
           </div>
         </div>
       </div>
@@ -101,8 +102,9 @@ class EditMetadata extends Component {
     return (
       <div>
         <form onSubmit={this.handleUpdate} ref='form'>
-          <input name='sgdid' value={this.state.sgdid} className="hide" />
-          // <OneMetadata metadata={this.props.metadata} onOptionChange={this.handleChange} />
+          <input name='sgdid' value={this.props.metadata.sgdid} className="hide" />
+          HELLO
+          // <OneAllele allele={this.props.allele} onOptionChange={this.handleChange} />
           {this.addButtons()}          	
         </form>
       </div>
