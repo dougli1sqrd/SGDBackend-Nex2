@@ -207,6 +207,8 @@ def main(global_config, **settings):
     config.add_route('regulation_file','/regulation_file',request_method='POST')
     config.add_route('triage_count','/triage_count',request_method='GET')
     config.add_route('get_apo','/get_apo/{namespace}',request_method='GET')
+    config.add_route('get_edam','/get_edam/{namespace}',request_method='GET')
+    config.add_route('get_readme','/get_readme',request_method='GET')
     config.add_route('get_observable','/get_observable',request_method='GET')
     config.add_route('get_allele','/get_allele',request_method='GET')
     config.add_route('get_reporter','/get_reporter',request_method='GET')

@@ -1782,6 +1782,32 @@ def get_apo(request):
     finally:
         if DBSession:
             DBSession.remove()
+
+@view_config(route_name='get_edam', renderer='json', request_method='GET')
+def get_edam(request):
+    try:
+        namespace = request.matchdict['namespace']
+        id = namespace + "_id"
+        all_edam = DBSession.query(Edam).filter_by(edam_namespace=namespace).order_by(Edam.display_name).all()
+        return [ {'display_name': x.display_name, id: x.edam_id } for x in all_edam ]
+    except Exception as e:
+        log.error(e)
+        return HTTPBadRequest(body=json.dumps({'error': str(e)}))
+    finally:
+        if DBSession:
+            DBSession.remove()
+
+@view_config(route_name='get_readme', renderer='json', request_method='GET')
+def get_readme(request):
+    try:
+        all_readme = DBSession.query(Filedbentity).filter(Filedbentity.display_name.ilike('%.README')).all()
+	return [ {'display_name': x.display_name, 'readme_file_id': x.dbentity_id } for x in all_readme ]
+    except Exception as e:
+        log.error(e)
+        return HTTPBadRequest(body=json.dumps({'error': str(e)}))
+    finally:
+        if DBSession:
+            DBSession.remove()
             
 @view_config(route_name='get_publication_year', renderer='json', request_method='GET')
 def get_publication_year(request):
