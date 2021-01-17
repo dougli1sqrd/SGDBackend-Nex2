@@ -1802,7 +1802,7 @@ def get_edam(request):
 def get_path(request):
     try:
         all_path = DBSession.query(Path).order_by(Path.path).all()
-        return [ {'display_name': x.path, id: x.path_id } for x in all_edam ]
+        return [ {'display_name': x.path, id: x.path_id } for x in all_path ]
     except Exception as e:
         log.error(e)
         return HTTPBadRequest(body=json.dumps({'error': str(e)}))
