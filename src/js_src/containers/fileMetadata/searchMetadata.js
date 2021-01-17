@@ -86,7 +86,7 @@ class SearchMetadata extends Component {
           <td>{ d.year }</td>
           <td>{ d.s3_url }</td>
           <td>{ d.description }</td>
-          <td><Link to={`/edit_metadata/${d.sgdid}`} target='new'><i className='fa fa-edit' /> Curate </Link></td> 
+          <td><Link to={`/edit_file_metadata/${d.sgdid}`} target='new'><i className='fa fa-edit' /> Curate </Link></td> 
         </tr>
       );
     });
