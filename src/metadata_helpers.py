@@ -53,10 +53,7 @@ def get_metadata_for_one_file(request):
         data['keywords'] = '|'.join(keywords)
 
         fp = DBSession.query(FilePath).filter_by(file_id=x.dbentity_id).one_or_none()
-        path = ''
-        if fp is not None:
-            path = fp.path.path
-        data['path'] = path
+        data['path_id'] = fp.path_id
         
         return HTTPOk(body=json.dumps(data),content_type='text/json')
     except Exception as e:
