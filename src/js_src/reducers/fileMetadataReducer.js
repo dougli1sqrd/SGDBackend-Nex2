@@ -14,7 +14,13 @@ const DEFAULT_STATE = {
     description: '',
     year: '',
     file_size: '',
+    readme_file_id: '',
+    s3_url: '',
+    file_size: '',
+    path: '',
+    keywords: '',
     sgdid: '',
+    dbentity_status: ''
   }
 };
 
