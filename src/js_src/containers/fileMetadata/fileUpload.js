@@ -74,11 +74,6 @@ class FileUpload extends Component{
           </div>
         </div>
         <div className='row'>
-          <div className='columns medium-12'>
-            <p>Current file name : {this.state.file.name}</p>
-          </div>
-        </div>
-        <div className='row'>
           <div className='columns small-3'>
             {isLoading ? <Loader /> : <button type='submit' className='button'>Submit</button>}
           </div>
