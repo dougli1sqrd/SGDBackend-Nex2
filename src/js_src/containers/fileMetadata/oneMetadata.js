@@ -17,10 +17,10 @@ class OneMetadata extends Component {
     return (
 
       <div>
-
-        SGDID: {this.props.metadata.sgdid}<p>
+	    
+        <div>SGDID: {this.props.metadata.sgdid}</div>
 	
-        s3_url: {this.props.metadata.s3_url}<p>
+        <div>s3_url: {this.props.metadata.s3_url}</div>
 	
         {/* file display name & previous file name & description */}
         <div className='row'>
