@@ -87,7 +87,7 @@ class OneMetadata extends Component {
             <div> <label> path_id (file path) </label> </div>
             <AutocompleteSection sec_title='' id='readme_file_id' value1='display_name' value2='' selectedIdName='readme_file_id' placeholder='Enter README file' onOptionChange={this.props.onOptionChange} selectedId={this.props.metadata.readme_file_id} setNewValue={false} />
           </div>
-
+        </div>
 	
       </div>
 
