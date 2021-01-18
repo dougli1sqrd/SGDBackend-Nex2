@@ -8,7 +8,7 @@ class OneMetadata extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: this.props.allele
+      data: this.props.metadata
     };
   }
 
