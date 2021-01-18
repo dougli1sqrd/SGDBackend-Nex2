@@ -15,8 +15,8 @@ class OneMetadata extends Component {
 	
     return (
       <div>
-        <div><h3>SGDID</h3>: {this.props.metadata.sgdid}</div>
-        <div><h3><a href={this.props.metadata.s3_url} target='new'>Download file from s3</a></h3></div>
+        <div><strong>SGDID: {this.props.metadata.sgdid}</strong></div>
+        <div><strong><a href={this.props.metadata.s3_url} target='new'>Download file from s3</a></strong></div>
         <hr />	
 
         {/* file display name & previous file name & description */}
@@ -110,7 +110,7 @@ class OneMetadata extends Component {
         {/* file to upload */}
         <div className='row'>
           <div className='columns medium-6 small-6'>
-            <h3>New File Upload</h3>
+            <strong>New File Upload</strong>
             <FileUpload />  
           </div>
         </div>
