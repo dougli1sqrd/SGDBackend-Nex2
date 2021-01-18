@@ -18,7 +18,7 @@ class OneMetadata extends Component {
 
       <div>
         <div>SGDID: {this.props.metadata.sgdid} <a href='{this.props.metadata.s3_url}' target='new'>s3_url</a></div>
-	
+        <hr />	
         {/* file display name & previous file name & description */}
         <div className='row'>
           <div className='columns medium-4 small-4'>
