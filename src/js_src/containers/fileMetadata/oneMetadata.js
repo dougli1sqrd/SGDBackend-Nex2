@@ -23,8 +23,17 @@ class OneMetadata extends Component {
         {this.props.metadata.s3_url}
 	
         {/* file display name & previous file name*/}
-        <TwoColTextField sec_title='File display name' name='display_name' value={this.props.metadata.display_name} onOptionChange={this.props.onOptionChange} sec_title2='Previous file name' name2='previous_file_name' value2={this.props.metadata.previous_file_name} onOptionChange2={this.props.onOptionChange} />
-
+        <div className='row'>
+          <div className='columns medium-5 small-5'>
+            <div> <label> File display name </label> </div>
+            <input type='text' name='display_name' value={this.props.metadata.display_name} onChange={this.props.onOptionChange} />
+          </div>
+          <div className='columns medium-5 small-5'>
+            <div> <label> Previous file name </label> </div>
+            <input type='text' name='previous_file_name' value={this.props.metadata.previous_file_name} onChange={this.props.onOptionChange} />
+          </div>
+        </div>
+	
         {/* file year, date, size, extension & file status */}
         <div className='row'>
           <div className='columns medium-2 small-2'>
