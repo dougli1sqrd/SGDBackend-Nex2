@@ -45,23 +45,23 @@ class OneMetadata extends Component {
             <div> <label> Year </label> </div>
             <input type='text' name='year' value={this.props.metadata.year} onChange={this.props.onOptionChange} />
           </div>
-          <div className='columns medium-1 small-1'>
-            <div> <label> File date </label> </div>
+          <div className='columns medium-2 small-2'>
+            <div> <label> File_date </label> </div>
             <input type='text' name='file_date' value={this.props.metadata.file_date} onChange={this.props.onOptionChange} />
           </div>
           <div className='columns medium-2 small-2'>
-            <div> <label> File size </label> </div>
+            <div> <label> File_size </label> </div>
             <input type='text' name='file_size' value={this.props.metadata.file_size} onChange={this.props.onOptionChange} />
           </div>
-          <div className='columns medium-1 small-1'>
-            <div> <label> File extension </label> </div>
+          <div className='columns medium-2 small-2'>
+            <div> <label> File_extension </label> </div>
             <input type='text' name='file_extension' value={this.props.metadata.file_extension} onChange={this.props.onOptionChange} />
           </div>
           <div className='columns medium-2 small-2'>
             <div> <label> File status </label> </div>
             <input type='text' name='dbentity_status' value={this.props.metadata.dbentity_status} onChange={this.props.onOptionChange} />
           </div>
-          <div className='columns medium-5 small-5'>
+          <div className='columns medium-3 small-3'>
             <div> <label> Keywords </label> </div>
             <input type='text' name='keywords' value={this.props.metadata.keywords} onChange={this.props.onOptionChange} />
           </div>
