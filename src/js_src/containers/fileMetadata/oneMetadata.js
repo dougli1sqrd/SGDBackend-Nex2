@@ -110,7 +110,7 @@ class OneMetadata extends Component {
         {/* file to upload */}
         <div className='row'>
           <div className='columns medium-6 small-6'>
-            <h1><New File Upload</h1>
+            <h1>New File Upload</h1>
             <FileUpload />  
           </div>
         </div>
