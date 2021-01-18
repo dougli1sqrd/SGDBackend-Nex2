@@ -34,7 +34,7 @@ class OneMetadata extends Component {
           </div>
           <div className='columns medium-4 small-4'>
             <div> <label> description </label> </div>
-            <input type='text' name='descr' value={this.props.metadata.display_name} onChange={this.props.onOptionChange} />
+            <input type='text' name='description' value={this.props.metadata.description} onChange={this.props.onOptionChange} />
           </div>
         </div>
 
