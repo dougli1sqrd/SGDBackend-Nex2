@@ -47,7 +47,7 @@ class AutocompleteSection extends Component {
       this.getData(GET_PATH);
     }
     else if (this.props.id == 'readme_file_id') {
-      this.getData(GET_EDAM_FORMAT);
+      this.getData(GET_README);
     }  
     else {
       this.props.dispatch(setError('Unknown ID: ' + this.props.id));
