@@ -35,15 +35,15 @@ class OneMetadata extends Component {
 
         {/* file year, date, size, extension & file status */}
         <div className='row'>
-          <div className='columns medium-1 small-1'>
+          <div className='columns medium-2 small-2'>
             <div> <label> year </label> </div>
             <input type='text' name='year' value={this.props.metadata.year} onChange={this.props.onOptionChange} />
           </div>
-          <div className='columns medium-2 small-2'>
+          <div className='columns medium-3 small-3'>
             <div> <label> file_date </label> </div>
             <input type='text' name='file_date' value={this.props.metadata.file_date} onChange={this.props.onOptionChange} />
           </div>
-          <div className='columns medium-2 small-2'>
+          <div className='columns medium-3 small-3'>
             <div> <label> file_size </label> </div>
             <input type='text' name='file_size' value={this.props.metadata.file_size} onChange={this.props.onOptionChange} />
           </div>
@@ -55,26 +55,26 @@ class OneMetadata extends Component {
             <div> <label> file_status </label> </div>
             <input type='text' name='dbentity_status' value={this.props.metadata.dbentity_status} onChange={this.props.onOptionChange} />
           </div>
-          <div className='columns medium-3 small-3'>
-            <div> <label> keyword(s) ('|' delimited)</label> </div>
-            <input type='text' name='keywords' value={this.props.metadata.keywords} onChange={this.props.onOptionChange} />
-          </div>
         </div>
 
         {/* is_in_browser etc */}
         <div className='row'>
-          <div className='columns medium-4 small-4'>
+          <div className='columns medium-2 small-2'>
             <div> <label> is_in_browser </label></div>
             <input type='text' name='is_in_browser' value={this.props.metadata.is_in_browser} onChange={this.props.onOptionChange} />
           </div>
-          <div className='columns medium-4 small-4'>
+          <div className='columns medium-2 small-2'>
             <div> <label> is_in_spell </label></div>
             <input type='text' name='is_in_spell' value={this.props.metadata.is_in_spell} onChange={this.props.onOptionChange} />
           </div>
-          <div className='columns medium-4 small-4'>
+          <div className='columns medium-2 small-2'>
             <div> <label> is_public </label></div>
             <input type='text' name='is_public' value={this.props.metadata.is_public} onChange={this.props.onOptionChange} />
-          </div>	
+          </div>
+          <div className='columns medium-6 small-6'>
+            <div> <label> keyword(s) ('|' delimited)</label> </div>
+            <input type='text' name='keywords' value={this.props.metadata.keywords} onChange={this.props.onOptionChange} />
+          </div>
         </div>
 	
         {/* data_id, topic_id, & format_id */}
