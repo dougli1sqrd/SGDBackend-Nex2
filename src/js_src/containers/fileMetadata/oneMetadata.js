@@ -16,7 +16,7 @@ class OneMetadata extends Component {
     return (
       <div>
         <div><strong>SGDID: {this.props.metadata.sgdid}</strong></div>
-        <div><strong><a href={this.props.metadata.s3_url} target='new'>Download file from s3</a></strong></div>
+        <div><strong><a href={this.props.metadata.s3_url} target='new'>Download this file from s3</a></strong></div>
         <hr />	
 
         {/* file display name & previous file name & description */}

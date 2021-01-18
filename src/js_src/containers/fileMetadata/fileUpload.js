@@ -75,15 +75,6 @@ class FileUpload extends Component{
 
         <div className='row'>
           <div className='columns medium-12'>
-            <ul>
-              <li>Drop/Select an <span className="primary label">excel (.xlsx)</span> file as shown in the template.</li>
-              <li>Ordering of columns is not required.</li>
-              <li>For updating an exisiting record, Separate old value & new value with pipe |   <span className="primary label">old|new</span> </li>
-            </ul>
-          </div>
-        </div>
-        <div className='row'>
-          <div className='columns medium-12'>
             <Dropzone multiple={false} onDrop={this.handleDrop}>
               <p className={style.uploadMsg}>Drop file here or click to select.</p>
               <h3 className={style.uploadIcon}><i className='fa fa-upload' /></h3>
