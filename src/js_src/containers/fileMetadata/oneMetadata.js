@@ -61,6 +61,22 @@ class OneMetadata extends Component {
           </div>
         </div>
 
+        {/* is_in_browser etc */}
+        <div className='row'>
+          <div className='columns medium-4 small-4'>
+            <div> <label> is_in_browser </div>
+            <input type='text' name='is_in_browser' value={this.props.metadata.is_in_browser} onChange={this.props.onOptionChange} />
+          </div>
+          <div className='columns medium-4 small-4'>
+            <div> <label> is_in_spell </div>
+            <input type='text' name='is_in_spell' value={this.props.metadata.is_in_spell} onChange={this.props.onOptionChange} />
+          </div>
+          <div className='columns medium-4 small-4'>
+            <div> <label> is_public </div>
+            <input type='text' name='is_public' value={this.props.metadata.is_public} onChange={this.props.onOptionChange} />
+          </div>	
+        </div>
+	
         {/* data_id, topic_id, & format_id */}
         <div className='row'>
           <div className='columns medium-4 small-4'>
