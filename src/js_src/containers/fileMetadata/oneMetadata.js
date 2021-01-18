@@ -111,7 +111,7 @@ class OneMetadata extends Component {
         <div className='row'>
           <div className='columns medium-6 small-6'>
             <strong>New File Upload</strong>
-	    Note: No need to upload a file if you only want to update the metadata for this file. If you upload a file and the md5sum is different from the current version, the interface will insert the metadata from this screen into the database, upload this new version to s3, set this version as 'Active', and mark the old version as 'Archived'.
+            Note: No need to upload a file if you only want to update the metadata for this file. If you upload a file and the md5sum is different from the current version, the interface will insert the metadata from this screen into the database, upload this new version to s3, set this version as 'Active', and mark the old version as 'Archived'.
             <FileUpload />  
           </div>
         </div>
