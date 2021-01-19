@@ -119,8 +119,6 @@ def update_metadata(request):
     try:
         CREATED_BY = request.session['username']
         curator_session = get_curator_session(request.session['username'])
-        # sgd = DBSession.query(Source).filter_by(display_name='SGD').one_or_none()
-        # source_id = sgd.source_id
 
         sgdid = request.params.get('sgdid')
         if sgdid == '':
@@ -135,7 +133,7 @@ def update_metadata(request):
 
         uploaded_file = request.params.get('uploaded_file')
 
-        return HTTPBadRequest(body=json.dumps({'error': "The uploaded file = " + uploaded_file}), content_type='text/json')
+        return HTTPBadRequest(body=json.dumps({'error': "The uploaded file = " + str(uploaded_file)}), content_type='text/json')
     
         ## update file display_name
         
