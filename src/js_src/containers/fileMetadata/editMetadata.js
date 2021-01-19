@@ -20,11 +20,7 @@ class EditMetadata extends Component {
     this.handleUpdate = this.handleUpdate.bind(this);
     
     this.state = {
-      display_name: null,
-      previous_file_name: null,
-      year: null,
-      sgdid: null,
-      s3_url: null,	
+      uploaded_file_name: null,
       isLoading: false,
       isComplete: false,
     };
@@ -35,6 +31,12 @@ class EditMetadata extends Component {
     this.getData(url);
   }
 
+  handleFile(e) {
+    this.setState({
+      uploaded_file: e.target.files[0].name,
+    });
+  }
+    
   handleChange() {
     let currentMetadata = {};
     let data = new FormData(this.refs.form);
@@ -50,6 +52,7 @@ class EditMetadata extends Component {
     for(let key in this.props.metadata){
       formData.append(key,this.props.metadata[key]);
     }
+    formData.append('uploaded_file', this.state.uploaded_file);  
     fetchData(UPDATE_METADATA, {
       type: 'POST',
       data: formData,
@@ -103,7 +106,7 @@ class EditMetadata extends Component {
       <div>
         <form onSubmit={this.handleUpdate} ref='form'>
           <input name='sgdid' value={this.props.metadata.sgdid} className="hide" />
-          <OneMetadata metadata={this.props.metadata} onOptionChange={this.handleChange} />     
+          <OneMetadata metadata={this.props.metadata} onOptionChange={this.handleChange} onFileUpload={this.handleFile}/>     
           {this.addButtons()}          	
         </form>
       </div>
