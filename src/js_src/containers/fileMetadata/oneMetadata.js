@@ -108,7 +108,7 @@ class OneMetadata extends Component {
 
         {/* file to upload */}
         <div className='row'>
-          <div className='columns medium-6 small-6'>
+          <div className='columns medium-12 small-12'>
             <strong>Upload a new version of the file:</strong>
             <input className="btn btn-default btn-file"
               type="file"
