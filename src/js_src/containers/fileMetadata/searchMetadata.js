@@ -165,7 +165,7 @@ SearchMetadata.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    metadata: state.metadata['currentFileMetadata']
+    metadata: state.metadata['currentMetadata']
   };
 }
 
