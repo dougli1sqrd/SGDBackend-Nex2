@@ -90,7 +90,30 @@ def get_list_of_file_metadata(request):
         if DBSession:
             DBSession.remove()    
 
+def add_metadata(request, old_file_id, uploaded_file):
 
+    try:
+        CREATED_BY = request.session['username']
+        curator_session = get_curator_session(request.session['username'])
+        sgd = DBSession.query(Source).filter_by(display_name='SGD').one_or_none()                           
+        source_id = sgd.source_id
+        display_name = request.params.get('display_name')
+        if display_name == '':
+            return HTTPBadRequest(body=json.dumps({'error': "File display_name field is blank"}), content_type='text/json')
+        success_message = ""
+
+
+
+
+        
+        transaction.commit()
+        return HTTPOk(body=json.dumps({'success': success_message, 'metadata': "METADATA"}), content_type='text/json')
+    except Exception as e:
+        return HTTPBadRequest(body=json.dumps({'error': str(e)}), content_type='text/json')
+    finally:
+        if curator_session:
+            curator_session.remove()
+        
 def update_metadata(request):
 
     try:
@@ -103,29 +126,36 @@ def update_metadata(request):
         if sgdid == '':
             return HTTPBadRequest(body=json.dumps({'error': "No SGDID is passed in."}), content_type='text/json')
     
-        d = curator_session.query(Dbentity).filter_by(subclass='FILE', sgdid=sgdid).one_or_none()
+        d = curator_session.query(Filedbentity).filter_by(sgdid=sgdid).one_or_none()
 
         if d is None:
             return HTTPBadRequest(body=json.dumps({'error': "The SGDID " + sgdid + " is not in the database."}), content_type='text/json')
 
-        #allele_id = d.dbentity_id
+        file_id = d.dbentity_id
 
-        ## update allele_name
+        uploaded_file = request.params.get('uploaded_file')
+
+        return HTTPBadRequest(body=json.dumps({'error': "The uploaded file = " + uploaded_file}), content_type='text/json')
+    
+        ## update file display_name
         
-        # allele_name = request.params.get('allele_name')
-        # if allele_name == '':
-        #    return HTTPBadRequest(body=json.dumps({'error': "Allele name field is blank"}), content_type='text/json')
+        display_name = request.params.get('display_name')
+        if display_name == '':
+            return HTTPBadRequest(body=json.dumps({'error': "File display_name field is blank"}), content_type='text/json')
 
         success_message = ""
-        # if allele_name != d.display_name:
-        #    success_message = "The allele name has been updated from '" + d.display_name + "' to '" + allele_name + "'."
-        #    d.display_name = allele_name
-        #    curator_session.add(d)
+        if display_name != d.display_name:
+            success_message = "The file display name has been updated from '" + d.display_name + "' to '" + display_name + "'."
+            d.display_name = display_name
+            curator_session.add(d)
 
+
+
+            
     
             
         transaction.commit()
-        return HTTPOk(body=json.dumps({'success': success_message, 'allele': "METADATA"}), content_type='text/json')
+        return HTTPOk(body=json.dumps({'success': success_message, 'metadata': "METADATA"}), content_type='text/json')
     except Exception as e:
         return HTTPBadRequest(body=json.dumps({'error': str(e)}), content_type='text/json')
     finally:
