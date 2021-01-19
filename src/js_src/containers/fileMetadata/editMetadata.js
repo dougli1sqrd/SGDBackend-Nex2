@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import fetchData from '../../lib/fetchData';
 import Loader from '../../components/loader';
+import Dropzone from 'react-dropzone';
 import { connect } from 'react-redux';
 import { setError, setMessage } from '../../actions/metaActions';
 import { setFileMetadata } from '../../actions/fileMetadataActions';
@@ -18,9 +19,10 @@ class EditMetadata extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleUpdate = this.handleUpdate.bind(this);
-    
+    this.renderFileDrop = this.renderFileDrop.bind(this);
+      
     this.state = {
-      uploaded_file_name: null,
+      uploaded_file: null,
       isLoading: false,
       isComplete: false,
     };
@@ -30,11 +32,19 @@ class EditMetadata extends Component {
     let url = this.setVariables();
     this.getData(url);
   }
+    
+  handleClear(){
+    this.setState({ uploaded_file:''});
+  }
 
-  handleFile(e) {
-    this.setState({
-      uploaded_file: e.target.files[0].name,
-    });
+  handleDrop(_file){
+    this.setState({uploaded_file: _file});
+  }
+
+  renderFileDrop() {
+    return  (<Dropzone name={'file'} onDrop={this.handleDrop.bind(this)} multiple={true}>
+               <h3 className={style.uploadIcon}><i className='fa fa-cloud-upload' /></h3>
+             </Dropzone>);
   }
     
   handleChange() {
@@ -106,7 +116,10 @@ class EditMetadata extends Component {
       <div>
         <form onSubmit={this.handleUpdate} ref='form'>
           <input name='sgdid' value={this.props.metadata.sgdid} className="hide" />
-          <OneMetadata metadata={this.props.metadata} onOptionChange={this.handleChange} onFileUpload={this.handleFile}/>     
+          <OneMetadata metadata={this.props.metadata} onOptionChange={this.handleChange} onFileUpload={this.handleFile}/>
+          <div className={'columns small-6'}>
+            {this.renderFileDrop()}
+          </div>
           {this.addButtons()}          	
         </form>
       </div>
