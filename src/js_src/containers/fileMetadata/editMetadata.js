@@ -43,7 +43,7 @@ class EditMetadata extends Component {
 
   renderFileDrop() {
     return  (<Dropzone name={'file'} onDrop={this.handleDrop.bind(this)} multiple={true}>
-               <h3 className={style.uploadIcon}><i className='fa fa-cloud-upload' /></h3>
+               <h3><i className='fa fa-cloud-upload' /></h3>
              </Dropzone>);
   }
     
@@ -116,7 +116,7 @@ class EditMetadata extends Component {
       <div>
         <form onSubmit={this.handleUpdate} ref='form'>
           <input name='sgdid' value={this.props.metadata.sgdid} className="hide" />
-          <OneMetadata metadata={this.props.metadata} onOptionChange={this.handleChange} onFileUpload={this.handleFile}/>
+          <OneMetadata metadata={this.props.metadata} onOptionChange={this.handleChange} onFileUpload={this.handleFile} />
           <div className={'columns small-6'}>
             {this.renderFileDrop()}
           </div>
