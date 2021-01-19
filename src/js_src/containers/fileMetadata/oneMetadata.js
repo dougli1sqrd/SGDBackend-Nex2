@@ -113,7 +113,7 @@ class OneMetadata extends Component {
             <input className="btn btn-default btn-file"
               type="file"
               name="uploaded_file"
-              onChange={this.props.onOptionChange}
+              onChange={this.props.onFileUpload}
               accept="image/*;capture=camera"
             />
             <p>Note: No need to upload a file if you only want to update the metadata for this file. If you upload a file and the md5sum is different from the current version, the interface will insert the metadata from this screen into the database, upload this new version to s3, set this version as 'Active', and mark the old version as 'Archived'.</p>
@@ -127,7 +127,8 @@ class OneMetadata extends Component {
 
 OneMetadata.propTypes = {
   metadata: PropTypes.object,
-  onOptionChange: PropTypes.func
+  onOptionChange: PropTypes.func,
+  onFileUpload: PropTypes.func
 };
 
 export default OneMetadata;
