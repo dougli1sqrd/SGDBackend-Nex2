@@ -34,16 +34,17 @@ class EditMetadata extends Component {
   }
     
   handleClear(){
-    this.setState({ uploaded_file:''});
+    this.setState({ uploaded_file: '' });
   }
 
   handleDrop(_file){
-    this.setState({uploaded_file: _file});
+    this.setState({ uploaded_file: _file });
   }
 
   renderFileDrop() {
     return  (<Dropzone name={'file'} onDrop={this.handleDrop.bind(this)} multiple={true}>
-               <h3><i className='fa fa-cloud-upload' /></h3>
+               <p className={style.uploadMsg}>Drop file here or click to select.</p>
+               <h3 className={style.uploadIcon}><i className='fa fa-cloud-upload' /></h3>
              </Dropzone>);
   }
     
