@@ -19,7 +19,8 @@ const DEFAULT_STATE = {
     path: '',
     keywords: '',
     sgdid: '',
-    dbentity_status: ''
+    dbentity_status: '',
+    uploaded_file
   }
 };
 
