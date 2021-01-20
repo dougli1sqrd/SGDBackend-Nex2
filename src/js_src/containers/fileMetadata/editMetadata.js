@@ -137,9 +137,7 @@ class EditMetadata extends Component {
         <form onSubmit={this.handleUpdate} ref='form'>
           <input name='sgdid' value={this.props.metadata.sgdid} className="hide" />
           <OneMetadata metadata={this.props.metadata} onOptionChange={this.handleChange} onFileUpload={this.handleFile} />
-          <div className={'columns small-6'}>
-            {this.renderFileDrop()}
-          </div>
+          {this.renderFileDrop()}
           {this.addButtons()}          	
         </form>
       </div>
