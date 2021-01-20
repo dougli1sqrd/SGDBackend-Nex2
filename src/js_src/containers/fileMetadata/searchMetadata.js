@@ -84,7 +84,7 @@ class SearchMetadata extends Component {
           <td>{ d.display_name }</td>
           <td>{ d.previous_file_name}</td>
           <td>{ d.year }</td>
-          <td><a href={ d.s3_url } target='new'>Download file</a></td>
+          <td><a href={ d.s3_url }>Download file</a></td>
           <td>{ d.description }</td>
           <td><Link to={`/edit_file_metadata/${d.sgdid}`} target='new'><i className='fa fa-edit' /> Curate </Link></td> 
         </tr>
