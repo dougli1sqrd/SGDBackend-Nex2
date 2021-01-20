@@ -43,8 +43,17 @@ class EditMetadata extends Component {
   }
 
   renderFileDrop() {
-
-
+    if (this.state.uploaded_file){
+      let filenames = this.state.uploaded_file.map( (file, index) => {
+        return <li key={index}>{file.name}</li>;
+      });
+      return(
+        <div>
+          <ul>{filenames}</ul>
+          <a onClick={this.handleClear.bind(this)}>Clear Files</a>
+        </div>
+      );
+    }	
     return  (<Dropzone name={'file'} onDrop={this.handleDrop.bind(this)} multiple={false}>
                <p className={style.uploadMsg}>Drop file here or click to select.</p>
                <h3 className={style.uploadIcon}><i className='fa fa-cloud-upload' /></h3>
