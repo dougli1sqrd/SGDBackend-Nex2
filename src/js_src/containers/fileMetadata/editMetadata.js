@@ -43,14 +43,14 @@ class EditMetadata extends Component {
   }
 
   renderFileDrop() {
-    if (this.state.file_to_upload){
+    if (this.state.file_to_upload.length){
       let filenames = this.state.file_to_upload.map( (file, index) => {
         return <li key={index}>{file.name}</li>;
       });
       return(
         <div>
           <ul>{filenames}</ul>
-          <a onClick={this.handleClear.bind(this)}>Clear Files</a>
+          <a onClick={this.handleClear.bind(this)}>Clear File</a>
         </div>
       );
     }	
