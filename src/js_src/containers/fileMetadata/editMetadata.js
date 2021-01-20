@@ -8,6 +8,7 @@ import { setError, setMessage } from '../../actions/metaActions';
 import { setFileMetadata } from '../../actions/fileMetadataActions';
 // import { PREVIEW_URL } from '../../constants.js';
 import OneMetadata from './oneMetadata';
+import style from './style.css';
 const UPDATE_METADATA = '/file_metadata_update';
 const GET_METADATA = '/get_one_file_metadata';
 
