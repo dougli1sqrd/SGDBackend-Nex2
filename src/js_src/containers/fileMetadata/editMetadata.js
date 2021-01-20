@@ -44,7 +44,7 @@ class EditMetadata extends Component {
 
   renderFileDrop() {
 
-    if (this.state.uploaded_file){  
+    if (this.state.uploaded_file.length){  
       return(
         <div>
           <ul>{this.state.uploaded_file}</ul>
