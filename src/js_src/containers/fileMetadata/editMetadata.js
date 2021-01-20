@@ -45,10 +45,14 @@ class EditMetadata extends Component {
 
   renderFileDrop() {
     if (this.state.files.length){
+      let file_to_s3 = '';
       let filenames = this.state.files.map( (file, index) => {
-        this.setState({ file_to_upload: file.name });
+        if (file_to_s3 == '') {
+          file_to_s3 = file.name;
+        }
         return <li key={index}>{file.name}</li>;
       });
+      this.setState({ file_to_upload: file_to_s3 });
       return(
         <div>
           <ul>{filenames}</ul>
