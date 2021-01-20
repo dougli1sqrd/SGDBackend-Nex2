@@ -13,7 +13,6 @@ from src.curation_helpers import get_curator_session
 
 log = logging.getLogger('curation')
 
-
 def get_metadata_for_one_file(request):
 
     try:
@@ -135,7 +134,7 @@ def update_metadata(request):
 
         file_to_s3 = None
         if file_to_s3_list:
-            file_to_s3 = file_to_s3_list[0]
+            file_to_s3 = file_to_s3_list
             
         return HTTPBadRequest(body=json.dumps({'error': "file to load= " + str(file_to_s3)}), content_type='text/json')
     
