@@ -130,7 +130,7 @@ def update_metadata(request):
 
         file_id = d.dbentity_id
 
-        file_to_s3 = request.params.get('file_to_upload')
+        file_to_s3 = request.params.get('file_to_upload', '')
             
         return HTTPBadRequest(body=json.dumps({'error': "file to load= " + str(file_to_s3)}), content_type='text/json')
     
