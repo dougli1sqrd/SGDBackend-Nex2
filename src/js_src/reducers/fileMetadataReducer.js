@@ -20,7 +20,7 @@ const DEFAULT_STATE = {
     keywords: '',
     sgdid: '',
     dbentity_status: '',
-    uploaded_file: ''
+    file_to_upload: []
   }
 };
 
