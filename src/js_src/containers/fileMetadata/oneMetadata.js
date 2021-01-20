@@ -106,19 +106,6 @@ class OneMetadata extends Component {
           </div>
         </div>
 
-        {/* file to upload */}
-        <div className='row'>
-          <div className='columns medium-12 small-12'>
-            <strong>Upload a new version of the file:</strong>
-            <input className="btn btn-default btn-file"
-              type="file"
-              name="uploaded_file"
-              onChange={this.props.onFileUpload}
-              accept="image/*;capture=camera"
-            />
-            <p>Note: No need to upload a file if you only want to update the metadata for this file. If you upload a file and the md5sum is different from the current version, the interface will insert the metadata from this screen into the database, upload this new version to s3, set this version as 'Active', and mark the old version as 'Archived'.</p>
-          </div>
-        </div>
       </div>
 
     );
