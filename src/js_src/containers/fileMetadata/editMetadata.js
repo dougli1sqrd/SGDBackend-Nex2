@@ -23,7 +23,7 @@ class EditMetadata extends Component {
     this.renderFileDrop = this.renderFileDrop.bind(this);
       
     this.state = {
-      file_to_upload: false,
+      file_to_upload: [],
       isLoading: false,
       isComplete: false,
     };
@@ -35,7 +35,7 @@ class EditMetadata extends Component {
   }
     
   handleClear(){
-    this.setState({ file_to_upload: '' });
+    this.setState({ file_to_upload: [] });
   }
 
   handleDrop(_file){
