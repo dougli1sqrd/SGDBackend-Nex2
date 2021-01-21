@@ -83,11 +83,11 @@ class EditMetadata extends Component {
       formData.append(key,this.props.metadata[key]);
     }
     if (this.state.file_to_upload.length) {
-        this.state.file_to_upload.map( item => {
-          console.log('item.name=' + item.name);
-          console.log('item=' + item);
-          formData.append(item.name, item);
-        });
+      this.state.file_to_upload.map( item => {
+        console.log('item.name=' + item.name);
+        console.log('item=' + item);
+        formData.append(item.name, item);
+      });
     }
     fetchData(UPDATE_METADATA, {
       type: 'POST',
