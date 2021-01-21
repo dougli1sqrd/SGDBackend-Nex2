@@ -83,10 +83,18 @@ class EditMetadata extends Component {
       formData.append(key,this.props.metadata[key]);
     }
     if (this.state.file_to_upload.length) {
-      formData.append('file_to_upload', this.state.file_to_upload);
+	this.state.file_to_upload.map( item => {
+        console.log('item.name=' + item.name);
+        console.log('item=' + item);
+        formData.append(item.name, item);
+      });
     }
     fetchData(UPDATE_METADATA, {
       type: 'POST',
+      credentials: 'same-origin',
+      headers: {
+        'X-CSRF-Token': this.props.csrfToken
+      },
       data: formData,
       processData: false,
       contentType: false,
@@ -167,13 +175,15 @@ class EditMetadata extends Component {
 
 EditMetadata.propTypes = {
   dispatch: PropTypes.func,
-  metadata: PropTypes.object
+  metadata: PropTypes.object,
+  csrfToken: PropTypes.string
 };
 
 
 function mapStateToProps(state) {
   return {
-    metadata: state.metadata['currentMetadata']
+    metadata: state.metadata['currentMetadata'],
+    csrfToken: state.auth.get('csrfToken')
   };
 }
 
