@@ -142,48 +142,53 @@ def update_metadata(request):
 
         success_message = ""
         if display_name != d.display_name:
-            success_message = "The file display name has been updated from '" + d.display_name + "' to '" + display_name + "'."
+            success_message = "display_name has been updated from '" + d.display_name + "' to '" + display_name + "'."
             d.display_name = display_name
             curator_session.add(d)
 
         ## update previous file name
         previous_file_name = request.params.get('previous_file_name', '')
         if previous_file_name != d.previous_file_name:
-            success_message = success_message + "<br>The previous_file_name has been updated from '" + d.previous_file_name + "' to '" + previous_file_name + "'."
+            success_message = success_message + "<br>previous_file_name has been updated from '" + d.previous_file_name + "' to '" + previous_file_name + "'."
             d.previous_file_name = previous_file_name
             curator_session.add(d)
 
         ## update description
         description = request.params.get('description', '')
         if description != d.description:
-            success_message = success_message + "<br>Description has been updated from '" + d.description + "' to '" + description + "'."
+            success_message = success_message + "<br>description has been updated from '" + d.description + "' to '" + description + "'."
             d.description = description
             curator_session.add(d)
 
         ## update year                                                                              
         year = request.params.get('year')
         if year is None:
-            return HTTPBadRequest(body=json.dumps({'error': "Year field is blank"}), content_type='text/json')
+            return HTTPBadRequest(body=json.dumps({'error': "year field is blank"}), content_type='text/json')
         year = int(year)
         if year != d.year:
-            success_message = success_message + "<br>Year has been updated from '" + str(d.year) + "' to '" + str(year) + "'."
+            success_message = success_message + "<br>year has been updated from '" + str(d.year) + "' to '" + str(year) + "'."
             d.year = year
             curator_session.add(d)    
-            
-        return HTTPBadRequest(body=json.dumps({'error': "OK=" + str(year)}), content_type='text/json')
 
-        ## required field
-        #topic_id
-        #data_id
-        #format_id
+        ## update file_size 
+        file_size = request.params.get('file_size')
+        if file_size is None:
+            return HTTPBadRequest(body=json.dumps({'error': "file_size field is blank"}), content_type='text/json')
+        file_size = int(file_size)
+        if file_size != d.file_size:
+            success_message = success_message + "<br>file_size has been updated from '" + str(d.file_size) + "' to '" + str(file_size) + "'."
+            d.file_size = file_size
+            curator_session.add(d)
+            
+            
+        return HTTPBadRequest(body=json.dumps({'error': "OK=" + str(file_size)}), content_type='text/json')
+
+    
+        ## required fields
+        #topic_id, data_id, format_id, is_public, is_in_spell, is_in_browser   
         #file_extension
         #file_date
-        #is_public
-        #is_in_spell
-        #is_in_browser
 
-
-        
         transaction.commit()
         return HTTPOk(body=json.dumps({'success': success_message, 'metadata': "METADATA"}), content_type='text/json')
     except Exception as e:
