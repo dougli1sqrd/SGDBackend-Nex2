@@ -238,10 +238,29 @@ def update_metadata(request):
             d.is_in_browser = is_in_browser
         
         ## update file_date (required field)  
-
+        file_date = request.params.get('file_date', '')
+        if file_date == '':
+            return HTTPBadRequest(body=json.dumps({'error': "file_date field is blank"}), content_type='text/json')
+        if '-' not in file_date:
+            return HTTPBadRequest(body=json.dumps({'error': "file_date format: yyyy-mm-dd"}), content_type='text/json')
+        if file_date != d.file_date:
+            success_message = success_message + "<br>file_date has been updated from '" + str(d.file_date) + "' to '" + file_date + "'."
+            d.file_date = file_date
+            
         ## update readme_file_id (optional field)
-        ## json??
-
+        readme_file_id = request.params.get('readme_file_id')
+        changed = 0
+        if readme_file_id is not None:
+            if str(readme_file_id).isdigit:
+                readme_file_id = int(readme_file_id)
+                if not d.readme_file_id or readme_file_id != d.readme_file_id:
+                    changed = 1
+        elif d.readme_file_id:
+            changed = 1
+        if changed == 1:
+            success_message = success_message + "<br>readme_file_id has been updated from '" + str(d.readme_file_id) + "' to '" + str(readme_file_id) + "'."
+            d.readme_file_id = readme_file_id
+            
         ## update keyword(s)
         ## update path_id (path)
         
