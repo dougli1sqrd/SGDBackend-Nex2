@@ -136,7 +136,6 @@ def update_metadata(request):
             return HTTPBadRequest(body=json.dumps({'error': "NEW file to upload: file name = " + str(file_name)}), content_type='text/json')
     
         ## update file display_name
-        
         display_name = request.params.get('display_name')
         if display_name == '':
             return HTTPBadRequest(body=json.dumps({'error': "File display_name field is blank"}), content_type='text/json')
@@ -148,16 +147,24 @@ def update_metadata(request):
             curator_session.add(d)
 
         ## update previous file name
-        
         previous_file_name = request.params.get('previous_file_name', '')
         if previous_file_name != d.previous_file_name:
-            success_message = success_message + "<br>The file display name has been updated from '" + d.previous_file_name + "' to '" + previous_file_name + "'."
+            success_message = success_message + "<br>The previous_file_name has been updated from '" + d.previous_file_name + "' to '" + previous_file_name + "'."
             
             d.previous_file_name = previous_file_name
             curator_session.add(d)
 
+        ## update description
+        description = request.params.get('description', '')
+	if description != d.description:
+            success_message = success_message + "<br>Description has been updated from '" + d.description + "' to '" + description + "'."
+
+            d.description = description
+            curator_session.add(d)
+
             
-        return HTTPBadRequest(body=json.dumps({'error': "previous_file_name=" + previous_file_name}), content_type='text/json')
+            
+        return HTTPBadRequest(body=json.dumps({'error': "OK=" + description}), content_type='text/json')
 
             
     
