@@ -137,11 +137,12 @@ def update_metadata(request):
         # file_obj = request.params.get('file_object').file
         # file_name = request.params.get('file_object').filename
         if file_name:
-            message = add_metadata(request, file_id)
-            return message
-        
-        return HTTPBadRequest(body=json.dumps({'error': "file to load = " + str(file_name)}), content_type='text/json')
+            # message = add_metadata(request, file_id)
+            # return message
+            return HTTPBadRequest(body=json.dumps({'error': "file to load = " + str(file_name)}), content_type='text/json')
 
+        return HTTPBadRequest(body=json.dumps({'error': "file to load = HELLO " + str(file_name)}), content_type='text/json')
+    
         ## update file display_name
         
         display_name = request.params.get('display_name')
