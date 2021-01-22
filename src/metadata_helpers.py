@@ -251,7 +251,7 @@ def update_metadata(request):
         readme_file_id = request.params.get('readme_file_id')
         changed = 0
         if readme_file_id is not None:
-            if str(readme_file_id).isdigit:
+            if str(readme_file_id).isdigit():
                 readme_file_id = int(readme_file_id)
                 if not d.readme_file_id or readme_file_id != d.readme_file_id:
                     changed = 1
