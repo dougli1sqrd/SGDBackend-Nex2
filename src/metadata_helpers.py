@@ -160,13 +160,30 @@ def update_metadata(request):
             d.description = description
             curator_session.add(d)
 
+        ## update year                                                                              
+        year = request.params.get('year')
+        if year is None:
+            return HTTPBadRequest(body=json.dumps({'error': "Year field is blank"}), content_type='text/json')
+        year = int(year)
+        if year != d.year:
+            success_message = success_message + "<br>Year has been updated from '" + str(d.year) + "' to '" + str(year) + "'."
+            d.year = year
+            curator_session.add(d)    
             
-            
-        return HTTPBadRequest(body=json.dumps({'error': "OK=" + description}), content_type='text/json')
+        return HTTPBadRequest(body=json.dumps({'error': "OK=" + str(year)}), content_type='text/json')
 
-            
-    
-            
+        ## required field
+        #topic_id
+        #data_id
+        #format_id
+        #file_extension
+        #file_date
+        #is_public
+        #is_in_spell
+        #is_in_browser
+
+
+        
         transaction.commit()
         return HTTPOk(body=json.dumps({'success': success_message, 'metadata': "METADATA"}), content_type='text/json')
     except Exception as e:
