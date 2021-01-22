@@ -15,7 +15,7 @@ from src.models import DBSession, Functionalcomplementannotation, Source, Dbenti
 from src.curation_helpers import get_curator_session
 
 
-OBJ_URL = 'https://www.alliancegenome.org/gene/hgnc_id'
+OBJ_URL = 'https://www.alliancegenome.org/gene'
 SGD_SOURCE_ID = 834
 
 models_helper = ModelsHelper()
@@ -105,8 +105,7 @@ def insert_update_complement_annotations(request):
                                     'obj_url': OBJ_URL + "/" +dbxref_id,
                                     'direction': direction,
                                     'curator_comment': curator_comment,
-                                    'dbxref_id': dbxref_id,
-                                    'created_by': CREATED_BY
+                                    'dbxref_id': dbxref_id
                                     }
 
                 curator_session.query(Functionalcomplementannotation).filter(Functionalcomplementannotation.annotation_id == annotation_id).update(update_complement)
