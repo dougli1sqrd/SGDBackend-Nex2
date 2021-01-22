@@ -147,7 +147,7 @@ def update_metadata(request):
             d.display_name = display_name
             curator_session.add(d)
 
-
+        return HTTPBadRequest(body=json.dumps({'error': "display_name=" + display_name}), content_type='text/json')
 
             
     
