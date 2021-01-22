@@ -85,7 +85,7 @@ class EditMetadata extends Component {
     if (this.state.file_to_upload.length) {
       this.state.file_to_upload.map( item => {
         // console.log('item=' + item);
-        formData.append('file_name', "HELLO: " + item.name);
+        formData.append('file_name', 'HELLO: ' + item.name);
         formData.append('file_object', item);
       });
     }
