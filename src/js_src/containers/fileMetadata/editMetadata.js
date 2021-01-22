@@ -80,7 +80,7 @@ class EditMetadata extends Component {
     e.preventDefault();
     let formData = new FormData();
     for(let key in this.props.metadata){
-      console.log('key=' + key + ', value=' + this.props.metadata[key]); 
+      // console.log('key=' + key + ', value=' + this.props.metadata[key]); 
       formData.append(key,this.props.metadata[key]);
     }
     if (this.state.file_to_upload.length) {
@@ -88,7 +88,7 @@ class EditMetadata extends Component {
         // console.log('item.name=' + item.name);
         // console.log('item=' + item);
         formData.append('file_name', item.name);
-        formData.append('file_object', item);
+        // formData.append('file_object', item);
       });
     }
     fetchData(UPDATE_METADATA, {
