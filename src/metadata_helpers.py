@@ -150,15 +150,13 @@ def update_metadata(request):
         previous_file_name = request.params.get('previous_file_name', '')
         if previous_file_name != d.previous_file_name:
             success_message = success_message + "<br>The previous_file_name has been updated from '" + d.previous_file_name + "' to '" + previous_file_name + "'."
-            
             d.previous_file_name = previous_file_name
             curator_session.add(d)
 
         ## update description
         description = request.params.get('description', '')
-	if description != d.description:
+        if description != d.description:
             success_message = success_message + "<br>Description has been updated from '" + d.description + "' to '" + description + "'."
-
             d.description = description
             curator_session.add(d)
 
