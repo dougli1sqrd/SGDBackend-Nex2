@@ -80,14 +80,12 @@ class EditMetadata extends Component {
     e.preventDefault();
     let formData = new FormData();
     for(let key in this.props.metadata){
-      // console.log('key=' + key + ', value=' + this.props.metadata[key]); 
       formData.append(key,this.props.metadata[key]);
     }
     if (this.state.file_to_upload.length) {
       this.state.file_to_upload.map( item => {
-        // console.log('item.name=' + item.name);
         // console.log('item=' + item);
-        formData.append('file_name', item.name);
+        formData.append('file_name', "HELLO: " + item.name);
         formData.append('file_object', item);
       });
     }
