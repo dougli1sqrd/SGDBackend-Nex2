@@ -212,7 +212,9 @@ def update_metadata(request):
             
         ## update is_public (required field)
         is_public = request.params.get('is_public')                                                                                            
-    
+        if is_public:
+            is_public = '1'
+        
         ## update is_in_spell (required field)
         ## update is_in_browser (required field)
 
