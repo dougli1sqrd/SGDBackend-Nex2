@@ -216,7 +216,8 @@ def update_metadata(request):
             is_public = '1'
         else:
             is_public = '0'
-            
+
+        
         ## update is_in_spell (required field)
         ## update is_in_browser (required field)
 
@@ -229,7 +230,7 @@ def update_metadata(request):
         ## update path_id (path)
         
         
-        return HTTPBadRequest(body=json.dumps({'error': "OK=" + str(is_public)}), content_type='text/json')
+        return HTTPBadRequest(body=json.dumps({'error': "OK=" + str(d.is_public)}), content_type='text/json')
     
         
 
