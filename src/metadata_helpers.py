@@ -89,7 +89,7 @@ def get_list_of_file_metadata(request):
         if DBSession:
             DBSession.remove()    
 
-def add_metadata(request, old_file_id, uploaded_file):
+def add_metadata(request, old_file_id):
 
     try:
         CREATED_BY = request.session['username']
@@ -134,11 +134,11 @@ def update_metadata(request):
         # file_name = request.POST['file_to_upload'].filename
         
         file_name = request.params.get('file_name')
-        file_obj = request.params.get('file_object')
-        filename = None
-        if file_obj:
-            filename = file_obj.filename
-            file = file_obj.file
+        # file_obj = request.params.get('file_object').file
+        # file_name = request.params.get('file_object').filename
+        if file_name:
+            message = add_metadata(request, file_id)
+            return message
         
         return HTTPBadRequest(body=json.dumps({'error': "file to load = " + str(file_name)}), content_type='text/json')
 
@@ -158,15 +158,15 @@ def update_metadata(request):
 
             
     
-            
+ i           
         transaction.commit()
         return HTTPOk(body=json.dumps({'success': success_message, 'metadata': "METADATA"}), content_type='text/json')
     except Exception as e:
         return HTTPBadRequest(body=json.dumps({'error': str(e)}), content_type='text/json')
     finally:
         if curator_session:
-            curator_session.remove()
+  l          curator_session.remove()
 
 
     
-    
+   
