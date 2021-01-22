@@ -141,7 +141,7 @@ def update_metadata(request):
             # return message
             return HTTPBadRequest(body=json.dumps({'error': "file to load = " + str(file_name)}), content_type='text/json')
 
-        return HTTPBadRequest(body=json.dumps({'error': "file to load = HELLO " + str(file_name)}), content_type='text/json')
+        return HTTPBadRequest(body=json.dumps({'error': "file to load = HELLO"}), content_type='text/json')
     
         ## update file display_name
         
