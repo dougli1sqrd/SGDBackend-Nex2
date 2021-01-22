@@ -189,15 +189,48 @@ def update_metadata(request):
             d.file_extension = file_extension
             curator_session.add(d)
 
+        ## update topic_id (required field)
+        topic_id = request.params.get('topic_id')
+        topic_id = int(topic_id)
+        if topic_id != d.topic_id:
+            success_message = success_message + "<br>topic_id has been updated from '" + str(d.topic_id) + "' to '" + str(topic_id) + "'."
+            d.topic_id = topic_id
             
-        return HTTPBadRequest(body=json.dumps({'error': "OK=" + str(file_extension)}), content_type='text/json')
+        ## update data_id (required field)
+        data_id = request.params.get('data_id')
+	data_id = int(data_id)
+        if data_id != d.data_id:
+            success_message = success_message + "<br>data_id has been updated from '" + str(d.data_id) + "' to '" + str(data_id) + "'."
+            d.data_id = data_id
+            
+        ## update format_id (required field)
+        format_id = request.params.get('format_id')
+	format_id = int(format_id)
+        if format_id != d.format_id:
+            success_message = success_message + "<br>format_id has been updated from '" + str(d.format_id) + "' to '" + str(format_id) + "'."
+            d.format_id = format_id
+            
+        ## update is_public (required field)
+        is_public = request.params.get('is_public')                                                                                            
     
-        ## required fields
-        #topic_id, data_id, format_id, is_public, is_in_spell, is_in_browser   
-        #file_date
+        ## update is_in_spell (required field)
+        ## update is_in_browser (required field)
+
+        ## update file_date (required field)  
+
+        ## update readme_file_id (optional field)
+        ## json??
+
+        ## update keyword(s)
+        ## update path_id (path)
+        
+        
+        return HTTPBadRequest(body=json.dumps({'error': "OK=" + str(is_public)}), content_type='text/json')
+    
+        
 
         transaction.commit()
-        return HTTPOk(body=json.dumps({'success': success_message, 'metadata': "METADATA"}), content_type='text/json')
+        retturn HTTPOk(body=json.dumps({'success': success_message, 'metadata': "METADATA"}), content_type='text/json')
     except Exception as e:
         return HTTPBadRequest(body=json.dumps({'error': str(e)}), content_type='text/json')
     finally:
