@@ -6,7 +6,7 @@ from sqlalchemy.exc import IntegrityError, DataError
 import transaction
 import json
 from src.models import DBSession, Dbentity, Filedbentity, FilePath, Path,\
-                       FileKeyword, Keyword
+                       FileKeyword, Keyword, Source
 from src.curation_helpers import get_curator_session
 
 # PREVIEW_URL = os.environ['PREVIEW_URL']
