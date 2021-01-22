@@ -185,7 +185,7 @@ def update_metadata(request):
         if file_extension is None:
             return HTTPBadRequest(body=json.dumps({'error': "file_extension field is blank"}), content_type='text/json')
         if file_extension != d.file_extension:
-            success_message = success_message + "<br>file_extension has been updated from '" + str(d.file_extension) + "' to '" + file_extension) + "'."
+            success_message = success_message + "<br>file_extension has been updated from '" + str(d.file_extension) + "' to '" + file_extension + "'."
             d.file_extension = file_extension
             curator_session.add(d)
 
@@ -194,7 +194,6 @@ def update_metadata(request):
     
         ## required fields
         #topic_id, data_id, format_id, is_public, is_in_spell, is_in_browser   
-        #file_extension
         #file_date
 
         transaction.commit()
