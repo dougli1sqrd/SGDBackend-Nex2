@@ -89,7 +89,7 @@ def get_list_of_file_metadata(request):
         if DBSession:
             DBSession.remove()    
 
-def add_metadata(request, old_file_id):
+def add_metadata(request, old_file_id, uploaded_file):
 
     try:
         CREATED_BY = request.session['username']
@@ -130,18 +130,9 @@ def update_metadata(request):
 
         file_id = d.dbentity_id
 
-        # file_to_upload = request.POST['file_to_upload'].file 
-        # file_name = request.POST['file_to_upload'].filename
-        
-        file_name = request.params.get('file_name')
-        # file_obj = request.params.get('file_object').file
-        # file_name = request.params.get('file_object').filename
-        if file_name:
-            # message = add_metadata(request, file_id)
-            # return message
-            return HTTPBadRequest(body=json.dumps({'error': "file to load = " + str(file_name)}), content_type='text/json')
-
-        return HTTPBadRequest(body=json.dumps({'error': "file to load = HELLO"}), content_type='text/json')
+        file_to_s3 = request.params.get('file_name')
+            
+        return HTTPBadRequest(body=json.dumps({'error': "file to load= " + str(file_to_s3)}), content_type='text/json')
     
         ## update file display_name
         
@@ -159,15 +150,15 @@ def update_metadata(request):
 
             
     
- i           
+            
         transaction.commit()
         return HTTPOk(body=json.dumps({'success': success_message, 'metadata': "METADATA"}), content_type='text/json')
     except Exception as e:
         return HTTPBadRequest(body=json.dumps({'error': str(e)}), content_type='text/json')
     finally:
         if curator_session:
-  l          curator_session.remove()
+            curator_session.remove()
 
 
     
-   
+    
