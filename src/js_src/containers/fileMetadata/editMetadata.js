@@ -86,7 +86,7 @@ class EditMetadata extends Component {
       this.state.file_to_upload.map( item => {
         // console.log('item=' + item);
         formData.append('file_name', 'HELLO: ' + item.name);
-        formData.append('file_object', item);
+        // formData.append('file_object', item);
       });
     }
     fetchData(UPDATE_METADATA, {
