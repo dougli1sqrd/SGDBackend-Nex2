@@ -211,19 +211,32 @@ def update_metadata(request):
             d.format_id = format_id
             
         ## update is_public (required field)
-        is_public = request.params.get('is_public')                                                                                            
-        if is_public == 'true':
-            is_public = True
-        else:
-            is_public = False
-        changed = 0
+        is_public = request.params.get('is_public', '')
+        if is_public == '':
+            return HTTPBadRequest(body=json.dumps({'error': "is_public field is blank"}), content_type='text/json')
+        is_public = True if is_public == 'true' else False
         if is_public != d.is_public:
-            changed = 1
+            success_message = success_message + "<br>is_public has been updated from '" + str(d.is_public) + "' to '" + str(is_public) + "'."
+            d.is_public = is_public
             
-        
         ## update is_in_spell (required field)
-        ## update is_in_browser (required field)
+        is_in_spell = request.params.get('is_in_spell', '')
+        if is_in_spell == '':
+            return HTTPBadRequest(body=json.dumps({'error': "is_in_spell field is blank"}), content_type='text/json')
+	is_in_spell = True if is_in_spell == 'true' else False
+        if is_in_spell != d.is_in_spell:
+            success_message = success_message + "<br>is_in_spell has been updated from '" + str(d.is_in_spell) + "' to '" + str(is_in_spell) + "'."
+            d.is_in_spell = is_in_spell
 
+        ## update is_in_browser (required field)
+        is_in_browser = request.params.get('is_in_browser', '')
+	if is_in_browser == '':
+            return HTTPBadRequest(body=json.dumps({'error': "is_in_browser field is blank"}), content_type='text/json')
+        is_in_browser = True if is_in_browser == 'true' else False
+        if is_in_browser != d.is_in_browser:
+            success_message = success_message + "<br>is_in_browser has been updated from '" + str(d.is_in_browser) + "' to '" + str(is_in_browser) + "'."
+            d.is_in_browser = is_in_browser
+        
         ## update file_date (required field)  
 
         ## update readme_file_id (optional field)
@@ -233,7 +246,7 @@ def update_metadata(request):
         ## update path_id (path)
         
         
-        return HTTPBadRequest(body=json.dumps({'error': "OK=" + str(changed)}), content_type='text/json')
+        return HTTPBadRequest(body=json.dumps({'error': "OK=" + str("OK")}), content_type='text/json')
     
         
 
