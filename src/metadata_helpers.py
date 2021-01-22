@@ -147,7 +147,17 @@ def update_metadata(request):
             d.display_name = display_name
             curator_session.add(d)
 
-        return HTTPBadRequest(body=json.dumps({'error': "display_name=" + display_name}), content_type='text/json')
+        ## update previous file name
+        
+        previous_file_name = request.params.get('previous_file_name', '')
+        if previous_file_name != d.previous_file_name:
+            success_message = success_message + "<br>The file display name has been updated from '" + d.previous_file_name + "' to '" + previous_file_name + "'."
+            
+            d.previous_file_name = previous_file_name
+            curator_session.add(d)
+
+            
+        return HTTPBadRequest(body=json.dumps({'error': "previous_file_name=" + previous_file_name}), content_type='text/json')
 
             
     
