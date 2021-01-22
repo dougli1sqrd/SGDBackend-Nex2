@@ -102,7 +102,11 @@ class EditMetadata extends Component {
       timeout: TIMEOUT
     }).then((data) => {
       this.props.dispatch(setMessage(data.success));
-    }).catch(err => this.props.dispatch(setError(err.error)));
+    }).catch( (data) => {
+      let errorMEssage = data ? data.error: 'Error occured: connection timed out';
+      this.props.dispatch(setError(errorMEssage));
+      this.setState({ isPending: false});
+    });
   }
 
   addButtons() {
