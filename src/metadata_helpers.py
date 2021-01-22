@@ -198,14 +198,14 @@ def update_metadata(request):
             
         ## update data_id (required field)
         data_id = request.params.get('data_id')
-	data_id = int(data_id)
+        data_id = int(data_id)
         if data_id != d.data_id:
             success_message = success_message + "<br>data_id has been updated from '" + str(d.data_id) + "' to '" + str(data_id) + "'."
             d.data_id = data_id
             
         ## update format_id (required field)
         format_id = request.params.get('format_id')
-	format_id = int(format_id)
+        format_id = int(format_id)
         if format_id != d.format_id:
             success_message = success_message + "<br>format_id has been updated from '" + str(d.format_id) + "' to '" + str(format_id) + "'."
             d.format_id = format_id
@@ -230,7 +230,7 @@ def update_metadata(request):
         
 
         transaction.commit()
-        retturn HTTPOk(body=json.dumps({'success': success_message, 'metadata': "METADATA"}), content_type='text/json')
+        return HTTPOk(body=json.dumps({'success': success_message, 'metadata': "METADATA"}), content_type='text/json')
     except Exception as e:
         return HTTPBadRequest(body=json.dumps({'error': str(e)}), content_type='text/json')
     finally:
