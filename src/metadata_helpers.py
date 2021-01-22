@@ -223,14 +223,14 @@ def update_metadata(request):
         is_in_spell = request.params.get('is_in_spell', '')
         if is_in_spell == '':
             return HTTPBadRequest(body=json.dumps({'error': "is_in_spell field is blank"}), content_type='text/json')
-	is_in_spell = True if is_in_spell == 'true' else False
+        is_in_spell = True if is_in_spell == 'true' else False
         if is_in_spell != d.is_in_spell:
             success_message = success_message + "<br>is_in_spell has been updated from '" + str(d.is_in_spell) + "' to '" + str(is_in_spell) + "'."
             d.is_in_spell = is_in_spell
 
         ## update is_in_browser (required field)
         is_in_browser = request.params.get('is_in_browser', '')
-	if is_in_browser == '':
+        if is_in_browser == '':
             return HTTPBadRequest(body=json.dumps({'error': "is_in_browser field is blank"}), content_type='text/json')
         is_in_browser = True if is_in_browser == 'true' else False
         if is_in_browser != d.is_in_browser:
