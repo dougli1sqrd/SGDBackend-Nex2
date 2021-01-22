@@ -89,13 +89,21 @@ def get_list_of_file_metadata(request):
         if DBSession:
             DBSession.remove()    
 
-def add_metadata(request, old_file_id, uploaded_file):
+def insert_file_path(curator_session, source_id, file_id, path_id):
+
+    x = FilePath(file_id = file_id,
+                 path_id = path_id,
+                 source_id = source_id,
+                 created_by = 'OTTO')
+    
+    curator_session.add(x)
+
+    
+def add_metadata(request, source_id, old_file_id, uploaded_file):
 
     try:
         CREATED_BY = request.session['username']
         curator_session = get_curator_session(request.session['username'])
-        sgd = DBSession.query(Source).filter_by(display_name='SGD').one_or_none()                           
-        source_id = sgd.source_id
         display_name = request.params.get('display_name')
         if display_name == '':
             return HTTPBadRequest(body=json.dumps({'error': "File display_name field is blank"}), content_type='text/json')
@@ -118,7 +126,9 @@ def update_metadata(request):
     try:
         CREATED_BY = request.session['username']
         curator_session = get_curator_session(request.session['username'])
-
+        sgd = DBSession.query(Source).filter_by(display_name='SGD').one_or_none()
+        source_id = sgd.source_id
+        
         sgdid = request.params.get('sgdid')
         if sgdid == '':
             return HTTPBadRequest(body=json.dumps({'error': "No SGDID is passed in."}), content_type='text/json')
@@ -248,7 +258,7 @@ def update_metadata(request):
             d.file_date = file_date
             
         ## update readme_file_id (optional field)
-        readme_file_id = request.params.get('readme_file_id')
+        readme_file_id = request.params.get('readme_file_id', None)
         changed = 0
         if readme_file_id is not None:
             if str(readme_file_id).isdigit():
@@ -260,9 +270,16 @@ def update_metadata(request):
         if changed == 1:
             success_message = success_message + "<br>readme_file_id has been updated from '" + str(d.readme_file_id) + "' to '" + str(readme_file_id) + "'."
             d.readme_file_id = readme_file_id
-            
-        ## update keyword(s)
+        curator_session.add(d)
+        
         ## update path_id (path)
+        path_id = request.params.get('path_id', None)
+        fp = curator_session.query(FilePath).filter_by(file_id=file_id).one_or_none()
+        if fp is None and path_id:
+            insert_file_path(curator_session, source_id, file_id, int(path_id))
+        
+        ## update keyword(s)
+        
         
         
         return HTTPBadRequest(body=json.dumps({'error': "OK=" + str("OK")}), content_type='text/json')
