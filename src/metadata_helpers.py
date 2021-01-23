@@ -320,14 +320,16 @@ def update_metadata(request):
             d.readme_file_id = readme_file_id
         curator_session.add(d)
 
-        return HTTPBadRequest(body=json.dumps({'error': "HELLO" }), content_type='text/json')
+        # return HTTPBadRequest(body=json.dumps({'error': "HELLO" }), content_type='text/json')
                     
         ## update path_id (path)
         path_id = request.params.get('path_id', None)
         fp = curator_session.query(FilePath).filter_by(file_id=file_id).one_or_none()
         if fp is None and path_id:
             insert_file_path(curator_session, CREATED_BY, source_id, file_id, int(path_id))
-        
+
+        return HTTPBadRequest(body=json.dumps({'error': "HELLO" }), content_type='text/json')
+    
         ## update keyword(s)
         all_kw = curator_session.query(FileKeyword).filter_by(file_id=file_id).all()
         keywords_db = {}
