@@ -1,4 +1,3 @@
-..
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import fetchData from '../../lib/fetchData';
@@ -81,6 +80,7 @@ class EditMetadata extends Component {
       formData.append(key,this.props.metadata[key]);
     }
     if (this.state.file_to_upload) {
+      console.log('file=' + this.state.file_to_upload)
       formData.append('file', this.state.file_to_upload);
     }
     fetchData(UPDATE_METADATA, {
