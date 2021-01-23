@@ -318,25 +318,17 @@ def update_metadata(request):
             
         ## update readme_file_id (optional field)
         readme_file_id = request.params.get('readme_file_id', None)
-        if readme_file_id == 'None':
-            readme_file_id = None
-        changed = 0
-        if readme_file_id is not None:
-            if str(readme_file_id).isdigit():
-                readme_file_id = int(readme_file_id)
-                if not d.readme_file_id or readme_file_id != d.readme_file_id:
-                    changed = 1
-        elif d.readme_file_id:
-            changed = 1
-        if changed == 1:
-            success_message = success_message + "<br>readme_file_id has been updated from '" + str(d.readme_file_id) + "' to '" + str(readme_file_id) + "'."
-            d.readme_file_id = readme_file_id
-        curator_session.add(d)
+        if readme_file_id is None and d.readme_file_id:
+            d.readme_file_id = None
+            curator_session.add(d)
+            success_message = success_message + "<br>readme_file_id has been removed from this file."
+        elif readme_file_id is not None and str(readme_file_id) != str(d.readme_file_id):
+            d.readme_file_id = int(readme_file_id)
+            curator_session.add(d)
+            success_message = success_message + "<br>readme_file_id has been set to " + str(readme_file_id) + " for this file."
                     
         ## update path_id (path) (optional field)
         path_id = request.params.get('path_id', None)
-        # if path_id == 'None':
-        #    path_id = None
         fp = curator_session.query(FilePath).filter_by(file_id=file_id).one_or_none()
         if path_id:
             if fp is None:
