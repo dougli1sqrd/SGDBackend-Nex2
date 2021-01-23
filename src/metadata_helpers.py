@@ -300,7 +300,7 @@ def update_metadata(request):
             return HTTPBadRequest(body=json.dumps({'error': "file_date field is blank"}), content_type='text/json')
         if '-' not in file_date:
             return HTTPBadRequest(body=json.dumps({'error': "file_date format: yyyy-mm-dd"}), content_type='text/json')
-        if file_date != d.file_date:
+        if file_date != d.file_date.split(' ')[0]:
             success_message = success_message + "<br>file_date has been updated from '" + str(d.file_date) + "' to '" + file_date + "'."
             d.file_date = file_date
             
