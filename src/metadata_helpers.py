@@ -338,7 +338,7 @@ def update_metadata(request):
         keywords = request.params.get('keywords', '')
         kw_list = keywords.split('|')
 
-        return HTTPBadRequest(body=json.dumps({'error': "HELL3" }), content_type='text/json')
+        # return HTTPBadRequest(body=json.dumps({'error': "HELL3" }), content_type='text/json')
     
         for kw in kw_list:
             kw = kw.strip()
@@ -351,7 +351,9 @@ def update_metadata(request):
             else:
                 err_msg = keyword_id 
                 return HTTPBadRequest(body=json.dumps({'error': err_msg}), content_type='text/json')
-            
+
+        return HTTPBadRequest(body=json.dumps({'error': "HELLO4" }), content_type='text/json')
+    
         for kw in keywords_db:
             keyword_id = keywords_db[kw]
             fk = curator_session.query(FileKeyword).filter_by(file_id=file_id, keyword_id=keyword_id).one_or_none()
