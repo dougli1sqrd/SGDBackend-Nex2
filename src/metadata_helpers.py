@@ -319,7 +319,9 @@ def update_metadata(request):
             success_message = success_message + "<br>readme_file_id has been updated from '" + str(d.readme_file_id) + "' to '" + str(readme_file_id) + "'."
             d.readme_file_id = readme_file_id
         curator_session.add(d)
-        
+
+        return HTTPBadRequest(body=json.dumps({'error': "HELLO" }), content_type='text/json')
+                    
         ## update path_id (path)
         path_id = request.params.get('path_id', None)
         fp = curator_session.query(FilePath).filter_by(file_id=file_id).one_or_none()
