@@ -318,6 +318,8 @@ def update_metadata(request):
             
         ## update readme_file_id (optional field)
         readme_file_id = request.params.get('readme_file_id', None)
+        if readme_file_id == 'None':
+            readme_file_id = None
         changed = 0
         if readme_file_id is not None:
             if str(readme_file_id).isdigit():
@@ -333,6 +335,8 @@ def update_metadata(request):
                     
         ## update path_id (path) (optional field)
         path_id = request.params.get('path_id', None)
+        if path_id == 'None':
+            path_id = None
         fp = curator_session.query(FilePath).filter_by(file_id=file_id).one_or_none()
         if path_id:
             if fp is None:
