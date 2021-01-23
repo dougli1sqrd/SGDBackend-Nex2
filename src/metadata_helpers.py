@@ -130,6 +130,7 @@ def insert_keyword(curator_session, CREATED_BY, source_id, keyword):
                     display_name = keyword,
                     obj_url = obj_url,
                     source_id = source_id,
+                    is_obsolete = '0',
                     created_by = CREATED_BY)
         curator_session.add(x)
         transaction.commit()
@@ -137,7 +138,7 @@ def insert_keyword(curator_session, CREATED_BY, source_id, keyword):
         transaction.abort()
         if curator_session:
             curator_session.rollback()
-        returnValue = 'Insert phenotype failed: ' + str(e.orig.pgerror)
+        returnValue = 'Insert Keyword failed: ' + str(e.orig.pgerror)
     finally:
         keyword_id = x.keyword_id
     if keyword_id:
