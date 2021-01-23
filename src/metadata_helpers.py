@@ -193,6 +193,8 @@ def update_metadata(request):
         file = request.POST['file'].file
         filename = request.POST['file'].filename
 
+        return HTTPBadRequest(body=json.dumps({'error': "NEW file to upload: file name = " + str(file)}), content_type='text/json')
+    
         if filename:
             return HTTPBadRequest(body=json.dumps({'error': "NEW file to upload: file name = " + str(filename)}), content_type='text/json')
 
