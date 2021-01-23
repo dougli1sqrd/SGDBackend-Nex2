@@ -23,7 +23,7 @@ class EditMetadata extends Component {
     this.renderFileDrop = this.renderFileDrop.bind(this);
       
     this.state = {
-      file_to_upload: [],
+      file_to_upload: '',
       isLoading: false,
       isComplete: false,
     };
@@ -35,21 +35,18 @@ class EditMetadata extends Component {
   }
     
   handleClear(){
-    this.setState({ file_to_upload: [] });
+    this.setState({ file_to_upload: '' });
   }
 
-  handleDrop(_file){
-    this.setState({ file_to_upload: _file });
+  handleDrop(files){
+    this.setState({ file_to_upload: files[0] });
   }
 
   renderFileDrop() {
-    if (this.state.file_to_upload.length){
-      let filenames = this.state.file_to_upload.map( (file, index) => {
-        return <li key={index}>{file.name}</li>;
-      });
+    if (this.state.file_to_upload){      
       return(
         <div>
-          <ul>{filenames}</ul>
+          <p>Uploaded file: {this.state.file_to_upload.name}</p>
           <a onClick={this.handleClear.bind(this)}>Clear File</a>
         </div>
       );
@@ -82,12 +79,8 @@ class EditMetadata extends Component {
     for(let key in this.props.metadata){
       formData.append(key,this.props.metadata[key]);
     }
-    if (this.state.file_to_upload.length) {
-      this.state.file_to_upload.map( item => {
-        // console.log('item=' + item);
-        formData.append('file_name', item.name);
-        // formData.append('file_object', item);
-      });
+    if (this.state.file_to_upload) {
+      formData.append('file', this.state.file_to_upload);
     }
     fetchData(UPDATE_METADATA, {
       type: 'POST',
