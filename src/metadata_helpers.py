@@ -188,6 +188,9 @@ def update_metadata(request):
         file_id = d.dbentity_id
 
         fileObj = request.params.get('file', None)
+
+        return HTTPBadRequest(body=json.dumps({'error': "NEW file to upload: file name = " + str(fileObj)}), content_type='text/json')
+    
         file = None
         filename = None
         if fileObj is not None:
