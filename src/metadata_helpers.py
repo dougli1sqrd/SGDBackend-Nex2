@@ -328,7 +328,7 @@ def update_metadata(request):
         if fp is None and path_id:
             insert_file_path(curator_session, CREATED_BY, source_id, file_id, int(path_id))
 
-        return HTTPBadRequest(body=json.dumps({'error': "HELLO" }), content_type='text/json')
+        return HTTPBadRequest(body=json.dumps({'error': "HELLO2" }), content_type='text/json')
     
         ## update keyword(s)
         all_kw = curator_session.query(FileKeyword).filter_by(file_id=file_id).all()
@@ -337,6 +337,9 @@ def update_metadata(request):
             keywords_db[kw.keyword.display_name.upper()] = kw.keyword_id
         keywords = request.params.get('keywords', '')
         kw_list = keywords.split('|')
+
+        return HTTPBadRequest(body=json.dumps({'error': "HELL3" }), content_type='text/json')
+    
         for kw in kw_list:
             kw = kw.strip()
             if kw.upper() in keywords_db:
