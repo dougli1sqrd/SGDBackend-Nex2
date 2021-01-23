@@ -7,6 +7,7 @@ import transaction
 import json
 from src.models import DBSession, Dbentity, Filedbentity, FilePath, Path,\
                        FileKeyword, Keyword, Source
+from src.aws_helpers import get_checksum
 from src.curation_helpers import get_curator_session
 
 # PREVIEW_URL = os.environ['PREVIEW_URL']
@@ -187,10 +188,11 @@ def update_metadata(request):
 
         file_id = d.dbentity_id
 
+        ## check to see if there is a file passed in and if yes, of its md5sum is
+        ## same as the one in the database, if yes, ignore it; otherwise upload 
+        ## the new file to s3, insert metadata, set status = 'Active', mark the 
+        ## old version as 'Archived'
         fileObj = request.params.get('file')
-
-        # return HTTPBadRequest(body=json.dumps({'error': "fileObj = " + str(fileObj)}), content_type='text/json')
-        
         file = None
         filename = None
         if fileObj != '':
@@ -200,12 +202,12 @@ def update_metadata(request):
         # fileObj = FieldStorage('file', 'pone.0000217.e011.jpg')
         # file = file <_io.BufferedRandom name=23>
         # filename = pone.0000217.e011.jpg
-        
-        return HTTPBadRequest(body=json.dumps({'error': "NEW file to upload: file name = " + str(filename)}), content_type='text/json')
-    
-        if filename:
-            return HTTPBadRequest(body=json.dumps({'error': "NEW file to upload: file name = " + str(filename)}), content_type='text/json')
 
+        # md5sum = hashlib.md5(go_file.encode()).hexdigest()
+        # goRow = nex_session.query(Filedbentity).filter_by(md5sum = md5sum).one_or_none()
+        if filename:
+            md5sum = get_checksum(file)
+            return HTTPBadRequest(body=json.dumps({'error': "md5sum=" + md5sum }), content_type='text/json')
         success_message = ""
         
         ## update file display_name
