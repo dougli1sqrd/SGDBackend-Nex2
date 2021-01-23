@@ -189,15 +189,15 @@ def update_metadata(request):
         ## the new file to s3, insert metadata, set status = 'Active', mark the 
         ## old version as 'Archived'
         fileObj = request.params.get('file')
-        file = None
-        filename = None
+        new_file = None
+        new_filename = None
         if fileObj != '':
-            file = fileObj.file
-            filename = fileObj.filename
+            new_file = fileObj.file
+            new_filename = fileObj.filename
 
         # fileObj = FieldStorage('file', 'pone.0000217.e011.jpg')
-        # file = file <_io.BufferedRandom name=23>
-        # filename = pone.0000217.e011.jpg
+        # new_file = file <_io.BufferedRandom name=23>
+        # new_filename = pone.0000217.e011.jpg
 
         # md5sum = hashlib.md5(go_file.encode()).hexdigest()
         # goRow = nex_session.query(Filedbentity).filter_by(md5sum = md5sum).one_or_none()
@@ -205,7 +205,7 @@ def update_metadata(request):
             md5sum = get_checksum(file)
             if md5sum != d.md5sum:
                 message = add_metadata(request, curator_session, CREATED_BY, source_id,
-                                       old_file_id, file, filename)
+                                       file_id, file, filename)
                 return message
             
         success_message = ""
