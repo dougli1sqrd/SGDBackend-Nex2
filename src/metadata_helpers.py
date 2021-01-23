@@ -331,7 +331,7 @@ def update_metadata(request):
             d.readme_file_id = readme_file_id
         curator_session.add(d)
                     
-        ## update path_id (path)
+        ## update path_id (path) (optional field)
         path_id = request.params.get('path_id', None)
         fp = curator_session.query(FilePath).filter_by(file_id=file_id).one_or_none()
         if path_id:
