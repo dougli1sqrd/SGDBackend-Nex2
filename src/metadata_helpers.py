@@ -334,9 +334,18 @@ def update_metadata(request):
         ## update path_id (path)
         path_id = request.params.get('path_id', None)
         fp = curator_session.query(FilePath).filter_by(file_id=file_id).one_or_none()
-        if fp is None and path_id:
-            insert_file_path(curator_session, CREATED_BY, source_id, file_id, int(path_id))
-    
+        if path_id:
+            if fp is None:
+                insert_file_path(curator_session, CREATED_BY, source_id, file_id, int(path_id))
+                success_message = success_message + "<br>path_id has been added for this file."
+            elif fp.path_id != int(path_id):
+                success_message = success_message + "<br>path_id has been updated from '" + str(fp.path_id) + "' to '" + str(path_id) + "'."
+                fp.path_id = int(path_id)
+                curator_session.add(fp)
+        elif fp is not None:
+            success_message = success_message + "<br>path_id has been removed from this file."
+            curator_session.add(fp)
+            
         ## update keyword(s)
         all_kw = curator_session.query(FileKeyword).filter_by(file_id=file_id).all()
         keywords_db = {}
@@ -344,7 +353,6 @@ def update_metadata(request):
             keywords_db[kw.keyword.display_name.upper()] = kw.keyword_id
         keywords = request.params.get('keywords', '')
         kw_list = keywords.split('|')
-    
         for kw in kw_list:
             kw = kw.strip()
             if kw.upper() in keywords_db:
@@ -352,6 +360,7 @@ def update_metadata(request):
                 continue
             keyword_id = insert_keyword(curator_session, CREATED_BY, source_id, kw)
             if str(keyword_id).isdigit():
+                success_message = success_message + "<br>keyword '" + kw + "' has been added for this file."
                 insert_file_keyword(curator_session, CREATED_BY, source_id, file_id, keyword_id)
             else:
                 err_msg = keyword_id 
@@ -361,6 +370,7 @@ def update_metadata(request):
             keyword_id = keywords_db[kw]
             fk = curator_session.query(FileKeyword).filter_by(file_id=file_id, keyword_id=keyword_id).one_or_none()
             if fk:
+                success_message = success_message + "<br>keyword '" + kw + "' has been removed from this file."
                 curator_session.delete(fk)
 
         if success_message == '':
