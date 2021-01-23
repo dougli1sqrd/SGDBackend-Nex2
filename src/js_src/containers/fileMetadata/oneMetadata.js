@@ -97,11 +97,11 @@ class OneMetadata extends Component {
         {/* path_id & readme_file_id */}
         <div className='row'>
           <div className='columns medium-6 small-6'>
-            <div> <label> path_id (file path) </label> </div>
+            <div> <label> path_id (file path, to remove path, enter/pick None) </label> </div>
             <AutocompleteSection sec_title='' id='path_id' value1='display_name' value2='' selectedIdName='path_id' placeholder='Enter file path' onOptionChange={this.props.onOptionChange} selectedId={this.props.metadata.path_id} setNewValue={true} />
           </div>
           <div className='columns medium-6 small-6'>
-            <div> <label> readme_file_id (README file) </label> </div>
+            <div> <label> readme_file_id (README file, to remove readme, enter/pick None) </label> </div>
             <AutocompleteSection sec_title='' id='readme_file_id' value1='display_name' value2='' selectedIdName='readme_file_id' placeholder='Enter README file' onOptionChange={this.props.onOptionChange} selectedId={this.props.metadata.readme_file_id} setNewValue={true} />
           </div>
         </div>
