@@ -346,9 +346,9 @@ def update_metadata(request):
             success_message = success_message + "<br>readme_file_id has been set to " + str(readme_file_id) + " for this file."
                     
         ## update path_id (path) (optional field)
-        path_id = request.params.get('path_id', None)
+        path_id = request.params.get('path_id')
         fp = curator_session.query(FilePath).filter_by(file_id=file_id).one_or_none()
-        if path_id:
+        if path_id and path_id != '':
             if fp is None:
                 insert_file_path(curator_session, CREATED_BY, source_id, file_id, int(path_id))
                 success_message = success_message + "<br>path_id has been added for this file."
