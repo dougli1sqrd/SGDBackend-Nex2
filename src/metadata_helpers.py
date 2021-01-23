@@ -187,10 +187,14 @@ def update_metadata(request):
 
         file_id = d.dbentity_id
 
-        file_name = request.params.get('file_name')
+        file = request.params.get('file').file
+        filename = request.params.get('file').filename
 
-        if file_name:
-            return HTTPBadRequest(body=json.dumps({'error': "NEW file to upload: file name = " + str(file_name)}), content_type='text/json')
+        # file = request.POST['file'].file
+        # filename = request.POST['file'].filename
+
+        if filename:
+            return HTTPBadRequest(body=json.dumps({'error': "NEW file to upload: file name = " + str(filename)}), content_type='text/json')
 
         success_message = ""
         
