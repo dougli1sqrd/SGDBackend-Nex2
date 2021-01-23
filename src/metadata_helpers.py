@@ -140,7 +140,7 @@ def insert_keyword(curator_session, CREATED_BY, source_id, keyword):
         transaction.abort()
         if curator_session:
             curator_session.rollback()
-        returnValue = 'Insert Keyword failed: ' + str(e.orig.pgerror)
+        returnValue = 'Insert Keyword failed: ' + str(e)
     if keyword_id:
         return keyword_id 
     else:
