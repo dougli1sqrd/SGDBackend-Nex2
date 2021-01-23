@@ -334,15 +334,17 @@ def update_metadata(request):
             
         ## update readme_file_id (optional field)
         readme_file_id = request.params.get('readme_file_id')
-        if !str(readme_file_id).isdigit() and d.readme_file_id:
-            d.readme_file_id = None
-            curator_session.add(d)
-            success_message = success_message + "<br>readme_file_id has been removed from this file."
-        elif str(readme_file_id).isdigit() and str(readme_file_id) != str(d.readme_file_id):
-            d.readme_file_id = int(readme_file_id)
-            curator_session.add(d)
-            success_message = success_message + "<br>readme_file_id has been set to " + str(readme_file_id) + " for this file."
-                    
+        if str(readme_file_id).isdigit():
+            if str(readme_file_id) != str(d.readme_file_id):
+                d.readme_file_id = int(readme_file_id)
+                curator_session.add(d)
+                success_message = success_message + "<br>readme_file_id has been set to " + str(readme_file_id) + " for this file."
+        else:
+            if d.readme_file_id:
+                d.readme_file_id = None
+                curator_session.add(d)
+                success_message = success_message + "<br>readme_file_id has been removed from this file."
+                
         ## update path_id (path) (optional field)
         path_id = request.params.get('path_id')
         fp = curator_session.query(FilePath).filter_by(file_id=file_id).one_or_none()
