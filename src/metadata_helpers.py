@@ -187,17 +187,19 @@ def update_metadata(request):
 
         file_id = d.dbentity_id
 
-        fileObj = request.params.get('file', None)
+        fileObj = request.params.get('file')
 
-        return HTTPBadRequest(body=json.dumps({'error': "NEW file to upload: file name = " + str(fileObj)}), content_type='text/json')
-    
+        # return HTTPBadRequest(body=json.dumps({'error': "fileObj = " + str(fileObj)}), content_type='text/json')
+        
         file = None
         filename = None
-        if fileObj is not None:
+        if fileObj != '':
             file = fileObj.file
             filename = fileObj.filename
 
-        # file <_io.BufferedRandom name=23>
+        # fileObj = FieldStorage('file', 'pone.0000217.e011.jpg')
+        # file = file <_io.BufferedRandom name=23>
+        # filename = pone.0000217.e011.jpg
         
         return HTTPBadRequest(body=json.dumps({'error': "NEW file to upload: file name = " + str(filename)}), content_type='text/json')
     
