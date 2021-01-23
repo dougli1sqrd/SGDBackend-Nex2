@@ -335,8 +335,8 @@ def update_metadata(request):
                     
         ## update path_id (path) (optional field)
         path_id = request.params.get('path_id', None)
-        if path_id == 'None':
-            path_id = None
+        # if path_id == 'None':
+        #    path_id = None
         fp = curator_session.query(FilePath).filter_by(file_id=file_id).one_or_none()
         if path_id:
             if fp is None:
@@ -348,7 +348,7 @@ def update_metadata(request):
                 curator_session.add(fp)
         elif fp is not None:
             success_message = success_message + "<br>path_id has been removed from this file."
-            curator_session.add(fp)
+            curator_session.delete(fp)
             
         ## update keyword(s)
         all_kw = curator_session.query(FileKeyword).filter_by(file_id=file_id).all()
