@@ -336,7 +336,7 @@ def update_metadata(request):
             if kw.upper() in keywords_db:
                 del keywords_db[kw.upper()]
                 continue
-            keyword_id = insert_keyword(curator_session, CREATED_BY, kw)
+            keyword_id = insert_keyword(curator_session, CREATED_BY, source_id, kw)
             if str(keyword_id).isdigit():
                 insert_file_keyword(curator_session, CREATED_BY, source_id, file_id, keyword_id)
             else:
