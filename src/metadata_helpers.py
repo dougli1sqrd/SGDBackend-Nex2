@@ -191,19 +191,30 @@ def update_metadata(request):
 
         if file_name:
             return HTTPBadRequest(body=json.dumps({'error': "NEW file to upload: file name = " + str(file_name)}), content_type='text/json')
-    
+
+        success_message = ""
+        
         ## update file display_name
         display_name = request.params.get('display_name')
         if display_name == '':
             return HTTPBadRequest(body=json.dumps({'error': "File display_name field is blank"}), content_type='text/json')
-
-        success_message = ""
         if display_name != d.display_name:
             success_message = "display_name has been updated from '" + d.display_name + "' to '" + display_name + "'."
             d.display_name = display_name
             curator_session.add(d)
 
-        ## update previous file name
+        ## update dbentity_status
+        dbentity_status = request.params.get('dbentity_status', None)
+        if dbentity_status is None:
+            return HTTPBadRequest(body=json.dumps({'error': "dbentity_status field is blank"}), content_type='text/json')
+        if dbentity_status not in ['Active', 'Archived']:
+            return HTTPBadRequest(body=json.dumps({'error': "dbentity_status must be 'Active' or 'Archived'."}), content_type='text/json')
+        if dbentity_status != d.dbentity_status:
+            success_message = success_message + "<br>dbentity_status has been updated from '" + d.dbentity_status + "' to '" + dbentity_status + "'."
+            d.dbentity_status = dbentity_status
+            curator_session.add(d)
+        
+        ## update previous file names
         previous_file_name = request.params.get('previous_file_name', '')
         if previous_file_name != d.previous_file_name:
             success_message = success_message + "<br>previous_file_name has been updated from '" + d.previous_file_name + "' to '" + previous_file_name + "'."
@@ -319,16 +330,12 @@ def update_metadata(request):
             success_message = success_message + "<br>readme_file_id has been updated from '" + str(d.readme_file_id) + "' to '" + str(readme_file_id) + "'."
             d.readme_file_id = readme_file_id
         curator_session.add(d)
-
-        # return HTTPBadRequest(body=json.dumps({'error': "HELLO" }), content_type='text/json')
                     
         ## update path_id (path)
         path_id = request.params.get('path_id', None)
         fp = curator_session.query(FilePath).filter_by(file_id=file_id).one_or_none()
         if fp is None and path_id:
             insert_file_path(curator_session, CREATED_BY, source_id, file_id, int(path_id))
-
-        # return HTTPBadRequest(body=json.dumps({'error': "HELLO2" }), content_type='text/json')
     
         ## update keyword(s)
         all_kw = curator_session.query(FileKeyword).filter_by(file_id=file_id).all()
@@ -337,8 +344,6 @@ def update_metadata(request):
             keywords_db[kw.keyword.display_name.upper()] = kw.keyword_id
         keywords = request.params.get('keywords', '')
         kw_list = keywords.split('|')
-
-        # return HTTPBadRequest(body=json.dumps({'error': "HELL3" }), content_type='text/json')
     
         for kw in kw_list:
             kw = kw.strip()
@@ -351,16 +356,12 @@ def update_metadata(request):
             else:
                 err_msg = keyword_id 
                 return HTTPBadRequest(body=json.dumps({'error': err_msg}), content_type='text/json')
-
-        # return HTTPBadRequest(body=json.dumps({'error': "HELLO4" }), content_type='text/json')
     
         for kw in keywords_db:
             keyword_id = keywords_db[kw]
             fk = curator_session.query(FileKeyword).filter_by(file_id=file_id, keyword_id=keyword_id).one_or_none()
             if fk:
                 curator_session.delete(fk)
-
-        # return HTTPBadRequest(body=json.dumps({'error': "HELLO5" }), content_type='text/json')  
 
         if success_message == '':
             success_message = "Nothing changed"
