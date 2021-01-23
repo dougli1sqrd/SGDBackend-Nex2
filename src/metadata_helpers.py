@@ -89,15 +89,61 @@ def get_list_of_file_metadata(request):
         if DBSession:
             DBSession.remove()    
 
-def insert_file_path(curator_session, source_id, file_id, path_id):
+def insert_file_path(curator_session, CREATED_BY, source_id, file_id, path_id):
 
-    x = FilePath(file_id = file_id,
-                 path_id = path_id,
-                 source_id = source_id,
-                 created_by = 'OTTO')
-    
-    curator_session.add(x)
+    try:
+        x = FilePath(file_id = file_id,
+                     path_id = path_id,
+                     source_id = source_id,
+                     created_by = CREATED_BY)
+        curator_session.add(x)
+    except Exception as e:
+        transaction.abort()
+        if curator_session:
+            curator_session.rollback()
+        
+def insert_file_keyword(curator_session, CREATED_BY, source_id, file_id, keyword_id):
 
+    try:
+        x = FileKeyword(file_id = file_id,
+                        keyword_id = keyword_id,
+                        source_id = source_id,
+                        created_by = CREATED_BY)
+        curator_session.add(x)
+    except Exception as e:
+        transaction.abort()
+        if curator_session:
+            curator_session.rollback()
+            
+def insert_keyword(curator_session, CREATED_BY, source_id, keyword):
+
+    kw = curator_session.query(Keyword).filter(Keyword.display_name.ilike(keyword)).one_or_none()
+    if kw:
+        return kw.keyword_id
+
+    keyword_id = None
+    returnValue = None
+    try:
+        format_name = keyword.replace(' ', '_').replace('/', '_')
+        obj_url = '/keyword/' + format_name
+        x = Keyword(format_name = format_name,
+                    display_name = keyword,
+                    obj_url = obj_url,
+                    source_id = source_id,
+                    created_by = CREATED_BY)
+        curator_session.add(x)
+        transaction.commit()
+    except Exception as e:
+        transaction.abort()
+        if curator_session:
+            curator_session.rollback()
+        returnValue = 'Insert phenotype failed: ' + str(e.orig.pgerror)
+    finally:
+        keyword_id = x.keyword_id
+    if keyword_id:
+        return keyword_id 
+    else:
+        return returnValue
     
 def add_metadata(request, source_id, old_file_id, uploaded_file):
 
@@ -276,16 +322,33 @@ def update_metadata(request):
         path_id = request.params.get('path_id', None)
         fp = curator_session.query(FilePath).filter_by(file_id=file_id).one_or_none()
         if fp is None and path_id:
-            insert_file_path(curator_session, source_id, file_id, int(path_id))
+            insert_file_path(curator_session, CREATED_BY, source_id, file_id, int(path_id))
         
         ## update keyword(s)
-        
-        
-        
-        return HTTPBadRequest(body=json.dumps({'error': "OK=" + str("OK")}), content_type='text/json')
+        all_kw = curator_session.query(FileKeyword).filter_by(file_id=file_id).all()
+        keywords_db = {}
+        for kw in all_kw:
+            keywords_db[kw.keyword.display_name.upper()] = kw.keyword_id
+        keywords = request.params.get('keywords', '')
+        kw_list = keywords.split('|')
+        for kw in kw_list:
+            kw = kw.strip()
+            if kw.upper() in keywords_db:
+                del keywords_db[kw.upper()]
+                continue
+            keyword_id = insert_keyword(curator_session, CREATED_BY, kw)
+            if str(keyword_id).isdigit():
+                insert_file_keyword(curator_session, CREATED_BY, source_id, file_id, keyword_id)
+            else:
+                err_msg = keyword_id 
+                return HTTPBadRequest(body=json.dumps({'error': err_msg}), content_type='text/json')
+            
+        for kw in keywords_db:
+            keyword_id = keywords_db[kw]
+            fk = curator_session.query(FileKeyword).filter_by(file_id=file_id, keyword_id=keyword_id).one_or_none()
+            if fk:
+                curator_session.delete(fk)
     
-        
-
         transaction.commit()
         return HTTPOk(body=json.dumps({'success': success_message, 'metadata': "METADATA"}), content_type='text/json')
     except Exception as e:
