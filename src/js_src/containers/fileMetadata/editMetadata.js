@@ -79,8 +79,8 @@ class EditMetadata extends Component {
     for(let key in this.props.metadata){
       formData.append(key,this.props.metadata[key]);
     }
-    console.log('file=' + this.state.file);
-    formData.append('file', this.state.file);
+    // console.log('file=' + this.state.file);
+    // formData.append('file', this.state.file);
     fetchData(UPDATE_METADATA, {
       type: 'POST',
       credentials: 'same-origin',
