@@ -203,7 +203,7 @@ def update_metadata(request):
         # goRow = nex_session.query(Filedbentity).filter_by(md5sum = md5sum).one_or_none()
         if filename:
             md5sum = get_checksum(file)
-            if md4sum != d.md5sum:
+            if md5sum != d.md5sum:
                 message = add_metadata(request, curator_session, CREATED_BY, source_id,
                                        old_file_id, file, filename)
                 return message
