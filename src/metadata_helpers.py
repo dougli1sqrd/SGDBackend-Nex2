@@ -333,14 +333,12 @@ def update_metadata(request):
             d.file_date = file_date
             
         ## update readme_file_id (optional field)
-        readme_file_id = request.params.get('readme_file_id', None)
-        if readme_file_id == '':
-            readme_file_id = None
-        if readme_file_id is None and d.readme_file_id:
+        readme_file_id = request.params.get('readme_file_id')
+        if !str(readme_file_id).isdigit() and d.readme_file_id:
             d.readme_file_id = None
             curator_session.add(d)
             success_message = success_message + "<br>readme_file_id has been removed from this file."
-        elif readme_file_id is not None and str(readme_file_id) != str(d.readme_file_id):
+        elif str(readme_file_id).isdigit() and str(readme_file_id) != str(d.readme_file_id):
             d.readme_file_id = int(readme_file_id)
             curator_session.add(d)
             success_message = success_message + "<br>readme_file_id has been set to " + str(readme_file_id) + " for this file."
@@ -348,7 +346,7 @@ def update_metadata(request):
         ## update path_id (path) (optional field)
         path_id = request.params.get('path_id')
         fp = curator_session.query(FilePath).filter_by(file_id=file_id).one_or_none()
-        if path_id and path_id != '':
+        if str(path_id).isdigit():
             if fp is None:
                 insert_file_path(curator_session, CREATED_BY, source_id, file_id, int(path_id))
                 success_message = success_message + "<br>path_id has been added for this file."
