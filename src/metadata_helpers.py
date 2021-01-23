@@ -359,8 +359,12 @@ def update_metadata(request):
             fk = curator_session.query(FileKeyword).filter_by(file_id=file_id, keyword_id=keyword_id).one_or_none()
             if fk:
                 curator_session.delete(fk)
-        return HTTPBadRequest(body=json.dumps({'error': "HELLO5" }), content_type='text/json')  
-                
+
+        # return HTTPBadRequest(body=json.dumps({'error': "HELLO5" }), content_type='text/json')  
+
+        if success_message == '':
+            success_message = "Nothing changed"
+            
         transaction.commit()
         return HTTPOk(body=json.dumps({'success': success_message, 'metadata': "METADATA"}), content_type='text/json')
     except Exception as e:
