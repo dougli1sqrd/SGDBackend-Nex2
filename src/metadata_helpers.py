@@ -123,6 +123,7 @@ def insert_keyword(curator_session, CREATED_BY, source_id, keyword):
 
     keyword_id = None
     returnValue = None
+    x = None
     try:
         format_name = keyword.replace(' ', '_').replace('/', '_')
         obj_url = '/keyword/' + format_name
