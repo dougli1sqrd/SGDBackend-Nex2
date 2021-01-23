@@ -189,14 +189,14 @@ def update_metadata(request):
 
         fileObj = request.params.get('file', None)
         file = None
+        filename = None
         if fileObj is not None:
             file = fileObj.file
-        # filename = request.params.get('file').filename
+            filename = fileObj.filename
 
-        # file = request.POST['file'].file
-        # filename = request.POST['file'].filename
-
-        return HTTPBadRequest(body=json.dumps({'error': "NEW file to upload: file name = " + str(file)}), content_type='text/json')
+        # file <_io.BufferedRandom name=23>
+        
+        return HTTPBadRequest(body=json.dumps({'error': "NEW file to upload: file name = " + str(filename)}), content_type='text/json')
     
         if filename:
             return HTTPBadRequest(body=json.dumps({'error': "NEW file to upload: file name = " + str(filename)}), content_type='text/json')
