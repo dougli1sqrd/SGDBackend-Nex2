@@ -123,7 +123,7 @@ def insert_keyword(curator_session, CREATED_BY, source_id, keyword):
 
     keyword_id = None
     returnValue = None
-    x = None
+    keyword_id = None
     try:
         format_name = keyword.replace(' ', '_').replace('/', '_')
         obj_url = '/keyword/' + format_name
@@ -135,13 +135,12 @@ def insert_keyword(curator_session, CREATED_BY, source_id, keyword):
                     created_by = CREATED_BY)
         curator_session.add(x)
         transaction.commit()
+        keyword_id = x.keyword_id
     except Exception as e:
         transaction.abort()
         if curator_session:
             curator_session.rollback()
         returnValue = 'Insert Keyword failed: ' + str(e.orig.pgerror)
-    finally:
-        keyword_id = x.keyword_id
     if keyword_id:
         return keyword_id 
     else:
