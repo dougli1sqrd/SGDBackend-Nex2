@@ -318,6 +318,8 @@ def update_metadata(request):
             
         ## update readme_file_id (optional field)
         readme_file_id = request.params.get('readme_file_id', None)
+        if readme_file_id == '':
+            readme_file_id = None
         if readme_file_id is None and d.readme_file_id:
             d.readme_file_id = None
             curator_session.add(d)
