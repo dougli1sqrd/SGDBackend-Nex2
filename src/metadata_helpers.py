@@ -355,6 +355,8 @@ def update_metadata(request):
         kw_list = keywords.split('|')
         for kw in kw_list:
             kw = kw.strip()
+            if kw == '':
+                continue
             if kw.upper() in keywords_db:
                 del keywords_db[kw.upper()]
                 continue
