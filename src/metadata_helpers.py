@@ -147,15 +147,11 @@ def insert_keyword(curator_session, CREATED_BY, source_id, keyword):
     else:
         return returnValue
     
-def add_metadata(request, source_id, old_file_id, uploaded_file):
+def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, file, filename):
 
     try:
-        CREATED_BY = request.session['username']
-        curator_session = get_curator_session(request.session['username'])
-        display_name = request.params.get('display_name')
-        if display_name == '':
-            return HTTPBadRequest(body=json.dumps({'error': "File display_name field is blank"}), content_type='text/json')
-        success_message = ""
+
+        success_message = "ADD metadata"
 
 
 
@@ -207,7 +203,11 @@ def update_metadata(request):
         # goRow = nex_session.query(Filedbentity).filter_by(md5sum = md5sum).one_or_none()
         if filename:
             md5sum = get_checksum(file)
-            return HTTPBadRequest(body=json.dumps({'error': "md5sum=" + md5sum }), content_type='text/json')
+            if md4sum != d.md5sum:
+                message = add_metadata(request, curator_session, CREATED_BY, source_id,
+                                       old_file_id, file, filename)
+                return message
+            
         success_message = ""
         
         ## update file display_name
