@@ -187,7 +187,10 @@ def update_metadata(request):
 
         file_id = d.dbentity_id
 
-        file = request.params.get('file').file
+        fileObj = request.params.get('file')
+        file = None
+        if fileObj:
+            file = fileObj.file
         # filename = request.params.get('file').filename
 
         # file = request.POST['file'].file
