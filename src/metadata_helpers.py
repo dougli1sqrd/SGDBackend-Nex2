@@ -8,6 +8,7 @@ import json
 from src.models import DBSession, Dbentity, Filedbentity, FilePath, Path,\
                        FileKeyword, Keyword, Source
 from src.aws_helpers import get_checksum
+from src.helpers import upload_file
 from src.curation_helpers import get_curator_session
 
 # PREVIEW_URL = os.environ['PREVIEW_URL']
