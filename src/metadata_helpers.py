@@ -170,8 +170,6 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
         if year is None or year == '':
             return HTTPBadRequest(body=json.dumps({'error': "year field is blank"}), content_type='text/json')
         year = int(year)
-
-        return HTTPBadRequest(body=json.dumps({'error': "year="+str(year)}), content_type='text/json')
     
         file_size = request.params.get('file_size')
         if file_size is None or file_size == '':
@@ -209,6 +207,8 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
         if '-' not in file_date:
             return HTTPBadRequest(body=json.dumps({'error': "file_date format: yyyy-mm-dd"}), content_type='text/json')
 
+        return HTTPBadRequest(body=json.dumps({'error': "file_date="+str(file_date)}), content_type='text/json')
+    
         readme_file_id = request.params.get('readme_file_id')
         if str(readme_file_id).isdigit():
             readme_file_id = int(readme_file_id)
