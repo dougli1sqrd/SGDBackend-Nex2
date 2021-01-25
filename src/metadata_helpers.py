@@ -166,6 +166,8 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
 
         description = request.params.get('description', '')
 
+        return HTTPBadRequest(body=json.dumps({'error': "desc="+description}), content_type='text/json')
+    
         year = request.params.get('year')
         if year is None or year == '':
             return HTTPBadRequest(body=json.dumps({'error': "year field is blank"}), content_type='text/json')
