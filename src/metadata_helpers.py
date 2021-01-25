@@ -295,6 +295,9 @@ def update_metadata(request):
         ## the new file to s3, insert metadata, set status = 'Active', mark the 
         ## old version as 'Archived'
         fileObj = request.params.get('file')
+
+        return HTTPBadRequest(body=json.dumps({'error': "fileObj="+str(fileObj)}), content_type='text/json')
+    
         file = None
         filename = None
         if fileObj != '':
