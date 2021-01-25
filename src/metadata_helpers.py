@@ -295,11 +295,11 @@ def update_metadata(request):
         ## the new file to s3, insert metadata, set status = 'Active', mark the 
         ## old version as 'Archived'
 
-        return HTTPBadRequest(body=json.dumps({'error': "HELLO"}), content_type='text/json')
+        # return HTTPBadRequest(body=json.dumps({'error': "HELLO"}), content_type='text/json')
     
         fileObj = request.params.get('file')
 
-        return HTTPBadRequest(body=json.dumps({'error': "fileObj="+str(fileObj)}), content_type='text/json')
+        # return HTTPBadRequest(body=json.dumps({'error': "fileObj="+str(fileObj)}), content_type='text/json')
     
         file = None
         filename = None
@@ -307,7 +307,7 @@ def update_metadata(request):
             file = fileObj.file
             filename = fileObj.filename
 
-        return HTTPBadRequest(body=json.dumps({'error': "filename="+str(filename)}), content_type='text/json')
+        # return HTTPBadRequest(body=json.dumps({'error': "filename="+str(filename)}), content_type='text/json')
     
         # fileObj = FieldStorage('file', 'pone.0000217.e011.jpg')
         # file = file <_io.BufferedRandom name=23>
@@ -315,7 +315,7 @@ def update_metadata(request):
 
         if filename:
             md5sum = get_checksum(file)
-            return HTTPBadRequest(body=json.dumps({'error': "md5sum="+md5sum}), content_type='text/json')
+            # return HTTPBadRequest(body=json.dumps({'error': "md5sum="+md5sum}), content_type='text/json')
             if md5sum != d.md5sum:
                 message = add_metadata(request, curator_session, CREATED_BY, source_id,
                                        file_id, file, filename)
