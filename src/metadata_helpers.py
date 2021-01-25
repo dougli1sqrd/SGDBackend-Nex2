@@ -206,8 +206,6 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
             return HTTPBadRequest(body=json.dumps({'error': "file_date field is blank"}), content_type='text/json')
         if '-' not in file_date:
             return HTTPBadRequest(body=json.dumps({'error': "file_date format: yyyy-mm-dd"}), content_type='text/json')
-
-        return HTTPBadRequest(body=json.dumps({'error': "file_date="+str(file_date)}), content_type='text/json')
     
         readme_file_id = request.params.get('readme_file_id')
         if str(readme_file_id).isdigit():
@@ -215,6 +213,8 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
         else:
             readme_file_id = None
 
+        return HTTPBadRequest(body=json.dumps({'error': "readme_file_id="+str(readme_file_id)}), content_type='text/json')
+    
         #### add metadata to database and upload the new file to s3
         upload_file(CREATED_BY, file,
                     filename=filename,
