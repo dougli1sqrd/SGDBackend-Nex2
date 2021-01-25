@@ -148,7 +148,7 @@ def insert_keyword(curator_session, CREATED_BY, source_id, keyword):
     else:
         return returnValue
     
-def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, file, filename):
+def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, file, filename, md5sum):
 
     try:
         success_message = ''
@@ -319,7 +319,7 @@ def update_metadata(request):
             # return HTTPBadRequest(body=json.dumps({'error': "md5sum="+md5sum}), content_type='text/json')
             if md5sum != d.md5sum:
                 message = add_metadata(request, curator_session, CREATED_BY, source_id,
-                                       file_id, file, filename)
+                                       file_id, file, filename, md5sum)
                 return message
             
         success_message = ""
