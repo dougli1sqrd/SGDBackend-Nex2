@@ -301,6 +301,8 @@ def update_metadata(request):
             file = fileObj.file
             filename = fileObj.filename
 
+        return HTTPBadRequest(body=json.dumps({'error': "filename="+str(filename)}), content_type='text/json')
+    
         # fileObj = FieldStorage('file', 'pone.0000217.e011.jpg')
         # file = file <_io.BufferedRandom name=23>
         # filename = pone.0000217.e011.jpg
