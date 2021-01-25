@@ -165,14 +165,14 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
         previous_file_name = request.params.get('previous_file_name', '')
 
         description = request.params.get('description', '')
-
-        return HTTPBadRequest(body=json.dumps({'error': "desc="+description}), content_type='text/json')
     
         year = request.params.get('year')
         if year is None or year == '':
             return HTTPBadRequest(body=json.dumps({'error': "year field is blank"}), content_type='text/json')
         year = int(year)
-        
+
+        return HTTPBadRequest(body=json.dumps({'error': "year="+str(year)}), content_type='text/json')
+    
         file_size = request.params.get('file_size')
         if file_size is None or file_size == '':
             return HTTPBadRequest(body=json.dumps({'error': "file_size field is blank"}), content_type='text/json')
