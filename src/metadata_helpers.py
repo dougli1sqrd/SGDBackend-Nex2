@@ -307,6 +307,7 @@ def update_metadata(request):
 
         if filename:
             md5sum = get_checksum(file)
+            return HTTPBadRequest(body=json.dumps({'error': "md5sum="+md5sum}), content_type='text/json')
             if md5sum != d.md5sum:
                 message = add_metadata(request, curator_session, CREATED_BY, source_id,
                                        file_id, file, filename)
