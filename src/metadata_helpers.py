@@ -1,5 +1,6 @@
 import logging
 import os
+import datetime
 from sqlalchemy import or_
 from pyramid.httpexceptions import HTTPBadRequest, HTTPOk
 from sqlalchemy.exc import IntegrityError, DataError
@@ -219,7 +220,7 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
                     file_extension=file_extension,
                     status=dbentity_status,
                     year=year,
-                    file_date=file_date,
+                    file_date=datetime.datetime.strptime(file_date, '%Y-%m-%d'),
                     description=description,
                     display_name=display_name,
                     data_id=data_id,
@@ -266,8 +267,6 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
         fd.dbentity_status = 'Archived'
         curator_session.add(fd)
         success_message = success_message + "<br>The dbentity_status has been set to 'Archived' for old version."
-        
-
         
         transaction.commit()
         return HTTPOk(body=json.dumps({'success': success_message, 'metadata': "METADATA"}), content_type='text/json')
