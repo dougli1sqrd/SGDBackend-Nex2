@@ -212,8 +212,6 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
             readme_file_id = int(readme_file_id)
         else:
             readme_file_id = None
-
-        return HTTPBadRequest(body=json.dumps({'error': "readme_file_id="+str(readme_file_id)}), content_type='text/json')
     
         #### add metadata to database and upload the new file to s3
         upload_file(CREATED_BY, file,
