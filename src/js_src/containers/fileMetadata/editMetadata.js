@@ -12,7 +12,7 @@ import style from './style.css';
 const UPDATE_METADATA = '/file_metadata_update';
 const GET_METADATA = '/get_one_file_metadata';
 
-const TIMEOUT = 300000;
+const TIMEOUT = 3000000;
 
 class EditMetadata extends Component {
   constructor(props) {
