@@ -150,11 +150,117 @@ def insert_keyword(curator_session, CREATED_BY, source_id, keyword):
 def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, file, filename):
 
     try:
+        success_message = ''
+        display_name = request.params.get('display_name')
+        if display_name == '':
+            return HTTPBadRequest(body=json.dumps({'error': "File display_name field is blank"}), content_type='text/json')
 
-        success_message = "ADD metadata"
+        dbentity_status = request.params.get('dbentity_status', None)
+        if dbentity_status is None or dbentity_status == '':
+            return HTTPBadRequest(body=json.dumps({'error': "dbentity_status field is blank"}), content_type='text/json')
+        if dbentity_status not in ['Active', 'Archived']:
+            return HTTPBadRequest(body=json.dumps({'error': "dbentity_status must be 'Active' or 'Archived'."}), content_type='text/json')
 
+        previous_file_name = request.params.get('previous_file_name', '')
 
+        description = request.params.get('description', '')
 
+        year = request.params.get('year')
+        if year is None:
+            return HTTPBadRequest(body=json.dumps({'error': "year field is blank"}), content_type='text/json')
+        year = int(year)
+        
+        file_size = request.params.get('file_size')
+        if file_size is None or file_size == '':
+            return HTTPBadRequest(body=json.dumps({'error': "file_size field is blank"}), content_type='text/json')
+        file_size = int(file_size)
+
+        file_extension = request.params.get('file_extension')
+        if file_extension is None:
+            return HTTPBadRequest(body=json.dumps({'error': "file_extension field is blank"}), content_type='text/json')
+
+        topic_id = request.params.get('topic_id')
+        topic_id = int(topic_id)
+
+        data_id = request.params.get('data_id')
+        data_id = int(data_id)
+
+        format_id = request.params.get('format_id')
+        format_id = int(format_id)
+
+        is_public = request.params.get('is_public', '')
+        if is_public == '':
+            return HTTPBadRequest(body=json.dumps({'error': "is_public field is blank"}), content_type='text/json')
+
+        is_in_spell = request.params.get('is_in_spell', '')
+        if is_in_spell == '':
+            return HTTPBadRequest(body=json.dumps({'error': "is_in_spell field is blank"}), content_type='text/json')
+
+        is_in_browser = request.params.get('is_in_browser', '')
+        if is_in_browser == '':
+            return HTTPBadRequest(body=json.dumps({'error': "is_in_browser field is blank"}), content_type='text/json')
+
+        file_date = request.params.get('file_date', '')
+        if file_date == '':
+            return HTTPBadRequest(body=json.dumps({'error': "file_date field is blank"}), content_type='text/json')
+        if '-' not in file_date:
+            return HTTPBadRequest(body=json.dumps({'error': "file_date format: yyyy-mm-dd"}), content_type='text/json')
+
+        readme_file_id = request.params.get('readme_file_id')
+        if str(readme_file_id).isdigit():
+            readme_file_id = int(readme_file_id)
+        else:
+            readme_file_id = None
+
+        #### add metadata to database and upload the new file to s3
+        upload_file(CREATED_BY, file,
+                    filename=filename,
+                    file_extension=file_extension,
+                    description=description,
+                    display_name=display_name,
+                    data_id=data_id,
+                    format_id=format_id,
+                    topic_id=topic_id,
+                    status=dbentity_status,
+                    is_public=is_public,
+                    is_in_spell=is_in_spell,
+                    is_in_browser=is_in_browser,
+                    file_date=file_date,
+                    source_id=source_id,
+                    md5sum=md5sum)
+        fd = curator_session.query(Filedbentity).filter_by(display_name=display_name, dbentity_status='Active').one_or_none()
+        if fd is None:
+            return HTTPBadRequest(body=json.dumps({'error': "Error occurred when adding metadata into database and uploading the file to s3."}), content_type='text/json')
+        file_id = fd.dbentity_id
+        success_message = success_message + "<br>The metadata for this new version has been added into database and the file is up in s3 now."
+        
+        #### add path_id and newly created file_id to file_path table
+        path_id = request.params.get('path_id')
+        if str(path_id).isdigit():
+            insert_file_path(curator_session, CREATED_BY, source_id, file_id, int(path_id))
+            success_message = success_message + "<br>path_id has been added for this file."
+
+        ### add keywords to database
+        keywords = request.params.get('keywords', '')
+        kw_list = keywords.split('|')
+        for kw in kw_list:
+            kw = kw.strip()
+            if kw == '':
+                continue
+            keyword_id = insert_keyword(curator_session, CREATED_BY, source_id, kw)
+            if str(keyword_id).isdigit():
+                success_message = success_message + "<br>keyword '" + kw + "' has been added for this file."
+                insert_file_keyword(curator_session, CREATED_BY, source_id, file_id, keyword_id)
+            else:
+                err_msg = keyword_id
+                return HTTPBadRequest(body=json.dumps({'error': err_msg}), content_type='text/json')
+
+        ### set dbentity_status = 'Archived' for the old_file_id
+        fd = curator_session.query(Filedbentity).filter_by(dbentity_id = old_file_id).one_or_none
+        fd.dbentity_status = 'Archived'
+        curator_session.add(fd)
+        success_message = success_message + "<br>The dbentity_status has been set to 'Archived' for old version."
+        
 
         
         transaction.commit()
@@ -198,11 +304,9 @@ def update_metadata(request):
         # fileObj = FieldStorage('file', 'pone.0000217.e011.jpg')
         # file = file <_io.BufferedRandom name=23>
         # filename = pone.0000217.e011.jpg
-        
+
         if filename:
             md5sum = get_checksum(file)
-            return HTTPBadRequest(body=json.dumps({'error': "md5sum="+md5sum}), content_type='text/json')
-            
             if md5sum != d.md5sum:
                 message = add_metadata(request, curator_session, CREATED_BY, source_id,
                                        file_id, file, filename)
