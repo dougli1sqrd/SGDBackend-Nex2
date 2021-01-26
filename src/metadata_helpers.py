@@ -245,7 +245,7 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
                     full_file_path=file_path,
                     source_id=source_id,
                     md5sum=md5sum)
-        curator_session.commit()
+        transaction.commit()
         
         fd = curator_session.query(Filedbentity).filter_by(md5sum=md5sum).one_or_none()
         if fd is None:
