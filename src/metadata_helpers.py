@@ -220,7 +220,11 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
             p = curator_session.query(Path).filter_by(path_id=path_id).one_or_none()
             if p:
                 file_path = p.path
-                
+
+        #### reconnect to database
+        engine = create_engine(os.environ['NEX2_URI'], pool_recycle=3600)
+        curator_session.configure(bind=engine)
+
         #### add metadata to database and upload the new file to s3
         upload_file(CREATED_BY, file,
                     filename=filename,
@@ -250,7 +254,6 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
 
         # return HTTPBadRequest(body=json.dumps({'error': "HELLO="+success_message}), content_type='text/json')
     
-        
         #### add path_id and newly created file_id to file_path table
         # path_id = request.params.get('path_id')
         if str(path_id).isdigit():
