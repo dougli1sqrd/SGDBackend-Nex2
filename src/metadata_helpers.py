@@ -261,7 +261,7 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
             insert_file_path(curator_session, CREATED_BY, source_id, file_id, int(path_id))
             success_message = success_message + "<br>path_id has been added for this file."
 
-        return HTTPBadRequest(body=json.dumps({'error': "HELLO2="+success_message}), content_type='text/json')
+        # return HTTPBadRequest(body=json.dumps({'error': "HELLO2="+success_message}), content_type='text/json')
     
         ### add keywords to database
         keywords = request.params.get('keywords', '')
@@ -279,10 +279,11 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
                 return HTTPBadRequest(body=json.dumps({'error': err_msg}), content_type='text/json')
 
         ### set dbentity_status = 'Archived' for the old_file_id
-        fd = curator_session.query(Filedbentity).filter_by(dbentity_id = old_file_id).one_or_none
-        fd.dbentity_status = 'Archived'
-        curator_session.add(fd)
-        success_message = success_message + "<br>The dbentity_status has been set to 'Archived' for old version."
+        fd = curator_session.query(Filedbentity).filter_by(dbentity_id=old_file_id).one_or_none
+        if fd:
+            fd.dbentity_status = 'Archived'
+            curator_session.add(fd)
+            success_message = success_message + "<br>The dbentity_status has been set to 'Archived' for old version."
         
         transaction.commit()
         return HTTPOk(body=json.dumps({'success': success_message, 'metadata': "METADATA"}), content_type='text/json')
