@@ -213,7 +213,14 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
             readme_file_id = int(readme_file_id)
         else:
             readme_file_id = None
-    
+
+        path_id = request.params.get('path_id')
+        file_path = None
+        if str(path_id).isdigit():
+            p = curator_session.query(Path).filter_by(path_id=path_id).one_or_none()
+            if p:
+                file_path = p.path
+                
         #### add metadata to database and upload the new file to s3
         upload_file(CREATED_BY, file,
                     filename=filename,
@@ -230,6 +237,7 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
                     is_in_spell=is_in_spell,
                     is_in_browser=is_in_browser,
                     readme_file_id=readme_file_id,
+                    full_file_path=file_path,
                     source_id=source_id,
                     md5sum=md5sum)
 
@@ -240,11 +248,11 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
         file_id = fd.dbentity_id
         success_message = success_message + "<br>The metadata for this new version has been added into database and the file is up in s3 now."
 
-        return HTTPBadRequest(body=json.dumps({'error': "HELLO="+success_message}), content_type='text/json')
+        # return HTTPBadRequest(body=json.dumps({'error': "HELLO="+success_message}), content_type='text/json')
     
         
         #### add path_id and newly created file_id to file_path table
-        path_id = request.params.get('path_id')
+        # path_id = request.params.get('path_id')
         if str(path_id).isdigit():
             insert_file_path(curator_session, CREATED_BY, source_id, file_id, int(path_id))
             success_message = success_message + "<br>path_id has been added for this file."
