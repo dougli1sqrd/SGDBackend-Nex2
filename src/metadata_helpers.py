@@ -248,16 +248,12 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
                     md5sum=md5sum)
         transaction.commit()
         fd = curator_session.query(Filedbentity).filter_by(md5sum=md5sum).one_or_none()
-
-        return HTTPBadRequest(body=json.dumps({'error': "HELLO="}), content_type='text/json') 
-    
-    
         if fd is None:
             return HTTPBadRequest(body=json.dumps({'error': "Error occurred when adding metadata into database and uploading the file to s3."}), content_type='text/json')
         file_id = fd.dbentity_id
         success_message = success_message + "<br>The metadata for this new version has been added into database and the file is up in s3 now."
 
-        # return HTTPBadRequest(body=json.dumps({'error': "HELLO="+success_message}), content_type='text/json')
+        return HTTPBadRequest(body=json.dumps({'error': "HELLO="+success_message}), content_type='text/json')
     
         #### add path_id and newly created file_id to file_path table
         # path_id = request.params.get('path_id')
