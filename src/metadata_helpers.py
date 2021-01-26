@@ -279,12 +279,9 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
                 return HTTPBadRequest(body=json.dumps({'error': err_msg}), content_type='text/json')
 
         ### set dbentity_status = 'Archived' for the old_file_id
-        d = curator_session.query(Dbentity).filter_by(dbentity_id=old_file_id).one_or_none
-        if d is not None:
-            d.dbentity_status = 'Archived'
-            curator_session.add(d)
-            success_message = success_message + "<br>The dbentity_status has been set to 'Archived' for old version."
-        
+        curator_session.query(Dbentity).filter_by(dbentity_id=old_file_id).filter_by(dbentity_status='Active').update({"dbentity_status": 'Archived'}, synchronize_session='fetch')
+        success_message = success_message + "<br>The dbentity_status has been set to 'Archived' for old version."
+                
         transaction.commit()
         return HTTPOk(body=json.dumps({'success': success_message, 'metadata': "METADATA"}), content_type='text/json')
     except Exception as e:
