@@ -227,7 +227,8 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
         curator_session.configure(bind=engine)
 
         #### add metadata to database and upload the new file to s3
-        upload_file(CREATED_BY, file,
+        upload_file(CREATED_BY,
+                    file,
                     filename=filename,
                     file_extension=file_extension,
                     status=dbentity_status,
@@ -246,7 +247,9 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
                     source_id=source_id,
                     md5sum=md5sum)
         transaction.commit()
-        
+
+        return HTTPBadRequest(body=json.dumps({'error': "HELLO WORLD!"}), content_type='text/json')
+    
         fd = curator_session.query(Filedbentity).filter_by(md5sum=md5sum).one_or_none()
         if fd is None:
             return HTTPBadRequest(body=json.dumps({'error': "Error occurred when adding metadata into database and uploading the file to s3."}), content_type='text/json')
