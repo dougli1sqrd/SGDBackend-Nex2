@@ -222,6 +222,7 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
                 file_path = p.path
 
         #### reconnect to database
+        from sqlalchemy import create_engine
         engine = create_engine(os.environ['NEX2_URI'], pool_recycle=3600)
         curator_session.configure(bind=engine)
 
