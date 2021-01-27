@@ -331,7 +331,9 @@ def upload_file(username, file, **kwargs):
         transaction.commit()
         DBSession.flush()
         fdb = DBSession.query(Filedbentity).filter(Filedbentity.dbentity_id == did).one_or_none()
-        fdb.upload_file_to_s3(file=file, filename=filename, is_web_file=is_web_file, file_path=full_file_path, flag=False)
+        s3_url = fdb.upload_file_to_s3(file=file, filename=filename, is_web_file=is_web_file, file_path=full_file_path, flag=False)
+        if fdb.s3_url is None:
+            fdb.s3_url = s3_url
         DBSession.add(fdb)
         transaction.commit()
     except Exception as e:
