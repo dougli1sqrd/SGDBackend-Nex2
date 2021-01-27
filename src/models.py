@@ -3016,6 +3016,7 @@ class Filedbentity(Dbentity):
                 if flag:
                     # multiplte commits are fluching pending transactions
                     transaction.commit()
+                    return self.s3_url
             else:
                 conn = boto.connect_s3(S3_ACCESS_KEY, S3_SECRET_KEY)
                 bucket = conn.get_bucket(S3_BUCKET)
@@ -3052,7 +3053,6 @@ class Filedbentity(Dbentity):
                     logging.info("Added file to s3")
                     return self.s3_url
                 return False
-            return self.s3_url
         except Exception as e:
             logging.error(e, exc_info=True)
             
