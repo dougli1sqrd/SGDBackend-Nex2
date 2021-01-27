@@ -3051,6 +3051,7 @@ class Filedbentity(Dbentity):
                     self.s3_url = re.sub(
                         r'\?.+', '', mod_s3_url).replace(':433', '').strip()
                     logging.info("Added file to s3")
+                    transaction.commit()
                     return True
                 return False
         except Exception as e:
