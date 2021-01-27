@@ -247,8 +247,6 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
                     source_id=source_id,
                     md5sum=md5sum)
         transaction.commit()
-
-        # return HTTPBadRequest(body=json.dumps({'error': "s3_url="+str(s3_url) + ", s3_url_db=" + str(s3_url_db)}), content_type='text/json')
     
         fd = curator_session.query(Filedbentity).filter_by(md5sum=md5sum).one_or_none()
         if fd is None:
