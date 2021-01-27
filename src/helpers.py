@@ -336,6 +336,7 @@ def upload_file(username, file, **kwargs):
             fdb.s3_url = s3_url
             DBSession.add(fdb)
         transaction.commit()
+        return (s3_url, fdb.s3_url)
     except Exception as e:
         DBSession.rollback()
         DBSession.remove()
