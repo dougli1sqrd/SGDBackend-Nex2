@@ -253,6 +253,8 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
             return HTTPBadRequest(body=json.dumps({'error': "Error occurred when adding metadata into database and uploading the file to s3."}), content_type='text/json')
         file_id = fd.dbentity_id
 
+        return HTTPBadRequest(body=json.dumps({'error': "HELLO2="+str(fd.s3_url)}), content_type='text/json')
+    
         if fd.s3_url is None:
             fd.upload_file_to_s3(file, filename)
             transaction.commit()
