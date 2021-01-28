@@ -260,7 +260,7 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
 
         # return HTTPBadRequest(body=json.dumps({'error': "file_id="+str(file_id)}), content_type='text/json')
 
-        fd = curator_session.query(Filedbentity).filter_by(file_id=file_id).one_or_none()
+        fd = curator_session.query(Filedbentity).filter_by(dbentity_id=file_id).one_or_none()
         
         return HTTPBadRequest(body=json.dumps({'error': "sgdid="+str(fd.sgdid)}), content_type='text/json')
 
