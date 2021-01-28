@@ -245,8 +245,7 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
                     is_in_browser=is_in_browser,
                     readme_file_id=readme_file_id,
                     source_id=source_id,
-                    md5sum=md5sum,
-                    'is_web_file'='1')
+                    md5sum=md5sum)
         transaction.commit()
     
         fd = curator_session.query(Filedbentity).filter_by(md5sum=md5sum).one_or_none()
