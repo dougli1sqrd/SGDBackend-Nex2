@@ -231,6 +231,7 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
         fd = Filedbentity(created_by=CREATED_BY,
                           display_name=display_name,
                           format_name=display_name,
+                          subclass='FILE',
                           previous_file_name=filename,
                           file_extension=file_extension,
                           dbentity_status=dbentity_status,
