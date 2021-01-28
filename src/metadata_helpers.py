@@ -227,41 +227,35 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
         # engine = create_engine(os.environ['NEX2_URI'], pool_recycle=3600)
         # curator_session.configure(bind=engine)
 
-        #### add metadata to database and upload the new file to s3
-        upload_file(CREATED_BY,
-                    file,
-                    filename=filename,
-                    file_extension=file_extension,
-                    status=dbentity_status,
-                    year=year,
-                    file_date=datetime.datetime.strptime(file_date, '%Y-%m-%d'),
-                    description=description,
-                    display_name=display_name,
-                    data_id=data_id,
-                    format_id=format_id,
-                    topic_id=topic_id,
-                    is_public=is_public,
-                    is_in_spell=is_in_spell,
-                    is_in_browser=is_in_browser,
-                    readme_file_id=readme_file_id,
-                    full_file_path=file_path,
-                    source_id=source_id,
-                    md5sum=md5sum)
-        transaction.commit()
-    
-        fd = curator_session.query(Filedbentity).filter_by(md5sum=md5sum).one_or_none()
-        if fd is None:
-            return HTTPBadRequest(body=json.dumps({'error': "Error occurred when adding metadata into database and uploading the file to s3."}), content_type='text/json')
-        file_id = fd.dbentity_id
-
+        #### add metadata to database 
+        fd = Filedbentity(created_by=CREATED_BY,
+                          display_name=display_name,
+                          previous_file_name=filename,
+                          file_extension=file_extension,
+                          dbentity_status=dbentity_status,
+                          year=year,
+                          file_date=datetime.datetime.strptime(file_date, '%Y-%m-%d'),
+                          description=description,
+                          data_id=data_id,
+                          format_id=format_id,
+                          topic_id=topic_id,
+                          is_public=is_public,
+                          is_in_spell=is_in_spell,
+                          is_in_browser=is_in_browser,
+                          readme_file_id=readme_file_id,
+                          source_id=source_id,
+                          md5sum=md5sum)
+        curator_session.add(f)
+        curator_session.flush()
+        file_id = f.dbentity_id
+        
         # return HTTPBadRequest(body=json.dumps({'error': "sgdid="+fd.sgdid}), content_type='text/json')
-    
-        if fd.s3_url is None:
-            transaction.commit()
-            s3_url = upload_file_to_s3(file, fd.sgdid + "/" + filename)
-            fd.s3_url = s3_url
-            curator_session.add(fd)
-            transaction.commit()
+
+        #### upload file to s3
+        s3_url = upload_file_to_s3(file, fd.sgdid + "/" + filename)
+        fd.s3_url = s3_url
+        curator_session.add(fd)
+        transaction.commit()
             
         success_message = success_message + "<br>The metadata for this new version has been added into database and the file is up in s3 now."
     
