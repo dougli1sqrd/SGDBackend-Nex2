@@ -269,6 +269,10 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
         transaction.commit()
         
         success_message = success_message + "<br>The metadata for this new version has been added into database and the file is up in s3 now."
+
+
+        return HTTPBadRequest(body=json.dumps({'error': "DONE with s3 uploading="+success_message}), content_type='text/json')
+
     
         #### add path_id and newly created file_id to file_path table
         # path_id = request.params.get('path_id')
@@ -276,7 +280,7 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
             insert_file_path(curator_session, CREATED_BY, source_id, file_id, int(path_id))
             success_message = success_message + "<br>path_id has been added for this file."
 
-        # return HTTPBadRequest(body=json.dumps({'error': "HELLO2="+success_message}), content_type='text/json')
+        # return HTTPBadRequest(body=json.dumps({'error': "DONE with s3 uploading="+success_message}), content_type='text/json')
     
         ### add keywords to database
         keywords = request.params.get('keywords', '')
@@ -300,6 +304,7 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
         transaction.commit()
         return HTTPOk(body=json.dumps({'success': success_message, 'metadata': "METADATA"}), content_type='text/json')
     except Exception as e:
+        log.error(e)
         return HTTPBadRequest(body=json.dumps({'error': str(e)}), content_type='text/json')
     finally:
         if curator_session:
