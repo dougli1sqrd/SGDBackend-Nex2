@@ -253,12 +253,25 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
             return HTTPBadRequest(body=json.dumps({'error': "Error occurred when adding metadata into database and uploading the file to s3."}), content_type='text/json')
         file_id = fd.dbentity_id
 
-        return HTTPBadRequest(body=json.dumps({'error': "HELLO2="+str(fd.s3_url)}), content_type='text/json')
-    
         if fd.s3_url is None:
-            fd.upload_file_to_s3(file, filename)
+            # fd.upload_file_to_s3(file, filename)
+            # transaction.commit()
+            from boto.s3.key import Key
+            import boto
+            S3_ACCESS_KEY = os.environ['S3_ACCESS_KEY']
+            S3_SECRET_KEY = os.environ['S3_SECRET_KEY']
+            S3_BUCKET = os.environ['S3_BUCKET']
+            conn = boto.connect_s3(S3_ACCESS_KEY, S3_SECRET_KEY)
+            bucket = conn.get_bucket(S3_BUCKET)
+            k = Key(bucket)
+            k.key = fd.sgdid + "/" + filename
+            k.set_contents_from_file(file, rewind=True)
+            k.make_public()
             transaction.commit()
-
+            fd.s3_url = "https://" + S3_BUCKET + ".s3.amazonaws.com/" + fd.sgdid + "/" + filename
+            curator_session.add(fd)
+            transaction.commit() 
+            
         success_message = success_message + "<br>The metadata for this new version has been added into database and the file is up in s3 now."
     
         #### add path_id and newly created file_id to file_path table
