@@ -10,7 +10,6 @@ from src.models import DBSession, Dbentity, Filedbentity, FilePath, Path,\
                        FileKeyword, Keyword, Source
 from src.aws_helpers import get_checksum
 from src.helpers import upload_file
-from src.aws_helpers import upload_file_to_s3
 from src.curation_helpers import get_curator_session
 
 # PREVIEW_URL = os.environ['PREVIEW_URL']
@@ -215,12 +214,12 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
         else:
             readme_file_id = None
 
-        # path_id = request.params.get('path_id')
-        # file_path = None
-        # if str(path_id).isdigit():
-        #    p = curator_session.query(Path).filter_by(path_id=path_id).one_or_none()
-        #    if p:
-        #        file_path = p.path
+        path_id = request.params.get('path_id')
+        file_path = None
+        if str(path_id).isdigit():
+            p = curator_session.query(Path).filter_by(path_id=path_id).one_or_none()
+            if p:
+                file_path = p.path
 
         #### reconnect to database
         # from sqlalchemy import create_engine
@@ -244,30 +243,40 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
                     is_in_spell=is_in_spell,
                     is_in_browser=is_in_browser,
                     readme_file_id=readme_file_id,
+                    full_file_path=file_path,
                     source_id=source_id,
                     md5sum=md5sum)
         transaction.commit()
     
         fd = curator_session.query(Filedbentity).filter_by(md5sum=md5sum).one_or_none()
-
         if fd is None:
             return HTTPBadRequest(body=json.dumps({'error': "Error occurred when adding metadata into database and uploading the file to s3."}), content_type='text/json')
-
         file_id = fd.dbentity_id
 
-        return HTTPBadRequest(body=json.dumps({'error': "fd.s3_url="+fd.s3_url}), content_type='text/json')
+        # return HTTPBadRequest(body=json.dumps({'error': "sgdid="+fd.sgdid}), content_type='text/json')
     
-        # if fd.s3_url is None:
-        #    s3_url = upload_file_to_s3(file, fd.sgdid + "/" + filename)
-        #    transaction.commit()
-        #    fd.s3_url = s3_url
-        #    curator_session.add(fd)
-        #    transaction.commit()
+        if fd.s3_url is None:
+            from boto.s3.key import Key
+            import boto
+            S3_ACCESS_KEY = os.environ['S3_ACCESS_KEY']
+            S3_SECRET_KEY = os.environ['S3_SECRET_KEY']
+            S3_BUCKET = os.environ['S3_BUCKET']
+            conn = boto.connect_s3(S3_ACCESS_KEY, S3_SECRET_KEY)
+            bucket = conn.get_bucket(S3_BUCKET)
+            k = Key(bucket)
+            k.key = fd.sgdid + "/" + filename
+            k.set_contents_from_file(file, rewind=True)
+            k.make_public()
+            transaction.commit()
+            s3_url = "https://" + S3_BUCKET + ".s3.amazonaws.com/" + fd.sgdid + "/" + filename
+            fd.s3_url = s3_url
+            curator_session.add(fd)
+            transaction.commit()
             
         success_message = success_message + "<br>The metadata for this new version has been added into database and the file is up in s3 now."
     
         #### add path_id and newly created file_id to file_path table
-        path_id = request.params.get('path_id')
+        # path_id = request.params.get('path_id')
         if str(path_id).isdigit():
             insert_file_path(curator_session, CREATED_BY, source_id, file_id, int(path_id))
             success_message = success_message + "<br>path_id has been added for this file."
