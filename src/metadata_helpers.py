@@ -245,9 +245,9 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
                           readme_file_id=readme_file_id,
                           source_id=source_id,
                           md5sum=md5sum)
-        curator_session.add(f)
+        curator_session.add(fd)
         curator_session.flush()
-        file_id = f.dbentity_id
+        file_id = fd.dbentity_id
         
         # return HTTPBadRequest(body=json.dumps({'error': "sgdid="+fd.sgdid}), content_type='text/json')
 
