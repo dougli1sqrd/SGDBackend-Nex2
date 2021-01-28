@@ -106,7 +106,7 @@ def upload_file_to_s3(file, filename):
     conn = boto.connect_s3(S3_ACCESS_KEY, S3_SECRET_KEY)
     bucket = conn.get_bucket(S3_BUCKET)
     k = Key(bucket)
-    k.key = key
+    k.key = filename
     k.set_contents_from_file(file, rewind=True)
     k.make_public()
     return "https://" + S3_BUCKET + ".s3.amazonaws.com/" + filename
