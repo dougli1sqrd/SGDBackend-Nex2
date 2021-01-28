@@ -253,7 +253,7 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
             return HTTPBadRequest(body=json.dumps({'error': "Error occurred when adding metadata into database and uploading the file to s3."}), content_type='text/json')
         file_id = fd.dbentity_id
 
-        return HTTPBadRequest(body=json.dumps({'error': "sgdid="+fd.sgdid}), content_type='text/json')
+        # return HTTPBadRequest(body=json.dumps({'error': "sgdid="+fd.sgdid}), content_type='text/json')
     
         if fd.s3_url is None:
             # fd.upload_file_to_s3(file, filename)
@@ -270,10 +270,12 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
             k.set_contents_from_file(file, rewind=True)
             k.make_public()
             transaction.commit()
-            fd.s3_url = "https://" + S3_BUCKET + ".s3.amazonaws.com/" + fd.sgdid + "/" + filename
-            curator_session.add(fd)
-            transaction.commit() 
-            # expected string or bytes-like object
+            s3_url = "https://" + S3_BUCKET + ".s3.amazonaws.com/" + fd.sgdid + "/" + filename
+            return HTTPBadRequest(body=json.dumps({'error': "s3_url="+s3_url}), content_type='text/json') 
+            # fd.s3_url = s3_url
+            # curator_session.add(fd)
+            # transaction.commit() 
+            # error: expected string or bytes-like object
             
         success_message = success_message + "<br>The metadata for this new version has been added into database and the file is up in s3 now."
     
