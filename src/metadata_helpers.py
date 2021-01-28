@@ -249,9 +249,11 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
                           md5sum=md5sum)
         curator_session.add(fd)
         curator_session.flush()
+        file_id = fd.dbentity_id
         transaction.commit()
+        curator_session.flush()
         
-        return HTTPBadRequest(body=json.dumps({'error': "sgdid="+fd.sgdid}), content_type='text/json')
+        return HTTPBadRequest(body=json.dumps({'error': "sgdid="+str(fd.sgdid)}), content_type='text/json')
 
     
         #### upload file to s3
