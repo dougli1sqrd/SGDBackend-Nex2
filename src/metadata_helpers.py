@@ -344,6 +344,9 @@ def update_metadata(request):
         filename = None
         if fileObj != '':
             file = fileObj.file
+            log.error(type(file))
+            log.error(file)
+            log.error(getattr(file, 'name', None))
             filename = fileObj.filename
 
         # return HTTPBadRequest(body=json.dumps({'error': "filename="+str(filename)}), content_type='text/json')
