@@ -260,7 +260,7 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
 
         fd = curator_session.query(Filedbentity).filter_by(dbentity_id=file_id).one_or_none()
         
-        # return HTTPBadRequest(body=json.dumps({'error': "sgdid="+str(fd.sgdid)}), content_type='text/json')
+        return HTTPBadRequest(body=json.dumps({'error': "sgdid="+str(fd.sgdid)}), content_type='text/json')
         
         #### upload file to s3
         s3_url = upload_file_to_s3(file, fd.sgdid + "/" + filename)
