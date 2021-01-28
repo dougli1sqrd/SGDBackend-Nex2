@@ -249,16 +249,19 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
                           md5sum=md5sum)
         curator_session.add(fd)
         curator_session.flush()
-        file_id = fd.dbentity_id
+        transaction.commit()
         
-        # return HTTPBadRequest(body=json.dumps({'error': "sgdid="+fd.sgdid}), content_type='text/json')
+        return HTTPBadRequest(body=json.dumps({'error': "sgdid="+fd.sgdid}), content_type='text/json')
 
+    
         #### upload file to s3
         s3_url = upload_file_to_s3(file, fd.sgdid + "/" + filename)
         fd.s3_url = s3_url
         curator_session.add(fd)
         transaction.commit()
-            
+
+        file_id = fd.dbentity_id
+        
         success_message = success_message + "<br>The metadata for this new version has been added into database and the file is up in s3 now."
     
         #### add path_id and newly created file_id to file_path table
