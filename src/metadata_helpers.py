@@ -227,6 +227,8 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
         # engine = create_engine(os.environ['NEX2_URI'], pool_recycle=3600)
         # curator_session.configure(bind=engine)
 
+        file_date=datetime.datetime.strptime(file_date, '%Y-%m-%d'),
+        
         #### add metadata to database 
         fd = Filedbentity(created_by=CREATED_BY,
                           display_name=display_name,
@@ -239,7 +241,7 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
                           s3_url=None,
                           dbentity_status=dbentity_status,
                           year=year,
-                          file_date=datetime.datetime.strptime(file_date, '%Y-%m-%d'),
+                          file_date=file_date,
                           description=description,
                           data_id=data_id,
                           format_id=format_id,
@@ -255,8 +257,10 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
         file_id = fd.dbentity_id
         transaction.commit()
         curator_session.flush()
-        
-        return HTTPBadRequest(body=json.dumps({'error': "sgdid="+str(fd.sgdid)}), content_type='text/json')
+
+        return HTTPBadRequest(body=json.dumps({'error': "file_id="+str(file_id)}), content_type='text/json')
+    
+        # return HTTPBadRequest(body=json.dumps({'error': "sgdid="+str(fd.sgdid)}), content_type='text/json')
 
     
         #### upload file to s3
