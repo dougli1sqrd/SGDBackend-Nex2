@@ -258,6 +258,7 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
     
         if fd.s3_url is None:
             s3_url = upload_file_to_s3(file, fd.sgdid + "/" + filename)
+            transaction.commit()
             fd.s3_url = s3_url
             curator_session.add(fd)
             transaction.commit()
