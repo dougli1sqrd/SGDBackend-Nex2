@@ -258,9 +258,9 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
         transaction.commit()
         curator_session.flush()
 
-        return HTTPBadRequest(body=json.dumps({'error': "file_id="+str(file_id)}), content_type='text/json')
+        # return HTTPBadRequest(body=json.dumps({'error': "file_id="+str(file_id)}), content_type='text/json')
     
-        # return HTTPBadRequest(body=json.dumps({'error': "sgdid="+str(fd.sgdid)}), content_type='text/json')
+        return HTTPBadRequest(body=json.dumps({'error': "sgdid="+str(fd.sgdid)}), content_type='text/json')
 
     
         #### upload file to s3
