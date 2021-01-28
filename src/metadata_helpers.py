@@ -304,7 +304,7 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
         transaction.commit()
         return HTTPOk(body=json.dumps({'success': success_message, 'metadata': "METADATA"}), content_type='text/json')
     except Exception as e:
-        log.error(e)
+        log.exception('ADD metadata ERROR')
         return HTTPBadRequest(body=json.dumps({'error': str(e)}), content_type='text/json')
     finally:
         if curator_session:
