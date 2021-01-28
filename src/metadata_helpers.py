@@ -271,10 +271,12 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
             k.make_public()
             transaction.commit()
             s3_url = "https://" + S3_BUCKET + ".s3.amazonaws.com/" + fd.sgdid + "/" + filename
-            return HTTPBadRequest(body=json.dumps({'error': "s3_url="+s3_url}), content_type='text/json') 
-            # fd.s3_url = s3_url
-            # curator_session.add(fd)
-            # transaction.commit() 
+            # return HTTPBadRequest(body=json.dumps({'error': "s3_url="+s3_url}), content_type='text/json') 
+            fd.s3_url = s3_url
+            curator_session.add(fd)
+            transaction.commit()
+            return HTTPBadRequest(body=json.dumps({'error': "fd.s3_url="+fd.s3_url}), content_type='text/json')
+        
             # error: expected string or bytes-like object
             
         success_message = success_message + "<br>The metadata for this new version has been added into database and the file is up in s3 now."
