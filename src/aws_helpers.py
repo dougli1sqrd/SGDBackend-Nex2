@@ -109,7 +109,7 @@ def upload_file_to_s3(file, filename):
     k = Key(bucket)
     k.key = filename
     k.set_contents_from_file(file, rewind=True, headers={
-        'Content-Type': mimetypes.guess_type(filename),
+        'Content-Type': mimetypes.guess_type(filename)[0],
     })
     k.make_public()
     return "https://" + S3_BUCKET + ".s3.amazonaws.com/" + filename
