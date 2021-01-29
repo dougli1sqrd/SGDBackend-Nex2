@@ -5,6 +5,7 @@ import logging
 import boto
 from boto.s3.key import Key
 import hashlib
+import mimetypes
 import functools
 import multiprocessing
 from multiprocessing.pool import IMapIterator
@@ -107,7 +108,9 @@ def upload_file_to_s3(file, filename):
     bucket = conn.get_bucket(S3_BUCKET)
     k = Key(bucket)
     k.key = filename
-    k.set_contents_from_file(file, rewind=True)
+    k.set_contents_from_file(file, rewind=True, headers={
+        'Content-Type': mimetypes.guess_type(filename),
+    })
     k.make_public()
     return "https://" + S3_BUCKET + ".s3.amazonaws.com/" + filename
 

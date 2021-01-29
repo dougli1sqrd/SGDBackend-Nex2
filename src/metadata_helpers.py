@@ -345,14 +345,18 @@ def update_metadata(request):
         if fileObj != '':
             file = fileObj.file
             filename = fileObj.filename
-            file.name = filename
             
         # return HTTPBadRequest(body=json.dumps({'error': "filename="+str(filename)}), content_type='text/json')
-    
+
+        ## for small file:
+        # file = <_io.BytesIO object at 0x7f668c41c468>
+        
+        ## for BIG file
         # fileObj = FieldStorage('file', 'pone.0000217.e011.jpg')
         # file = file <_io.BufferedRandom name=23>
         # filename = pone.0000217.e011.jpg
-
+        ## this name=23 will cause issue
+        
         if filename:
             md5sum = get_checksum(file)
             # return HTTPBadRequest(body=json.dumps({'error': "md5sum="+md5sum}), content_type='text/json')
