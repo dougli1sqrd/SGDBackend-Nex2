@@ -214,22 +214,9 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
             readme_file_id = int(readme_file_id)
         else:
             readme_file_id = None
-
-        path_id = request.params.get('path_id')
-        file_path = None
-        if str(path_id).isdigit():
-            p = curator_session.query(Path).filter_by(path_id=path_id).one_or_none()
-            if p:
-                file_path = p.path
-
-        #### reconnect to database
-        # from sqlalchemy import create_engine
-        # engine = create_engine(os.environ['NEX2_URI'], pool_recycle=3600)
-        # curator_session.configure(bind=engine)
-
-        file_date=datetime.datetime.strptime(file_date, '%Y-%m-%d'),
         
-        #### add metadata to database 
+        #### add metadata to database
+        file_date=datetime.datetime.strptime(file_date, '%Y-%m-%d'),
         fd = Filedbentity(created_by=CREATED_BY,
                           display_name=display_name,
                           format_name=display_name,
@@ -259,28 +246,19 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
         curator_session.flush()
 
         fd = curator_session.query(Filedbentity).filter_by(dbentity_id=file_id).one_or_none()
-        
-        # return HTTPBadRequest(body=json.dumps({'error': "sgdid="+str(fd.sgdid)}), content_type='text/json')
-        
+                
         #### upload file to s3
         s3_url = upload_file_to_s3(file, fd.sgdid + "/" + filename)
         fd.s3_url = s3_url
         curator_session.add(fd)
         transaction.commit()
-        
         success_message = success_message + "<br>The metadata for this new version has been added into database and the file is up in s3 now."
 
-
-        return HTTPBadRequest(body=json.dumps({'error': "DONE with s3 uploading="+success_message}), content_type='text/json')
-
-    
         #### add path_id and newly created file_id to file_path table
-        # path_id = request.params.get('path_id')
+        path_id = request.params.get('path_id')
         if str(path_id).isdigit():
             insert_file_path(curator_session, CREATED_BY, source_id, file_id, int(path_id))
             success_message = success_message + "<br>path_id has been added for this file."
-
-        # return HTTPBadRequest(body=json.dumps({'error': "DONE with s3 uploading="+success_message}), content_type='text/json')
     
         ### add keywords to database
         keywords = request.params.get('keywords', '')
@@ -329,16 +307,12 @@ def update_metadata(request):
 
         file_id = d.dbentity_id
 
-        ## check to see if there is a file passed in and if yes, of its md5sum is
-        ## same as the one in the database, if yes, ignore it; otherwise upload 
+        ## check to see if there is a file passed in and if yes, if its md5sum is
+        ## the same as the one in the database, ignore it; otherwise upload 
         ## the new file to s3, insert metadata, set status = 'Active', mark the 
         ## old version as 'Archived'
-
-        # return HTTPBadRequest(body=json.dumps({'error': "HELLO"}), content_type='text/json')
     
         fileObj = request.params.get('file')
-
-        # return HTTPBadRequest(body=json.dumps({'error': "fileObj="+str(fileObj)}), content_type='text/json')
     
         file = None
         filename = None
@@ -346,7 +320,6 @@ def update_metadata(request):
             file = fileObj.file
             filename = fileObj.filename
             
-        # return HTTPBadRequest(body=json.dumps({'error': "filename="+str(filename)}), content_type='text/json')
 
         ## for small file:
         # file = <_io.BytesIO object at 0x7f668c41c468>
@@ -359,7 +332,6 @@ def update_metadata(request):
         
         if filename:
             md5sum = get_checksum(file)
-            # return HTTPBadRequest(body=json.dumps({'error': "md5sum="+md5sum}), content_type='text/json')
             if md5sum != d.md5sum:
                 message = add_metadata(request, curator_session, CREATED_BY, source_id,
                                        file_id, file, filename, md5sum)
