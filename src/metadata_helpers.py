@@ -7,7 +7,7 @@ from sqlalchemy.exc import IntegrityError, DataError
 import transaction
 import json
 from src.models import DBSession, Dbentity, Filedbentity, FilePath, Path,\
-                       FileKeyword, Keyword, Source
+                       FileKeyword, ReferenceFile, Keyword, Source
 from src.aws_helpers import get_checksum
 from src.helpers import upload_file
 from src.aws_helpers import upload_file_to_s3
@@ -60,6 +60,12 @@ def get_metadata_for_one_file(request):
             data['path_id'] = fp.path_id
         else:
             data['path_id'] = ''
+
+        all_refs = DBSession.query(ReferenceFile).filter_by(file_id=x.dbentity_id).all()
+        pmids = []
+        for ref in all_refs:
+            pmids.append(ref.reference.pmid)
+        data['pmids'] = '|'.join(pmids) 
             
         return HTTPOk(body=json.dumps(data),content_type='text/json')
     except Exception as e:
