@@ -72,7 +72,11 @@ class OneMetadata extends Component {
             <div> <label> is_public </label></div>
             <input type='text' name='is_public' value={this.props.metadata.is_public} onChange={this.props.onOptionChange} />
           </div>
-          <div className='columns medium-6 small-6'>
+          <div className='columns medium-6 small-3'>
+            <div> <label> pmid(s) ('|' delimited)</label> </div>
+            <input type='text' name='pmids' value={this.props.metadata.pmids} onChange={this.props.onOptionChange} />
+          </div>
+          <div className='columns medium-6 small-3'>
             <div> <label> keyword(s) ('|' delimited)</label> </div>
             <input type='text' name='keywords' value={this.props.metadata.keywords} onChange={this.props.onOptionChange} />
           </div>
