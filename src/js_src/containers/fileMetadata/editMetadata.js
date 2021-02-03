@@ -46,7 +46,7 @@ class EditMetadata extends Component {
     if (this.state.file){      
       return(
         <div>
-          <p>Uploaded file: {this.state.file.name}</p>
+          <p>Uploaded file: {this.state.file.name}. Please wait while uploading the file to s3 and it may take a while if the file is big.</p>
           <a onClick={this.handleClear.bind(this)}>Clear This File</a>
         </div>
       );
@@ -105,7 +105,7 @@ class EditMetadata extends Component {
       <div>
         <div className='row'>
           <div className='columns medium-6 small-6'>
-            <button type='submit' id='submit' value='0' className="button expanded" onClick={this.handleUpdate.bind(this)} > Update Metadata </button>
+            <button type='submit' id='submit' value='0' className="button expanded" onClick={this.handleUpdate.bind(this)} > Update File Metadata or Upload a New Version of the File to s3 </button>
           </div>
         </div>
       </div>
