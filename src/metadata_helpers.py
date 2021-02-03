@@ -7,7 +7,8 @@ from sqlalchemy.exc import IntegrityError, DataError
 import transaction
 import json
 from src.models import DBSession, Dbentity, Filedbentity, Referencedbentity, FilePath, \
-                       Path, FileKeyword, ReferenceFile, Keyword, Source
+                       Path, FileKeyword, ReferenceFile, Keyword, Dataset, DatasetFile,\
+                       Source
 from src.aws_helpers import get_checksum
 from src.helpers import upload_file
 from src.aws_helpers import upload_file_to_s3
@@ -83,7 +84,33 @@ def get_list_of_file_metadata(request):
     try:
         query = str(request.matchdict['query'])
         data = []
-        for x in DBSession.query(Filedbentity).filter(or_(Filedbentity.display_name.ilike('%'+query+'%'), Filedbentity.previous_file_name.ilike('%'+query+'%'))).order_by(Filedbentity.display_name).all():        
+
+        ## search by PMID:
+        rows_by_pmid = []
+        if query.isdigit():
+            pmid = int(query)
+            ref = DBSession.query(Referencedbentity).filter_by(pmid=pmid).one_or_none()
+            if ref is not None:
+                all_refFiles = DBSession.query(ReferenceFile).filter_by(reference_id=ref.dbentity_id).all()
+                for x in all_refFiles:
+                    rows_by_pmid.append(x.file)
+
+        ## search by GEO/SRA/ArrayExpress ID:
+        rows_by_GEO = []
+        all_datasets = DBSession.query(Dataset).filter(format_name.ilike('%'+query+'%')).all()
+        for x in all_datasets:
+            all_df = DBSession.query(DatasetFile).filter_by(dataset_id=x.dataset_id).all()
+            for y in all_df:
+                rows_by_GEO.append(y.file)
+
+                ## search by file name:
+        rows_by_filename = DBSession.query(Filedbentity).filter(or_(Filedbentity.display_name.ilike('%'+query+'%'), Filedbentity.previous_file_name.ilike('%'+query+'%'))).order_by(Filedbentity.display_name).all()
+
+        foundSGDID = {}
+        for x in rows_by_pmid + rows_by_GEO + rows_by_filename:
+            if x.sgdid in foundSGDID:
+                continue
+            foundSGDID[x.sgdid] = 1
             data.append({ 'display_name': x.display_name,
                           'previous_file_name': x.previous_file_name,
                           'sgdid': x.sgdid,
