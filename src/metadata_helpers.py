@@ -97,13 +97,13 @@ def get_list_of_file_metadata(request):
 
         ## search by GEO/SRA/ArrayExpress ID:
         rows_by_GEO = []
-        all_datasets = DBSession.query(Dataset).filter(format_name.ilike('%'+query+'%')).all()
+        all_datasets = DBSession.query(Dataset).filter(Dataset.format_name.ilike('%'+query+'%')).all()
         for x in all_datasets:
             all_df = DBSession.query(DatasetFile).filter_by(dataset_id=x.dataset_id).all()
             for y in all_df:
                 rows_by_GEO.append(y.file)
 
-                ## search by file name:
+        ## search by file name:
         rows_by_filename = DBSession.query(Filedbentity).filter(or_(Filedbentity.display_name.ilike('%'+query+'%'), Filedbentity.previous_file_name.ilike('%'+query+'%'))).order_by(Filedbentity.display_name).all()
 
         foundSGDID = {}
