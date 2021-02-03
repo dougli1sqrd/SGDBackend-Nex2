@@ -549,7 +549,7 @@ e database."}), content_type='text/json')
             reference_id = ref.dbentity_id
             insert_reference_file(curator_session, CREATED_BY, source_id, file_id,
                                   reference_id, file_type)
-            success_message = success_message + "<br>PMID '" + pmid + "' has been addeed to this file."
+            success_message = success_message + "<br>PMID '" + pmid + "' has been added to this file."
             
         for type_pmid in references_db:
             reference_id = references_db[type_pmid]
