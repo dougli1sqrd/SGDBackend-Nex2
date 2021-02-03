@@ -66,7 +66,7 @@ def get_metadata_for_one_file(request):
         for ref in all_refs:
             if pmids != '':
                 pmids = pmids + "|"
-            pmids = pmids + str(ref.reference.pmid)
+            pmids = pmids + ref.file_type + ":" + str(ref.reference.pmid)
         data['pmids'] = pmids
             
         return HTTPOk(body=json.dumps(data),content_type='text/json')
