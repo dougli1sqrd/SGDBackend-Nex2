@@ -72,11 +72,7 @@ class OneMetadata extends Component {
             <div> <label> is_public </label></div>
             <input type='text' name='is_public' value={this.props.metadata.is_public} onChange={this.props.onOptionChange} />
           </div>
-          <div className='columns medium-3 small-3'>
-            <div> <label> pmid(s) ('|' delimited)</label> </div>
-            <input type='text' name='pmids' value={this.props.metadata.pmids} onChange={this.props.onOptionChange} />
-          </div>
-          <div className='columns medium-3 small-3'>
+          <div className='columns medium-6 small-6'>
             <div> <label> keyword(s) ('|' delimited)</label> </div>
             <input type='text' name='keywords' value={this.props.metadata.keywords} onChange={this.props.onOptionChange} />
           </div>
@@ -96,6 +92,14 @@ class OneMetadata extends Component {
             <div> <label> format_id (EDAM Term) </label> </div>
             <AutocompleteSection sec_title='' id='format_id' value1='display_name' value2='' selectedIdName='format_id' placeholder='Enter EDAM Term' onOptionChange={this.props.onOptionChange} selectedId={this.props.metadata.format_id} setNewValue={false} />
           </div>  
+        </div>
+
+        {/* path_id & readme_file_id */}
+        <div className='row'>
+          <div className='columns medium-12 small-12'>
+            <div> <label> file_type & pmid(s) ('|' delimited, eg: Dataset:24133141|Supplemental:16690605)</label> </div>
+            <input type='text' name='pmids' value={this.props.metadata.pmids} onChange={this.props.onOptionChange} />
+          </div>
         </div>
 
         {/* path_id & readme_file_id */}
