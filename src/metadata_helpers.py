@@ -291,7 +291,7 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
             if ref is None:
                 return HTTPBadRequest(body=json.dumps({'error': "The PMID: " + pmid + " is not in the database."}), content_type='text/json')
             reference_id = ref.dbentity_id
-            insert_reference_file(curator_session, CREATED_BY, source_id, file_id, reference_id):
+            insert_reference_file(curator_session, CREATED_BY, source_id, file_id, reference_id)
             
         ### add keywords to database
         keywords = request.params.get('keywords', '')
@@ -536,12 +536,12 @@ def update_metadata(request):
             if int(pmid) in references_db:
                 del references_db[int(pmid)]
                 continue
-	    ref = curator_session.query(Referencedbentity).filter_by(pmid=int(pmid)).one_or_none()
+            ref = curator_session.query(Referencedbentity).filter_by(pmid=int(pmid)).one_or_none()
             if ref is None:
                 return HTTPBadRequest(body=json.dumps({'error': "The PMID: " + pmid + " is not in th\
 e database."}), content_type='text/json')
             reference_id = ref.dbentity_id
-	    insert_reference_file(curator_session, CREATED_BY, source_id, file_id, reference_id):
+            insert_reference_file(curator_session, CREATED_BY, source_id, file_id, reference_id)
             
         for pmid in references_db:
             reference_id = references_db[pmid]
