@@ -275,7 +275,7 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
                           file_size=file_size,
                           json=None,
                           s3_url=None,
-                          dbentity_status=dbentity_status,
+                          dbentity_status='Active',
                           year=year,
                           file_date=file_date,
                           description=description,
