@@ -6,8 +6,8 @@ from pyramid.httpexceptions import HTTPBadRequest, HTTPOk
 from sqlalchemy.exc import IntegrityError, DataError
 import transaction
 import json
-from src.models import DBSession, Dbentity, Filedbentity, FilePath, Path,\
-                       FileKeyword, ReferenceFile, Keyword, Source
+from src.models import DBSession, Dbentity, Filedbentity, Referencedbentity, FilePath, \
+                       Path, FileKeyword, ReferenceFile, Keyword, Source
 from src.aws_helpers import get_checksum
 from src.helpers import upload_file
 from src.aws_helpers import upload_file_to_s3
