@@ -101,11 +101,12 @@ def get_list_of_file_metadata(request):
         if DBSession:
             DBSession.remove()    
 
-def insert_reference_file(curator_session, CREATED_BY, source_id, file_id, reference_id):
+def insert_reference_file(curator_session, CREATED_BY, source_id, file_id, reference_id, file_type):
 
     try:
         x = ReferenceFile(file_id = file_id,
                           reference_id = reference_id,
+                          file_type = file_type,
                           source_id = source_id,
                           created_by = CREATED_BY)
         curator_session.add(x)
@@ -284,14 +285,17 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
         #### add paper(s) and newly created file_id to reference_file table
         pmids = request.params.get('pmids', '')
         pmid_list = pmids.split('|')
-        for pmid in pmid_list:
-            if pmid == '':
+        for type_pmid in pmid_list:
+            type_pmid = type_pmid.replace(' ', '')
+            if type_pmid == '':
                 continue
+            [file_type, pmid] = type_pmid.split(':') 
             ref = curator_session.query(Referencedbentity).filter_by(pmid=int(pmid)).one_or_none()
             if ref is None:
                 return HTTPBadRequest(body=json.dumps({'error': "The PMID: " + pmid + " is not in the database."}), content_type='text/json')
             reference_id = ref.dbentity_id
-            insert_reference_file(curator_session, CREATED_BY, source_id, file_id, reference_id)
+            insert_reference_file(curator_session, CREATED_BY, source_id, file_id,
+                                  reference_id, file_type)
             
         ### add keywords to database
         keywords = request.params.get('keywords', '')
@@ -526,26 +530,30 @@ def update_metadata(request):
         all_refs = curator_session.query(ReferenceFile).filter_by(file_id=file_id).all()
         references_db = {}
         for ref in all_refs:
-            references_db[ref.reference.pmid] = ref.reference.dbentity_id
+            references_db[ref.file_type + ":" + str(ref.reference.pmid)] = ref.reference.dbentity_id
             
         pmids =	request.params.get('pmids', '')
         pmid_list = pmids.split('|')
-        for pmid in pmid_list:
-            if pmid == '':
+        for type_pmid in pmid_list:
+            type_pmid = type_pmid.replace(' ', '')
+            if type_pmid == '':
                 continue
-            if int(pmid) in references_db:
-                del references_db[int(pmid)]
+            [file_type, pmid] = type_pmid.split(':')
+            if type_pmid in references_db:
+                del references_db[type_pmid]
                 continue
             ref = curator_session.query(Referencedbentity).filter_by(pmid=int(pmid)).one_or_none()
             if ref is None:
                 return HTTPBadRequest(body=json.dumps({'error': "The PMID: " + pmid + " is not in th\
 e database."}), content_type='text/json')
             reference_id = ref.dbentity_id
-            insert_reference_file(curator_session, CREATED_BY, source_id, file_id, reference_id)
+            insert_reference_file(curator_session, CREATED_BY, source_id, file_id,
+                                  reference_id, file_type)
             
-        for pmid in references_db:
-            reference_id = references_db[pmid]
-            rf = curator_session.query(ReferenceFile).filter_by(file_id=file_id, reference_id=reference_id).one_or_none()
+        for type_pmid in references_db:
+            reference_id = references_db[type_pmid]
+            [file_type, pmid] = type_pmid.split(':')
+            rf = curator_session.query(ReferenceFile).filter_by(file_id=file_id, reference_id=reference_id, file_type=file_type).one_or_none()
             if rf:
                 success_message = success_message + "<br>PMID '" + str(pmid) + "' has been removed from this file."
                 curator_session.delete(rf)
