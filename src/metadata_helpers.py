@@ -412,7 +412,7 @@ def update_metadata(request):
             d.display_name = display_name
             curator_session.add(d)
 
-        return HTTPBadRequest(body=json.dumps({'error': "HELLO"}), content_type='text/json')
+        return HTTPBadRequest(body=json.dumps({'error': "HELLO2"}), content_type='text/json')
             
         ## update dbentity_status
         dbentity_status = request.params.get('dbentity_status', None)
