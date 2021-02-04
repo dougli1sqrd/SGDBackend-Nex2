@@ -400,6 +400,10 @@ def update_metadata(request):
                 message = add_metadata(request, curator_session, CREATED_BY, source_id,
                                        file_id, file, filename, md5sum)
                 return message
+
+
+        return HTTPBadRequest(body=json.dumps({'error': "HELLO"}), content_type='text/json')
+    
             
         success_message = ""
         
