@@ -400,10 +400,6 @@ def update_metadata(request):
                 message = add_metadata(request, curator_session, CREATED_BY, source_id,
                                        file_id, file, filename, md5sum)
                 return message
-
-
-        return HTTPBadRequest(body=json.dumps({'error': "HELLO"}), content_type='text/json')
-    
             
         success_message = ""
         
@@ -416,6 +412,8 @@ def update_metadata(request):
             d.display_name = display_name
             curator_session.add(d)
 
+        return HTTPBadRequest(body=json.dumps({'error': "HELLO"}), content_type='text/json')
+            
         ## update dbentity_status
         dbentity_status = request.params.get('dbentity_status', None)
         if dbentity_status is None:
