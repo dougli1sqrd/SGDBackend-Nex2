@@ -677,7 +677,7 @@ e database."}), content_type='text/json')
 
             for kw in keywords_dataset_db:
                 keyword_id = keywords_dataset_db[kw]
-                fk = curator_session.query(DatasetKeyword).filter_by(dataset_id=file_id, keyword_id=keyword_id).one_or_none()
+                fk = curator_session.query(DatasetKeyword).filter_by(dataset_id=x.dataset_id, keyword_id=keyword_id).one_or_none()
                 if fk:
                     success_message = success_message + "<br>keyword '" + kw + "' has been removed from the associated dataset."
                     curator_session.delete(fk)
