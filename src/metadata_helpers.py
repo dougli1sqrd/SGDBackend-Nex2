@@ -7,7 +7,7 @@ from sqlalchemy.exc import IntegrityError, DataError
 import transaction
 import json
 from src.models import DBSession, Dbentity, Filedbentity, Referencedbentity, FilePath, \
-                       Path, FileKeyword, ReferenceFile, Keyword, Dataset, DatasetFile,\
+                       Path, FileKeyword, Keyword, ReferenceFile, Dataset, DatasetFile,\
                        DatasetKeyword, Source
 from src.aws_helpers import get_checksum
 from src.helpers import upload_file
@@ -337,25 +337,49 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
             insert_reference_file(curator_session, CREATED_BY, source_id, file_id,
                                   reference_id, file_type)
             
-        ### add keywords to database
+        ### add keywords to file_keyword table
         keywords = request.params.get('keywords', '')
         kw_list = keywords.split('|')
+        all_new_keyword_id = {}
         for kw in kw_list:
             kw = kw.strip()
             if kw == '':
                 continue
             keyword_id = insert_keyword(curator_session, CREATED_BY, source_id, kw)
             if str(keyword_id).isdigit():
+                all_new_keyword_id[keyword_id] = kw
                 success_message = success_message + "<br>keyword '" + kw + "' has been added for this file."
                 insert_file_keyword(curator_session, CREATED_BY, source_id, file_id, keyword_id)
             else:
                 err_msg = keyword_id
                 return HTTPBadRequest(body=json.dumps({'error': err_msg}), content_type='text/json')
 
+        ### update dataset_keyword table
+        all_df = curator_session.query(DatasetFile).filter_by(file_id=old_file_id).all()
+        for x in all_df:
+            already_in_db = []
+            all_dk = curator_session.query(DatasetKeyword).filter_by(dataset_id=x.dataset_id).all()
+            for kw in all_dk:
+                if kw.keyword.keyword_id in all_new_keyword_id:
+                    already_in_db[kw.keyword.keyword_id] = 1
+                    continue
+                curator_session.delete(kw)
+            for keyword_id in all_new_keyword_id:
+                if keyword_id in already_in_db:
+                    continue
+                success_message = success_message + "<br>keyword '" + all_new_keyword_id[keyword_id] + "' has been added for the associated dataset."
+                insert_dataset_keyword(curator_session, CREATED_BY, source_id, x.dataset_id, keyword_id)
+                
         ### set dbentity_status = 'Archived' for the old_file_id
         curator_session.query(Dbentity).filter_by(dbentity_id=old_file_id).filter_by(dbentity_status='Active').update({"dbentity_status": 'Archived'}, synchronize_session='fetch')
         success_message = success_message + "<br>The dbentity_status has been set to 'Archived' for old version."
-                
+
+        ### update dataset_file table to point to new file_id
+        curator_session.query(DatasetFile).filter_by(file_id=old_file_id).update({"file_id": file_id}, synchronize_session='fetch')
+
+        ### update reference_file table to point to new file_id
+        curator_session.query(ReferenceFile).filter_by(file_id=old_file_id).update({"file_id": file_id}, synchronize_session='fetch')
+        
         transaction.commit()
         return HTTPOk(body=json.dumps({'success': success_message, 'metadata': "METADATA"}), content_type='text/json')
     except Exception as e:
