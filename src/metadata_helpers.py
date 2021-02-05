@@ -377,9 +377,11 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
         ### update dataset_file table to point to new file_id
         curator_session.query(DatasetFile).filter_by(file_id=old_file_id).update({"file_id": file_id}, synchronize_session='fetch')
 
-        ### update reference_file table to point to new file_id
-        curator_session.query(ReferenceFile).filter_by(file_id=old_file_id).update({"file_id": file_id}, synchronize_session='fetch')
-        
+        ### delete paper associated with old file 
+        all_old_refs = curator_session.query(ReferenceFile).filter_by(file_id=old_file_id).all()
+        for x in all_old_refs:
+            curator_session.delete(x)
+            
         transaction.commit()
         return HTTPOk(body=json.dumps({'success': success_message, 'metadata': "METADATA"}), content_type='text/json')
     except Exception as e:
