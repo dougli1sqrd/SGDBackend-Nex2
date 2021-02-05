@@ -8,7 +8,7 @@ import transaction
 import json
 from src.models import DBSession, Dbentity, Filedbentity, Referencedbentity, FilePath, \
                        Path, FileKeyword, ReferenceFile, Keyword, Dataset, DatasetFile,\
-                       Source
+                       DatasetKeyword, Source
 from src.aws_helpers import get_checksum
 from src.helpers import upload_file
 from src.aws_helpers import upload_file_to_s3
@@ -154,7 +154,20 @@ def insert_file_path(curator_session, CREATED_BY, source_id, file_id, path_id):
         transaction.abort()
         if curator_session:
             curator_session.rollback()
-        
+
+def insert_dataset_keyword(curator_session, CREATED_BY, source_id, dataset_id, keyword_id):
+
+    try:
+        x = DatasetKeyword(dataset_id = dataset_id,
+                           keyword_id = keyword_id,
+                           source_id = source_id,
+                           created_by = CREATED_BY)
+        curator_session.add(x)
+    except Exception as e:
+        transaction.abort()
+        if curator_session:
+            curator_session.rollback()
+            
 def insert_file_keyword(curator_session, CREATED_BY, source_id, file_id, keyword_id):
 
     try:
@@ -586,19 +599,20 @@ e database."}), content_type='text/json')
                 success_message = success_message + "<br>PMID '" + str(pmid) + "' has been removed from this file."
                 curator_session.delete(rf)
 
-        ## update keyword(s)
-        all_kw = curator_session.query(FileKeyword).filter_by(file_id=file_id).all()
-        keywords_db = {}
-        for kw in all_kw:
-            keywords_db[kw.keyword.display_name.upper()] = kw.keyword_id
+        
+        ## update keyword(s) for file_keyword table
+        all_file_kw = curator_session.query(FileKeyword).filter_by(file_id=file_id).all()
+        keywords_file_db = {}
+        for kw in all_file_kw:
+            keywords_file_db[kw.keyword.display_name.upper()] = kw.keyword_id
         keywords = request.params.get('keywords', '')
         kw_list = keywords.split('|')
         for kw in kw_list:
             kw = kw.strip()
             if kw == '':
                 continue
-            if kw.upper() in keywords_db:
-                del keywords_db[kw.upper()]
+            if kw.upper() in keywords_file_db:
+                del keywords_file_db[kw.upper()]
                 continue
             keyword_id = insert_keyword(curator_session, CREATED_BY, source_id, kw)
             if str(keyword_id).isdigit():
@@ -608,13 +622,41 @@ e database."}), content_type='text/json')
                 err_msg = keyword_id 
                 return HTTPBadRequest(body=json.dumps({'error': err_msg}), content_type='text/json')
     
-        for kw in keywords_db:
-            keyword_id = keywords_db[kw]
+        for kw in keywords_file_db:
+            keyword_id = keywords_file_db[kw]
             fk = curator_session.query(FileKeyword).filter_by(file_id=file_id, keyword_id=keyword_id).one_or_none()
             if fk:
                 success_message = success_message + "<br>keyword '" + kw + "' has been removed from this file."
                 curator_session.delete(fk)
 
+        ## update keyword(s) for dataset_keyword table
+        all_df = curator_session.query(DatasetFile).filter_by(file_id=file_id).all()
+        for x in all_df:
+            all_dataset_kw = curator_session.query(DatasetKeyword).filter_by(dataset_id=x.dataset_id).all()
+            keywords_dataset_db = {}
+            for kw in all_dataset_kw:
+                keywords_dataset_db[kw.keyword.display_name.upper()] = kw.keyword_id
+            for kw in kw_list:
+                kw = kw.strip()
+                if kw == '':
+                    continue
+                if kw.upper() in keywords_dataset_db:
+                    del keywords_dataset_db[kw.upper()]
+                    continue
+                keyword_id = insert_keyword(curator_session, CREATED_BY, source_id, kw)
+                if str(keyword_id).isdigit():
+                    success_message = success_message + "<br>keyword '" + kw + "' has been added for the associated dataset."
+                    insert_dataset_keyword(curator_session, CREATED_BY, source_id, x.dataset_id, keyword_id)
+                else:
+                    err_msg = keyword_id
+                    return HTTPBadRequest(body=json.dumps({'error': err_msg}), content_type='text/json')
+            for kw in keywords_dataset_db:
+                keyword_id = keywords_dataset_db[kw]
+                fk = curator_session.query(FileKeyword).filter_by(file_id=file_id, keyword_id=keyword_id).one_or_none()
+                if fk:
+                    success_message = success_message + "<br>keyword '" + kw + "' has been removed from the associated dataset."
+                    curator_session.delete(fk)
+                
         if success_message == '':
             success_message = "Nothing changed"
             
