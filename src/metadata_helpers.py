@@ -357,7 +357,7 @@ def add_metadata(request, curator_session, CREATED_BY, source_id, old_file_id, f
         ### update dataset_keyword table
         all_df = curator_session.query(DatasetFile).filter_by(file_id=old_file_id).all()
         for x in all_df:
-            already_in_db = []
+            already_in_db = {}
             all_dk = curator_session.query(DatasetKeyword).filter_by(dataset_id=x.dataset_id).all()
             for kw in all_dk:
                 if kw.keyword.keyword_id in all_new_keyword_id:
