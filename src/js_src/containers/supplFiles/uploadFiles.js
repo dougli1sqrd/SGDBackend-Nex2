@@ -106,20 +106,7 @@ class UploadFiles extends Component {
   }
 
   render() {
-    if (this.state.isLoading) {
-      return (
-        <div>
-          <div>Please wait while we are constructing the update form.</div>
-          <div><Loader /></div>
-        </div>
-      );
-    }
-    if (this.state.isComplete) {
-      return this.displayForm();
-    }
-    else {
-      return (<div>Something is wrong while we are constructing the update form.</div>);
-    }
+    return this.displayForm();
   }
 }
 
