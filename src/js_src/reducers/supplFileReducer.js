@@ -1,6 +1,6 @@
 const DEFAULT_STATE = {
   currentSupplFile: {
-    files
+    files: []
   }
 };
 
