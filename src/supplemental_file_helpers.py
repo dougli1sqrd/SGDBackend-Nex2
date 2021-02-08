@@ -124,6 +124,11 @@ def add_metadata_upload_files(request):
         from datetime import datetime
         date = str(datetime.now()).split(' ')[0]
 
+
+        return HTTPBadRequest(body=json.dumps({'error': "HELLO"}), content_type='text/json')
+
+
+    
         topic = DBSession.query(Edam).filter_by(display_name='Biology').one_or_none()
         if topic is None:
             return HTTPBadRequest(body=json.dumps({'error': "EDAM term: 'Biology' is not in the database."}), content_type='text/json')
@@ -137,7 +142,7 @@ def add_metadata_upload_files(request):
             return HTTPBadRequest(body=json.dumps({'error': "EDAM term: 'Textual format' is not in the database."}), content_type='text/json')
         format_id = format.edam_id
 
-        return HTTPBadRequest(body=json.dumps({'error': "HELLO"}), content_type='text/json')
+        return HTTPBadRequest(body=json.dumps({'error': "HELLO2"}), content_type='text/json')
 
         fileObjs = request.params.get('files')
 
