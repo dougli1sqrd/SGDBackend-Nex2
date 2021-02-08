@@ -140,7 +140,7 @@ def add_metadata_upload_files(request):
         fileObjs = request.params.get('files')
 
         success_message = ''
-        
+
         for fileObj in fileObjs:
             file = None
             filename = None
@@ -148,6 +148,11 @@ def add_metadata_upload_files(request):
                 file = fileObj.file
                 filename = fileObj.filename
 
+                success_message = success_message + "<br>" + filename
+                continue
+            
+                
+                
             if filename:                
                 md5sum = get_checksum(file)
                 fd = DBSession.query(Filedbentity).filter_by(md5sum=md5sum).one_or_none()
