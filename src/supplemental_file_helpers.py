@@ -139,6 +139,8 @@ def add_metadata_upload_files(request):
 
         fileObjs = request.params.get('files')
 
+        return HTTPBadRequest(body=json.dumps({'error': str(fileObjs)}), content_type='text/json')
+
         success_message = ''
 
         for fileObj in fileObjs:
