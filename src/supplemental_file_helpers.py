@@ -121,6 +121,10 @@ def add_metadata_upload_files(request):
         sgd = DBSession.query(Source).filter_by(display_name='SGD').one_or_none()
         source_id = sgd.source_id
 
+        
+        return HTTPBadRequest(body=json.dumps({'error': "HELLO"}), content_type='text/json')
+    
+        
         from datetime import datetime
         date = str(datetime.now()).split(' ')[0]
 
