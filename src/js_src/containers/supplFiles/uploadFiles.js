@@ -34,13 +34,13 @@ class UploadFiles extends Component {
   }
 
   renderFileDrop() {
-    if (this.state.files.length > 0){
-      let files = this.state.files;
+    if(this.state.files.length){
+      let filenames = this.state.files.map( (file, index) => {
+        return <li key={index}>{file.name}</li>;
+      }); 
       return(
         <div>
-          for (let i = 0; i < files.length; i++) {
-            <li>Uploaded file: {files[i].name}</li>
-          }
+          <ul>{filenames}</ul>
           <a onClick={this.handleClear.bind(this)}>Clear File(s)</a>
         </div>
       );
