@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { setError, setMessage } from '../../actions/metaActions';
 // import { setSupplFile } from '../../actions/supplFileActions.js';
 import style from '../fileMetadata/style.css';
-const UPLOAD_FILES = '/upload_suppl_files';
+const UPLOAD_FILES = '/upload_suppl_file';
 
 const TIMEOUT = 300000;
 
