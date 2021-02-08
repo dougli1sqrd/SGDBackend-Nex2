@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import CurateLayout from '../curateHome/layout';
 import UploadFiles from './uploadFiles';
 
-class upload extends Component {
+class Upload extends Component {
   constructor(props) {
     super(props);
   }
