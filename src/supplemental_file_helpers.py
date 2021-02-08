@@ -136,7 +136,9 @@ def add_metadata_upload_files(request):
         if format is None:
             return HTTPBadRequest(body=json.dumps({'error': "EDAM term: 'Textual format' is not in the database."}), content_type='text/json')
         format_id = format.edam_id
-        
+
+        return HTTPBadRequest(body=json.dumps({'error': "HELLO"}), content_type='text/json')
+
         fileObjs = request.params.get('files')
 
         success_message = ''
