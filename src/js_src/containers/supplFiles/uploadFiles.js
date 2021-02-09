@@ -4,8 +4,7 @@ import fetchData from '../../lib/fetchData';
 // import LoadingPage from '../../components/loadingPage';
 import Dropzone from 'react-dropzone';
 import { connect } from 'react-redux';
-// import { setError, setMessage } from '../../actions/metaActions';
-import { setError } from '../../actions/metaActions';
+import { setError, setMessage } from '../../actions/metaActions';
 import style from '../fileMetadata/style.css';
 const UPLOAD_FILE = '/upload_suppl_file';
 
@@ -20,9 +19,7 @@ class UploadFiles extends Component {
       
     this.state = {
       files: [],
-      isPending: false,
-      currFile: '',
-      currIndex: ''
+      isPending: false
     };
   }
     
@@ -61,10 +58,12 @@ class UploadFiles extends Component {
     
   handleUpload(e) {
     e.preventDefault();
+    let success_message = '';
+    let error_message = '';
     this.state.files.map( (file, index) => {
       this.setState({ isPending: true });
       // console.log('uploading file: ' + index + ' ' + file.name);
-      this.setState({ currFile: file.name, currIndex: index });
+      // this.setState({ currFile: file.name, currIndex: index });
       let formData = new FormData();
       formData.append('file', file);
       fetchData(UPLOAD_FILE, {
@@ -78,18 +77,12 @@ class UploadFiles extends Component {
         contentType: false,
         timeout: TIMEOUT
       }).then((data) => {
-        this.setState({
-          isPending: false,
-        });
-        if (data){
-          this.setState({
-            isPending: false
-          });
-          this.props.dispatch(this.handleClear.bind(this));
-        }
+        success_message = success_message + "<br>" + data.success;
+        this.props.dispatch(setMessage(success_message));
       }).catch( (data) => {
         let errorMessage = data ? data.error: 'Error occured: connection timed out';
-        this.props.dispatch(setError(errorMessage));
+        error_message = error_message + "<br>" + errorMessage;
+        this.props.dispatch(setError(error_message));
         this.setState({ isPending: false});
       });
     });
@@ -103,14 +96,6 @@ class UploadFiles extends Component {
             <button type='submit' id='submit' value='0' className="button expanded" onClick={this.handleUpload.bind(this)} > Upload Files </button>
           </div>
         </div>
-      </div>
-    );
-  }
-
-  loadingMessage() {
-    return (
-      <div>
-        <p>uploading files ...</p>
       </div>
     );
   }
@@ -128,12 +113,7 @@ class UploadFiles extends Component {
   }
 
   render() {
-    if (this.state.isPending){
-      return this.loadingMessage();
-    }
-    else {
-      return this.displayForm();
-    }
+    return this.displayForm();
   }
 }
 
