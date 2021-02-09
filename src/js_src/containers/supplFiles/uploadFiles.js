@@ -62,7 +62,7 @@ class UploadFiles extends Component {
     let error_message = '';
     this.state.files.map( (file, index) => {
       this.setState({ isPending: true });
-      // console.log('uploading file: ' + index + ' ' + file.name);
+      console.log('uploading file: ' + index + ' ' + file.name);
       // this.setState({ currFile: file.name, currIndex: index });
       let formData = new FormData();
       formData.append('file', file);
@@ -77,11 +77,11 @@ class UploadFiles extends Component {
         contentType: false,
         timeout: TIMEOUT
       }).then((data) => {
-        success_message = success_message + "<br>" + data.success;
+        success_message = success_message + '<br>' + data.success;
         this.props.dispatch(setMessage(success_message));
       }).catch( (data) => {
         let errorMessage = data ? data.error: 'Error occured: connection timed out';
-        error_message = error_message + "<br>" + errorMessage;
+        error_message = error_message + '<br>' + errorMessage;
         this.props.dispatch(setError(error_message));
         this.setState({ isPending: false});
       });
