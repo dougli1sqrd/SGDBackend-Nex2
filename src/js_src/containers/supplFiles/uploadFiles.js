@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import fetchData from '../../lib/fetchData';
-// import Loader from '../../components/loader';
+import LoadingPage from '../../components/loadingPage';
 import Dropzone from 'react-dropzone';
 import { connect } from 'react-redux';
 import { setError, setMessage } from '../../actions/metaActions';
-// import { setSupplFile } from '../../actions/supplFileActions.js';
 import style from '../fileMetadata/style.css';
 const UPLOAD_FILE = '/upload_suppl_file';
 
@@ -20,8 +19,7 @@ class UploadFiles extends Component {
       
     this.state = {
       files: [],
-      isLoading: false,
-      isComplete: false,
+      isPending: false
     };
   }
     
@@ -60,6 +58,7 @@ class UploadFiles extends Component {
     
   handleUpload(e) {
     e.preventDefault();
+    this.setState({ isPending: true });
     this.state.files.map( (file, index) => {
       console.log('uploading file: ' + index + ' ' + file.name); 	  
       let formData = new FormData();
@@ -75,7 +74,15 @@ class UploadFiles extends Component {
         contentType: false,
         timeout: TIMEOUT
       }).then((data) => {
-        this.props.dispatch(setMessage(data.success));
+        this.setState({
+          isPending: false,
+        });
+        if (data){
+          this.setState({
+            isPending: false
+          });
+          this.props.dispatch(clearError());
+        }
       }).catch( (data) => {
         let errorMessage = data ? data.error: 'Error occured: connection timed out';
         this.props.dispatch(setError(errorMessage));
@@ -109,7 +116,12 @@ class UploadFiles extends Component {
   }
 
   render() {
-    return this.displayForm();
+    if (this.state.isPending){
+      return ( <LoadingPage />);
+    }
+    else {
+      return this.displayForm();
+    }
   }
 }
 
