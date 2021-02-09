@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { setError, setMessage } from '../../actions/metaActions';
 // import { setSupplFile } from '../../actions/supplFileActions.js';
 import style from '../fileMetadata/style.css';
-const UPLOAD_FILES = '/upload_suppl_file';
+const UPLOAD_FILE = '/upload_suppl_file';
 
 const TIMEOUT = 300000;
 
@@ -60,24 +60,27 @@ class UploadFiles extends Component {
     
   handleUpload(e) {
     e.preventDefault();
-    let formData = new FormData();
-    formData.append('files', this.state.files);
-    fetchData(UPLOAD_FILES, {
-      type: 'POST',
-      credentials: 'same-origin',
-      headers: {
-        'X-CSRF-Token': this.props.csrfToken
-      },
-      data: formData,
-      processData: false,
-      contentType: false,
-      timeout: TIMEOUT
-    }).then((data) => {
-      this.props.dispatch(setMessage(data.success));
-    }).catch( (data) => {
-      let errorMessage = data ? data.error: 'Error occured: connection timed out';
-      this.props.dispatch(setError(errorMessage));
-      this.setState({ isPending: false});
+    this.state.files.map( (file, index) => {
+      console.log("uploading file: " + index); 	  
+      let formData = new FormData();
+      formData.append('file', file);
+      fetchData(UPLOAD_FILE, {
+        type: 'POST',
+        credentials: 'same-origin',
+        headers: {
+          'X-CSRF-Token': this.props.csrfToken
+        },
+        data: formData,
+        processData: false,
+        contentType: false,
+        timeout: TIMEOUT
+      }).then((data) => {
+        this.props.dispatch(setMessage(data.success));
+      }).catch( (data) => {
+        let errorMessage = data ? data.error: 'Error occured: connection timed out';
+        this.props.dispatch(setError(errorMessage));
+        this.setState({ isPending: false});
+      });
     });
   }
 
