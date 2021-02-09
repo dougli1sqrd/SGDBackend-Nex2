@@ -21,7 +21,8 @@ class UploadFiles extends Component {
     this.state = {
       files: [],
       isPending: false,
-      currFile: ''
+      currFile: '',
+      currIndex: ''
     };
   }
     
@@ -63,7 +64,7 @@ class UploadFiles extends Component {
     this.state.files.map( (file, index) => {
       this.setState({ isPending: true });
       // console.log('uploading file: ' + index + ' ' + file.name);
-      this.setState({ currFile: file.name });
+	this.setState({ currFile: file.name, currIndex: index });
       let formData = new FormData();
       formData.append('file', file);
       fetchData(UPLOAD_FILE, {
