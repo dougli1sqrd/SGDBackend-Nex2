@@ -161,7 +161,7 @@ def add_metadata_upload_files(request):
                 if ref is None:
                     success_message = success_message + "<br>" + filename + " is skipped since PMID = " + str(pmid) + " is not in the database"
                 else:
-                    reference_id = ref.reference_id
+                    reference_id = ref.dbentity_id
                     year = ref.year
                     if year is None:
                         success_message = success_message +	"<br>" + filename + " is skipped since no year found in the database for PMID = " + str(pmid) + "."
