@@ -4,7 +4,8 @@ import fetchData from '../../lib/fetchData';
 import LoadingPage from '../../components/loadingPage';
 import Dropzone from 'react-dropzone';
 import { connect } from 'react-redux';
-import { setError, setMessage } from '../../actions/metaActions';
+// import { setError, setMessage } from '../../actions/metaActions';
+import { setError } from '../../actions/metaActions';
 import style from '../fileMetadata/style.css';
 const UPLOAD_FILE = '/upload_suppl_file';
 
@@ -81,7 +82,7 @@ class UploadFiles extends Component {
           this.setState({
             isPending: false
           });
-          this.props.dispatch(clearError());
+          this.props.dispatch(handleClear());
         }
       }).catch( (data) => {
         let errorMessage = data ? data.error: 'Error occured: connection timed out';
