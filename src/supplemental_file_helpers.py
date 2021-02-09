@@ -113,7 +113,7 @@ def upload_one_file(request, curator_session, CREATED_BY, source_id, file, filen
         if curator_session:
             curator_session.remove()
         
-def add_metadata_upload_files(request):
+def add_metadata_upload_file(request):
 
     try:
         CREATED_BY = request.session['username']
@@ -145,10 +145,7 @@ def add_metadata_upload_files(request):
             file = fileObj.file
             filename = fileObj.filename
 
-        # return HTTPBadRequest(body=json.dumps({'error': str(filename)}), content_type='text/json')
-
-        success_message = ''
-        
+        success_message = ""
         if filename:                
             md5sum = get_checksum(file)
             fd = DBSession.query(Filedbentity).filter_by(md5sum=md5sum).one_or_none()
