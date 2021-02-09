@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import fetchData from '../../lib/fetchData';
-import LoadingPage from '../../components/loadingPage';
+// import LoadingPage from '../../components/loadingPage';
 import Dropzone from 'react-dropzone';
 import { connect } from 'react-redux';
 // import { setError, setMessage } from '../../actions/metaActions';
@@ -20,7 +20,8 @@ class UploadFiles extends Component {
       
     this.state = {
       files: [],
-      isPending: false
+      isPending: false,
+      currFile: ''
     };
   }
     
@@ -59,9 +60,10 @@ class UploadFiles extends Component {
     
   handleUpload(e) {
     e.preventDefault();
-    this.setState({ isPending: true });
     this.state.files.map( (file, index) => {
-      console.log('uploading file: ' + index + ' ' + file.name); 	  
+      this.setState({ isPending: true });
+      // console.log('uploading file: ' + index + ' ' + file.name);
+      this.setState({ currFile: file.name });
       let formData = new FormData();
       formData.append('file', file);
       fetchData(UPLOAD_FILE, {
@@ -104,6 +106,14 @@ class UploadFiles extends Component {
     );
   }
 
+  loadingMessage() {
+    return (
+      <div>
+        <p>uploading {{this.state.currFile}} ...</p>
+      </div>
+    );
+  }
+    
   displayForm() {
     return (
       <div>
@@ -118,7 +128,7 @@ class UploadFiles extends Component {
 
   render() {
     if (this.state.isPending){
-      return ( <LoadingPage />);
+      return this.loadingMessage();
     }
     else {
       return this.displayForm();
