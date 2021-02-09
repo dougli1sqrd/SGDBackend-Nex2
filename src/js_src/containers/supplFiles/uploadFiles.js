@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import fetchData from '../../lib/fetchData';
-// import LoadingPage from '../../components/loadingPage';
 import Dropzone from 'react-dropzone';
 import { connect } from 'react-redux';
 import { setError, setMessage } from '../../actions/metaActions';
@@ -18,8 +17,7 @@ class UploadFiles extends Component {
     this.renderFileDrop = this.renderFileDrop.bind(this);
       
     this.state = {
-      files: [],
-      isPending: false
+      files: []
     };
   }
     
@@ -61,9 +59,7 @@ class UploadFiles extends Component {
     let success_message = '';
     let error_message = '';
     this.state.files.map( (file, index) => {
-      this.setState({ isPending: true });
       console.log('uploading file: ' + index + ' ' + file.name);
-      // this.setState({ currFile: file.name, currIndex: index });
       let formData = new FormData();
       formData.append('file', file);
       fetchData(UPLOAD_FILE, {
@@ -83,7 +79,6 @@ class UploadFiles extends Component {
         let errorMessage = data ? data.error: 'Error occured: connection timed out';
         error_message = error_message + errorMessage;
         this.props.dispatch(setError(error_message));
-        this.setState({ isPending: false});
       });
     });
   }
