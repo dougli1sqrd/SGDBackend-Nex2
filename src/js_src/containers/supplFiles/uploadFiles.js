@@ -82,7 +82,7 @@ class UploadFiles extends Component {
           this.setState({
             isPending: false
           });
-          this.props.dispatch(this.handleClear());
+          this.props.dispatch(this.handleClear.bind(this));
         }
       }).catch( (data) => {
         let errorMessage = data ? data.error: 'Error occured: connection timed out';
