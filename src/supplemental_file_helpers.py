@@ -158,7 +158,7 @@ def add_metadata_upload_files(request):
                 pmid = int(filename.replace('.zip', ''))
 
                 
-                HTTPBadRequest(body=json.dumps({'error': "PMID=" + str(pmid)}), content_type='text/json')
+                return HTTPBadRequest(body=json.dumps({'error': "PMID=" + str(pmid)}), content_type='text/json')
 
 
                 
