@@ -109,7 +109,7 @@ class UploadFiles extends Component {
   loadingMessage() {
     return (
       <div>
-        <p>uploading {{this.state.currFile}} ...</p>
+        <p>uploading files ...</p>
       </div>
     );
   }
