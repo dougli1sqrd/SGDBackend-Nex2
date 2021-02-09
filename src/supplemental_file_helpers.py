@@ -147,6 +147,8 @@ def add_metadata_upload_files(request):
 
         # return HTTPBadRequest(body=json.dumps({'error': str(fileObj)}), content_type='text/json')
 
+        success_message = ''
+        
         if filename:                
             md5sum = get_checksum(file)
             fd = DBSession.query(Filedbentity).filter_by(md5sum=md5sum).one_or_none()
