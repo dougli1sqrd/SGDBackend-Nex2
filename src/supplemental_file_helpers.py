@@ -156,6 +156,9 @@ def add_metadata_upload_files(request):
                 success_message = success_message + "<br>"+ filename + " is already in the database"
             else:
                 pmid = int(filename.replace('.zip', ''))
+
+                HTTPBadRequest(body=json.dumps({'error': "PMID=" + str(pmid)}), content_type='text/json')
+                
                 ref = curator_session.query(Referencedbentity).filter_by(pmid=pmid).one_or_none()
                 if ref is None:
                     success_message = success_message + "<br>" + filename + " is skipped since PMID = " + str(pmid) + " is not in the database"
