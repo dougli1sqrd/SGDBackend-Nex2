@@ -61,7 +61,7 @@ class UploadFiles extends Component {
   handleUpload(e) {
     e.preventDefault();
     this.state.files.map( (file, index) => {
-      console.log('uploading file: ' + index); 	  
+      console.log('uploading file: ' + index + ' ' + file); 	  
       let formData = new FormData();
       formData.append('file', file);
       fetchData(UPLOAD_FILE, {
