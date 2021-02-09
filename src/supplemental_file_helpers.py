@@ -157,7 +157,10 @@ def add_metadata_upload_files(request):
             else:
                 pmid = int(filename.replace('.zip', ''))
 
+                
                 HTTPBadRequest(body=json.dumps({'error': "PMID=" + str(pmid)}), content_type='text/json')
+
+
                 
                 ref = curator_session.query(Referencedbentity).filter_by(pmid=pmid).one_or_none()
                 if ref is None:
