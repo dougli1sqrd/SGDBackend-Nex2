@@ -77,11 +77,11 @@ class UploadFiles extends Component {
         contentType: false,
         timeout: TIMEOUT
       }).then((data) => {
-        success_message = success_message + '<br>' + data.success;
+        success_message = success_message + data.success;
         this.props.dispatch(setMessage(success_message));
       }).catch( (data) => {
         let errorMessage = data ? data.error: 'Error occured: connection timed out';
-        error_message = error_message + '<br>' + errorMessage;
+        error_message = error_message + errorMessage;
         this.props.dispatch(setError(error_message));
         this.setState({ isPending: false});
       });
