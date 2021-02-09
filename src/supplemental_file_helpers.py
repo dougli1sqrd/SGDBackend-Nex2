@@ -145,28 +145,29 @@ def add_metadata_upload_files(request):
             file = fileObj.file
             filename = fileObj.filename
 
-        return HTTPBadRequest(body=json.dumps({'error': str(fileObj)}), content_type='text\/json')
-                 
+        return HTTPBadRequest(body=json.dumps({'error': str(fileObj)}), content_type='text/json')
+
         if filename:                
             md5sum = get_checksum(file)
             fd = DBSession.query(Filedbentity).filter_by(md5sum=md5sum).one_or_none()
             if fd is not None:
-                continue
-            pmid = int(filename.replace('.zip', ''))
-            ref = curator_session.query(Referencedbentity).filter_by(pmid=pmid).one_or_none()
-            if ref is None:
-                success_message = success_message + "<br>" + filename + " is skipped since PMID = " + str(pmid) + " is not in the database"
-            reference_id = ref.reference_id
-            year = ref.year
-            if year is None:
-                success_message = success_message +	"<br>" + filename + " is skipped since no year found in the database for PMID = " + str(pmid) + "."
-            msg = upload_one_file(request, curator_session, CREATED_BY, source_id, file,
-                                  filename, md5sum, date, topic_id, data_id, format_id,
-                                  reference_id, year)
-            if msg == "loaded":
-                success_message = success_message + "<br>" + filename + " is uploaded to s3."
+                success_message = success_message + "<br>"+ filename + " is already in the database"
             else:
-                return msg
+                pmid = int(filename.replace('.zip', ''))
+                ref = curator_session.query(Referencedbentity).filter_by(pmid=pmid).one_or_none()
+                if ref is None:
+                    success_message = success_message + "<br>" + filename + " is skipped since PMID = " + str(pmid) + " is not in the database"
+                reference_id = ref.reference_id
+                year = ref.year
+                if year is None:
+                    success_message = success_message +	"<br>" + filename + " is skipped since no year found in the database for PMID = " + str(pmid) + "."
+                msg = upload_one_file(request, curator_session, CREATED_BY, source_id, file,
+                                      filename, md5sum, date, topic_id, data_id, format_id,
+                                      reference_id, year)
+                if msg == "loaded":
+                    success_message = success_message + "<br>" + filename + " is uploaded to s3."
+                else:
+                    return msg
                 
         if success_message == '':
             success_message = "No file loaded"
