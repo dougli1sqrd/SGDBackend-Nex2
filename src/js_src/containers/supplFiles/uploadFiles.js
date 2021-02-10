@@ -74,10 +74,16 @@ class UploadFiles extends Component {
         timeout: TIMEOUT
       }).then((data) => {
         success_message = success_message + data.success;
+        if (index == this.state.files.length -1) {
+          success_message = success_message + '<br>DONE!'
+        }
         this.props.dispatch(setMessage(success_message));
       }).catch( (data) => {
         let errorMessage = data ? data.error: 'Error occured: connection timed out';
         error_message = error_message + errorMessage;
+        if (index == this.state.files.length -1) {
+          error_message = error_message + '<br>DONE!'
+        }
         this.props.dispatch(setError(error_message));
       });
     });
