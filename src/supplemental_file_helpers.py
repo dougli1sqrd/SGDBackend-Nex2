@@ -152,6 +152,20 @@ def add_metadata_upload_file(request):
             if fd is not None:
                 success_message = success_message + "<br>"+ filename + " is already in the database"
             else:
+                old_file = curator_session.query(Dbentity).filter_by(subclass='FILE', display_name=filename).one_or_none()
+
+                ## a new version of the file   
+                if old_file is not None:
+
+                    ## update dbentity_status to 'Archived' for old version
+                    old_file.dbentity_status = 'Archived'
+                    curator_session.add(old_file)
+
+                    ## unlink old version with paper
+                    all_rf = curator_session.query(ReferenceFile).filter_by(file_id=old_file.dbentity_id).all()
+                    for x in all_rf:
+                        curator_session.delete(x)
+                    
                 pmid = int(filename.replace('.zip', ''))
 
                 ref = curator_session.query(Referencedbentity).filter_by(pmid=pmid).one_or_none()
@@ -167,7 +181,10 @@ def add_metadata_upload_file(request):
                                               filename, md5sum, date, topic_id, data_id, format_id,
                                               reference_id, year)
                         if msg == "loaded":
-                            success_message = success_message + "<br>" + filename + " is uploaded to s3."
+                            if old_file is not None:
+                                success_message = success_message + "<br>" + filename + " is updated in s3."
+                            else:
+                                success_message = success_message + "<br>" + filename + " is uploaded to s3."
                         else:
                             return msg
                 
