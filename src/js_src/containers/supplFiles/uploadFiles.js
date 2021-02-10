@@ -49,7 +49,7 @@ class UploadFiles extends Component {
             <h3 className={style.uploadIcon}><i className='fa fa-cloud-upload' /></h3>
           </Dropzone>
         </div>
-        <div className='columns medium-6 small-6'>Note: It will take a while to upload the files.
+        <div className='columns medium-6 small-6'>It will take a while to upload the files.
         </div>
       </div>);
   }
@@ -101,7 +101,9 @@ class UploadFiles extends Component {
         <form onSubmit={this.handleUpload} ref='form'>
           {this.renderFileDrop()}
           <hr />
-          {this.addButton()}          	
+          {this.addButton()}
+          <hr />
+          Note: This interface is only for uploading the supplemental files to s3 so the expected file name should be like PMID.zip (eg, 33472078.zip). The interface assumes the associated paper should be in the database so it can link the file to the given paper. Also it will take a while to upload the files to s3 so be patient! =)
         </form>
       </div>
     );
