@@ -81,14 +81,6 @@ class UploadFiles extends Component {
         this.props.dispatch(setError(error_message));
       });
     });
-    if (success_message != '') {
-      success_message = success_message + '<br>DONE!';
-      this.props.dispatch(setMessage(success_message));
-    }
-    else {
-      error_message = error_message + '<br>DONE!';
-      this.props.dispatch(setError(error_message));
-    }
   }
 
   addButton() {
