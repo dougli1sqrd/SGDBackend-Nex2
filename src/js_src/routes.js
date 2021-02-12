@@ -57,6 +57,9 @@ import EditLitGuide from './containers/litguide/edit';
 import SearchFileMetadata from './containers/fileMetadata/search';
 import EditFileMetadata from './containers/fileMetadata/edit';
 import UploadSupplFiles from './containers/supplFiles/upload';
+import LoadDataset from './containers/dataset/load';
+import EditDataset from './containers/dataset/edit';
+import SearchDataset from './containers/dataset/search';
 
 //TODO: Fix the Routes.
 export default (
@@ -91,7 +94,10 @@ export default (
           <Route component={requireAuthentication(SearchAllele)} path='/search_allele' />
           <Route component={requireAuthentication(SearchFileMetadata)} path='/search_file_metadata' />
           <Route component={requireAuthentication(EditFileMetadata)} path='/edit_file_metadata/:id' />
-          <Route component={requireAuthentication(UploadSupplFiles)} path='/upload_suppl_files' />	     
+          <Route component={requireAuthentication(UploadSupplFiles)} path='/upload_suppl_files' />
+          <Route component={requireAuthentication(NewAllele)} path='/load_dataset' />
+          <Route component={requireAuthentication(EditAllele)} path='/curate/dataset/:id' />
+          <Route component={requireAuthentication(SearchAllele)} path='/search_dataset' />	     
           <Route component={requireAuthentication(LitGuide)} path='/litguide_todo' />
           <Route component={requireAuthentication(AddLitGuide)} path='/add_litguide' />
           <Route component={requireAuthentication(EditLitGuide)} path='/edit_litguide' />
