@@ -64,7 +64,7 @@ def get_list_of_dataset(request):
                           'display_name': x.display_name,
                           'dbxref_id': x.dbxref_id,
                           'dbxref_type': x.dbxref_type,
-                          'date_public': x.date_public })
+                          'date_public': str(x.date_public) })
         return HTTPOk(body=json.dumps(data),content_type='text/json')
     except Exception as e:
         log.error(e)
