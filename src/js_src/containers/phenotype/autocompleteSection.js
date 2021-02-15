@@ -12,6 +12,8 @@ const GET_EDAM_TOPIC = '/get_edam/topic';
 const GET_EDAM_FORMAT = '/get_edam/format';
 const GET_PATH = '/get_path';
 const GET_README = '/get_readme';
+const GET_OBI = '/get_obi';
+const GET_DATASET = '/get_all_datasets';
 
 class AutocompleteSection extends Component {
   constructor(props) {
@@ -48,7 +50,13 @@ class AutocompleteSection extends Component {
     }
     else if (this.props.id == 'readme_file_id') {
       this.getData(GET_README);
-    }  
+    }
+    else if (this.props.id == 'obi_id') {
+      this.getData(GET_OBI);
+    }
+    else if (this.props.id == 'dataset_id') {
+      this.getData(GET_DATASET);
+    }
     else {
       this.props.dispatch(setError('Unknown ID: ' + this.props.id));
     }
