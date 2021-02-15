@@ -218,6 +218,15 @@ def main(global_config, **settings):
     config.add_route('get_papers_by_tag','/get_papers_by_tag/{tag}/{gene}/{year}',request_method='GET')
     config.add_route('literature_guide_update','/literature_guide_update', request_method='POST')
     config.add_route('literature_guide_add','/literature_guide_add', request_method='POST')
+
+    config.add_route('get_obi','/get_obi',request_method='GET')
+    config.add_route('get_all_datasets','/get_all_datasets',request_method='GET')
+    config.add_route('get_datasets','/get_datasets',request_method='GET')
+    config.add_route('dataset_update','/dataset_update', request_method='POST')
+    config.add_route('datasetsample_update','/datasetsample_update', request_method='POST')
+    config.add_route('datasettrack_update','/datasettrack_update', request_method='POST')
+    config.add_route('dataset_load','/dataset_load', request_method='POST')
+    config.add_route('dataset_delete','/dataset_delete', request_method='POST')
     
     config.add_route('get_phenotypes','/get_phenotypes/{gene}/{reference}', request_method='GET')
     config.add_route('get_phenotype','/get_phenotype/{annotation_id}/{group_id}', request_method='GET')
