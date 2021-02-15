@@ -43,7 +43,7 @@ def load_dataset(request):
         sgd = DBSession.query(Source).filter_by(display_name='SGD').one_or_none()
         source_id = sgd.source_id
 
-	success_message = ''
+        success_message = ''
 	
 
         transaction.commit()
@@ -81,7 +81,7 @@ def delete_dataset(request):
         curator_session = get_curator_session(request.session['username'])
 
 
-	success_message = ''
+        success_message = ''
 	
 
         transaction.commit()
@@ -100,7 +100,7 @@ def update_datasetsample(request):
         sgd = DBSession.query(Source).filter_by(display_name='SGD').one_or_none()
         source_id = sgd.source_id
 
-	success_message = ''
+        success_message = ''
 	
 
         transaction.commit()
@@ -118,7 +118,7 @@ def delete_datasetsample(request):
         curator_session = get_curator_session(request.session['username'])
         
 
-	success_message = ''
+        success_message = ''
 	
 
         transaction.commit()
@@ -137,7 +137,7 @@ def update_datasettrack(request):
         sgd = DBSession.query(Source).filter_by(display_name='SGD').one_or_none()
         source_id = sgd.source_id
 
-	success_message = ''
+        success_message = ''
 	
 
         transaction.commit()
@@ -154,7 +154,7 @@ def delete_datasettrack(request):
         CREATED_BY = request.session['username']
         curator_session = get_curator_session(request.session['username'])
         
-	success_message = ''
+        success_message = ''
 	
 
         transaction.commit()
