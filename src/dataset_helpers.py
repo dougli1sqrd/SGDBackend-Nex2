@@ -112,8 +112,6 @@ def get_one_dataset(request):
                 keywords = keywords + '|'
             keywords = keywords + kw.keyword.display_name
         data['keywords'] = keywords
-
-        return data
     
         ## pmids
         pmids = ''
@@ -121,9 +119,11 @@ def get_one_dataset(request):
         for dsR in all_dsRefs:
             if pmids != '':
                 pmids = pmids + '|'
-            pmids = pmids + dsR.reference.pmid
+            pmids = pmids + str(dsR.reference.pmid)
         data['pmids'] = pmids
 
+        return data
+    
         ## urls
         urls = []
         all_dsUrls = DBSession.query(DatasetUrl).filter_by(dataset_id=x.dataset_id).all()
