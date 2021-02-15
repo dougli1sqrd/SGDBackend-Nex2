@@ -140,8 +140,6 @@ def get_one_dataset(request):
             if labInfo.colleague_id:
                 lab = labInfo.colleague.full_name + " @" + lab 
         data['lab'] = lab
-
-        return data
     
         ## samples
         samples = []
@@ -159,7 +157,9 @@ def get_one_dataset(request):
                              'description': s.description,
                              'dbxref_url': s.dbxref_url })
         data['samples'] = samples
-        
+
+        return data
+    
         ## tracks
         tracks = []
         all_tracks = DBSession.query(Datasettrack).filter_by(dataset_id=x.dataset_id).all()
