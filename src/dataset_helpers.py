@@ -157,9 +157,7 @@ def get_one_dataset(request):
                              'description': s.description,
                              'dbxref_url': s.dbxref_url })
         data['samples'] = samples
-
-        return data
-    
+ 
         ## tracks
         tracks = []
         all_tracks = DBSession.query(Datasettrack).filter_by(dataset_id=x.dataset_id).all()
