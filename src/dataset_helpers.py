@@ -106,7 +106,7 @@ def get_one_dataset(request):
 
         ## keywords
         keywords = ''
-        all_kwsd = DBSession.query(DatasetKeyword).filter_by(dataset_id=x.dataset_id).all()
+        all_kws = DBSession.query(DatasetKeyword).filter_by(dataset_id=x.dataset_id).all()
         for kw in all_kws:
             if keywords != '':
                 keywords = keywords + '|'
