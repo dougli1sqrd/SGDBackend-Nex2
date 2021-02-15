@@ -75,8 +75,107 @@ def get_list_of_dataset(request):
             
 def get_one_dataset(request):
 
-    return {}
+    try:
+        data = {}
+        format_name = str(request.matchdict['format_name'])
+        x = DBSession.query(Dataset).filter_by(format_name=format_name).one_or_none()
+        if x is None:
+            return HTTPBadRequest(body=json.dumps({'error': "The dataset format_name " + format_name + " is not in the database."}))
+        data['format_name'] = x.format_name
+        data['display_name'] = x.display_name
+        data['dbxref_id'] = x.dbxref_id
+        data['dbxref_type'] = x.dbxref_type
+        data['date_public'] = str(x.date_public)
+        data['parent_dataset_id'] = x.parent_dataset_id
+        data['assay_id'] = x.assay_id
+        data['channel_count'] = x.channel_count
+        data['sample_count'] = x.sample_count
+        data['is_in_spell'] = x.is_in_spell
+        data['is_in_browser'] = x.is_in_browser
+        data['description'] = x.description
 
+        ## file names
+        files = ''
+        all_dfs = DBSession.query(DatasetFile).filter_by(dataset_id=x.dataset_id).all() 
+        for df in all_dfs:
+            if df.file.dbentity_status == 'Active':
+                if files != '':
+                    files = files + '|'
+                files = files + df.file.display_name 
+        data['filenames'] = files
+
+        ## keywords
+        keywords = ''
+        all_kws = DBSession.query(DatasetKeyword).filter_by(dataset_id=x.dataset_id).all()
+        for kw in all_kws:
+            if keywords != '':
+                keywords = keywords + '|'
+            keywords = keywords + kw.keyword.display_name
+        data['keywords'] = keywords
+
+        ## pmids
+        pmids = ''
+        all_dsRefs = DBSession.query(DatasetReference).filter_by(dataset_id=x.dataset_id).all()
+        for dsR in all_dsRefs:
+            if pmids != '':
+                pmids = pmids + '|'
+            pmids = pmids + dsR.reference.pmid
+        data['pmids'] = pmids
+
+        ## urls
+        urls = []
+        all_dsUrls = DBSession.query(DatasetUrl).filter_by(dataset_id=x.dataset_id).all()
+        for dsUrl in all_dsUrls:
+            row = { 'url_type': dsUrl.url_type,
+                    'display_name': dsUrl.display_name,
+                    'link': dsUrl.obj_url }
+            urls.append(row)
+        data['urls'] = urls
+
+        ## lab
+        labInfo = DBSession.query(Datasetlab).filter_by(dataset_id=x.dataset_id).one_or_none()
+        lab = ''
+        if labInfo is not None:
+            lab = labInfo.lab_name + ", " + labInfo.lab_location
+            if labInfo.colleague_id:
+                lab = labInfo.colleague.full_name + " @" + lab 
+        data['lab'] = lab
+
+        ## samples
+        samples = []
+        all_samples = DBSession.query(Datasetsample).filter_by(dataset_id=x.dataset_id).all()
+        for s in all_samples:
+            samples.append({ 'format_name': s.format_name,
+                             'display_name': s.display_name,
+                             'obj_url': s.obj_url,
+                             'taxonomy_id': s.taxonomy_id,
+                             'sample_order': s.sample_order,
+                             'dbxref_id': s.dbxref_id,
+                             'dbxref_type': s.dbxref_type,
+                             'biosample': s.biosample,
+                             'strain_name': s.strain_name,
+                             'description': s.description,
+                             'dbxref_url': s.dbxref_url })
+        data['samples'] = samples
+        
+        ## tracks
+        tracks = []
+        all_tracks = DBSession.query(Datasettrack).filter_by(dataset_id=x.dataset_id).all()
+        for t in all_tracks:
+            tracks.append({ 'format_name': t.format_name,
+                            'display_name': t.display_name,
+                            'obj_url': t.obj_url,
+                            'track_order': t.track_order })
+        data['tracks'] = tracks
+
+        return HTTPOk(body=json.dumps(data),content_type='text/json')
+    except Exception as e:
+        log.error(e)
+        return HTTPBadRequest(body=json.dumps({'error': str(e)}))
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 def load_dataset(request):
 
     try:
