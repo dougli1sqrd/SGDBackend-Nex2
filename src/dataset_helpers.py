@@ -121,8 +121,6 @@ def get_one_dataset(request):
                 pmids = pmids + '|'
             pmids = pmids + str(dsR.reference.pmid)
         data['pmids'] = pmids
-
-        return data
     
         ## urls
         urls = []
@@ -133,6 +131,8 @@ def get_one_dataset(request):
                     'link': dsUrl.obj_url }
             urls.append(row)
         data['urls'] = urls
+
+        return data
 
         ## lab
         labInfo = DBSession.query(Datasetlab).filter_by(dataset_id=x.dataset_id).one_or_none()
