@@ -94,6 +94,8 @@ def get_one_dataset(request):
         data['is_in_browser'] = x.is_in_browser
         data['description'] = x.description
 
+        return data
+    
         ## file names
         files = ''
         all_dfs = DBSession.query(DatasetFile).filter_by(dataset_id=x.dataset_id).all() 
@@ -106,7 +108,7 @@ def get_one_dataset(request):
 
         ## keywords
         keywords = ''
-        all_kws = DBSession.query(DatasetKeyword).filter_by(dataset_id=x.dataset_id).all()
+        all_kwsd = DBSession.query(DatasetKeyword).filter_by(dataset_id=x.dataset_id).all()
         for kw in all_kws:
             if keywords != '':
                 keywords = keywords + '|'
