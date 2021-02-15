@@ -228,6 +228,8 @@ def main(global_config, **settings):
     config.add_route('datasettrack_update','/datasettrack_update', request_method='POST')
     config.add_route('dataset_load','/dataset_load', request_method='POST')
     config.add_route('dataset_delete','/dataset_delete', request_method='POST')
+    config.add_route('datasetsample_delete','/datasetsample_delete', request_method='POST')
+    config.add_route('datasettrack_delete','/datasettrack_delete', request_method='POST')
     
     config.add_route('get_phenotypes','/get_phenotypes/{gene}/{reference}', request_method='GET')
     config.add_route('get_phenotype','/get_phenotype/{annotation_id}/{group_id}', request_method='GET')
@@ -248,6 +250,7 @@ def main(global_config, **settings):
     config.add_route('get_file_metadata','/get_file_metadata/{query}', request_method='GET')
     config.add_route('get_one_file_metadata','/get_one_file_metadata/{sgdid}', request_method='GET')
     config.add_route('file_metadata_update','/file_metadata_update', request_method='POST')
+    config.add_route('file_metadata_delete','/file_metadata_delete', request_method='POST')
     config.add_route('upload_suppl_file', '/upload_suppl_file', request_method='POST')
     
     config.add_route('disease_insert_update','/disease', request_method='POST')
