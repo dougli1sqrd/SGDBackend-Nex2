@@ -132,8 +132,6 @@ def get_one_dataset(request):
             urls.append(row)
         data['urls'] = urls
 
-        return data
-
         ## lab
         labInfo = DBSession.query(Datasetlab).filter_by(dataset_id=x.dataset_id).one_or_none()
         lab = ''
@@ -143,6 +141,8 @@ def get_one_dataset(request):
                 lab = labInfo.colleague.full_name + " @" + lab 
         data['lab'] = lab
 
+        return data
+    
         ## samples
         samples = []
         all_samples = DBSession.query(Datasetsample).filter_by(dataset_id=x.dataset_id).all()
