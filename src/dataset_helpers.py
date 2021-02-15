@@ -29,8 +29,6 @@ def insert_dataset_reference(curator_session, CREATED_BY, source_id, dataset_id,
 
 def get_list_of_dataset(request):
 
-    return HELLO
-    
     try:
         query = str(request.matchdict['query'])
         data = []
