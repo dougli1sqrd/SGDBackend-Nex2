@@ -104,8 +104,6 @@ def get_one_dataset(request):
                 files = files + df.file.display_name 
         data['filenames'] = files
 
-        return data
-    
         ## keywords
         keywords = ''
         all_kwsd = DBSession.query(DatasetKeyword).filter_by(dataset_id=x.dataset_id).all()
@@ -115,6 +113,8 @@ def get_one_dataset(request):
             keywords = keywords + kw.keyword.display_name
         data['keywords'] = keywords
 
+        return data
+    
         ## pmids
         pmids = ''
         all_dsRefs = DBSession.query(DatasetReference).filter_by(dataset_id=x.dataset_id).all()
