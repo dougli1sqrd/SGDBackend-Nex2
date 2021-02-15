@@ -31,5 +31,5 @@ export default {
   authorResponse:authorResponseReducer,
   litguide:litguideReducer,
   metadata: fileMetadataReducer,
-  dataset: datasetReducers
+  dataset: datasetReducer
 };
