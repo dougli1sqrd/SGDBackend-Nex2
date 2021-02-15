@@ -221,8 +221,8 @@ def main(global_config, **settings):
 
     config.add_route('get_obi','/get_obi',request_method='GET')
     config.add_route('get_all_datasets','/get_all_datasets',request_method='GET')
-    config.add_route('get_dataset_data','/get_dataset_data',request_method='GET')
-    config.add_route('get_datasets','/get_datasets',request_method='GET')
+    config.add_route('get_dataset_data','/get_dataset_data/{format_name}',request_method='GET')
+    config.add_route('get_datasets','/get_datasets/{query}',request_method='GET')
     config.add_route('dataset_update','/dataset_update', request_method='POST')
     config.add_route('datasetsample_update','/datasetsample_update', request_method='POST')
     config.add_route('datasettrack_update','/datasettrack_update', request_method='POST')
