@@ -85,7 +85,7 @@ def get_one_dataset(request):
         data['display_name'] = x.display_name
         data['dbxref_id'] = x.dbxref_id
         data['dbxref_type'] = x.dbxref_type
-        data['date_public'] = str(x.date_public)
+        data['date_public'] = str(x.date_public).split(' ')[0]
         data['parent_dataset_id'] = x.parent_dataset_id
         data['assay_id'] = x.assay_id
         data['channel_count'] = x.channel_count
@@ -93,8 +93,6 @@ def get_one_dataset(request):
         data['is_in_spell'] = x.is_in_spell
         data['is_in_browser'] = x.is_in_browser
         data['description'] = x.description
-
-        return data
     
         ## file names
         files = ''
@@ -106,6 +104,8 @@ def get_one_dataset(request):
                 files = files + df.file.display_name 
         data['filenames'] = files
 
+        return data
+    
         ## keywords
         keywords = ''
         all_kwsd = DBSession.query(DatasetKeyword).filter_by(dataset_id=x.dataset_id).all()
