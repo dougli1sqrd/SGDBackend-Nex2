@@ -21,6 +21,7 @@ const DEFAULT_STATE = {
     lab: '',
     tracks: '',
     samples: ''
+  }
 };
 
 const SET_DATASET = 'SET_DATASET';
