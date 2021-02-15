@@ -7,7 +7,7 @@ const DEFAULT_STATE = {
     dbxref_id:'',
     dbxref_type: '',
     date_public: '',
-    parent_dataset: '',
+    parent_dataset_id: '',
     assay_id: '',
     channel_count: '',
     sample_count: '',
@@ -19,7 +19,8 @@ const DEFAULT_STATE = {
     pmids: '',
     urls: '',
     lab: '',
-    tracks: ''
+    tracks: '',
+    samples: ''
 };
 
 const SET_DATASET = 'SET_DATASET';
