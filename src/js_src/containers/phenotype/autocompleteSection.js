@@ -51,10 +51,10 @@ class AutocompleteSection extends Component {
     else if (this.props.id == 'readme_file_id') {
       this.getData(GET_README);
     }
-    else if (this.props.id == 'obi_id') {
+    else if (this.props.id == 'assay_id') {
       this.getData(GET_OBI);
     }
-    else if (this.props.id == 'dataset_id') {
+    else if (this.props.id == 'parent_dataset_id') {
       this.getData(GET_DATASET);
     }
     else {
