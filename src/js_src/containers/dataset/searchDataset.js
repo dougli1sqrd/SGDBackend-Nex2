@@ -45,7 +45,7 @@ class SearchDataset extends Component {
   }
 
   setGetUrl() {
-    let dataset_query = this.props.dataset['dataset_name'];
+    let dataset_query = this.props.dataset['format_name'];
     if (dataset_query) {
       return GET_DATASETS + dataset_query;
     }	
