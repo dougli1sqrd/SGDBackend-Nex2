@@ -11,7 +11,7 @@ class OneDataset extends Component {
   }
 
   url_rows(urls) {
-    let rows = urls.map(url, i) => {
+    let rows = urls.map((url, i) => {
       let name = 'url' + i;
       let value = url.url_type + ": " + url.link;
       return (
