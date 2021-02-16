@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { setError, setMessage } from '../../actions/metaActions';
 import { setDataset } from '../../actions/datasetActions';
 import { PREVIEW_URL } from '../../constants.js';
-// import OneDataset from './oneDataset';
+import OneDataset from './oneDataset';
 const UPDATE_DATASET = '/dataset_update';
 const GET_DATASET = '/get_dataset_data';
 
@@ -104,7 +104,7 @@ class EditDataset extends Component {
         <form onSubmit={this.handleUpdate} ref='form'>
           <input name='format_name' value={this.props.dataset.format_name} className="hide" />
           DATASET UPDATE
-          // <OneDataset dataset={this.props.dataset} onOptionChange={this.handleChange} />
+          <OneDataset dataset={this.props.dataset} onOptionChange={this.handleChange} />
           {this.addButtons()}          	
         </form>
       </div>
