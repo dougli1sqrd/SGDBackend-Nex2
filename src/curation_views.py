@@ -1774,7 +1774,7 @@ def get_obi(request):
         all_obi = DBSession.query(Obi).order_by(Obi.display_name).all()
         data = []
         for o in all_obi:
-            data.append({"obi_id": o.obi_id,
+            data.append({"assay_id": o.obi_id,
                          "format_name": o.format_name,
                          "display_name": o.display_name})
         return HTTPOk(body=json.dumps(data), content_type='text/json')
@@ -1791,7 +1791,7 @@ def get_all_datasets(request):
         all_datasets = DBSession.query(Dataset).order_by(Dataset.format_name).all()
         data = []
         for d in all_datasets:
-            data.append({"dataset_id": d.dataset_id,
+            data.append({"parent_dataset_id": d.dataset_id,
                          "format_name": d.format_name,
                          "display_name": d.format_name})
         return HTTPOk(body=json.dumps(data), content_type='text/json')
