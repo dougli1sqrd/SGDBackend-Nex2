@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { setError, setMessage } from '../../actions/metaActions';
 import { setDataset } from '../../actions/datasetActions';
 import { PREVIEW_URL } from '../../constants.js';
-import OneDataset from './oneDataset';
+// import OneDataset from './oneDataset';
 const UPDATE_DATASET = '/dataset_update';
 const GET_DATASET = '/get_dataset_data';
 
@@ -21,7 +21,7 @@ class EditDataset extends Component {
   
     this.state = {
       dataset_id: null,
-      geo_id: null,
+      format_name: null,
       preview_url: null,	
       isLoading: false,
       isComplete: false,
@@ -88,11 +88,11 @@ class EditDataset extends Component {
 
   setVariables() {
     let urlList = window.location.href.split('/');
-    let geo_id = urlList[urlList.length-1];
-    let url = GET_DATASET + '/' + geo_id;  
+    let format_name = urlList[urlList.length-1];
+    let url = GET_DATASET + '/' + format_name;  
     this.setState({
-      geo_id: geo_id,
-      preview_url: `${PREVIEW_URL}` + '/dataset/' + geo_id
+      format_name: format_name,
+      preview_url: `${PREVIEW_URL}` + '/dataset/' + format_name
     });
     return url;
   }
@@ -102,8 +102,9 @@ class EditDataset extends Component {
       <div>
         <a href={this.state.preview_url} target='new'>Preview this Dataset Page</a>
         <form onSubmit={this.handleUpdate} ref='form'>
-          <input name='GEOID' value={this.props.dataset.format_name} className="hide" />
-          <OneDataset dataset={this.props.dataset} onOptionChange={this.handleChange} />
+          <input name='format_name' value={this.props.dataset.format_name} className="hide" />
+          DATASET UPDATE
+          // <OneDataset dataset={this.props.dataset} onOptionChange={this.handleChange} />
           {this.addButtons()}          	
         </form>
       </div>
