@@ -73,8 +73,8 @@ class SearchDataset extends Component {
         <tr key={i}>
           <td>{ d.format_name }</td>
           <td>{ d.display_name }</td>
-          <td>{ d.dbxref_id }</td>
-          <td>{ d.dbxref_type }</td>
+          <td>{ d.keywords }</td>
+          <td>{ d.pmids }</td>
           <td><Link to={ linkUrl } target='new'><i className='fa fa-edit' /> Curate </Link></td>
         </tr>
       );
@@ -94,8 +94,8 @@ class SearchDataset extends Component {
               <tr>
                 <th>Format name</th> 
                 <th>Display name</th>
-                <th>Dbxref_id</th>
-                <th>Dbxref_type</th>
+                <th>Keyword(s)</th>
+                <th>PMID(s)</th>
                 <th>Actions</th>
               </tr>
             </thead>
