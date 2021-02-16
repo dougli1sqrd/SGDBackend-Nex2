@@ -28,6 +28,36 @@ def insert_dataset_reference(curator_session, CREATED_BY, source_id, dataset_id,
         if curator_session:
             curator_session.rollback()
 
+def get_pmids(dataset_id):
+    
+    pmids = ''
+    all_dsRefs = DBSession.query(DatasetReference).filter_by(dataset_id=dataset_id).all()
+    for dsR in all_dsRefs:
+        if pmids != '':
+            pmids = pmids + '|'
+        pmids = pmids + str(dsR.reference.pmid)
+    return pmids
+
+def get_keywords(dataset_id):
+    
+    keywords = ''
+    all_kws = DBSession.query(DatasetKeyword).filter_by(dataset_id=dataset_id).all()
+    for kw in all_kws:
+        if keywords != '':
+            keywords = keywords + '|'
+        keywords = keywords + kw.keyword.display_name
+    return keywords
+
+def get_lab(dataset_id):
+                                                                                            
+    labInfo = DBSession.query(Datasetlab).filter_by(dataset_id=dataset_id).one_or_none()
+    lab = ''
+    if labInfo is not None:
+        lab = labInfo.lab_name + ", " + labInfo.lab_location
+        if labInfo.colleague_id:
+            lab = labInfo.colleague.full_name + " @" + lab
+    return lab
+
 def get_list_of_dataset(request):
 
     try:
@@ -60,11 +90,17 @@ def get_list_of_dataset(request):
             if x.format_name in foundDataset:
                 continue
             foundDataset[x.format_name] = 1
+            pmids = get_pmids(x.dataset_id)
+            keywords = get_keywords(x.dataset_id)
+            lab = get_lab(x.dataset_id)
             data.append({ 'format_name': x.format_name,
                           'display_name': x.display_name,
                           'dbxref_id': x.dbxref_id,
                           'dbxref_type': x.dbxref_type,
-                          'date_public': str(x.date_public) })
+                          'date_public': str(x.date_public),
+                          'pmids': pmids,
+                          'keywords': keywords,
+                          'lab': lab })
         return HTTPOk(body=json.dumps(data),content_type='text/json')
     except Exception as e:
         log.error(e)
@@ -104,24 +140,11 @@ def get_one_dataset(request):
                 files = files + df.file.display_name 
         data['filenames'] = files
 
-        ## keywords
-        keywords = ''
-        all_kws = DBSession.query(DatasetKeyword).filter_by(dataset_id=x.dataset_id).all()
-        for kw in all_kws:
-            if keywords != '':
-                keywords = keywords + '|'
-            keywords = keywords + kw.keyword.display_name
-        data['keywords'] = keywords
-    
-        ## pmids
-        pmids = ''
-        all_dsRefs = DBSession.query(DatasetReference).filter_by(dataset_id=x.dataset_id).all()
-        for dsR in all_dsRefs:
-            if pmids != '':
-                pmids = pmids + '|'
-            pmids = pmids + str(dsR.reference.pmid)
-        data['pmids'] = pmids
-    
+        ## pmids, keywords, lab
+        data['pmids'] = get_pmids(x.dataset_id)
+        data['keywords'] = get_keywords(x.dataset_id)
+        data['lab'] = get_lab(x.dataset_id)
+        
         ## urls
         urls = []
         all_dsUrls = DBSession.query(DatasetUrl).filter_by(dataset_id=x.dataset_id).all()
@@ -131,15 +154,6 @@ def get_one_dataset(request):
                     'link': dsUrl.obj_url }
             urls.append(row)
         data['urls'] = urls
-
-        ## lab
-        labInfo = DBSession.query(Datasetlab).filter_by(dataset_id=x.dataset_id).one_or_none()
-        lab = ''
-        if labInfo is not None:
-            lab = labInfo.lab_name + ", " + labInfo.lab_location
-            if labInfo.colleague_id:
-                lab = labInfo.colleague.full_name + " @" + lab 
-        data['lab'] = lab
     
         ## samples
         samples = []
