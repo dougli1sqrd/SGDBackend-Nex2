@@ -9,6 +9,18 @@ class OneDataset extends Component {
       data: this.props.dataset
     };
   }
+
+  url_rows() {
+    let urls = this.props.dataset.urls;
+    let rows = urls.map((url, i) => {
+      let name = 'url' + i;
+      let value = url.url_type + ': ' + url.link;
+      return (
+        <input type='text' name={name} value={value} onChange={this.props.onOptionChange} />
+      );
+    });
+    return rows;
+  }
     
   render() {
 	
@@ -67,6 +79,14 @@ class OneDataset extends Component {
           <div className='columns medium-5 small-5'>
             <div> <label> keyword(s) ('|' delimited)</label> </div>
             <input type='text' name='keywords' value={this.props.dataset.keywords} onChange={this.props.onOptionChange} />
+          </div>
+        </div>
+
+        {/* urls */}
+        <div className='row'>
+          <div className='columns medium-12 small-12'>
+            <div> <label> dataset url(s) ('|' delimited) </label> </div>
+            {this.url_rows(}
           </div>
         </div>
 
