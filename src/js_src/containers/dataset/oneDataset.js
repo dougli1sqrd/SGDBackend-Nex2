@@ -14,7 +14,7 @@ class OneDataset extends Component {
     let urls = this.props.dataset.urls;
     let rows = urls.map((url, i) => {
       let name = 'url' + i;
-      let value = url.url_type + ': ' + url.link;
+      let value = url.url_type + ' | ' + url.link;
       return (
         <input type='text' name={name} value={value} onChange={this.props.onOptionChange} />
       );
