@@ -86,7 +86,7 @@ class OneDataset extends Component {
         <div className='row'>
           <div className='columns medium-12 small-12'>
             <div> <label> dataset url(s) ('|' delimited) </label> </div>
-            {this.url_rows(}
+            {this.url_rows()}
           </div>
         </div>
 
