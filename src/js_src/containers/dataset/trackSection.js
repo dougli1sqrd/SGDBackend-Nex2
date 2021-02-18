@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { setError, setMessage } from '../../actions/metaActions';
 import { setTrack } from '../../actions/trackActions';
 import { PREVIEW_URL } from '../../constants.js';
-import OneTrack from './oneTrack';
+import OneDataset from './oneDataset';
 const UPDATE_TRACK = '/track_update';
 const GET_TRACK = '/get_track_data';
 

@@ -4,9 +4,9 @@ import fetchData from '../../lib/fetchData';
 import Loader from '../../components/loader';
 import { connect } from 'react-redux';
 import { setError, setMessage } from '../../actions/metaActions';
-import { setSample } from '../../actions/sampleActions';
+import { setSample } from '../../actions/datasetSampleActions';
 import { PREVIEW_URL } from '../../constants.js';
-import OneSample from './oneSample';
+import OneDataset from './oneDataset';
 const UPDATE_SAMPLE = '/sample_update';
 const GET_SAMPLE = '/get_sample_data';
 
