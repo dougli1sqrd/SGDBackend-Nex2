@@ -103,7 +103,6 @@ class EditDataset extends Component {
         <a href={this.state.preview_url} target='new'>Preview this Dataset Page</a>
         <form onSubmit={this.handleUpdate} ref='form'>
           <input name='format_name' value={this.props.dataset.format_name} className="hide" />
-          DATASET UPDATE
           <OneDataset dataset={this.props.dataset} onOptionChange={this.handleChange} />
           {this.addButtons()}          	
         </form>
