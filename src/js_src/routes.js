@@ -59,6 +59,8 @@ import EditFileMetadata from './containers/fileMetadata/edit';
 import UploadSupplFiles from './containers/supplFiles/upload';
 import LoadDataset from './containers/dataset/load';
 import EditDataset from './containers/dataset/edit';
+import EditDatasetSample from './containers/dataset/editSample';
+import EditDatasetTrack from './containers/dataset/editTrack';
 import SearchDataset from './containers/dataset/search';
 
 //TODO: Fix the Routes.
@@ -97,6 +99,8 @@ export default (
           <Route component={requireAuthentication(UploadSupplFiles)} path='/upload_suppl_files' />
           <Route component={requireAuthentication(LoadDataset)} path='/load_dataset' />
           <Route component={requireAuthentication(EditDataset)} path='/curate/dataset/:id' />
+          <Route component={requireAuthentication(EditDatasetSample)} path='/curate/datasetsample/:id' />
+          <Route component={requireAuthentication(EditDatasetTrack)} path='/curate/datasettrack/:id' />
           <Route component={requireAuthentication(SearchDataset)} path='/search_dataset' />	     
           <Route component={requireAuthentication(LitGuide)} path='/litguide_todo' />
           <Route component={requireAuthentication(AddLitGuide)} path='/add_litguide' />
