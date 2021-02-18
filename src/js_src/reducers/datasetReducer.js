@@ -18,9 +18,7 @@ const DEFAULT_STATE = {
     keywords: '',
     pmids: '',
     urls: '',
-    lab: '',
-    tracks: '',
-    samples: ''
+    lab: ''
   }
 };
 
