@@ -5,8 +5,7 @@ import Loader from '../../components/loader';
 import { connect } from 'react-redux';
 import { setError, setMessage } from '../../actions/metaActions';
 import { setSample } from '../../actions/datasetSampleActions';
-const UPDATE_SAMPLE = '/sample_update';
-const GET_SAMPLE = '/get_dataset_data';
+const UPDATE_SAMPLE = '/datasetsample_update';
 
 const TIMEOUT = 300000;
 
@@ -20,14 +19,7 @@ class SampleSection extends Component {
     this.state = {
       sample_id: null,
       format_name: null,
-      isLoading: false,
-      isComplete: false,
     };
-  }
-
-  componentDidMount() {
-    let url = this.setVariables();
-    this.getData(url);
   }
 
   handleChange() {
@@ -63,64 +55,23 @@ class SampleSection extends Component {
       <div>
         <div className='row'>
           <div className='columns medium-6 small-6'>
-            <button type='submit' id='submit' value='0' className="button expanded" onClick={this.handleUpdate.bind(this)} > Update Sample data </button>
+            <button type='submit' id='submit' value='0' className="button expanded" onClick={this.handleUpdate.bind(this)} > Update </button>
           </div>
         </div>
       </div>
     );
   }
-
-  getData(url) {
-    this.setState({ isLoading: true });
-    fetchData(url).then( (data) => {
-      let currentSample = {};
-      for (let key in data) {
-        currentSample[key] = data[key];         
-      }
-      this.props.dispatch(setSample(currentSample));
-    })
-    .catch(err => this.props.dispatch(setError(err.error)))
-    .finally(() => this.setState({ isComplete: true, isLoading: false }));
-  }
-
-  setVariables() {
-    let urlList = window.location.href.split('/');
-    let format_name = urlList[urlList.length-1];
-    let url = GET_SAMPLE + '/' + format_name;  
-    this.setState({
-      format_name: format_name,
-    });
-    return url;
-  }
     
-  displayForm() {
+  render() {
     return (
       <div>
         <form onSubmit={this.handleUpdate} ref='form'>
           <input name='format_name' value={this.props.sample.format_name} className="hide" />
           {this.props.sample.format_name}
-          HELLO WORLD
           {this.addButtons()}          	
         </form>
       </div>
     );
-  }
-
-  render() {
-    if (this.state.isLoading) {
-      return (
-        <div>
-          <div>Please wait while we are constructing the update form.</div>
-          <div><Loader /></div>
-        </div>
-      );
-    }
-    if (this.state.isComplete) {
-      return this.displayForm();
-    }
-    else {
-      return (<div>Something is wrong while we are constructing the update form.</div>);
-    }
   }
 }
 
@@ -130,11 +81,12 @@ SampleSection.propTypes = {
   index: PropTypes.integer
 };
 
+export default SampleSection;
 
-function mapStateToProps(state) {
-  return {
-    sample: state.sample['currentSample']
-  };
-}
+//function mapStateToProps(state) {
+//  return {
+//    sample: state.sample['currentSample']
+//  };
+// }
 
-export default connect(mapStateToProps)(SampleSection);
+// export default connect(mapStateToProps)(SampleSection);
