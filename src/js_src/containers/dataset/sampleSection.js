@@ -5,9 +5,8 @@ import Loader from '../../components/loader';
 import { connect } from 'react-redux';
 import { setError, setMessage } from '../../actions/metaActions';
 import { setSample } from '../../actions/datasetSampleActions';
-import { PREVIEW_URL } from '../../constants.js';
 const UPDATE_SAMPLE = '/sample_update';
-const GET_SAMPLE = '/get_sample_data';
+const GET_SAMPLE = '/get_dataset_data';
 
 const TIMEOUT = 300000;
 
@@ -21,7 +20,6 @@ class SampleSection extends Component {
     this.state = {
       sample_id: null,
       format_name: null,
-      preview_url: null,	
       isLoading: false,
       isComplete: false,
     };
@@ -91,7 +89,6 @@ class SampleSection extends Component {
     let url = GET_SAMPLE + '/' + format_name;  
     this.setState({
       format_name: format_name,
-      preview_url: `${PREVIEW_URL}` + '/sample/' + format_name
     });
     return url;
   }
@@ -99,7 +96,6 @@ class SampleSection extends Component {
   displayForm() {
     return (
       <div>
-        <a href={this.state.preview_url} target='new'>Preview this Sample Page</a>
         <form onSubmit={this.handleUpdate} ref='form'>
           <input name='format_name' value={this.props.sample.format_name} className="hide" />
           SAMPLE PAGE
