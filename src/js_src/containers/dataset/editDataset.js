@@ -104,7 +104,7 @@ class EditDataset extends Component {
   links() {
     return (
       <div>
-        <h3><a href={this.state.preview_url} target='preview'>Preview this Dataset Page</a> | <a href={this.state.sample_url} target='sample'>Update Dataset Sample(s)</a> | <a href={this.state.track_url} target='track'>Update Dataset Track(s)</a></h3>
+        <strong><a href={this.state.preview_url} target='preview'>Preview this Dataset Page</a> | <a href={this.state.sample_url} target='sample'>Update Dataset Sample(s)</a> | <a href={this.state.track_url} target='track'>Update Dataset Track(s)</a></strong>
       </div>
     );
   }
