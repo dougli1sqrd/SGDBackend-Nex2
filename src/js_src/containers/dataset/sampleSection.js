@@ -98,7 +98,7 @@ class SampleSection extends Component {
       <div>
         <form onSubmit={this.handleUpdate} ref='form'>
           <input name='format_name' value={this.props.sample.format_name} className="hide" />
-          SAMPLE PAGE
+          {this.props.sample.format_name}
           {this.addButtons()}          	
         </form>
       </div>
@@ -125,7 +125,8 @@ class SampleSection extends Component {
 
 SampleSection.propTypes = {
   dispatch: PropTypes.func,
-  sample: PropTypes.object
+  sample: PropTypes.object,
+  index: PropTypes.integer
 };
 
 
