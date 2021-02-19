@@ -28,7 +28,7 @@ class SampleSection extends Component {
     for (let key of data.entries()) {
       currentSample[key[0]] = key[1];
     }
-    this.props.dispatch(setSample(currentSample));
+    this.props.onDataSubmitReport(setSample(currentSample));
   }
 
   handleUpdate(e) {
@@ -44,9 +44,9 @@ class SampleSection extends Component {
       contentType: false,
       timeout: TIMEOUT
     }).then((data) => {
-      this.props.dispatch(setMessage(data.success));
+      this.props.onDataSubmitReport(setMessage(data.success));
     }).catch((err) => {
-      this.props.dispatch(setError(err.error));
+      this.props.onDataSubmitReport(setError(err.error));
     });
   }
 
@@ -63,9 +63,9 @@ class SampleSection extends Component {
       contentType: false,
       timeout: TIMEOUT
     }).then((data) => {
-      this.props.dispatch(setMessage(data.success));
+      this.props.onDataSubmitReport(setMessage(data.success));
     }).catch((err) => {
-      this.props.dispatch(setError(err.error));
+      this.props.onDataSubmitReport(setError(err.error));
     });
   }
 
@@ -151,6 +151,7 @@ class SampleSection extends Component {
 }
 
 SampleSection.propTypes = {
+  onDataSubmitReport: PropTypes.func,    
   dispatch: PropTypes.func,
   sample: PropTypes.object,
   index: PropTypes.integer

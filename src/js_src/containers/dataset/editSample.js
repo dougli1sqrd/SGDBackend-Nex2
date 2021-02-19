@@ -32,9 +32,13 @@ class EditSample extends Component {
     return GET_DATASET + '/' + format_name;
   }
 
+  dataSubmitReport(message) {
+    this.props.dispatch(message);
+  }
+    
   sampleSections() {
     let sections = this.state.samples.map((sample, i) => {
-      return (<SampleSection sample={sample} index={i} />);
+      return (<SampleSection sample={sample} index={i} onDataSubmitReport={this.dataSubmitReport} />);
     });
     return sections;
   }
