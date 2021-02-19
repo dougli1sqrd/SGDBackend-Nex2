@@ -4,7 +4,7 @@ import fetchData from '../../lib/fetchData';
 import Loader from '../../components/loader';
 import { connect } from 'react-redux';
 import { setError, setMessage } from '../../actions/metaActions';
-import { setTrack } from '../../actions/trackActions';
+import { setTrack } from '../../actions/datasetTrackActions';
 import { PREVIEW_URL } from '../../constants.js';
 const UPDATE_TRACK = '/track_update';
 const GET_TRACK = '/get_track_data';
