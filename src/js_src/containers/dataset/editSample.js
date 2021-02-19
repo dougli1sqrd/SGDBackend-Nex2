@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import CurateLayout from '../curateHome/layout';
 import fetchData from '../../lib/fetchData';
-import SampleSection from './sampleSection';
+// import SampleSection from './sampleSection';
 import { setError } from '../../actions/metaActions';
 
 const GET_DATASET = '/get_dataset_data';
@@ -34,7 +34,8 @@ class EditSample extends Component {
 
   sampleSections() {
     let sections = this.state.samples.map((sample, i) => {
-      return (<SampleSection sample={sample} index={i} />);
+      // return (<SampleSection sample={sample} index={i} />);
+      return (<div>{i} : {sample.format_name}</div>);
     });
     return sections;
   }
