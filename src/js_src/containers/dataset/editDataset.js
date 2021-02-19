@@ -7,6 +7,7 @@ import { setError, setMessage } from '../../actions/metaActions';
 import { setDataset } from '../../actions/datasetActions';
 import { PREVIEW_URL } from '../../constants.js';
 import OneDataset from './oneDataset';
+import NavigateBar from './navigateBar';
 const UPDATE_DATASET = '/dataset_update';
 const GET_DATASET = '/get_dataset_data';
 
@@ -102,6 +103,7 @@ class EditDataset extends Component {
       <div>
         <a href={this.state.preview_url} target='new'>Preview this Dataset Page</a>
         <form onSubmit={this.handleUpdate} ref='form'>
+          <NavigateBar dataset={this.props.dataset.format_name} isDataset=true isSample=false isTrack=false />
           <input name='format_name' value={this.props.dataset.format_name} className="hide" />
           <OneDataset dataset={this.props.dataset} onOptionChange={this.handleChange} />
           {this.addButtons()}          	
