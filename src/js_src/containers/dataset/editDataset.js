@@ -113,6 +113,7 @@ class EditDataset extends Component {
     return (
       <div>
         {this.links()}
+        <hr />
         <form onSubmit={this.handleUpdate} ref='form'>
           <input name='format_name' value={this.props.dataset.format_name} className="hide" />
           <OneDataset dataset={this.props.dataset} onOptionChange={this.handleChange} />
