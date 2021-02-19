@@ -8,9 +8,8 @@ const GET_DATASET = '/get_dataset_data';
 class EditSample extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
-      samples = []
+      samples: []
     };
   }
 
