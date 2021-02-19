@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import fetchData from '../../lib/fetchData';
-import Loader from '../../components/loader';
-import { connect } from 'react-redux';
 import { setError, setMessage } from '../../actions/metaActions';
 import { setSample } from '../../actions/datasetSampleActions';
 const UPDATE_SAMPLE = '/datasetsample_update';
