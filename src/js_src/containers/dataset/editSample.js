@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import CurateLayout from '../curateHome/layout';
+import fetchData from '../../lib/fetchData';
 import SampleSection from './sampleSection';
 import { setError } from '../../actions/metaActions';
 
@@ -22,7 +23,7 @@ class EditSample extends Component {
     fetchData(url).then( (data) => {
       this.setState({ samples: data['samples'] });
     })
-    .catch(err => this.props.dispatch(setError(err.error)))
+    .catch(err => this.props.dispatch(setError(err.error)));
   }
 
   setVariables() {
