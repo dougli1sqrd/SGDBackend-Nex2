@@ -95,8 +95,8 @@ class EditDataset extends Component {
     this.setState({
       format_name: format_name,
       preview_url: `${PREVIEW_URL}` + '/dataset/' + format_name,
-      sample_url: '/datasetsample/' + format_name,
-      track_url: '/datasettrack/' + format_name
+      sample_url: '/#/curate/datasetsample/' + format_name,
+      track_url: '/#/curate/datasettrack/' + format_name
     });
     return url;
   }
