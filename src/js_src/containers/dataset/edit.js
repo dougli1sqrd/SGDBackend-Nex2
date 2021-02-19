@@ -10,7 +10,7 @@ class EditDataset extends Component {
   render() {
     return (
       <CurateLayout>
-        <h1>Update Dataset</h1>
+        <h2>Update Dataset</h2>
         <EditDATASET /> 
       </CurateLayout>
     );
