@@ -5,9 +5,9 @@ import Loader from '../../components/loader';
 import { connect } from 'react-redux';
 import { setError, setMessage } from '../../actions/metaActions';
 import { setDataset } from '../../actions/datasetActions';
+import { Link } from 'react-router-dom';
 import { PREVIEW_URL } from '../../constants.js';
 import OneDataset from './oneDataset';
-import NavigateBar from './navigateBar';
 const UPDATE_DATASET = '/dataset_update';
 const GET_DATASET = '/get_dataset_data';
 
@@ -23,7 +23,9 @@ class EditDataset extends Component {
     this.state = {
       dataset_id: null,
       format_name: null,
-      preview_url: null,	
+      preview_url: null,
+      sample_url: null,
+      track_url: null,
       isLoading: false,
       isComplete: false,
     };
@@ -93,17 +95,27 @@ class EditDataset extends Component {
     let url = GET_DATASET + '/' + format_name;  
     this.setState({
       format_name: format_name,
-      preview_url: `${PREVIEW_URL}` + '/dataset/' + format_name
+      preview_url: `${PREVIEW_URL}` + '/dataset/' + format_name,
+      sample_url: '/datasetsample/' + format_name,
+      track_url: '/datasettrack/' + format_name
     });
     return url;
   }
-    
+
+  links() {
+    return (
+      <div>
+        <a href={this.state.preview_url} target='preview'>Preview this Dataset Page</a> | <a href={this.state.sample_url} target='sample'>Update Dataset Sample(s)</a> | <a href={this.state.track_url} target='track'>Update Dataset Track(s)</a>
+      </div>
+      <hr />
+    );
+  }
+
   displayForm() {
     return (
       <div>
-        <a href={this.state.preview_url} target='new'>Preview this Dataset Page</a>
+        {this.links()}
         <form onSubmit={this.handleUpdate} ref='form'>
-          <NavigateBar dataset_name={this.props.dataset.format_name} isDataset={true} isSample={false} isTrack={false} />
           <input name='format_name' value={this.props.dataset.format_name} className="hide" />
           <OneDataset dataset={this.props.dataset} onOptionChange={this.handleChange} />
           {this.addButtons()}          	
