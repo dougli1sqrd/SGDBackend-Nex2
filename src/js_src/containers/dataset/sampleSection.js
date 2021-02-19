@@ -98,7 +98,7 @@ class SampleSection extends Component {
       <div>
         <form onSubmit={this.handleUpdate} ref='form'>
           <input name='format_name' value={this.props.sample.format_name} className="hide" />
-          {{this.props.sample.format_name}}
+          {this.props.sample.format_name}
           HELLO WORLD
           {this.addButtons()}          	
         </form>
