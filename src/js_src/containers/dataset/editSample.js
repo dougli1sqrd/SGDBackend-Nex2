@@ -50,7 +50,7 @@ class EditSample extends Component {
     return (
       <CurateLayout>
         <h2>Update Dataset Sample...</h2>
-        { this.sampleSections }
+        { this.sampleSections() }
       </CurateLayout>
     );
   }
