@@ -12,6 +12,8 @@ class NavigateBar extends Component {
     let dataset_url = '/dataset/' + this.props.dataset_name;
     let sample_url = '/datasetsample/' + this.props.dataset_name;
     let track_url = '/datasettrack/' + this.props.dataset_name;
+    console.log('dataset_url=' + dataset_url);
+      
     return (
       <div className='row'>
         <div className='columns medium-4 small-4'>
