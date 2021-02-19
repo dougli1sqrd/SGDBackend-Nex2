@@ -16,14 +16,11 @@ class EditSample extends Component {
 
   componentDidMount() {
     let url = this.setVariables();
-    console.log('url='+url);
     this.getData(url);
   }
 
   getData(url) {
     fetchData(url).then( (data) => {
-      console.log('samples='+data['samples']);
-      console.log('dataset='+data);
       this.setState({ samples: data['samples'] });
     })
     .catch(err => this.props.dispatch(setError(err.error)));
@@ -36,12 +33,8 @@ class EditSample extends Component {
   }
 
   sampleSections() {
-
-    console.log('this.state.samples='+this.state.samples);
-      
     let sections = this.state.samples.map((sample, i) => {
-      // return (<SampleSection sample={sample} index={i} />);
-      return (<div>{i} : {sample.format_name}</div>);
+      return (<SampleSection sample={sample} index={i} />);
     });
     return sections;
   }
