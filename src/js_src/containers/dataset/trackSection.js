@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import { setError, setMessage } from '../../actions/metaActions';
 import { setTrack } from '../../actions/trackActions';
 import { PREVIEW_URL } from '../../constants.js';
-import OneDataset from './oneDataset';
 const UPDATE_TRACK = '/track_update';
 const GET_TRACK = '/get_track_data';
 
@@ -103,7 +102,7 @@ class TrackSection extends Component {
         <a href={this.state.preview_url} target='new'>Preview this Track Page</a>
         <form onSubmit={this.handleUpdate} ref='form'>
           <input name='format_name' value={this.props.track.format_name} className="hide" />
-          <OneTrack track={this.props.track} onOptionChange={this.handleChange} />
+          TRACK PAGE
           {this.addButtons()}          	
         </form>
       </div>

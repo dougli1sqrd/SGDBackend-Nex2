@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import { setError, setMessage } from '../../actions/metaActions';
 import { setSample } from '../../actions/datasetSampleActions';
 import { PREVIEW_URL } from '../../constants.js';
-import OneDataset from './oneDataset';
 const UPDATE_SAMPLE = '/sample_update';
 const GET_SAMPLE = '/get_sample_data';
 
@@ -103,7 +102,7 @@ class SampleSection extends Component {
         <a href={this.state.preview_url} target='new'>Preview this Sample Page</a>
         <form onSubmit={this.handleUpdate} ref='form'>
           <input name='format_name' value={this.props.sample.format_name} className="hide" />
-          <OneSample sample={this.props.sample} onOptionChange={this.handleChange} />
+          SAMPLE PAGE
           {this.addButtons()}          	
         </form>
       </div>
