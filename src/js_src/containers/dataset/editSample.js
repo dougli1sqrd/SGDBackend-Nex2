@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import CurateLayout from '../curateHome/layout';
 import fetchData from '../../lib/fetchData';
 import SampleSection from './sampleSection';
