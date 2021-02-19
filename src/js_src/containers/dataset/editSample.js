@@ -16,6 +16,7 @@ class EditSample extends Component {
 
   componentDidMount() {
     let url = this.setVariables();
+    console.log('url='+url);
     this.getData(url);
   }
 
