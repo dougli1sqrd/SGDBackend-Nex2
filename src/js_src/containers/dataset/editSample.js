@@ -54,4 +54,8 @@ class EditSample extends Component {
 
 }
 
+EditSample.propTypes = {
+  dispatch: PropTypes.func,
+};
+
 export default EditSample;
