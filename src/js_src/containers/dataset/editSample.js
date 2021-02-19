@@ -21,6 +21,8 @@ class EditSample extends Component {
 
   getData(url) {
     fetchData(url).then( (data) => {
+      console.log('samples='+data['samples']);
+      console.log('dataset='+data);
       this.setState({ samples: data['samples'] });
     })
     .catch(err => this.props.dispatch(setError(err.error)));
