@@ -5,7 +5,6 @@ import Loader from '../../components/loader';
 import { connect } from 'react-redux';
 import { setError, setMessage } from '../../actions/metaActions';
 import { setDataset } from '../../actions/datasetActions';
-import { Link } from 'react-router-dom';
 import { PREVIEW_URL } from '../../constants.js';
 import OneDataset from './oneDataset';
 const UPDATE_DATASET = '/dataset_update';
