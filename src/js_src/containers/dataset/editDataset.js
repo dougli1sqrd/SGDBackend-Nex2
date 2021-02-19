@@ -8,6 +8,8 @@ import { setDataset } from '../../actions/datasetActions';
 import { PREVIEW_URL } from '../../constants.js';
 import OneDataset from './oneDataset';
 const UPDATE_DATASET = '/dataset_update';
+const DELETE_DATASET = '/dataset_delete';
+
 const GET_DATASET = '/get_dataset_data';
 
 const TIMEOUT = 300000;
@@ -18,7 +20,8 @@ class EditDataset extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleUpdate = this.handleUpdate.bind(this);
-  
+    this.handleDelete = this.handleDelete.bind(this);
+      
     this.state = {
       dataset_id: null,
       format_name: null,
@@ -63,12 +66,34 @@ class EditDataset extends Component {
     });
   }
 
+  handleDelete(e) {
+    e.preventDefault();
+    let formData = new FormData();
+    for(let key in this.props.dataset){
+      formData.append(key,this.props.dataset[key]);
+    }
+    fetchData(DELETE_DATASET, {
+      type: 'POST',
+      data: formData,
+      processData: false,
+      contentType: false,
+      timeout: TIMEOUT
+    }).then((data) => {
+      this.props.dispatch(setMessage(data.success));
+    }).catch((err) => {
+      this.props.dispatch(setError(err.error));
+    });
+  }
+    
   addButtons() {
     return (
       <div>
         <div className='row'>
           <div className='columns medium-6 small-6'>
-            <button type='submit' id='submit' value='0' className="button expanded" onClick={this.handleUpdate.bind(this)} > Update Dataset data </button>
+            <button type='submit' id='submit' value='0' className="button expanded" onClick={this.handleUpdate.bind(this)} > Update Dataset </button>
+          </div>
+          <div className='columns medium-6 small-6'>
+            <button type='button' className="button alert expanded" onClick={(e) => { if (confirm('Are you sure you want to delete this dataset along with all the sample & track data associated with it?')) this.handleDelete(e); }} > Delete Dataset </button>
           </div>
         </div>
       </div>
