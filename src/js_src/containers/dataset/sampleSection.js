@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import fetchData from '../../lib/fetchData';
-import { setError, setMessage } from '../../actions/metaActions';
+// import fetchData from '../../lib/fetchData';
+// import { setError, setMessage } from '../../actions/metaActions';
 import { setSample } from '../../actions/datasetSampleActions';
-const UPDATE_SAMPLE = '/datasetsample_update';
-const DELETE_SAMPLE = '/datasetsample_delete';
+// const UPDATE_SAMPLE = '/datasetsample_update';
+// const DELETE_SAMPLE = '/datasetsample_delete';
 
-const TIMEOUT = 300000;
+// const TIMEOUT = 300000;
 
 class SampleSection extends Component {
   constructor(props) {
@@ -28,7 +28,7 @@ class SampleSection extends Component {
     for (let key of data.entries()) {
       currentSample[key[0]] = key[1];
     }
-    this.props.onDataSubmitReport(setSample(currentSample));
+    // this.props.onDataSubmitReport(setSample(currentSample));
   }
 
   handleUpdate(e) {

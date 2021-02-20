@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 import CurateLayout from '../curateHome/layout';
 import fetchData from '../../lib/fetchData';
 import SampleSection from './sampleSection';
-import { setError } from '../../actions/metaActions';
+import { setError, setMessage } from '../../actions/metaActions';
 
 const GET_DATASET = '/get_dataset_data';
 const UPDATE_SAMPLE = '/datasetsample_update';
 const DELETE_SAMPLE = '/datasetsample_delete';
+
+const TIMEOUT = 300000;
 
 class EditSample extends Component {
   constructor(props) {
@@ -53,9 +55,9 @@ class EditSample extends Component {
       contentType: false,
       timeout: TIMEOUT
     }).then((data) => {
-      this.props.onDataSubmitReport(setMessage(data.success));
+      this.props.dispatch(setMessage(data.success));
     }).catch((err) => {
-      this.props.onDataSubmitReport(setError(err.error));
+      this.props.dispatch(setError(err.error));
     });
   }
     
