@@ -157,7 +157,7 @@ def get_one_dataset(request):
     
         ## samples
         samples = []
-        all_samples = DBSession.query(Datasetsample).filter_by(dataset_id=x.dataset_id).all()
+        all_samples = DBSession.query(Datasetsample).filter_by(dataset_id=x.dataset_id).order_by(Datasetsample.sample_order).all()
         for s in all_samples:
             samples.append({ 'format_name': s.format_name,
                              'display_name': s.display_name,
@@ -174,7 +174,7 @@ def get_one_dataset(request):
  
         ## tracks
         tracks = []
-        all_tracks = DBSession.query(Datasettrack).filter_by(dataset_id=x.dataset_id).all()
+        all_tracks = DBSession.query(Datasettrack).filter_by(dataset_id=x.dataset_id).order_by(Datasettrack.track_order).all()
         for t in all_tracks:
             tracks.append({ 'format_name': t.format_name,
                             'display_name': t.display_name,
