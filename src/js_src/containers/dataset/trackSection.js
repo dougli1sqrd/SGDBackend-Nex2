@@ -76,7 +76,7 @@ class TrackSection extends Component {
     return (
       <div>
         <form onSubmit={this.handleUpdate} ref='form'>
-          <input name='format_name' value={this.props.track.format_name} className="hide" />
+          <input name='datasettrack_id' value={this.props.track.datasettrack_id} className="hide" />
           {this.trackRow()}
           <hr />
         </form>

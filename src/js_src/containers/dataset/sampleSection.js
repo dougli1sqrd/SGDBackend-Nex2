@@ -104,7 +104,7 @@ class SampleSection extends Component {
     return (
       <div>
         <form onSubmit={this.handleUpdate} ref='form'>
-          <input name='format_name' value={this.props.sample.format_name} className="hide" />
+            <input name='datasetsample_id' value={this.props.sample.datasetsample_id} className="hide" />
           {this.sampleRow()}
           <hr />
         </form>
