@@ -55,7 +55,7 @@ class SampleSection extends Component {
         <div className='row'>
           <div className='columns medium-2 small-2'>
             <div> <label> dbxref_id </label> </div>
-            <input type='text' name='dbxref_id' id={index} value={this.props.sample.dbxref_id} onChange={this.onChange(index, this.value)} />
+            <input type='text' name='dbxref_id' id={this.props.index} value={this.props.sample.dbxref_id} onChange={this.onChange(this.props.index, this.value)} />
           </div>
           <div className='columns medium-2 small-2'>
             <div> <label> dbxref_type </label> </div>
