@@ -17,8 +17,7 @@ class SampleSection extends Component {
     this.handleUpdate = this.handleUpdate.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.updateData = this.updateData.bind(this);
-	  
+    	  
     this.state = {
       sample_id: null,
       format_name: null,
@@ -31,12 +30,12 @@ class SampleSection extends Component {
     
   handleUpdate(e) {
     e.preventDefault();
-    updateData(UPDATE_SAMPLE);
+    this.updateData(UPDATE_SAMPLE);
   }
 
   handleDelete(e) {
     e.preventDefault();
-    updateData(DELETE_SAMPLE);
+    this.updateData(DELETE_SAMPLE);
   }
 
   updateData(update_url) {
