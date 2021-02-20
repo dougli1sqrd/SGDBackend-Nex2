@@ -57,8 +57,9 @@ class SampleSection extends Component {
     
   handleChange() {
     let currentSample = {};
-    let formName = 'form' + this.props.index;
-    let data = new FormData(this.refs.{formName});
+    // let formName = 'form' + this.props.index;
+    // let data = new FormData(this.refs.{formName});
+    let data = new FormData(this.refs.form); 
     for (let key of data.entries()) {
       currentSample[key[0]] = key[1];
     }
