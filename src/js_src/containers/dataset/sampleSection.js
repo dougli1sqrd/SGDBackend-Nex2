@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 // import fetchData from '../../lib/fetchData';
 // import { setError, setMessage } from '../../actions/metaActions';
-import { setSample } from '../../actions/datasetSampleActions';
+// import { setSample } from '../../actions/datasetSampleActions';
 // const UPDATE_SAMPLE = '/datasetsample_update';
 // const DELETE_SAMPLE = '/datasetsample_delete';
 
