@@ -34,6 +34,9 @@ class SampleSection extends Component {
 
   onChange(fieldname, e) {
 
+    console.log('fieldname=' + fieldname);
+    console.log('new value=' + e.target.value);
+      
     document.getElementById(fieldname).value = e.target.value;
     // this.setState({ text: e.target.value });
       
