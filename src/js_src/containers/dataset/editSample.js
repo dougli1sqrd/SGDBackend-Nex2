@@ -48,7 +48,7 @@ class EditSample extends Component {
       'taxonomy_id': '',
       'biosample': '',
       'format_name': '',
-      'obj_url': '' })
+      'obj_url': '' });
     this.setState({ samples: samples });
   }
     
