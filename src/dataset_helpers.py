@@ -11,8 +11,6 @@ from src.models import DBSession, Dataset, Datasetsample, Datasettrack, Datasetl
                        Filedbentity
 from src.curation_helpers import get_curator_session
 
-# PREVIEW_URL = os.environ['PREVIEW_URL']
-
 log = logging.getLogger('curation')
 
 def insert_dataset_reference(curator_session, CREATED_BY, source_id, dataset_id, reference_id):
@@ -117,6 +115,7 @@ def get_one_dataset(request):
         x = DBSession.query(Dataset).filter_by(format_name=format_name).one_or_none()
         if x is None:
             return HTTPBadRequest(body=json.dumps({'error': "The dataset format_name " + format_name + " is not in the database."}))
+        data['dataset_id'] = x.dataset_id
         data['format_name'] = x.format_name
         data['display_name'] = x.display_name
         data['dbxref_id'] = x.dbxref_id
@@ -159,7 +158,8 @@ def get_one_dataset(request):
         samples = []
         all_samples = DBSession.query(Datasetsample).filter_by(dataset_id=x.dataset_id).order_by(Datasetsample.sample_order).all()
         for s in all_samples:
-            samples.append({ 'format_name': s.format_name,
+            samples.append({ 'datasetsample_id': s.datasetsample_id,
+                             'format_name': s.format_name,
                              'display_name': s.display_name,
                              'obj_url': s.obj_url,
                              'taxonomy_id': s.taxonomy_id,
@@ -176,7 +176,8 @@ def get_one_dataset(request):
         tracks = []
         all_tracks = DBSession.query(Datasettrack).filter_by(dataset_id=x.dataset_id).order_by(Datasettrack.track_order).all()
         for t in all_tracks:
-            tracks.append({ 'format_name': t.format_name,
+            tracks.append({ 'datasettrack_id': t.datasettrack_id,
+                            'format_name': t.format_name,
                             'display_name': t.display_name,
                             'obj_url': t.obj_url,
                             'track_order': t.track_order })
@@ -255,9 +256,62 @@ def update_datasetsample(request):
         sgd = DBSession.query(Source).filter_by(display_name='SGD').one_or_none()
         source_id = sgd.source_id
 
-        success_message = ''
-	
+        datasetsample_id = request.params.get('datasetsample_id', '')
+        if datasettrack_id == '':
+            return HTTPBadRequest(body=json.dumps({'error': "No datasetsample_id is passed in."}), content_type='text/json')
+        d = curator_session.query(Datasetsample).filter_by(datasetsample_id=int(datasetsample_id)).one_or_none()
 
+        if d is None:
+            return HTTPBadRequest(body=json.dumps({'error': "The datasetsample_id " + datasettrack_id + " is not in the database."}), content_type='text/json')
+
+        format_name = request.params.get('format_name', '')
+        display_name = request.params.get('display_name', '')
+        dbxref_id = request.params.get('dbxref_id', '')
+        dbxref_type = request.params.get('dbxref_type', '')
+        dbxref_url = request.params.get('dbxref_url', '')
+        strain_name = request.params.get('strain_name', '')
+        biosample = request.params.get('biosample', '')
+        sample_order = request.params.get('sample_order', '') 
+        description = request.params.get('description', '')
+
+        if format_name == '' or display_name == '' or sample_order == '':
+            return HTTPBadRequest(body=json.dumps({'error': "format_name, display_name, and sample_order are required fields."}), content_type='text/json')
+        update = 0
+        if format_name != d.format_name:
+            d.format_name = format_name
+            update = 1
+        if display_name != d.display_name:
+            d.display_name = display_name
+            update = 1
+        if dbxref_id != d.dbxref_id:
+            d.dbxref_id = dbxref_id
+            update = 1
+        if dbxref_type != d.dbxref_type:
+            d.dbxref_type = dbxref_type
+            update = 1
+        if dbxref_url != d.dbxref_url:
+            d.dbxref_url = dbxref_url
+            update = 1
+        if strain_name != d.strain_name:
+            d.strain_name = strain_name
+            update = 1
+        if biosample != d.biosample:
+            d.biosample = biosample
+            update = 1
+        if int(sample_order) != d.sample_order:
+            d.sample_order = int(sample_order)
+            update = 1
+        if description != d.description:
+            d.description = description
+            update = 1
+            
+        success_message = ''
+        if update == 1:
+            curator_session.add(d)
+            success_message = 'The datasetsample row has been successfully updated'
+        else:
+            success_message = 'Nothing is changed'
+            
         transaction.commit()
         return HTTPOk(body=json.dumps({'success': success_message, 'dataset': "DATASET"}), content_type='text/json')
     except Exception as e:
@@ -271,11 +325,19 @@ def delete_datasetsample(request):
     try:
         CREATED_BY = request.session['username']
         curator_session = get_curator_session(request.session['username'])
+
+        datasetsample_id = request.params.get('datasetsample_id', '')
+        if datasettrack_id == '':
+            return HTTPBadRequest(body=json.dumps({'error': "No datasetsample_id is passed in."}), content_type='text/json')
+        d = curator_session.query(Datasetsample).filter_by(datasetsample_id=int(datasetsample_id)).one_or_none()
+
+        if d is None:
+            return HTTPBadRequest(body=json.dumps({'error': "The datasetsample_id " + datasettrack_id + " is not in the database."}), content_type='text/json')
+
+        curator_session.delete(d)
+
+        success_message = 'The datasetsample row has been successfully deleted.'
         
-
-        success_message = ''
-	
-
         transaction.commit()
         return HTTPOk(body=json.dumps({'success': success_message, 'dataset': "DATASET"}), content_type='text/json')
     except Exception as e:
@@ -292,9 +354,43 @@ def update_datasettrack(request):
         sgd = DBSession.query(Source).filter_by(display_name='SGD').one_or_none()
         source_id = sgd.source_id
 
-        success_message = ''
-	
+        datasettrack_id = request.params.get('datasettrack_id', '')
+        if datasettrack_id == '':
+            return HTTPBadRequest(body=json.dumps({'error': "No datasettrack_id is passed in."}), content_type='text/json')
+        d = curator_session.query(Datasettrack).filter_by(datasettrack_id=int(datasettrack_id)).one_or_none()
 
+        if d is None:
+            return HTTPBadRequest(body=json.dumps({'error': "The datasettrack_id " + datasettrack_id + " is not in the database."}), content_type='text/json')
+        
+        format_name = request.params.get('format_name', '')
+        display_name = request.params.get('display_name', '')
+        dbxref_id = request.params.get('dbxref_id', '')
+        track_order = request.params.get('track_order', '')
+
+        if format_name == '' or diplay_name == '' or dbxref_id == '' or track_order == '':
+            return HTTPBadRequest(body=json.dumps({'error': "All four fields are required."}), content_type='text/json')
+        
+        update = 0
+        if format_name != d.format_name:
+            d.format_name = format_name
+            update = 1
+        if display_name != d.display_name:
+            d.display_name = display_name
+            update = 1
+        if dbxref_id != d.dbxref_id:
+            d.dbxref_id = dbxref_id
+            update = 1
+        if track_order != d.track_order:
+            d.track_order = track_order
+            update = 1
+            
+        success_message = ''
+        if update == 1:
+            curator_session.add(d)
+            success_message = 'The datasettrack row has been successfully updated.'
+        else:
+            success_message = 'Nothing is changed'
+            
         transaction.commit()
         return HTTPOk(body=json.dumps({'success': success_message, 'dataset': "DATASET"}), content_type='text/json')
     except Exception as e:
@@ -309,9 +405,18 @@ def delete_datasettrack(request):
         CREATED_BY = request.session['username']
         curator_session = get_curator_session(request.session['username'])
         
-        success_message = ''
-	
+        datasettrack_id = request.params.get('datasettrack_id', '')
+        if datasettrack_id == '':
+            return HTTPBadRequest(body=json.dumps({'error': "No datasettrack_id is passed in."}), content_type='text/json')
+        d = curator_session.query(Datasettrack).filter_by(datasettrack_id=int(datasettrack_id)).one_or_none()
 
+        if d is None:
+            return HTTPBadRequest(body=json.dumps({'error': "The datasettrack_id " + datasettrack_id + " is not in the database."}), content_type='text/json')
+
+        curator_session.delete(d)
+
+        success_message = 'The datasettrack row has been successfully deleted.'
+        
         transaction.commit()
         return HTTPOk(body=json.dumps({'success': success_message, 'dataset': "DATASET"}), content_type='text/json')
     except Exception as e:
