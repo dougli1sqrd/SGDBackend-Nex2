@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import CurateLayout from '../curateHome/layout';
+import { setSample } from '../../actions/datasetSampleActions';  
 import fetchData from '../../lib/fetchData';
 import SampleSection from './sampleSection';
 import { setError, setMessage } from '../../actions/metaActions';
@@ -19,6 +20,7 @@ class EditSample extends Component {
     };
     this.handleUpdateSubmit = this.handleUpdateSubmit.bind(this);
     this.handleDeleteSubmit = this.handleDeleteSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
@@ -39,6 +41,15 @@ class EditSample extends Component {
     return GET_DATASET + '/' + format_name;
   }
 
+  handleChange() {
+    let currentSample = {};
+    let data = new FormData(this.refs.form);
+    for (let key of data.entries()) {
+      currentSample[key[0]] = key[1];
+    }
+    this.props.dispatch(setSample(currentSample));
+  }
+    
   handleUpdateSubmit(e) {
     this.updateData(e, UPDATE_SAMPLE);
   }
@@ -63,7 +74,7 @@ class EditSample extends Component {
     
   sampleSections() {
     let sections = this.state.samples.map((sample, i) => {
-      return (<SampleSection sample={sample} index={i} onUpdateSubmit={this.handleUpdateSubmit} onDeleteSubmit={this.handleDeleteSubmit} />);
+      return (<SampleSection sample={sample} index={i} onUpdateSubmit={this.handleUpdateSubmit} onDeleteSubmit={this.handleDeleteSubmit} onOptionChange={this.handleChange} />);
     });
     return sections;
   }

@@ -1,12 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-// import fetchData from '../../lib/fetchData';
-// import { setError, setMessage } from '../../actions/metaActions';
-// import { setSample } from '../../actions/datasetSampleActions';
-// const UPDATE_SAMPLE = '/datasetsample_update';
-// const DELETE_SAMPLE = '/datasetsample_delete';
-
-// const TIMEOUT = 300000;
 
 class SampleSection extends Component {
   constructor(props) {
@@ -20,15 +13,6 @@ class SampleSection extends Component {
       sample_id: null,
       format_name: null,
     };
-  }
-
-  handleChange() {
-    let currentSample = {};
-    let data = new FormData(this.refs.form);
-    for (let key of data.entries()) {
-      currentSample[key[0]] = key[1];
-    }
-    // this.props.onDataSubmitReport(setSample(currentSample));
   }
 
   handleUpdate(e) {
@@ -56,11 +40,11 @@ class SampleSection extends Component {
         <div className='row'>
           <div className='columns medium-4 small-4'>
             <div> <label> format_name </label> </div>
-            <input type='text' name='format_name' value={this.props.sample.format_name} onChange={this.handleChange()} />
+            <input type='text' name='format_name' value={this.props.sample.format_name} onChange={this.onOptionChange()} />
           </div>
           <div className='columns medium-8 small-8'>
             <div> <label> display_name </label> </div>
-            <input type='text' name='display_name' value={this.props.sample.display_name} onChange={this.handleChange()} />
+            <input type='text' name='display_name' value={this.props.sample.display_name} onChange={this.onOptionChange()} />
           </div>
         </div>
 
@@ -68,23 +52,23 @@ class SampleSection extends Component {
         <div className='row'>
           <div className='columns medium-2 small-2'>
             <div> <label> dbxref_id </label> </div>
-            <input type='text' name='dbxref_id' value={this.props.sample.dbxref_id} onChange={this.handleChange()} />
+            <input type='text' name='dbxref_id' value={this.props.sample.dbxref_id} onChange={this.onOptionChange()} />
           </div>
           <div className='columns medium-2 small-2'>
             <div> <label> dbxref_type </label> </div>
-            <input type='text' name='dbxref_type' value={this.props.sample.dbxref_type} onChange={this.handleChange()} />
+            <input type='text' name='dbxref_type' value={this.props.sample.dbxref_type} onChange={this.props.onOptionChange()} />
           </div>
           <div className='columns medium-3 small-3'>
             <div> <label> strain_name </label> </div>
-            <input type='text' name='strain_name' value={this.props.sample.strain_name} onChange={this.handleChange()} />
+            <input type='text' name='strain_name' value={this.props.sample.strain_name} onChange={this.props.onOptionChange()} />
           </div>	    
           <div className='columns medium-3 small-3'>
             <div> <label> biosample </label> </div>
-            <input type='text' name='biosample' value={this.props.sample.biosample} onChange={this.handleChange()} />
+            <input type='text' name='biosample' value={this.props.sample.biosample} onChange={this.props.onOptionChange()} />
           </div>
           <div className='columns medium-2 small-2'>
             <div> <label> sample_order </label> </div>
-            <input type='text' name='sample_order' value={this.props.sample.sample_order} onChange={this.handleChange()} />
+            <input type='text' name='sample_order' value={this.props.sample.sample_order} onChange={this.props.onOptionChange()} />
           </div>
         </div>
 
@@ -92,7 +76,7 @@ class SampleSection extends Component {
         <div className='row'>
           <div className='columns medium-12 small-12'>
             <div> <label> dbxref_url </label> </div>
-            <input type='text' name='dbxref_url' value={this.props.sample.dbxref_url} onChange={this.handleChange()} />
+            <input type='text' name='dbxref_url' value={this.props.sample.dbxref_url} onChange={this.props.onOptionChange()} />
           </div>
         </div>
 
@@ -100,7 +84,7 @@ class SampleSection extends Component {
         <div className='row'>
           <div className='columns medium-12 small-12'>
             <div> <label> description </label> </div>
-            <input type='text' name='description' value={this.props.sample.description} onChange={this.handleChange()} />
+            <input type='text' name='description' value={this.props.sample.description} onChange={this.props.onOptionChange()} />
           </div>
         </div>
 
@@ -133,6 +117,7 @@ class SampleSection extends Component {
 SampleSection.propTypes = {
   onUpdateSubmit: PropTypes.func,
   onDeleteSubmit: PropTypes.func,
+  onOptionChange: PropTypes.func,
   dispatch: PropTypes.func,
   sample: PropTypes.object,
   index: PropTypes.integer
