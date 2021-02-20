@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import fetchData from '../../lib/fetchData';
 import { setSample } from '../../actions/datasetSampleActions'; 
 import { connect } from 'react-redux';
 import { setError, setMessage } from '../../actions/metaActions';
 
 const UPDATE_SAMPLE = '/datasetsample_update';
 const DELETE_SAMPLE = '/datasetsample_delete';
+
+const TIMEOUT = 300000;
 
 class SampleSection extends Component {
   constructor(props) {
@@ -14,7 +17,8 @@ class SampleSection extends Component {
     this.handleUpdate = this.handleUpdate.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handleChange = this.handleChange.bind(this);
-      
+    this.updateData = this.updateData.bind(this);
+	  
     this.state = {
       sample_id: null,
       format_name: null,
