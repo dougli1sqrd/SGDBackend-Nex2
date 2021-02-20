@@ -18,7 +18,7 @@ class SampleSection extends Component {
     this.handleDelete = this.handleDelete.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.state = {
-      sample: {},
+      data: {},
       format_name: null,
     };
   }
@@ -67,7 +67,7 @@ class SampleSection extends Component {
   }
 
   setData() {
-    this.setState({ sample: this.props.data });
+    this.setState({ data: this.props.data });
   }
     
   sampleRow() {
