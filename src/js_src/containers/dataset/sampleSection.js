@@ -38,8 +38,8 @@ class SampleSection extends Component {
 
   updateData(update_url) {
     let formData = new FormData();
-    for(let key in this.props.sample){
-      formData.append(key,this.props.sample[key]);
+    for(let key in this.state.data){
+      formData.append(key,this.state.data[key]);
     }  
     fetchData(update_url, {
       type: 'POST',
@@ -152,15 +152,7 @@ class SampleSection extends Component {
 SampleSection.propTypes = {
   dispatch: PropTypes.func,
   data: PropTypes.object,
-  sample: PropTypes.object,
   index: PropTypes.integer
 };
 
-function mapStateToProps(state) {
-  return {
-    sample: state.sample['currentSample']
-  };
-}
-
-export default connect(mapStateToProps)(SampleSection);
-
+export default SampleSection;

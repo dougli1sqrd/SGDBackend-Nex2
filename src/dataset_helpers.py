@@ -262,7 +262,7 @@ def update_datasetsample(request):
         d = curator_session.query(Datasetsample).filter_by(datasetsample_id=int(datasetsample_id)).one_or_none()
 
         if d is None:
-            return HTTPBadRequest(body=json.dumps({'error': "The datasetsample_id " + datasetsample_id + " is not in the database."}), content_type='text/json')
+            return HTTPBadRequest(body=json.dumps({'error': "The datasetsample_id = " + datasetsample_id + " is not in the database."}), content_type='text/json')
 
         format_name = request.params.get('format_name', '')
         display_name = request.params.get('display_name', '')
