@@ -32,6 +32,10 @@ class SampleSection extends Component {
     this.props.onDeleteSubmit(formData);
   }
 
+  onChange(fieldname, value) {
+    document.getElementById(fieldname).value = value;
+  }
+	
   sampleRow() {
     return (
       <div>
@@ -51,7 +55,7 @@ class SampleSection extends Component {
         <div className='row'>
           <div className='columns medium-2 small-2'>
             <div> <label> dbxref_id </label> </div>
-            <input type='text' name='dbxref_id' value={this.props.sample.dbxref_id} onChange={this.props.onOptionChange} />
+            <input type='text' name='dbxref_id' id={index} value={this.props.sample.dbxref_id} onChange={this.onChange(index, this.value)} />
           </div>
           <div className='columns medium-2 small-2'>
             <div> <label> dbxref_type </label> </div>
