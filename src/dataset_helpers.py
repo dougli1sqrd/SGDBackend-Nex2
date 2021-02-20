@@ -327,7 +327,7 @@ def delete_datasetsample(request):
         curator_session = get_curator_session(request.session['username'])
 
         datasetsample_id = request.params.get('datasetsample_id', '')
-        if datasettrack_id == '':
+        if datasetsample_id == '':
             return HTTPBadRequest(body=json.dumps({'error': "No datasetsample_id is passed in."}), content_type='text/json')
         d = curator_session.query(Datasetsample).filter_by(datasetsample_id=int(datasetsample_id)).one_or_none()
 
