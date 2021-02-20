@@ -1,6 +1,6 @@
 const DEFAULT_STATE = {
   currentTrack: {
-    dataset_id: 0,
+    datasettrack_id: 0,
     track_id: 0,
     format_name: '',
     display_name: '',

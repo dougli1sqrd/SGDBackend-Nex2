@@ -1,6 +1,6 @@
 const DEFAULT_STATE = {
   currentSample: {
-    dataset_id: 0,
+    datasetsample_id: 0,
     sample_id: 0,
     format_name: '',
     display_name: '',
