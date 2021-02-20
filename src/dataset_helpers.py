@@ -257,7 +257,7 @@ def update_datasetsample(request):
         source_id = sgd.source_id
 
         datasetsample_id = request.params.get('datasetsample_id', '')
-        if datasettrack_id == '':
+        if datasetsample_id == '':
             return HTTPBadRequest(body=json.dumps({'error': "No datasetsample_id is passed in."}), content_type='text/json')
         d = curator_session.query(Datasetsample).filter_by(datasetsample_id=int(datasetsample_id)).one_or_none()
 
