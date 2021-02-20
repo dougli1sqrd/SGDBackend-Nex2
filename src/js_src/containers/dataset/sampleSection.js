@@ -37,17 +37,7 @@ class SampleSection extends Component {
     for(let key in this.props.sample){
       formData.append(key,this.props.sample[key]);
     }
-    fetchData(UPDATE_SAMPLE, {
-      type: 'POST',
-      data: formData,
-      processData: false,
-      contentType: false,
-      timeout: TIMEOUT
-    }).then((data) => {
-      this.props.onDataSubmitReport(setMessage(data.success));
-    }).catch((err) => {
-      this.props.onDataSubmitReport(setError(err.error));
-    });
+    this.props.onUpdateSubmit(formData);
   }
 
   handleDelete(e) {
@@ -56,17 +46,7 @@ class SampleSection extends Component {
     for(let key in this.props.sample){
       formData.append(key,this.props.sample[key]);
     }
-    fetchData(DELETE_SAMPLE, {
-      type: 'POST',
-      data: formData,
-      processData: false,
-      contentType: false,
-      timeout: TIMEOUT
-    }).then((data) => {
-      this.props.onDataSubmitReport(setMessage(data.success));
-    }).catch((err) => {
-      this.props.onDataSubmitReport(setError(err.error));
-    });
+    this.props.onDeleteSubmit(formData);
   }
 
   sampleRow() {
@@ -151,7 +131,8 @@ class SampleSection extends Component {
 }
 
 SampleSection.propTypes = {
-  onDataSubmitReport: PropTypes.func,    
+  onUpdateSubmit: PropTypes.func,
+  onDeleteSubmit: PropTypes.func,
   dispatch: PropTypes.func,
   sample: PropTypes.object,
   index: PropTypes.integer

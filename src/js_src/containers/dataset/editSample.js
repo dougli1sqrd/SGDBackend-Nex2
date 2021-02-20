@@ -6,6 +6,8 @@ import SampleSection from './sampleSection';
 import { setError } from '../../actions/metaActions';
 
 const GET_DATASET = '/get_dataset_data';
+const UPDATE_SAMPLE = '/datasetsample_update';
+const DELETE_SAMPLE = '/datasetsample_delete';
 
 class EditSample extends Component {
   constructor(props) {
@@ -13,6 +15,8 @@ class EditSample extends Component {
     this.state = {
       samples: []
     };
+    this.handleUpdateSubmit = this.handleUpdateSubmit.bind(this);
+    this.handleDeleteSubmit = this.handleDeleteSubmit.bind(this);
   }
 
   componentDidMount() {
@@ -33,13 +37,31 @@ class EditSample extends Component {
     return GET_DATASET + '/' + format_name;
   }
 
-  dataSubmitReport(message) {
-    this.props.dispatch(message);
+  handleUpdateSubmit(e) {
+    this.updateData(e, UPDATE_SAMPLE);
+  }
+
+  handleDeleteSubmit(e) {
+    this.deleteData(e, DELETE_SAMPLE);
+  }
+
+  updateData(formData, update_url) {
+    fetchData(update_url, {
+      type: 'POST',
+      data: formData,
+      processData: false,
+      contentType: false,
+      timeout: TIMEOUT
+    }).then((data) => {
+      this.props.onDataSubmitReport(setMessage(data.success));
+    }).catch((err) => {
+      this.props.onDataSubmitReport(setError(err.error));
+    });
   }
     
   sampleSections() {
     let sections = this.state.samples.map((sample, i) => {
-      return (<SampleSection sample={sample} index={i} onDataSubmitReport={this.dataSubmitReport} />);
+      return (<SampleSection sample={sample} index={i} onUpdateSubmit={this.handleUpdateSubmit} onDeleteSubmit={this.handleDeleteSubmit} />);
     });
     return sections;
   }
