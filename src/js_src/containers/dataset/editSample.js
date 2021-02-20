@@ -26,7 +26,6 @@ class EditSample extends Component {
   componentDidMount() {
     let url = this.setVariables();
     this.getData(url);
-    this.addEmptyRow();
   }
 
   getData(url) {
@@ -36,22 +35,6 @@ class EditSample extends Component {
     .catch(err => this.props.dispatch(setError(err.error)));
   }
 
-  addEmptyRow() {
-    let samples = this.state.samples;
-    samples.push({ 'dbxref_id': '',
-      'display_name': '',
-      'strain_name': '',
-      'sample_order': '',
-      'description': '',
-      'dbxref_type': '',
-      'dbxref_url': '',
-      'taxonomy_id': '',
-      'biosample': '',
-      'format_name': '',
-      'obj_url': '' });
-    this.setState({ samples: samples });
-  }
-    
   setVariables() {
     let urlList = window.location.href.split('/');
     let format_name = urlList[urlList.length-1];
