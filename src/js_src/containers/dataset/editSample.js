@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import CurateLayout from '../curateHome/layout';
-import { setSample } from '../../actions/datasetSampleActions';  
+// import { setSample } from '../../actions/datasetSampleActions';  
 import fetchData from '../../lib/fetchData';
 import SampleSection from './sampleSection';
 import { setError, setMessage } from '../../actions/metaActions';
