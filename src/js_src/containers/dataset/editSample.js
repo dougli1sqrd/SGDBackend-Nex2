@@ -55,7 +55,7 @@ class EditSample extends Component {
   }
 
   handleDeleteSubmit(e) {
-    this.deleteData(e, DELETE_SAMPLE);
+    this.updateData(e, DELETE_SAMPLE);
   }
 
   updateData(formData, update_url) {
