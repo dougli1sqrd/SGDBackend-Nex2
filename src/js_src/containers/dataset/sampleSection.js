@@ -16,8 +16,7 @@ class SampleSection extends Component {
 
     this.handleUpdate = this.handleUpdate.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    	  
+    this.handleChange = this.handleChange.bind(this);    	  
     this.state = {
       sample_id: null,
       format_name: null,
