@@ -89,23 +89,23 @@ class SampleSection extends Component {
         <div className='row'>
           <div className='columns medium-2 small-2'>
             <div> <label> dbxref_id </label> </div>
-            <input type='text' name='dbxref_id' value={this.props.data.dbxref_id} onChange={this.handleChange.bind(this)} />
+            <input type='text' name='dbxref_id' value={this.state.data.dbxref_id} onChange={this.handleChange.bind(this)} />
           </div>
           <div className='columns medium-2 small-2'>
             <div> <label> dbxref_type </label> </div>
-            <input type='text' name='dbxref_type' value={this.props.data.dbxref_type} onChange={this.handleChange.bind(this)} />
+            <input type='text' name='dbxref_type' value={this.state.data.dbxref_type} onChange={this.handleChange.bind(this)} />
           </div>
           <div className='columns medium-3 small-3'>
             <div> <label> strain_name </label> </div>
-            <input type='text' name='strain_name' value={this.props.data.strain_name} onChange={this.handleChange.bind(this)} />
+            <input type='text' name='strain_name' value={this.state.data.strain_name} onChange={this.handleChange.bind(this)} />
           </div>	    
           <div className='columns medium-3 small-3'>
             <div> <label> biosample </label> </div>
-            <input type='text' name='biosample' value={this.props.data.biosample} onChange={this.handleChange.bind(this)} />
+            <input type='text' name='biosample' value={this.state.data.biosample} onChange={this.handleChange.bind(this)} />
           </div>
           <div className='columns medium-2 small-2'>
             <div> <label> sample_order </label> </div>
-            <input type='text' name='sample_order' value={this.props.data.sample_order} onChange={this.handleChange.bind(this)} />
+            <input type='text' name='sample_order' value={this.state.data.sample_order} onChange={this.handleChange.bind(this)} />
           </div>
         </div>
 
@@ -113,7 +113,7 @@ class SampleSection extends Component {
         <div className='row'>
           <div className='columns medium-12 small-12'>
             <div> <label> dbxref_url </label> </div>
-            <input type='text' name='dbxref_url' value={this.props.data.dbxref_url} onChange={this.handleChange.bind(this)} />
+            <input type='text' name='dbxref_url' value={this.state.data.dbxref_url} onChange={this.handleChange.bind(this)} />
           </div>
         </div>
 
@@ -121,7 +121,7 @@ class SampleSection extends Component {
         <div className='row'>
           <div className='columns medium-12 small-12'>
             <div> <label> description </label> </div>
-            <input type='text' name='description' value={this.props.sample.description} onChange={this.handleChange.bind(this)} />
+            <input type='text' name='description' value={this.state.data.description} onChange={this.handleChange.bind(this)} />
           </div>
         </div>
 
