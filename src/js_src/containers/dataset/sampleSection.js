@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { setSample } from '../../actions/datasetSampleActions'; 
+import { connect } from 'react-redux';
+import { setError, setMessage } from '../../actions/metaActions';
+
+const UPDATE_SAMPLE = '/datasetsample_update';
+const DELETE_SAMPLE = '/datasetsample_delete';
 
 class SampleSection extends Component {
   constructor(props) {
@@ -7,6 +13,7 @@ class SampleSection extends Component {
 
     this.handleUpdate = this.handleUpdate.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.handleChange = this.handleChange.bind(this);
       
     this.state = {
       sample_id: null,
@@ -14,34 +21,56 @@ class SampleSection extends Component {
     };
   }
 
+  componentDidMount() {
+    this.setData();
+  }	
+    
   handleUpdate(e) {
     e.preventDefault();
-    let formData = new FormData();
-    for(let key in this.props.sample){
-      formData.append(key,this.props.sample[key]);
-    }
-    this.props.onUpdateSubmit(formData);
+    updateData(e, UPDATE_SAMPLE);
   }
 
   handleDelete(e) {
     e.preventDefault();
+    updateData(e, DELETE_SAMPLE);
+  }
+
+  updateData(formData, update_url) {
     let formData = new FormData();
     for(let key in this.props.sample){
       formData.append(key,this.props.sample[key]);
+    }  
+    fetchData(update_url, {
+      type: 'POST',
+      data: formData,
+      processData: false,
+      contentType: false,
+      timeout: TIMEOUT
+    }).then((data) => {
+      this.props.dispatch(setMessage(data.success));
+    }).catch((err) => {
+      this.props.dispatch(setError(err.error));
+    });
+  }
+    
+  handleChange() {
+    let currentSample = {};
+    let data = new FormData(this.refs.form);
+    for (let key of data.entries()) {
+      currentSample[key[0]] = key[1];
     }
-    this.props.onDeleteSubmit(formData);
+    this.props.dispatch(setSample(currentSample));      
   }
 
-  onChange(fieldname, e) {
-
-    console.log('fieldname=' + fieldname);
-    console.log('new value=' + e.target.value);
-      
-    document.getElementById(fieldname).value = e.target.value;
-    // this.setState({ text: e.target.value });
-      
+  setData() {
+    let currentSample = {};
+    let data = this.props.sample;
+    for (let key in data) {
+      currentSample[key] = data[key];
+    }
+    this.props.dispatch(setSample(currentSample));  
   }
-	
+    
   sampleRow() {
     return (
       <div>
@@ -114,7 +143,7 @@ class SampleSection extends Component {
     return (
       <div>
         <form onSubmit={this.handleUpdate} ref='form'>
-            <input name='datasetsample_id' value={this.props.sample.datasetsample_id} className="hide" />
+          <input name='datasetsample_id' value={this.props.sample.datasetsample_id} className="hide" />
           {this.sampleRow()}
           <hr />
         </form>
@@ -124,12 +153,16 @@ class SampleSection extends Component {
 }
 
 SampleSection.propTypes = {
-  onUpdateSubmit: PropTypes.func,
-  onDeleteSubmit: PropTypes.func,
-  onOptionChange: PropTypes.func,
   dispatch: PropTypes.func,
   sample: PropTypes.object,
   index: PropTypes.integer
 };
 
-export default SampleSection;
+function mapStateToProps(state) {
+  return {
+    sample: state.sample['currentSample']
+  };
+}
+
+export default connect(mapStateToProps)(SampleSection);
+

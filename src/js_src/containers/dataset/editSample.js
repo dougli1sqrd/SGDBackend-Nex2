@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import CurateLayout from '../curateHome/layout';
-// import { setSample } from '../../actions/datasetSampleActions';  
 import fetchData from '../../lib/fetchData';
 import SampleSection from './sampleSection';
 import { setError, setMessage } from '../../actions/metaActions';
 
 const GET_DATASET = '/get_dataset_data';
-const UPDATE_SAMPLE = '/datasetsample_update';
-const DELETE_SAMPLE = '/datasetsample_delete';
 
 const TIMEOUT = 300000;
 
@@ -41,35 +38,9 @@ class EditSample extends Component {
     return GET_DATASET + '/' + format_name;
   }
 
-  handleChange(e) {
-    this.setState({ text: e.target.value });
-  }
-    
-  handleUpdateSubmit(e) {
-    this.updateData(e, UPDATE_SAMPLE);
-  }
-
-  handleDeleteSubmit(e) {
-    this.deleteData(e, DELETE_SAMPLE);
-  }
-
-  updateData(formData, update_url) {
-    fetchData(update_url, {
-      type: 'POST',
-      data: formData,
-      processData: false,
-      contentType: false,
-      timeout: TIMEOUT
-    }).then((data) => {
-      this.props.dispatch(setMessage(data.success));
-    }).catch((err) => {
-      this.props.dispatch(setError(err.error));
-    });
-  }
-    
   sampleSections() {
     let sections = this.state.samples.map((sample, i) => {
-      return (<SampleSection sample={sample} index={i} onUpdateSubmit={this.handleUpdateSubmit} onDeleteSubmit={this.handleDeleteSubmit} onOptionChange={this.handleChange} />);
+      return (<SampleSection sample={sample} index={i} />);
     });
     return sections;
   }
