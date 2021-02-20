@@ -39,11 +39,11 @@ class SampleSection extends Component {
         <div className='row'>
           <div className='columns medium-4 small-4'>
             <div> <label> format_name </label> </div>
-            <input type='text' name='format_name' value={this.props.sample.format_name} onChange={this.onOptionChange()} />
+            <input type='text' name='format_name' value={this.props.sample.format_name} onChange={this.props.onOptionChange()} />
           </div>
           <div className='columns medium-8 small-8'>
             <div> <label> display_name </label> </div>
-            <input type='text' name='display_name' value={this.props.sample.display_name} onChange={this.onOptionChange()} />
+            <input type='text' name='display_name' value={this.props.sample.display_name} onChange={this.props.onOptionChange()} />
           </div>
         </div>
 
@@ -51,7 +51,7 @@ class SampleSection extends Component {
         <div className='row'>
           <div className='columns medium-2 small-2'>
             <div> <label> dbxref_id </label> </div>
-            <input type='text' name='dbxref_id' value={this.props.sample.dbxref_id} onChange={this.onOptionChange()} />
+            <input type='text' name='dbxref_id' value={this.props.sample.dbxref_id} onChange={this.props.onOptionChange()} />
           </div>
           <div className='columns medium-2 small-2'>
             <div> <label> dbxref_type </label> </div>
