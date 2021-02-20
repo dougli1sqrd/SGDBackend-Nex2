@@ -35,7 +35,7 @@ class EditSample extends Component {
 
   sampleSections() {
     let sections = this.state.samples.map((sample, i) => {
-      return (<SampleSection sample={sample} index={i} />);
+      return (<SampleSection data={sample} index={i} />);
     });
     return sections;
   }
