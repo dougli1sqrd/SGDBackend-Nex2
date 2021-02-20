@@ -18,7 +18,7 @@ class SampleSection extends Component {
     this.handleDelete = this.handleDelete.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.state = {
-      sample_id: null,
+      sample: {},
       format_name: null,
     };
   }
@@ -67,12 +67,7 @@ class SampleSection extends Component {
   }
 
   setData() {
-    let currentSample = {};
-    let data = this.props.data;
-    for (let key in data) {
-      currentSample[key] = data[key];
-    }
-    this.props.dispatch(setSample(currentSample));  
+    this.setState({ sample: this.props.data });
   }
     
   sampleRow() {
@@ -82,11 +77,11 @@ class SampleSection extends Component {
         <div className='row'>
           <div className='columns medium-4 small-4'>
             <div> <label> format_name </label> </div>
-            <input type='text' name='format_name' value={this.props.data.format_name} onChange={this.handleChange.bind(this)} />
+            <input type='text' name='format_name' value={this.state.data.format_name} onChange={this.handleChange.bind(this)} />
           </div>
           <div className='columns medium-8 small-8'>
             <div> <label> display_name </label> </div>
-            <input type='text' name='display_name' value={this.props.data.display_name} onChange={this.handleChange.bind(this)} />
+            <input type='text' name='display_name' value={this.state.data.display_name} onChange={this.handleChange.bind(this)} />
           </div>
         </div>
 
