@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import fetchData from '../../lib/fetchData';
-import { setSample } from '../../actions/datasetSampleActions'; 
+// import { setSample } from '../../actions/datasetSampleActions'; 
 import { connect } from 'react-redux';
 import { setError, setMessage } from '../../actions/metaActions';
 
@@ -57,13 +57,11 @@ class SampleSection extends Component {
     
   handleChange() {
     let currentSample = {};
-    // let formName = 'form' + this.props.index;
-    // let data = new FormData(this.refs.{formName});
     let data = new FormData(this.refs.form); 
     for (let key of data.entries()) {
       currentSample[key[0]] = key[1];
     }
-    this.props.dispatch(setSample(currentSample));      
+    this.setState({ data: currentSample });  
   }
 
   setData() {
