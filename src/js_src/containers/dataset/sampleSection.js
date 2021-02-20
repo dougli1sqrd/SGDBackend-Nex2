@@ -32,9 +32,10 @@ class SampleSection extends Component {
     this.props.onDeleteSubmit(formData);
   }
 
-  onChange(e) {
+  onChange(fieldname, e) {
 
-    this.setState({ text: e.target.value });
+    document.getElementById(fieldname).value = e.target.value;
+    // this.setState({ text: e.target.value });
       
   }
 	
@@ -57,7 +58,7 @@ class SampleSection extends Component {
         <div className='row'>
           <div className='columns medium-2 small-2'>
             <div> <label> dbxref_id </label> </div>
-            <input type='text' name='dbxref_id' id={this.props.index} value={this.props.sample.dbxref_id} onChange={(e) => this.onChange(e)} />
+            <input type='text' name='dbxref_id' id={this.props.index} value={this.props.sample.dbxref_id} onChange={(e) => this.onChange(this.props.index, e)} />
           </div>
           <div className='columns medium-2 small-2'>
             <div> <label> dbxref_type </label> </div>
