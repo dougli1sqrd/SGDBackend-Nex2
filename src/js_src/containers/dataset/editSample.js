@@ -39,16 +39,16 @@ class EditSample extends Component {
   addEmptyRow() {
     let samples = this.state.samples;
     samples.push({ 'dbxref_id': '',
-		   'display_name': '',
-		   'strain_name': '',
-		   'sample_order': '',
-		   'description': '',
+                   'display_name': '',
+                   'strain_name': '',
+                   'sample_order': '',
+                   'description': '',
                    'dbxref_type': '',
-		   'dbxref_url': '',
-		   'taxonomy_id': '',
-		   'biosample': '',
-		   'format_name': '',
-		   'obj_url': '' })
+                   'dbxref_url': '',
+                   'taxonomy_id': '',
+                   'biosample': '',
+                   'format_name': '',
+                   'obj_url': '' })
     this.setState({ samples: samples });
   }
     
