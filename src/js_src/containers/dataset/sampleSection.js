@@ -66,7 +66,7 @@ class SampleSection extends Component {
 
   setData() {
     let currentSample = {};
-    let data = this.props.sample;
+    let data = this.props.data;
     for (let key in data) {
       currentSample[key] = data[key];
     }
@@ -156,6 +156,7 @@ class SampleSection extends Component {
 
 SampleSection.propTypes = {
   dispatch: PropTypes.func,
+  data: PropTypes.object,
   sample: PropTypes.object,
   index: PropTypes.integer
 };
