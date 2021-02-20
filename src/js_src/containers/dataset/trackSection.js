@@ -1,44 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import fetchData from '../../lib/fetchData';
-import Loader from '../../components/loader';
-import { connect } from 'react-redux';
-import { setError, setMessage } from '../../actions/metaActions';
-import { setTrack } from '../../actions/datasetTrackActions';
-import { PREVIEW_URL } from '../../constants.js';
-const UPDATE_TRACK = '/track_update';
-const GET_TRACK = '/get_track_data';
-
-const TIMEOUT = 300000;
 
 class TrackSection extends Component {
   constructor(props) {
     super(props);
 
-    this.handleChange = this.handleChange.bind(this);
     this.handleUpdate = this.handleUpdate.bind(this);
-  
+    this.handleDelete = this.handleDelete.bind(this);
+      
     this.state = {
       track_id: null,
       format_name: null,
-      preview_url: null,	
-      isLoading: false,
-      isComplete: false,
     };
-  }
-
-  componentDidMount() {
-    let url = this.setVariables();
-    this.getData(url);
-  }
-
-  handleChange() {
-    let currentTrack = {};
-    let data = new FormData(this.refs.form);
-    for (let key of data.entries()) {
-      currentTrack[key[0]] = key[1];
-    }
-    this.props.dispatch(setTrack(currentTrack));
   }
 
   handleUpdate(e) {
@@ -47,96 +20,78 @@ class TrackSection extends Component {
     for(let key in this.props.track){
       formData.append(key,this.props.track[key]);
     }
-    fetchData(UPDATE_TRACK, {
-      type: 'POST',
-      data: formData,
-      processData: false,
-      contentType: false,
-      timeout: TIMEOUT
-    }).then((data) => {
-      this.props.dispatch(setMessage(data.success));
-    }).catch((err) => {
-      this.props.dispatch(setError(err.error));
-    });
+    this.props.onUpdateSubmit(formData);
   }
 
-  addButtons() {
+  handleDelete(e) {
+    e.preventDefault();
+    let formData = new FormData();
+    for(let key in this.props.track){
+      formData.append(key,this.props.track[key]);
+    }
+    this.props.onDeleteSubmit(formData);
+  }
+
+  trackRow() {
     return (
       <div>
+        {/* format_name, display_name */}
         <div className='row'>
           <div className='columns medium-6 small-6'>
-            <button type='submit' id='submit' value='0' className="button expanded" onClick={this.handleUpdate.bind(this)} > Update Track data </button>
+            <div> <label> format_name </label> </div>
+            <input type='text' name='format_name' value={this.props.track.format_name} onChange={this.props.onOptionChange()} />
+          </div>
+          <div className='columns medium-6 small-6'>
+            <div> <label> display_name </label> </div>
+            <input type='text' name='display_name' value={this.props.track.display_name} onChange={this.props.onOptionChange()} />
+          </div>
+        </div>
+
+        {/* obj_url & track_order */}
+        <div className='row'>
+          <div className='columns medium-10 small-10'>
+            <div> <label> dbxref_id </label> </div>
+            <input type='text' name='obj_url' value={this.props.track.obj_url} onChange={this.props.onOptionChange()} />
+          </div>
+          <div className='columns medium-2 small-2'>
+            <div> <label> track_order </label> </div>
+            <input type='text' name='track_order' value={this.props.track.track_order} onChange={this.props.onOptionChange()} />
+          </div>
+        </div>
+
+        {/* update & delete button */}
+        <div className='row'>	    
+          <div className='columns medium-6 small-6'>
+            <button type='submit' id='submit' value='0' className="button expanded" onClick={this.handleUpdate.bind(this)} > Update this track </button>
+          </div>
+          <div className='columns medium-6 small-6'>
+            <button type='button' className="button alert expanded" onClick={(e) => { if (confirm('Are you sure you want to delete this track?')) this.handleDelete(e); }} > Delete this track </button>
           </div>
         </div>
       </div>
     );
   }
-
-  getData(url) {
-    this.setState({ isLoading: true });
-    fetchData(url).then( (data) => {
-      let currentTrack = {};
-      for (let key in data) {
-        currentTrack[key] = data[key];         
-      }
-      this.props.dispatch(setTrack(currentTrack));
-    })
-    .catch(err => this.props.dispatch(setError(err.error)))
-    .finally(() => this.setState({ isComplete: true, isLoading: false }));
-  }
-
-  setVariables() {
-    let urlList = window.location.href.split('/');
-    let format_name = urlList[urlList.length-1];
-    let url = GET_TRACK + '/' + format_name;  
-    this.setState({
-      format_name: format_name,
-      preview_url: `${PREVIEW_URL}` + '/track/' + format_name
-    });
-    return url;
-  }
     
-  displayForm() {
+  render() {
     return (
       <div>
-        <a href={this.state.preview_url} target='new'>Preview this Track Page</a>
         <form onSubmit={this.handleUpdate} ref='form'>
           <input name='format_name' value={this.props.track.format_name} className="hide" />
-          TRACK PAGE
-          {this.addButtons()}          	
+          {this.trackRow()}
+          <hr />
         </form>
       </div>
     );
   }
-
-  render() {
-    if (this.state.isLoading) {
-      return (
-        <div>
-          <div>Please wait while we are constructing the update form.</div>
-          <div><Loader /></div>
-        </div>
-      );
-    }
-    if (this.state.isComplete) {
-      return this.displayForm();
-    }
-    else {
-      return (<div>Something is wrong while we are constructing the update form.</div>);
-    }
-  }
 }
 
 TrackSection.propTypes = {
+  onUpdateSubmit: PropTypes.func,
+  onDeleteSubmit: PropTypes.func,
+  onOptionChange: PropTypes.func,
   dispatch: PropTypes.func,
-  track: PropTypes.object
+  track: PropTypes.object,
+  index: PropTypes.integer
 };
 
-
-function mapStateToProps(state) {
-  return {
-    track: state.track['currentTrack']
-  };
-}
-
-export default connect(mapStateToProps)(TrackSection);
+export default TrackSection;
