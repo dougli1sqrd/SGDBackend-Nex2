@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import CurateLayout from '../curateHome/layout';
 import { setSample } from '../../actions/datasetSampleActions';  
 import fetchData from '../../lib/fetchData';
@@ -48,7 +47,7 @@ class EditSample extends Component {
     for (let key of data.entries()) {
       currentSample[key[0]] = key[1];
     }
-    this.props.dispatch(setSample(currentSample));
+    // this.props.dispatch(setSample(currentSample));
   }
     
   handleUpdateSubmit(e) {
@@ -56,7 +55,7 @@ class EditSample extends Component {
   }
 
   handleDeleteSubmit(e) {
-    this.updateData(e, DELETE_SAMPLE);
+    this.deleteData(e, DELETE_SAMPLE);
   }
 
   updateData(formData, update_url) {
@@ -93,13 +92,6 @@ class EditSample extends Component {
 
 EditSample.propTypes = {
   dispatch: PropTypes.func,
-  sample: PropTypes.object
 };
 
-function mapStateToProps(state) {
-  return {
-    sample: state.sample['currentSample']
-  };
-}
-
-export default connect(mapStateToProps)(EditSample);
+export default EditSample;
