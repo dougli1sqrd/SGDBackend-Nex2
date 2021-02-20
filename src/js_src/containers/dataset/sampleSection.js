@@ -27,15 +27,15 @@ class SampleSection extends Component {
     
   handleUpdate(e) {
     e.preventDefault();
-    updateData(e, UPDATE_SAMPLE);
+    updateData(UPDATE_SAMPLE);
   }
 
   handleDelete(e) {
     e.preventDefault();
-    updateData(e, DELETE_SAMPLE);
+    updateData(DELETE_SAMPLE);
   }
 
-  updateData(formData, update_url) {
+  updateData(update_url) {
     let formData = new FormData();
     for(let key in this.props.sample){
       formData.append(key,this.props.sample[key]);

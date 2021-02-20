@@ -3,11 +3,9 @@ import PropTypes from 'prop-types';
 import CurateLayout from '../curateHome/layout';
 import fetchData from '../../lib/fetchData';
 import SampleSection from './sampleSection';
-import { setError, setMessage } from '../../actions/metaActions';
+import { setError } from '../../actions/metaActions';
 
 const GET_DATASET = '/get_dataset_data';
-
-const TIMEOUT = 300000;
 
 class EditSample extends Component {
   constructor(props) {
