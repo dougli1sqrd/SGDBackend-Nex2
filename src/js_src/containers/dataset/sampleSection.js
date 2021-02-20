@@ -57,7 +57,8 @@ class SampleSection extends Component {
     
   handleChange() {
     let currentSample = {};
-    let data = new FormData(this.refs.{this.props.index});
+    let formName = 'form' + this.props.index;
+    let data = new FormData(this.refs.{formName});
     for (let key of data.entries()) {
       currentSample[key[0]] = key[1];
     }
@@ -142,9 +143,10 @@ class SampleSection extends Component {
   }
     
   render() {
+    let formName = 'form' + this.props.index;
     return (
       <div>
-        <form onSubmit={this.handleUpdate} ref={this.props.index}>
+        <form onSubmit={this.handleUpdate} ref={formName}>
           <input name='datasetsample_id' value={this.props.sample.datasetsample_id} className="hide" />
           {this.sampleRow()}
           <hr />
