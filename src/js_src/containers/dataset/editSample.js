@@ -92,6 +92,13 @@ class EditSample extends Component {
 
 EditSample.propTypes = {
   dispatch: PropTypes.func,
+  sample: PropTypes.object
 };
 
-export default EditSample;
+function mapStateToProps(state) {
+  return {
+    sample: state.sample['currentSample']
+  };
+}
+
+export default connect(mapStateToProps)(EditSample);
