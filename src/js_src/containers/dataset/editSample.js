@@ -41,13 +41,8 @@ class EditSample extends Component {
     return GET_DATASET + '/' + format_name;
   }
 
-  handleChange() {
-    let currentSample = {};
-    let data = new FormData(this.refs.form);
-    for (let key of data.entries()) {
-      currentSample[key[0]] = key[1];
-    }
-    // this.props.dispatch(setSample(currentSample));
+  handleChange(e) {
+    this.setState({ text: e.target.value });
   }
     
   handleUpdateSubmit(e) {
