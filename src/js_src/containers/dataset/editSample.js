@@ -13,9 +13,6 @@ class EditSample extends Component {
     this.state = {
       samples: []
     };
-    this.handleUpdateSubmit = this.handleUpdateSubmit.bind(this);
-    this.handleDeleteSubmit = this.handleDeleteSubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
