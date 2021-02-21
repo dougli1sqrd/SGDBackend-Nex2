@@ -124,15 +124,17 @@ class TrackSection extends Component {
 TrackSection.propTypes = {
   dispatch: PropTypes.func,
   data: PropTypes.object,
-  track: PropTypes.object,
+  dataset: PropTypes.object,
   index: PropTypes.integer
 };
 
 function mapStateToProps(state) {
   return {
-    track: state.track['currentTrack']
+    dataset: state.dataset['currentDataset']
   };
 }
 
 export default connect(mapStateToProps)(TrackSection);
+
+
 
