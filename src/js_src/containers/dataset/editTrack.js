@@ -1,16 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import CurateLayout from '../curateHome/layout';
-import { setTrack } from '../../actions/datasetTrackActions';  
 import fetchData from '../../lib/fetchData';
 import TrackSection from './trackSection';
-import { setError, setMessage } from '../../actions/metaActions';
+import { setError } from '../../actions/metaActions';
 
 const GET_DATASET = '/get_dataset_data';
-const UPDATE_TRACK = '/datasettrack_update';
-const DELETE_TRACK = '/datasettrack_delete';
-
-const TIMEOUT = 300000;
 
 class EditTrack extends Component {
   constructor(props) {
@@ -18,9 +13,6 @@ class EditTrack extends Component {
     this.state = {
       tracks: []
     };
-    this.handleUpdateSubmit = this.handleUpdateSubmit.bind(this);
-    this.handleDeleteSubmit = this.handleDeleteSubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
@@ -41,40 +33,9 @@ class EditTrack extends Component {
     return GET_DATASET + '/' + format_name;
   }
 
-  handleChange() {
-    let currentTrack = {};
-    let data = new FormData(this.refs.form);
-    for (let key of data.entries()) {
-      currentTrack[key[0]] = key[1];
-    }
-    this.props.dispatch(setTrack(currentTrack));
-  }
-    
-  handleUpdateSubmit(e) {
-    this.updateData(e, UPDATE_TRACK);
-  }
-
-  handleDeleteSubmit(e) {
-    this.deleteData(e, DELETE_TRACK);
-  }
-
-  updateData(formData, update_url) {
-    fetchData(update_url, {
-      type: 'POST',
-      data: formData,
-      processData: false,
-      contentType: false,
-      timeout: TIMEOUT
-    }).then((data) => {
-      this.props.dispatch(setMessage(data.success));
-    }).catch((err) => {
-      this.props.dispatch(setError(err.error));
-    });
-  }
-    
   trackSections() {
     let sections = this.state.tracks.map((track, i) => {
-      return (<TrackSection track={track} index={i} onUpdateSubmit={this.handleUpdateSubmit} onDeleteSubmit={this.handleDeleteSubmit} onOptionChange={this.handleChange} />);
+      return (<TrackSection data={track} index={i} />);
     });
     return sections;
   }
