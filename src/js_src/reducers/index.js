@@ -14,8 +14,6 @@ import authorResponseReducer from './authorResponseReducer';
 import litguideReducer from './litguideReducer';
 import fileMetadataReducer from './fileMetadataReducer';
 import datasetReducer from './datasetReducer';
-import datasetSampleReducer from './datasetSampleReducer';
-import datasetTrackReducer from './datasetTrackReducer';
 
 export default {
   auth: authReducer,
@@ -33,7 +31,5 @@ export default {
   authorResponse:authorResponseReducer,
   litguide:litguideReducer,
   metadata: fileMetadataReducer,
-  dataset: datasetReducer,
-  sample: datasetSampleReducer,
-  track: datasetTrackReducer
+  dataset: datasetReducer
 };
