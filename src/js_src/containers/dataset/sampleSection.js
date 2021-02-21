@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import fetchData from '../../lib/fetchData';
+import { connect } from 'react-redux';
 import { setError, setMessage } from '../../actions/metaActions';
 
 const UPDATE_SAMPLE = '/datasetsample_update';
@@ -151,7 +152,15 @@ class SampleSection extends Component {
 SampleSection.propTypes = {
   dispatch: PropTypes.func,
   data: PropTypes.object,
+  dataset: PropTypes.object,
   index: PropTypes.integer
 };
 
-export default SampleSection;
+function mapStateToProps(state) {
+  return {
+    dataset: state.dataset['currentDataset']
+  };
+}
+
+export default connect(mapStateToProps)(SampleSection);
+
