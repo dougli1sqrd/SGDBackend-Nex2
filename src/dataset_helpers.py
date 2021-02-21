@@ -367,7 +367,7 @@ def update_datasettrack(request):
         dbxref_id = request.params.get('dbxref_id', '')
         track_order = request.params.get('track_order', '')
 
-        if format_name == '' or diplay_name == '' or dbxref_id == '' or track_order == '':
+        if format_name == '' or display_name == '' or dbxref_id == '' or track_order == '':
             return HTTPBadRequest(body=json.dumps({'error': "All four fields are required."}), content_type='text/json')
         
         update = 0
