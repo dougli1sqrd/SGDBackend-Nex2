@@ -9,7 +9,7 @@ const DELETE_SAMPLE = '/datasetsample_delete';
 
 const TIMEOUT = 300000;
 
-class SampleSection extends Component {
+class OneSample extends Component {
   constructor(props) {
     super(props);
 
@@ -149,7 +149,7 @@ class SampleSection extends Component {
   }
 }
 
-SampleSection.propTypes = {
+OneSample.propTypes = {
   dispatch: PropTypes.func,
   data: PropTypes.object,
   dataset: PropTypes.object,
@@ -162,5 +162,5 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(SampleSection);
+export default connect(mapStateToProps)(OneSample);
 

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import CurateLayout from '../curateHome/layout';
 import fetchData from '../../lib/fetchData';
-import TrackSection from './trackSection';
+import OneTrack from './oneTrack';
 import { setError } from '../../actions/metaActions';
 
 const GET_DATASET = '/get_dataset_data';
@@ -35,7 +35,7 @@ class EditTrack extends Component {
 
   trackSections() {
     let sections = this.state.tracks.map((track, i) => {
-      return (<TrackSection data={track} index={i} />);
+      return (<OneTrack data={track} index={i} />);
     });
     return sections;
   }

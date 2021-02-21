@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import CurateLayout from '../curateHome/layout';
 import fetchData from '../../lib/fetchData';
-import SampleSection from './sampleSection';
+import OneSample from './oneSample';
 import { setError } from '../../actions/metaActions';
 
 const GET_DATASET = '/get_dataset_data';
@@ -35,7 +35,7 @@ class EditSample extends Component {
 
   sampleSections() {
     let sections = this.state.samples.map((sample, i) => {
-      return (<SampleSection data={sample} index={i} />);
+      return (<OneSample data={sample} index={i} />);
     });
     return sections;
   }

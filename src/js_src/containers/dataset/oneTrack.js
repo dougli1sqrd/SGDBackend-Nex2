@@ -9,7 +9,7 @@ const DELETE_TRACK = '/datasettrack_delete';
 
 const TIMEOUT = 300000;
 
-class TrackSection extends Component {
+class OneTrack extends Component {
   constructor(props) {
     super(props);
 
@@ -121,7 +121,7 @@ class TrackSection extends Component {
   }
 }
 
-TrackSection.propTypes = {
+OneTrack.propTypes = {
   dispatch: PropTypes.func,
   data: PropTypes.object,
   dataset: PropTypes.object,
@@ -134,7 +134,7 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(TrackSection);
+export default connect(mapStateToProps)(OneTrack);
 
 
 
