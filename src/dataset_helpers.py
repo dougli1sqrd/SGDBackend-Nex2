@@ -364,7 +364,7 @@ def update_datasettrack(request):
         
         format_name = request.params.get('format_name', '')
         display_name = request.params.get('display_name', '')
-        dbxref_id = request.params.get('dbxref_id', '')
+        obj_url = request.params.get('obj_url', '')
         track_order = request.params.get('track_order', '')
 
         if format_name == '' or display_name == '' or dbxref_id == '' or track_order == '':
