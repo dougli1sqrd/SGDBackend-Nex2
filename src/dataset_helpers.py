@@ -377,8 +377,8 @@ def update_datasettrack(request):
         if display_name != d.display_name:
             d.display_name = display_name
             update = 1
-        if dbxref_id != d.dbxref_id:
-            d.dbxref_id = dbxref_id
+        if obj_url != d.obj_url:
+            d.obj_url = obj_url
             update = 1
         if track_order != d.track_order:
             d.track_order = track_order
