@@ -50,9 +50,16 @@ class EditDataset extends Component {
   handleUpdate(e) {
     e.preventDefault();
     let formData = new FormData();
+    let urls = ''
     for(let key in this.props.dataset){
-      formData.append(key,this.props.dataset[key]);
+     if (key == 'urls') {
+        urls = urls + '||' + this.props.dataset['urls'];
+      }
+      else {
+        formData.append(key,this.props.dataset[key]);
+      }
     }
+    formData.append('urls', urls);  
     fetchData(UPDATE_DATASET, {
       type: 'POST',
       data: formData,
