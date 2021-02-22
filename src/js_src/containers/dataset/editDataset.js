@@ -50,19 +50,9 @@ class EditDataset extends Component {
   handleUpdate(e) {
     e.preventDefault();
     let formData = new FormData();
-    let i = 0;
     for(let key in this.props.dataset){
-      if (key == 'urls') {
-        let urls = $('input[name=urls]').map((function() {
-          return this.value;
-        });
-        formData.append('urls', urls);
-      }
-      else {
-        formData.append(key,this.props.dataset[key]);
-      }
+      formData.append(key,this.props.dataset[key]);
     }
-    formData.append('urls', urls);  
     fetchData(UPDATE_DATASET, {
       type: 'POST',
       data: formData,
