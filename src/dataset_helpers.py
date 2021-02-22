@@ -262,9 +262,11 @@ def update_dataset(request):
 
         success_message = ''
 
-        urls = request.params.get('urls', '')
-
-        return HTTPBadRequest(body=json.dumps({'error': "URLs=" + str(urls)}), content_type='text/json')
+        urls = request.params.get('urls', [])
+        
+        for url_set in urls:
+            
+            return HTTPBadRequest(body=json.dumps({'error': "url_set=" + str(url_set)}), content_type='text/json')
         
         ## dataset
 
