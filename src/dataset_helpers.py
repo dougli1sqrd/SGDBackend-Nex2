@@ -10,9 +10,36 @@ from src.models import DBSession, Dataset, Datasetsample, Datasettrack, Datasetl
                        DatasetKeyword, DatasetReference, DatasetUrl, Referencedbentity, Source,\
                        Filedbentity
 from src.curation_helpers import get_curator_session
+from src.metadata_helpers import insert_keyword
 
 log = logging.getLogger('curation')
 
+def insert_dataset_keyword(curator_session, CREATED_BY, source_id, dataset_id, keyword_id):
+    
+    try:
+        x = DatasetKeyword(dataset_id = dataset_id,
+                           keyword_id = keyword_id,
+                           source_id = source_id,
+                           created_by = CREATED_BY)
+        curator_session.add(x)
+    except Exception as e:
+        transaction.abort()
+        if curator_session:
+            curator_session.rollback()
+
+def insert_dataset_file(curator_session, CREATED_BY, source_id, dataset_id, file_id):
+
+    try:
+        x = DatasetFile(dataset_id = dataset_id,
+                        file_id = file_id,
+                        source_id = source_id,
+                        created_by = CREATED_BY)
+        curator_session.add(x)
+    except Exception as e:
+        transaction.abort()
+        if curator_session:
+            curator_session.rollback()
+    
 def insert_dataset_reference(curator_session, CREATED_BY, source_id, dataset_id, reference_id):
 
     try:
@@ -200,7 +227,13 @@ def load_dataset(request):
         source_id = sgd.source_id
 
         success_message = ''
-	
+
+
+
+
+
+
+        
 
         transaction.commit()
         return HTTPOk(body=json.dumps({'success': success_message, 'dataset': "DATASET"}), content_type='text/json')
@@ -219,6 +252,119 @@ def update_dataset(request):
         sgd = DBSession.query(Source).filter_by(display_name='SGD').one_or_none()
         source_id = sgd.source_id
 
+        dataset_id = request.params.get('dataset_id', '')
+        if dataset_id == '':
+            return HTTPBadRequest(body=json.dumps({'error': "No dataset_id is passed in."}), content_type='text/json')
+        d = curator_session.query(Dataset).filter_by(dataset_id=int(dataset_id)).one_or_none()
+        if d is None:
+            return HTTPBadRequest(body=json.dumps({'error': "The dataset_id = " + dataset_id + " is not in the database."}), content_type='text/json')
+        dataset_id = d.dataset_id
+
+        success_message = ''
+
+        urls = request.params.get('urls', '')
+
+        return HTTPBadRequest(body=json.dumps({'error': "URLs=" + str(urls)}), content_type='text/json')
+        
+        ## dataset
+
+
+
+        
+        ## dataset_file
+        
+        all_dFile = curator_session.query(DatasetFile).filter_by(dataset_id=dataset_id).all()
+        all_file_ids_DB = {}
+        for x in all_dFile:
+            all_file_ids_DB[x.file_id] = x
+            
+        filenames = request.params.get('filenames', '')
+        files = filenames.split('|')
+        
+        all_file_ids_NEW = {}
+        for file in files:
+            fd = curator_session.query(Filedbentity).filter_by(display_name=file, subclass='Active').one_or_none()
+            if fd is None:
+                return HTTPBadRequest(body=json.dumps({'error': "file = " + file + " is not in the database."}), content_type='text/json')
+            all_file_ids_NEW[fd.dbentity_id] = fd
+            if fd.dbentity_id not in all_file_ids_DB:
+                insert_dataset_file(curator_session, CREATED_BY, source_id, dataset_id, fd.dbentity_id)
+                success_message = success_message + "<br>file '" + fd.display_name + "' has been added for this dataset."
+                
+        for file_id in all_file_ids_DB:
+            if file_id not in all_file_ids_NEW:
+                x = all_file_ids_DB[file_id]
+                success_message = success_message + "<br>file '" + fd.display_name + "' has been added for this dataset."
+                curator_session.delete(x)
+                
+        ## dataset_keyword
+        
+        all_Kw = curator_session.query(DatasetKeyword).filter_by(dataset_id=dataset_id).all()
+        all_keyword_ids_DB = {}
+        for x in all_dKw:
+            all_keyword_ids_DB[x.keyword_id] = x
+
+        keywords = request.params.get('keywords', '')
+        kws = keywords.split('|')
+
+        all_keyword_ids_NEW = {}
+        for kw in kws:
+            k = curator_session.query(Keyword).filter_by(display_name=kw).one_or_none()
+            keyword_id = None
+            if k is None:
+                keyword_id = insert_keyword(curator_session, CREATED_BY, source_id, kw)
+                if str(keyword_id).isdigit():
+                    success_message = success_message + "<br>keyword '" + kw + "' has been added into database."
+                else:
+                    err_msg = keyword_id
+                    return HTTPBadRequest(body=json.dumps({'error': err_msg}), content_type='text/json')
+            else:
+                keyword_id = k.keyword_id
+            all_keyword_ids_NEW[keyword_id] = 1
+            if keyword_id not in all_keyword_ids_DB:
+                insert_dataset_keyword(curator_session, CREATED_BY, source_id, dataset_id, keyword_id)
+                success_message = success_message + "<br>keyword '" + kw + "' has been added for this dataset."
+
+        for keyword_id in all_keyword_ids_DB:
+            if keyword_id not in all_keyword_ids_NEW:
+                x = all_keyword_ids_DB[keyword_id]
+                success_message = success_message + "<br>keyword '" + x.display_name + "' has been removed from this dataset."
+                curator_session.delete(x)
+
+        ## dataset_reference
+
+        all_refs = curator_session.query(DatasetReference).filter_by(dataset_id=dataset_id).all()
+
+        all_ref_ids_DB = {}
+        for x in all_refs:
+            all_ref_ids_DB[x.reference.dbentity_id] = x
+
+        pmids = request.params.get('pmids', '')
+        pmid_list = pmids.split('|')
+
+        all_ref_ids_NEW = {}
+        for pmid in pmid_list:
+            ref = curator_session.query(Referencedbentity).filter_by(pmid=int(pmid)).one_or_none()
+            if ref is None:
+                return HTTPBadRequest(body=json.dumps({'error': 'pmid = ' + pmid + ' is not in the database.'}), content_type='text/json')
+            reference_id = ref.dbentity_id
+            if reference_id not in all_ref_ids_DB:
+                insert_dataset_reference(curator_session, CREATED_BY, source_id, dataset_id, reference_id)
+                success_message = success_message + "<br>pmid '" + pmid + "' has been added for this dataset."
+            all_ref_ids_NEW[reference_id] = 1
+                
+        for reference_id in all_ref_ids_DB:
+            if reference_id not in all_ref_ids_NEW:
+                x = all_ref_ids_DB[reference_id]
+                success_message = success_message + "<br>pmid '" + pmid + "' has been added for this dataset."
+                curator_session.delete(x)
+            
+        ## dataset_url
+        all_urls = curator_session.query(DatasetUrl).filter_by(dataset_id=dataset_id).all()
+        
+        
+        ## datasetlab    
+        
         success_message = ''
         
 
@@ -236,9 +382,42 @@ def delete_dataset(request):
         CREATED_BY = request.session['username']
         curator_session = get_curator_session(request.session['username'])
 
+        dataset_id = request.params.get('dataset_id', '')
+        if dataset_id == '':
+            return HTTPBadRequest(body=json.dumps({'error': "No dataset_id is passed in."}), content_type='text/json')
+        d = curator_session.query(Dataset).filter_by(dataset_id=int(dataset_id)).one_or_none()
 
-        success_message = ''
-	
+        if d is None:
+            return HTTPBadRequest(body=json.dumps({'error': "The dataset_id = " + dataset_id + " is not in the database."}), content_type='text/json')
+        dataset_id = d.dataset_id
+        
+        ## dataset_file
+        all_dFile = curator_session.query(DatasetFile).filter_by(dataset_id=dataset_id).all()
+                    
+        ## dataset_keyword
+        all_dKw = curator_session.query(DatasetKeyword).filter_by(dataset_id=dataset_id).all()
+                    
+        ## dataset_reference
+        all_dRef = curator_session.query(DatasetReference).filter_by(dataset_id=dataset_id).all()
+                    
+        ## dataset_url
+        all_dUrl = curator_session.query(DatasetUrl).filter_by(dataset_id=dataset_id).all()
+                    
+        ## datasetlab
+        all_dLab = curator_session.query(Datasetlab).filter_by(dataset_id=dataset_id).all()
+        
+        ## datasetsample
+        all_dSample = curator_session.query(Datasetsample).filter_by(dataset_id=dataset_id).all()
+
+        ## datasettrack
+        all_dTrack = curator_session.query(Datasettrack).filter_by(dataset_id=dataset_id).all()
+
+        for x in all_dFile + all_dKw + all_dRef + all_dUrl + all_dLab + all_dSample + all_dTarck:
+            curator_session.delete (x)
+
+        curator_session.delete(d)
+
+        success_message = 'The dataset row along with its associated File/Keyword/URL/Lab/Sample/Track has been successfully deleted.'	
 
         transaction.commit()
         return HTTPOk(body=json.dumps({'success': success_message, 'dataset': "DATASET"}), content_type='text/json')
