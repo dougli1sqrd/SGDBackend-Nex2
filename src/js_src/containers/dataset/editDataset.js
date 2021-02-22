@@ -53,7 +53,7 @@ class EditDataset extends Component {
     let i = 0;
     for(let key in this.props.dataset){
       if (key == 'urls') {
-        let urls = $('input[name='urls']').map((function() {
+        let urls = $('input[name=urls]').map((function() {
           return this.value
         }).gets;
         formData.append('urls', urls);
