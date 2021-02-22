@@ -53,7 +53,7 @@ class EditDataset extends Component {
     let urls = '';
     for(let key in this.props.dataset){
       if (key == 'urls') {
-        urls = urls + '||' + this.props.dataset['urls'];
+        urls = urls + '||' + this.props.dataset['urls'].name;
       }
       else {
         formData.append(key,this.props.dataset[key]);
