@@ -356,8 +356,6 @@ def update_dataset(request):
         if channel_count != d.channel_count:
             d.channel_count = channel_count
             update = 1
-
-        return HTTPBadRequest(body=json.dumps({'error': "HELLO5"}), content_type='text/json')
     
         # required
         sample_count = request.params.get('sample_count', None)
