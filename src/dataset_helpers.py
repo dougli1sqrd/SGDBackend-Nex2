@@ -421,7 +421,7 @@ def update_dataset(request):
                 success_message = success_message + "<br>file '" + fd.display_name + "' has been added for this dataset."
                 curator_session.delete(x)
 
-        return HTTPBadRequest(body=json.dumps({'error': "dataset_file table"}), content_type='text/json')
+        # return HTTPBadRequest(body=json.dumps({'error': "dataset_file table"}), content_type='text/json')
     
         ## dataset_keyword
         
@@ -457,6 +457,8 @@ def update_dataset(request):
                 success_message = success_message + "<br>keyword '" + x.display_name + "' has been removed from this dataset."
                 curator_session.delete(x)
 
+        return HTTPBadRequest(body=json.dumps({'error': "dataset_keyword table"}), content_type='text/json')
+    
         ## dataset_reference
 
         all_refs = curator_session.query(DatasetReference).filter_by(dataset_id=dataset_id).all()
