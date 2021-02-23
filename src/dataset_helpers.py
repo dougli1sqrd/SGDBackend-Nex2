@@ -265,14 +265,76 @@ def update_dataset(request):
             return HTTPBadRequest(body=json.dumps({'error': "The dataset_id = " + dataset_id + " is not in the database."}), content_type='text/json')
 
         dataset_id = d.dataset_id
-
-        success_message = ''
         
         ## dataset
 
-
-
+        update = 0
+        format_name = request.params.get('format_name', '')
+        if format_name != d.format_name:
+            d.format_name = format_name
+            update = 1
         
+        display_name = request.params.get('display_name', '')
+        if display_name != d.display_name:
+            d.display_name = display_name
+            update = 1
+
+        dbxref_id = request.params.get('dbxref_id', '')
+        if dbxref_id != d.dbxref_id:
+            d.dbxref_id = dbxref_id
+            update = 1
+
+        dbxref_type = request.params.get('dbxref_type', '')
+        if dbxref_type != d.dbxref_type:
+            d.dbxref_type = dbxref_type
+            update = 1
+
+        date_public = request.params.get('date_public', '')
+        if date_public != d.date_public:
+            d.date_public = date_public
+            update = 1
+
+        parent_dataset_id = request.params.get('parent_dataset_id', None)
+        if parent_dataset_id != d.parent_dataset_id:
+            d.parent_dataset_id = parent_dataset_id
+            update = 1
+
+        assay_id = request.params.get('assay_id', None)
+        if assay_id != d.assay_id:
+            d.assay_id = assay_id
+            update = 1
+
+        channel_count = request.params.get('channel_count', None)
+        if channel_count != d.channel_count:
+            d.channel_count = channel_count
+            update = 1
+
+        sample_count = request.params.get('sample_count', None)
+        if sample_count != d.sample_count:
+            d.sample_count = sample_count
+            update = 1
+
+        is_in_spell = request.params.get('is_in_spell')
+        is_in_spell = True if is_in_spell == 'true' else False
+        if is_in_spell != d.is_in_spell:
+            d.is_in_spell = is_in_spell
+            update = 1
+
+        is_in_browser = request.params.get('is_in_browser')
+        is_in_browser = True if is_in_browser == 'true' else False
+        if is_in_browser != d.is_in_browser:
+            d.is_in_browser = is_in_browser
+            update = 1
+
+        description = request.params.get('is_in_browser', '')
+        if description != d.description:
+            d.description = description
+            update = 1
+
+        success_message = ''
+        if update == 1:
+            success_message = 'The dataset table has been successfully updated'
+            
         ## dataset_file
         
         all_dFile = curator_session.query(DatasetFile).filter_by(dataset_id=dataset_id).all()
@@ -362,6 +424,7 @@ def update_dataset(request):
                 curator_session.delete(x)
             
         ## dataset_url
+
         all_urls = curator_session.query(DatasetUrl).filter_by(dataset_id=dataset_id).all()
         
         all_urls_DB = {}
@@ -381,13 +444,49 @@ def update_dataset(request):
                 success_message = success_message + "<br>URL '" + url_set + "' has been removed for this dataset."
                 curator_session.delete(x)
                 
-        ## datasetlab    
+        ## datasetlab
         
+        labNew = request.params.get('lab', '').replace(' |', '|').replace('| ', '|')
+        [lab_name, lab_location, colleague_full_name] =	labNew.split('|')
+        lab_name = lab_name.replace('lab_name: ', '')
+        lab_location = lab_location.replace('lab_location: ', '')
+        colleague_full_name = colleague_full_name.replace('colleague_full_name: ', '')
+        
+        lab = curator_session.query(Datasetlab).filter_by(dataset_id=dataset_id).one_or_none()
+        if lab is not None:
+            if lab_name == '' or lab_location == '':
+                success_message = success_message + "<br>lab '" + lab.lab_name + '|' + lab.lab_location + "' has been removed for this dataset."
+                curator_session.delete(lab)
+                
+            else: ## update
+                update = 0
+                if lab.lab_name != lab_name:
+                    lab.lab_name = lab_name
+                    update = 1
+                if lab.lab_location != lab_location:
+                    lab.lab_location = lab_location
+                    update = 1
+                if colleague_full_name:
+                    coll = curator_session.query(Colleague).filter_by(full_name=colleague_full_name).one_or_none()
+                    colleague_id = None
+                    if coll:
+                        colleague_id = coll.colleague_id
+                    if colleague_id and colleague_id != lab.colleague_id:
+                        lab.colleague_id = colleague_id
+                        update = 1
+                elif lab.colleague_id:
+                    lab.colleague_id = None
+                    update = 1
+                if update == 1:
+                    curator_session.add(lab)
+                    success_message = success_message + "<br>lab info has been updated for this dataset." 
+        elif lab_name and lab_location:
+            insert_datasetlab(curator_session, CREATED_BY, source_id, dataset_id, lab_name, lab_location, colleague_full_name)
+            success_message = success_message + "<br>lab '" + labNew + "' has been added for this dataset."        
 
+        if success_message == '':
+            success_message = 'Nothing is changed'
         
-        success_message = ''
-        
-
         transaction.commit()
         return HTTPOk(body=json.dumps({'success': success_message, 'dataset': "DATASET"}), content_type='text/json')
     except Exception as e:
