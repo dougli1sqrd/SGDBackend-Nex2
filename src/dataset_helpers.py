@@ -346,15 +346,15 @@ def update_dataset(request):
             d.assay_id = assay_id
             update = 1
 
-        return HTTPBadRequest(body=json.dumps({'error': "HELLO3"}), content_type='text/json')
-
         channel_count = request.params.get('channel_count', None)
-        if channel_count is not None:
+        if str(channel_count).isdigit():
             channel_count = int(channel_count)
         if channel_count != d.channel_count:
             d.channel_count = channel_count
             update = 1
 
+        return HTTPBadRequest(body=json.dumps({'error': "HELLO5"}), content_type='text/json')
+    
         # required
         sample_count = request.params.get('sample_count', None)
         if sample_count is not None:
