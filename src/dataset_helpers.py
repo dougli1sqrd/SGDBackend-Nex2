@@ -376,7 +376,7 @@ def update_dataset(request):
             d.is_in_spell = is_in_spell
             update = 1
 
-        ils_in_browser = request.params.get('is_in_browser')
+        ls_in_browser = request.params.get('is_in_browser')
         is_in_browser = True if is_in_browser == 'true' else False
         if is_in_browser != d.is_in_browser:
             d.is_in_browser = is_in_browser
