@@ -388,7 +388,7 @@ def update_dataset(request):
         if update == 1:
             success_message = 'The dataset table has been successfully updated'
 
-        return HTTPBadRequest(body=json.dumps({'error': "HELLO7"}), content_type='text/json')
+        # return HTTPBadRequest(body=json.dumps({'error': "dataset table"}), content_type='text/json')
     
         ## dataset_file
         
@@ -415,7 +415,9 @@ def update_dataset(request):
                 x = all_file_ids_DB[file_id]
                 success_message = success_message + "<br>file '" + fd.display_name + "' has been added for this dataset."
                 curator_session.delete(x)
-                
+
+        return HTTPBadRequest(body=json.dumps({'error': "dataset_file table"}), content_type='text/json')
+    
         ## dataset_keyword
         
         all_Kw = curator_session.query(DatasetKeyword).filter_by(dataset_id=dataset_id).all()
