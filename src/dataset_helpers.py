@@ -8,7 +8,7 @@ import transaction
 import json
 from src.models import DBSession, Dataset, Datasetsample, Datasettrack, Datasetlab, DatasetFile, \
                        DatasetKeyword, DatasetReference, DatasetUrl, Referencedbentity, Source,\
-                       Filedbentity
+                       Filedbentity, Colleague, Keyword
 from src.curation_helpers import get_curator_session
 from src.metadata_helpers import insert_keyword
 
