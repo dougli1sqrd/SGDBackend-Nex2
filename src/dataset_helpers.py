@@ -330,7 +330,7 @@ def update_dataset(request):
             update = 1
             
         parent_dataset_id = request.params.get('parent_dataset_id', None)
-        if parent_dataset_id is not None:
+        if str(parent_dataset_id).isdigit():
             parent_dataset_id = int(parent_dataset_id)
         if parent_dataset_id != d.parent_dataset_id:
             d.parent_dataset_id = parent_dataset_id
