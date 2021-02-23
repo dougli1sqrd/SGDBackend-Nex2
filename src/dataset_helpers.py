@@ -174,6 +174,7 @@ def get_one_dataset(request):
         ## urls
         # urls = []
         all_dsUrls = DBSession.query(DatasetUrl).filter_by(dataset_id=x.dataset_id).all()
+        i = 0
         for dsUrl in all_dsUrls:
             # row = { 'url_type': dsUrl.url_type,
             #        'display_name': dsUrl.display_name,
