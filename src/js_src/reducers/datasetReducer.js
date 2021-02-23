@@ -17,7 +17,8 @@ const DEFAULT_STATE = {
     filenames: '',
     keywords: '',
     pmids: '',
-    urls: '',
+    url1: '',
+    url2: '',
     lab: ''
   }
 };
