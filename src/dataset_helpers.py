@@ -78,9 +78,9 @@ def get_lab(dataset_id):
     labInfo = DBSession.query(Datasetlab).filter_by(dataset_id=dataset_id).one_or_none()
     lab = ''
     if labInfo is not None:
-        lab = labInfo.lab_name + ", " + labInfo.lab_location
+        lab = "lab_name: " + labInfo.lab_name + " | lab_location: " + labInfo.lab_location + " | colleague_full_name: "
         if labInfo.colleague_id:
-            lab = labInfo.colleague.full_name + " @" + lab
+            lab = lab + labInfo.colleague.full_name
     return lab
 
 def get_list_of_dataset(request):
@@ -267,10 +267,6 @@ def update_dataset(request):
         dataset_id = d.dataset_id
 
         success_message = ''
-
-        urls = request.params.get('url1', '')
-
-        return HTTPBadRequest(body=json.dumps({'error': "urls=" + str(urls)}), content_type='text/json')
         
         ## dataset
 
@@ -362,14 +358,32 @@ def update_dataset(request):
         for reference_id in all_ref_ids_DB:
             if reference_id not in all_ref_ids_NEW:
                 x = all_ref_ids_DB[reference_id]
-                success_message = success_message + "<br>pmid '" + pmid + "' has been added for this dataset."
+                success_message = success_message + "<br>pmid '" + pmid + "' has been removed for this dataset."
                 curator_session.delete(x)
             
         ## dataset_url
         all_urls = curator_session.query(DatasetUrl).filter_by(dataset_id=dataset_id).all()
         
-        
+        all_urls_DB = {}
+        for x in all_urls:
+            all_urls_DB[x.display_name + '|' + x.obj_url] = x
+
+        url1 = request.params.get('url1', '').replace(' ', '')
+        url2 = request.params.get('url2', '').replace(' ', '')
+        for urr_set in [url1, url2]:
+            if url_set not in all_urls_DB:
+                [u_display_name, url] = url_set.split('|')
+                insert_dataset_url(curator_session, CREATED_BY, source_id, dataset_id, u_display_name, url)
+                success_message = success_message + "<br>URL '" + url_set + "' has been added for this dataset."
+        for url_set in all_urls_DB:
+            if url_set not in [url1, url2]:
+                x = all_urls_DB[url_set]
+                success_message = success_message + "<br>URL '" + url_set + "' has been removed for this dataset."
+                curator_session.delete(x)
+                
         ## datasetlab    
+        
+
         
         success_message = ''
         
