@@ -366,8 +366,6 @@ def update_dataset(request):
         if sample_count != d.sample_count:
             d.sample_count = sample_count
             update = 1
-
-        return HTTPBadRequest(body=json.dumps({'error': "HELLO6"}), content_type='text/json')
     
         is_in_spell = request.params.get('is_in_spell')
         is_in_spell = True if is_in_spell == 'true' else False
@@ -389,7 +387,9 @@ def update_dataset(request):
         success_message = ''
         if update == 1:
             success_message = 'The dataset table has been successfully updated'
-            
+
+        return HTTPBadRequest(body=json.dumps({'error': "HELLO7"}), content_type='text/json')
+    
         ## dataset_file
         
         all_dFile = curator_session.query(DatasetFile).filter_by(dataset_id=dataset_id).all()
