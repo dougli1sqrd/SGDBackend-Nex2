@@ -329,6 +329,10 @@ def update_dataset(request):
             d.date_public = date_public
             update = 1
 
+
+        return HTTPBadRequest(body=json.dumps({'error': "HELLO"}), content_type='text/json')
+            
+            
         parent_dataset_id = request.params.get('parent_dataset_id', None)
         if parent_dataset_id is not None:
             parent_dataset_id = int(parent_dataset_id)
