@@ -52,8 +52,8 @@ class EditDataset extends Component {
   handleUpdate(e) {
     e.preventDefault();
     let formData = new FormData();
-    for(let key in this.props.dataset){
-      formData.append(key,this.props.dataset[key]);
+    for(let key in this.state.data){
+      formData.append(key,this.state.data[key]);
     }
     fetchData(UPDATE_DATASET, {
       type: 'POST',
