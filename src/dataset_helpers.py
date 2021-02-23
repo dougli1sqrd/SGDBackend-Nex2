@@ -329,14 +329,14 @@ def update_dataset(request):
             update = 1
 
         date_public = request.params.get('date_public', '')
-        if date_public != str(d.date_public):
+        if date_public != str(d.date_public).split(' ')[0]:
             d.date_public = date_public
             update = 1
             
         parent_dataset_id = request.params.get('parent_dataset_id', None)
         if str(parent_dataset_id).isdigit():
             parent_dataset_id = int(parent_dataset_id)
-        if parent_dataset_id != d.parent_dataset_id:
+        if parent_dataset_id and parent_dataset_id != d.parent_dataset_id:
             d.parent_dataset_id = parent_dataset_id
             update = 1
 
@@ -379,7 +379,7 @@ def update_dataset(request):
             d.is_in_browser = is_in_browser
             update = 1
 
-        description = request.params.get('is_in_browser', '')
+        description = request.params.get('description', '')
         if description != d.description:
             d.description = description
             update = 1
