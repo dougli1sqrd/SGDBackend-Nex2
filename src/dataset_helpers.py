@@ -405,6 +405,8 @@ def update_dataset(request):
         
         all_file_ids_NEW = {}
         for file in files:
+            if file == '':
+                continue
             fd = curator_session.query(Filedbentity).filter_by(display_name=file, subclass='Active').one_or_none()
             if fd is None:
                 return HTTPBadRequest(body=json.dumps({'error': "file = " + file + " is not in the database."}), content_type='text/json')
