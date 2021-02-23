@@ -336,15 +336,17 @@ def update_dataset(request):
             d.parent_dataset_id = parent_dataset_id
             update = 1
 
-        return HTTPBadRequest(body=json.dumps({'error': "HELLO2"}), content_type='text/json')
-
-    
+        ## required
         assay_id = request.params.get('assay_id', None)
-        if assay_id is not None:
+        if assay_id is None:
+            return HTTPBadRequest(body=json.dumps({'error': "assay_id is required."}), content_type='text/json')
+        if str(assay_id).isdigit():
             assay_id = int(assay_id)
         if assay_id != d.assay_id:
             d.assay_id = assay_id
             update = 1
+
+        return HTTPBadRequest(body=json.dumps({'error': "HELLO3"}), content_type='text/json')
 
         channel_count = request.params.get('channel_count', None)
         if channel_count is not None:
@@ -353,6 +355,7 @@ def update_dataset(request):
             d.channel_count = channel_count
             update = 1
 
+        # required
         sample_count = request.params.get('sample_count', None)
         if sample_count is not None:
             sample_count = int(sample_count)
