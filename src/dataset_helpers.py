@@ -252,13 +252,14 @@ def update_dataset(request):
         sgd = DBSession.query(Source).filter_by(display_name='SGD').one_or_none()
         source_id = sgd.source_id
 
-        dataset_id = request.params.get('dataset_id', '')
-        if dataset_id == '':
-            return HTTPBadRequest(body=json.dumps({'error': "No dataset_id is passed in."}), content_type='text/json')
-        
-        d = curator_session.query(Dataset).filter_by(dataset_id=int(dataset_id)).one_or_none()
+        # dataset_id = request.params.get('dataset_id', '')
+        # if dataset_id == '':
+        #    return HTTPBadRequest(body=json.dumps({'error': "No dataset_id is passed in."}), content_type='text/json')
+
+        dataset_format_name = request.params.get('dataset_format_name', '')      
+        d = curator_session.query(Dataset).filter_by(format_name=dataset_format_name).one_or_none()
         if d is None:
-            return HTTPBadRequest(body=json.dumps({'error': "The dataset_id = " + dataset_id + " is not in the database."}), content_type='text/json')
+            return HTTPBadRequest(body=json.dumps({'error': "The dataset format_name = " + dataset_format_name + " is not in the database."}), content_type='text/json')
 
         dataset_id = d.dataset_id
 

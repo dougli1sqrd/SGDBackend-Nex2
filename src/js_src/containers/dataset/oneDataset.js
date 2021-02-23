@@ -18,7 +18,7 @@ class OneDataset extends Component {
         <div className='row'>
           <div className='columns medium-2 small-2'>
             <div> <label> format_name </label> </div>
-            <input name='dataset_id' value={this.props.dataset.dataset_id} className="hide" />
+            <input name='dataset_format_name' value={this.props.dataset.format_name} className="hide" />
             <input type='text' name='format_name' value={this.props.dataset.format_name} onChange={this.props.onOptionChange} />
           </div>
           <div className='columns medium-10 small-10'>
