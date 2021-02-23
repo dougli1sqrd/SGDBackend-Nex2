@@ -304,12 +304,16 @@ def update_dataset(request):
         ## dataset
 
         update = 0
-        format_name = request.params.get('format_name', '')
+        format_name = request.params.get('format_name', None)
+        if format_name is None:
+            return HTTPBadRequest(body=json.dumps({'error': "format_name is required."}), content_type='text/json')
         if format_name != d.format_name:
             d.format_name = format_name
             update = 1
         
         display_name = request.params.get('display_name', '')
+        if display_name is None:
+            return HTTPBadRequest(body=json.dumps({'error': "display_name is required."}), content_type='text/json')
         if display_name != d.display_name:
             d.display_name = display_name
             update = 1
@@ -357,12 +361,16 @@ def update_dataset(request):
     
         # required
         sample_count = request.params.get('sample_count', None)
-        if sample_count is not None:
+        if sample_count is None:
+            return HTTPBadRequest(body=json.dumps({'error': "sample_count is required."}), content_type='text/json')
+        if str(sample_count).isdigit():
             sample_count = int(sample_count)
         if sample_count != d.sample_count:
             d.sample_count = sample_count
             update = 1
 
+        return HTTPBadRequest(body=json.dumps({'error': "HELLO6"}), content_type='text/json')
+    
         is_in_spell = request.params.get('is_in_spell')
         is_in_spell = True if is_in_spell == 'true' else False
         if is_in_spell != d.is_in_spell:
