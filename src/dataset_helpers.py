@@ -427,7 +427,7 @@ def update_dataset(request):
         
         all_Kw = curator_session.query(DatasetKeyword).filter_by(dataset_id=dataset_id).all()
         all_keyword_ids_DB = {}
-        for x in all_dKw:
+        for x in all_Kw:
             all_keyword_ids_DB[x.keyword_id] = x
 
         keywords = request.params.get('keywords', '')
