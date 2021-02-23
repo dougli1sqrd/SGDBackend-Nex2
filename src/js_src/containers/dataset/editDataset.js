@@ -4,7 +4,7 @@ import fetchData from '../../lib/fetchData';
 import Loader from '../../components/loader';
 import { connect } from 'react-redux';
 import { setError, setMessage } from '../../actions/metaActions';
-import { setDataset } from '../../actions/datasetActions';
+// import { setDataset } from '../../actions/datasetActions';
 import { PREVIEW_URL } from '../../constants.js';
 import OneDataset from './oneDataset';
 const UPDATE_DATASET = '/dataset_update';
@@ -23,6 +23,7 @@ class EditDataset extends Component {
     this.handleDelete = this.handleDelete.bind(this);
       
     this.state = {
+      data: {},
       dataset_id: null,
       format_name: null,
       preview_url: null,
@@ -107,7 +108,8 @@ class EditDataset extends Component {
       for (let key in data) {
         currentDataset[key] = data[key];         
       }
-      this.props.dispatch(setDataset(currentDataset));
+      // this.props.dispatch(setDataset(currentDataset));
+      this.setState({ data: currentDataset });
     })
     .catch(err => this.props.dispatch(setError(err.error)))
     .finally(() => this.setState({ isComplete: true, isLoading: false }));
@@ -140,8 +142,8 @@ class EditDataset extends Component {
         {this.links()}
         <hr />
         <form onSubmit={this.handleUpdate} ref='form'>
-          <input name='dataset_id' value={this.props.dataset.dataset_id} className="hide" />
-          <OneDataset dataset={this.props.dataset} onOptionChange={this.handleChange} />
+          <input name='dataset_id' value={this.state.data.dataset_id} className="hide" />
+          <OneDataset dataset={this.state.data} onOptionChange={this.handleChange} />
           {this.addButtons()}          	
         </form>
       </div>

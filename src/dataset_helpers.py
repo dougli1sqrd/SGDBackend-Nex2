@@ -172,15 +172,16 @@ def get_one_dataset(request):
         data['lab'] = get_lab(x.dataset_id)
         
         ## urls
-        urls = []
         all_dsUrls = DBSession.query(DatasetUrl).filter_by(dataset_id=x.dataset_id).all()
+        i = 1
         for dsUrl in all_dsUrls:
-            row = { 'url_type': dsUrl.url_type,
-                    'display_name': dsUrl.display_name,
-                    'link': dsUrl.obj_url }
-            urls.append(row)
-        data['urls'] = urls
-    
+            # row = { 'url_type': dsUrl.url_type,
+            #        'display_name': dsUrl.display_name,
+            #        'link': dsUrl.obj_url }
+            # urls.append(row)
+            data['url'+str(i)] = dsUrl.display_name + ' | ' + dsUrl.obj_url 
+            i = i + 1
+            
         ## samples
         samples = []
         all_samples = DBSession.query(Datasetsample).filter_by(dataset_id=x.dataset_id).order_by(Datasetsample.sample_order).all()
