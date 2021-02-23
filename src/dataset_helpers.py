@@ -172,16 +172,15 @@ def get_one_dataset(request):
         data['lab'] = get_lab(x.dataset_id)
         
         ## urls
+        urls = []
         all_dsUrls = DBSession.query(DatasetUrl).filter_by(dataset_id=x.dataset_id).all()
-        i = 1
         for dsUrl in all_dsUrls:
-            # row = { 'url_type': dsUrl.url_type,
-            #        'display_name': dsUrl.display_name,
-            #        'link': dsUrl.obj_url }
-            # urls.append(row)
-            data['url'+str(i)] = dsUrl.display_name + ' | ' + dsUrl.obj_url 
-            i = i + 1
-            
+            row = { 'url_type': dsUrl.url_type,
+                    'display_name': dsUrl.display_name,
+                    'link': dsUrl.obj_url }
+            urls.append(row)
+        data['urls'] = urls
+    
         ## samples
         samples = []
         all_samples = DBSession.query(Datasetsample).filter_by(dataset_id=x.dataset_id).order_by(Datasetsample.sample_order).all()
@@ -256,9 +255,11 @@ def update_dataset(request):
         dataset_id = request.params.get('dataset_id', '')
         if dataset_id == '':
             return HTTPBadRequest(body=json.dumps({'error': "No dataset_id is passed in."}), content_type='text/json')
+        
         d = curator_session.query(Dataset).filter_by(dataset_id=int(dataset_id)).one_or_none()
         if d is None:
             return HTTPBadRequest(body=json.dumps({'error': "The dataset_id = " + dataset_id + " is not in the database."}), content_type='text/json')
+
         dataset_id = d.dataset_id
 
         success_message = ''
