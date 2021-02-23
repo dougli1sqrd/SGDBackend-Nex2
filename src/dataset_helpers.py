@@ -334,12 +334,13 @@ def update_dataset(request):
             update = 1
             
         parent_dataset_id = request.params.get('parent_dataset_id', None)
-        if parent_dataset_id == 'null':
-            parent_dataset_id = None
         if str(parent_dataset_id).isdigit():
             parent_dataset_id = int(parent_dataset_id)
-        if parent_dataset_id and parent_dataset_id != d.parent_dataset_id:
-            d.parent_dataset_id = parent_dataset_id
+            if parent_dataset_id != d.parent_dataset_id:
+                d.parent_dataset_id = parent_dataset_id
+                update = 1
+        elif d.parent_dataset_id:
+            d.parent_dataset_id = None
             update = 1
 
         ## required
@@ -375,7 +376,7 @@ def update_dataset(request):
             d.is_in_spell = is_in_spell
             update = 1
 
-        is_in_browser = request.params.get('is_in_browser')
+        ils_in_browser = request.params.get('is_in_browser')
         is_in_browser = True if is_in_browser == 'true' else False
         if is_in_browser != d.is_in_browser:
             d.is_in_browser = is_in_browser
