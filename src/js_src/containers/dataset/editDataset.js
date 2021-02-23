@@ -45,7 +45,8 @@ class EditDataset extends Component {
     for (let key of data.entries()) {
       currentDataset[key[0]] = key[1];
     }
-    this.props.dispatch(setDataset(currentDataset));
+    // this.props.dispatch(setDataset(currentDataset));
+    this.setState({ data: currentDataset });
   }
 
   handleUpdate(e) {
