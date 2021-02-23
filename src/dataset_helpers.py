@@ -39,7 +39,42 @@ def insert_dataset_file(curator_session, CREATED_BY, source_id, dataset_id, file
         transaction.abort()
         if curator_session:
             curator_session.rollback()
+
+def insert_dataset_url(curator_session, CREATED_BY, source_id, dataset_id, display_name, url):
+
+    try:
+        x = DatasetUrl(dataset_id = dataset_id,
+                       display_name = display_name,
+                       obj_url = url,
+                       url_type = display_name,
+                       source_id = source_id,
+                       created_by = CREATED_BY)
+        curator_session.add(x)
+    except Exception as e:
+        transaction.abort()
+        if curator_session:
+            curator_session.rollback()
+
+def insert_datasetlab(curator_session, CREATED_BY, source_id, dataset_id, lab_name, lab_location, colleague_full_name):
+
+    colleague_id = None
+    coll = curator_session.query(Colleague).filter_by(full_name = colleague_full_name).one_or_none()
+    if coll:
+        colleague_id = coll.colleague_id
     
+    try:
+        x = Datasetlab(dataset_id = dataset_id,
+                       lab_name = lab_name,
+                       lab_location = lab_location,
+                       colleague_id = colleague_id,
+                       source_id = source_id,
+                       created_by = CREATED_BY)
+        curator_session.add(x)
+    except Exception as e:
+        transaction.abort()
+        if curator_session:
+            curator_session.rollback()
+        
 def insert_dataset_reference(curator_session, CREATED_BY, source_id, dataset_id, reference_id):
 
     try:
@@ -290,26 +325,34 @@ def update_dataset(request):
             update = 1
 
         date_public = request.params.get('date_public', '')
-        if date_public != d.date_public:
+        if date_public != str(d.date_public):
             d.date_public = date_public
             update = 1
 
         parent_dataset_id = request.params.get('parent_dataset_id', None)
+        if parent_dataset_id is not None:
+            parent_dataset_id = int(parent_dataset_id)
         if parent_dataset_id != d.parent_dataset_id:
             d.parent_dataset_id = parent_dataset_id
             update = 1
 
         assay_id = request.params.get('assay_id', None)
+        if assay_id is not None:
+            assay_id = int(assay_id)
         if assay_id != d.assay_id:
             d.assay_id = assay_id
             update = 1
 
         channel_count = request.params.get('channel_count', None)
+        if channel_count is not None:
+            channel_count = int(channel_count)
         if channel_count != d.channel_count:
             d.channel_count = channel_count
             update = 1
 
         sample_count = request.params.get('sample_count', None)
+        if sample_count is not None:
+            sample_count = int(sample_count)
         if sample_count != d.sample_count:
             d.sample_count = sample_count
             update = 1
