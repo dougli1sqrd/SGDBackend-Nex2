@@ -457,7 +457,7 @@ def update_dataset(request):
                 success_message = success_message + "<br>keyword '" + x.display_name + "' has been removed from this dataset."
                 curator_session.delete(x)
 
-        return HTTPBadRequest(body=json.dumps({'error': "dataset_keyword table"}), content_type='text/json')
+        # return HTTPBadRequest(body=json.dumps({'error': "dataset_keyword table"}), content_type='text/json')
     
         ## dataset_reference
 
@@ -486,7 +486,9 @@ def update_dataset(request):
                 x = all_ref_ids_DB[reference_id]
                 success_message = success_message + "<br>pmid '" + pmid + "' has been removed for this dataset."
                 curator_session.delete(x)
-            
+
+        return HTTPBadRequest(body=json.dumps({'error': "dataset_reference table"}), content_type='text/json')
+    
         ## dataset_url
 
         all_urls = curator_session.query(DatasetUrl).filter_by(dataset_id=dataset_id).all()
