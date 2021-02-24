@@ -71,8 +71,8 @@ class EditDataset extends Component {
   handleDelete(e) {
     e.preventDefault();
     let formData = new FormData();
-    for(let key in this.props.dataset){
-      formData.append(key,this.props.dataset[key]);
+    for(let key in this.state.data){
+      formData.append(key,this.state.data[key]);
     }
     fetchData(DELETE_DATASET, {
       type: 'POST',
