@@ -10,22 +10,10 @@ from src.models import DBSession, Dataset, Datasetsample, Datasettrack, Datasetl
                        DatasetKeyword, DatasetReference, DatasetUrl, Referencedbentity, Source,\
                        Filedbentity, Colleague, Keyword
 from src.curation_helpers import get_curator_session
-from src.metadata_helpers import insert_keyword
+from src.metadata_helpers import insert_keyword, insert_file_keyword, insert_dataset_keyword
 
 log = logging.getLogger('curation')
 
-def insert_dataset_keyword(curator_session, CREATED_BY, source_id, dataset_id, keyword_id):
-    
-    try:
-        x = DatasetKeyword(dataset_id = dataset_id,
-                           keyword_id = keyword_id,
-                           source_id = source_id,
-                           created_by = CREATED_BY)
-        curator_session.add(x)
-    except Exception as e:
-        transaction.abort()
-        if curator_session:
-            curator_session.rollback()
 
 def insert_dataset_file(curator_session, CREATED_BY, source_id, dataset_id, file_id):
 
@@ -402,7 +390,7 @@ def update_dataset(request):
             
         filenames = request.params.get('filenames', '')
         files = filenames.split('|')
-        
+
         all_file_ids_NEW = {}
         for file in files:
             if file == '':
@@ -414,7 +402,6 @@ def update_dataset(request):
             if fd.dbentity_id not in all_file_ids_DB:
                 insert_dataset_file(curator_session, CREATED_BY, source_id, dataset_id, fd.dbentity_id)
                 success_message = success_message + "<br>file '" + fd.display_name + "' has been added for this dataset."
-                
         for file_id in all_file_ids_DB:
             if file_id not in all_file_ids_NEW:
                 x = all_file_ids_DB[file_id]
@@ -457,8 +444,40 @@ def update_dataset(request):
                 success_message = success_message + "<br>keyword '" + x.display_name + "' has been removed from this dataset."
                 curator_session.delete(x)
 
+            
         # return HTTPBadRequest(body=json.dumps({'error': "dataset_keyword table"}), content_type='text/json')
-    
+
+        ## file_keyword
+        # keywords = request.params.get('keywords', '')
+        # kws = keywords.split('|')
+        
+        for file_id in all_file_ids_NEW:
+            all_file_kw = curator_session.query(FileKeyword).filter_by(file_id=file_id).all()
+            keywords_file_db = {}
+            for kw in all_file_kw:
+                keywords_file_db[kw.keyword.display_name.upper()] = kw.keyword_id
+            for kw in kws:
+                kw = kw.strip()
+                if kw == '':
+                    continue
+                if kw.upper() in keywords_file_db:
+                    del keywords_file_db[kw.upper()]
+                    continue
+                keyword_id = insert_keyword(curator_session, CREATED_BY, source_id, kw)
+                if str(keyword_id).isdigit():
+                    success_message = success_message + "<br>keyword '" + kw + "' has been added for this file."
+                    insert_file_keyword(curator_session, CREATED_BY, source_id, file_id, keyword_id)
+                else:
+                    err_msg = keyword_id
+                    return HTTPBadRequest(body=json.dumps({'error': err_msg}), content_type='text/json')
+
+            for kw in keywords_file_db:
+                keyword_id = keywords_file_db[kw]
+                fk = curator_session.query(FileKeyword).filter_by(file_id=file_id, keyword_id=keyword_id).one_or_none()
+                if fk:
+                    success_message = success_message + "<br>keyword '" + kw + "' has been removed from this file."
+                    curator_session.delete(fk)
+
         ## dataset_reference
 
         all_refs = curator_session.query(DatasetReference).filter_by(dataset_id=dataset_id).all()
