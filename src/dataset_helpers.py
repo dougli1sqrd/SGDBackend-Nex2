@@ -441,7 +441,7 @@ def update_dataset(request):
         for keyword_id in all_keyword_ids_DB:
             if keyword_id not in all_keyword_ids_NEW:
                 x = all_keyword_ids_DB[keyword_id]
-                success_message = success_message + "<br>keyword '" + x.display_name + "' has been removed from this dataset."
+                success_message = success_message + "<br>keyword '" + x.keyword.display_name + "' has been removed from this dataset."
                 curator_session.delete(x)
 
             
