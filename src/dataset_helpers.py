@@ -497,8 +497,8 @@ def update_dataset(request):
         for x in all_urls:
             all_urls_DB[x.display_name + '|' + x.obj_url] = x
 
-        url1 = request.params.get('url1', '').replace(' ', '')
-        url2 = request.params.get('url2', '').replace(' ', '')
+        url1 = request.params.get('url1', '').replace('| ', '|')
+        url2 = request.params.get('url2', '').replace(' |', '|')
         for url_set in [url1, url2]:
             if url_set not in all_urls_DB:
                 [u_display_name, url] = url_set.split('|')
