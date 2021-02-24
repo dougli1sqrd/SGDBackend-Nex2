@@ -510,7 +510,7 @@ def update_dataset(request):
                 success_message = success_message + "<br>URL '" + url_set + "' has been removed for this dataset."
                 curator_session.delete(x)
 
-        return HTTPBadRequest(body=json.dumps({'error': "dataset_url table"}), content_type='text/json')
+        # return HTTPBadRequest(body=json.dumps({'error': "dataset_url table"}), content_type='text/json')
     
         ## datasetlab
         
@@ -552,6 +552,10 @@ def update_dataset(request):
             insert_datasetlab(curator_session, CREATED_BY, source_id, dataset_id, lab_name, lab_location, colleague_full_name)
             success_message = success_message + "<br>lab '" + labNew + "' has been added for this dataset."        
 
+            
+        return HTTPBadRequest(body=json.dumps({'error': "dataset_url table"}), content_type='text/json') 
+            
+            
         if success_message == '':
             success_message = 'Nothing is changed'
         
