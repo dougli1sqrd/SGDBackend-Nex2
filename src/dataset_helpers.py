@@ -487,7 +487,7 @@ def update_dataset(request):
                 success_message = success_message + "<br>pmid '" + pmid + "' has been removed for this dataset."
                 curator_session.delete(x)
 
-        return HTTPBadRequest(body=json.dumps({'error': "dataset_reference table"}), content_type='text/json')
+        # return HTTPBadRequest(body=json.dumps({'error': "dataset_reference table"}), content_type='text/json')
     
         ## dataset_url
 
@@ -509,7 +509,9 @@ def update_dataset(request):
                 x = all_urls_DB[url_set]
                 success_message = success_message + "<br>URL '" + url_set + "' has been removed for this dataset."
                 curator_session.delete(x)
-                
+
+        return HTTPBadRequest(body=json.dumps({'error': "dataset_url table"}), content_type='text/json')
+    
         ## datasetlab
         
         labNew = request.params.get('lab', '').replace(' |', '|').replace('| ', '|')
