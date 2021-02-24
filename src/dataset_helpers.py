@@ -556,7 +556,7 @@ def update_dataset(request):
             success_message = success_message + "<br>lab '" + labNew + "' has been added for this dataset."        
 
             
-        return HTTPBadRequest(body=json.dumps({'error': "dataset_url table"}), content_type='text/json') 
+        # return HTTPBadRequest(body=json.dumps({'error': "dataset_lab table"}), content_type='text/json') 
             
             
         if success_message == '':
