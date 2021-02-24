@@ -501,6 +501,8 @@ def update_dataset(request):
         url2 = request.params.get('url2', '').replace(' |', '|')
         url3 = request.params.get('url3', '').replace(' |', '|')
         for url_set in [url1, url2, url3]:
+            if url_set == '':
+                continue
             if url_set not in all_urls_DB:
                 [u_display_name, url] = url_set.split('|')
                 u_display_name = u_display_name.strip()
