@@ -499,7 +499,7 @@ def update_dataset(request):
 
         url1 = request.params.get('url1', '').replace(' ', '')
         url2 = request.params.get('url2', '').replace(' ', '')
-        for urr_set in [url1, url2]:
+        for url_set in [url1, url2]:
             if url_set not in all_urls_DB:
                 [u_display_name, url] = url_set.split('|')
                 insert_dataset_url(curator_session, CREATED_BY, source_id, dataset_id, u_display_name, url)
