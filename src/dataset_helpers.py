@@ -499,14 +499,15 @@ def update_dataset(request):
 
         url1 = request.params.get('url1', '').replace('| ', '|')
         url2 = request.params.get('url2', '').replace(' |', '|')
-        for url_set in [url1, url2]:
+        url3 = request.params.get('url3', '').replace(' |', '|')
+        for url_set in [url1, url2, url3]:
             if url_set not in all_urls_DB:
                 [u_display_name, url] = url_set.split('|')
                 u_display_name = u_display_name.strip()
                 insert_dataset_url(curator_session, CREATED_BY, source_id, dataset_id, u_display_name, url)
                 success_message = success_message + "<br>URL '" + url_set + "' has been added for this dataset."
         for url_set in all_urls_DB:
-            if url_set not in [url1, url2]:
+            if url_set not in [url1, url2, url3]:
                 x = all_urls_DB[url_set]
                 success_message = success_message + "<br>URL '" + url_set + "' has been removed for this dataset."
                 curator_session.delete(x)
