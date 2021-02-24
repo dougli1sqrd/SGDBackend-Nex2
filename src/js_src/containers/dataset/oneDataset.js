@@ -77,6 +77,7 @@ class OneDataset extends Component {
             <div> <label> dataset url(s) ('|' delimited) </label> </div>
             <input type='text' name='url1' value={this.props.dataset.url1} onChange={this.props.onOptionChange} />
             <input type='text' name='url2' value={this.props.dataset.url2} onChange={this.props.onOptionChange} />
+            <input type='text' name='url3' value={this.props.dataset.url3} onChange={this.props.onOptionChange} />
           </div>
         </div>
 
