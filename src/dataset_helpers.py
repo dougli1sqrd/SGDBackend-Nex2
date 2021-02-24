@@ -465,7 +465,7 @@ def update_dataset(request):
                     continue
                 keyword_id = insert_keyword(curator_session, CREATED_BY, source_id, kw)
                 if str(keyword_id).isdigit():
-                    success_message = success_message + "<br>keyword '" + kw + "' has been added for this file."
+                    success_message = success_message + "<br>keyword '" + kw + "' has been added for the associated file."
                     insert_file_keyword(curator_session, CREATED_BY, source_id, file_id, keyword_id)
                 else:
                     err_msg = keyword_id
@@ -475,7 +475,7 @@ def update_dataset(request):
                 keyword_id = keywords_file_db[kw]
                 fk = curator_session.query(FileKeyword).filter_by(file_id=file_id, keyword_id=keyword_id).one_or_none()
                 if fk:
-                    success_message = success_message + "<br>keyword '" + kw + "' has been removed from this file."
+                    success_message = success_message + "<br>keyword '" + kw + "' has been removed from the associated file."
                     curator_session.delete(fk)
 
         ## dataset_reference
