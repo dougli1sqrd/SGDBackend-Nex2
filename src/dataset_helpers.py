@@ -55,10 +55,10 @@ def insert_dataset_url(curator_session, CREATED_BY, source_id, dataset_id, displ
         if curator_session:
             curator_session.rollback()
 
-def insert_datasetlab(curator_session, CREATED_BY, source_id, dataset_id, lab_name, lab_location, colleague_full_name):
+def insert_datasetlab(curator_session, CREATED_BY, source_id, dataset_id, lab_name, lab_location, colleague_format_name):
 
     colleague_id = None
-    coll = curator_session.query(Colleague).filter_by(full_name = colleague_full_name).one_or_none()
+    coll = curator_session.query(Colleague).filter_by(format_name = colleague_format_name).one_or_none()
     if coll:
         colleague_id = coll.colleague_id
     
@@ -113,9 +113,9 @@ def get_lab(dataset_id):
     labInfo = DBSession.query(Datasetlab).filter_by(dataset_id=dataset_id).one_or_none()
     lab = ''
     if labInfo is not None:
-        lab = "lab_name: " + labInfo.lab_name + " | lab_location: " + labInfo.lab_location + " | colleague_full_name: "
+        lab = "lab_name: " + labInfo.lab_name + " | lab_location: " + labInfo.lab_location + " | colleague_format_name: "
         if labInfo.colleague_id:
-            lab = lab + labInfo.colleague.full_name
+            lab = lab + labInfo.colleague.format_name
     return lab
 
 def get_list_of_dataset(request):
@@ -304,15 +304,15 @@ def update_dataset(request):
         ## dataset
 
         update = 0
-        format_name = request.params.get('format_name', None)
-        if format_name is None:
+        format_name = request.params.get('format_name', '')
+        if format_name == '':
             return HTTPBadRequest(body=json.dumps({'error': "format_name is required."}), content_type='text/json')
         if format_name != d.format_name:
             d.format_name = format_name
             update = 1
         
         display_name = request.params.get('display_name', '')
-        if display_name is None:
+        if display_name == '':
             return HTTPBadRequest(body=json.dumps({'error': "display_name is required."}), content_type='text/json')
         if display_name != d.display_name:
             d.display_name = display_name
@@ -518,10 +518,10 @@ def update_dataset(request):
         ## datasetlab
         
         labNew = request.params.get('lab', '').replace(' |', '|').replace('| ', '|')
-        [lab_name, lab_location, colleague_full_name] =	labNew.split('|')
+        [lab_name, lab_location, colleague_format_name] =	labNew.split('|')
         lab_name = lab_name.replace('lab_name: ', '')
         lab_location = lab_location.replace('lab_location: ', '')
-        colleague_full_name = colleague_full_name.replace('colleague_full_name: ', '')
+        colleague_format_name = colleague_format_name.replace('colleague_format_name: ', '')
         
         lab = curator_session.query(Datasetlab).filter_by(dataset_id=dataset_id).one_or_none()
         if lab is not None:
@@ -537,8 +537,8 @@ def update_dataset(request):
                 if lab.lab_location != lab_location:
                     lab.lab_location = lab_location
                     update = 1
-                if colleague_full_name:
-                    coll = curator_session.query(Colleague).filter_by(full_name=colleague_full_name).one_or_none()
+                if colleague_format_name:
+                    coll = curator_session.query(Colleague).filter_by(format_name=colleague_format_name).one_or_none()
                     colleague_id = None
                     if coll:
                         colleague_id = coll.colleague_id
@@ -552,7 +552,7 @@ def update_dataset(request):
                     curator_session.add(lab)
                     success_message = success_message + "<br>lab info has been updated for this dataset." 
         elif lab_name and lab_location:
-            insert_datasetlab(curator_session, CREATED_BY, source_id, dataset_id, lab_name, lab_location, colleague_full_name)
+            insert_datasetlab(curator_session, CREATED_BY, source_id, dataset_id, lab_name, lab_location, colleague_format_name)
             success_message = success_message + "<br>lab '" + labNew + "' has been added for this dataset."        
 
             
