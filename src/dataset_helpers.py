@@ -603,6 +603,18 @@ def delete_dataset(request):
             return HTTPBadRequest(body=json.dumps({'error': "The dataset_id = " + dataset_id + " is not in the database."}), content_type='text/json')
         
         dataset_id = d.dataset_id
+
+        ## check to see if this dataset associated datasetsample IDs are in the
+        ## expressionannotation table. 
+        found = 0
+        all_dSample = curator_session.query(Datasetsample).filter_by(dataset_id=dataset_id).all()
+        for x in all_sSample:
+            all_exp = curator_session.query(Expressionannotation).filter_by(datasetsample_id=x.datasetsample_id).all()
+            if len(all_exp) > 0:
+                found = 1
+                break
+        if found == 1:
+            return HTTPBadRequest(body=json.dumps({'error': "The associated datasetsample is in use (Expressionannotation)."}), content_type='text/json')
         
         ## dataset_file
         all_dFile = curator_session.query(DatasetFile).filter_by(dataset_id=dataset_id).all()
@@ -620,7 +632,7 @@ def delete_dataset(request):
         all_dLab = curator_session.query(Datasetlab).filter_by(dataset_id=dataset_id).all()
         
         ## datasetsample
-        all_dSample = curator_session.query(Datasetsample).filter_by(dataset_id=dataset_id).all()
+        # see above all_dSample
 
         ## datasettrack
         all_dTrack = curator_session.query(Datasettrack).filter_by(dataset_id=dataset_id).all()
