@@ -608,7 +608,7 @@ def delete_dataset(request):
         ## expressionannotation table. 
         found = 0
         all_dSample = curator_session.query(Datasetsample).filter_by(dataset_id=dataset_id).all()
-        for x in all_sSample:
+        for x in all_dSample:
             all_exp = curator_session.query(Expressionannotation).filter_by(datasetsample_id=x.datasetsample_id).all()
             if len(all_exp) > 0:
                 found = 1
