@@ -614,7 +614,7 @@ def delete_dataset(request):
                 found = 1
                 break
         if found == 1:
-            return HTTPBadRequest(body=json.dumps({'error': "The associated datasetsample is in use (Expressionannotation)."}), content_type='text/json')
+            return HTTPBadRequest(body=json.dumps({'error': "The associated datasetsample is used in Expressionannotation table."}), content_type='text/json')
         
         ## dataset_file
         all_dFile = curator_session.query(DatasetFile).filter_by(dataset_id=dataset_id).all()
@@ -738,6 +738,10 @@ def delete_datasetsample(request):
         if d is None:
             return HTTPBadRequest(body=json.dumps({'error': "The datasetsample_id " + datasettrack_id + " is not in the database."}), content_type='text/json')
 
+        all_exp = curator_session.query(Expressionannotation).filter_by(datasetsample_id=datasetsample_id).all()
+        if len(all_exp) > 0:
+            return HTTPBadRequest(body=json.dumps({'error': "This datasetsample_id is in Expressionannotation table."}), content_type='text/json')
+        
         curator_session.delete(d)
 
         success_message = 'The datasetsample row has been successfully deleted.'
