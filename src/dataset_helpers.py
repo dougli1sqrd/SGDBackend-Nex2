@@ -625,7 +625,7 @@ def delete_dataset(request):
         ## datasettrack
         all_dTrack = curator_session.query(Datasettrack).filter_by(dataset_id=dataset_id).all()
 
-        for x in all_dFile + all_dKw + all_dRef + all_dUrl + all_dLab + all_dSample + all_dTarck:
+        for x in all_dFile + all_dKw + all_dRef + all_dUrl + all_dLab + all_dSample + all_dTrack:
             curator_session.delete (x)
 
         curator_session.delete(d)
