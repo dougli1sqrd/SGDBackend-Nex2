@@ -273,9 +273,9 @@ def load_datasetsample(request):
 
     try:
         CREATED_BY = request.session['username']
-	curator_session = get_curator_session(request.session['username'])
+        curator_session = get_curator_session(request.session['username'])
         sgd = DBSession.query(Source).filter_by(display_name='SGD').one_or_none()
-	source_id = sgd.source_id
+        source_id = sgd.source_id
 
         success_message = ''
 
