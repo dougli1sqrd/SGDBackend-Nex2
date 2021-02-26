@@ -96,10 +96,10 @@ class LoadDataset extends Component {
 
   note() {
     if (this.state.isSample) {
-      return (<div>Please upload one or more <strong>dataset</strong> file(s) and it will take a while to load the data into database.</div>);
+      return (<div><p>Please upload one or more <strong>dataset</strong> file(s). Note that it will take a while to load the data rows from the file(s) into database.</p></div>);
     }
     else {
-      return (<div>Please upload one or more <strong>dataset sample</strong> file(s) and it will take a while to load the data into database.</div>);
+      return (<div><p>Please upload one or more <strong>dataset sample</strong> file(s). Note that it will take a while to load the data rows from the file(s) into database.</p></div>);
     }
   }
     
@@ -120,10 +120,10 @@ class LoadDataset extends Component {
       <div>
         <div className='row'>
           <div className='columns medium-6 small-6'>
-            <button type="button" className="button expanded" onClick={this.handleToggleDatasetOrSample} disabled={!this.state.isSample}>Load Dataset</button>
+            <button type="button" className="button expanded" onClick={this.handleToggleDatasetOrSample} disabled={this.state.isSample}>Load Dataset</button>
           </div>
           <div className='columns medium-6 small-6 end'>
-            <button type="button" className="button expanded" onClick={this.handleToggleDatasetOrSample} disabled={this.state.isSample}>Load Dataset Sample</button>
+            <button type="button" className="button expanded" onClick={this.handleToggleDatasetOrSample} disabled={!this.state.isSample}>Load Dataset Sample</button>
           </div>
         </div>    
         <form onSubmit={this.handleUpload} ref='form'>
