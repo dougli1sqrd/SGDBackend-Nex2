@@ -1,129 +1,155 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import fetchData from '../../lib/fetchData';
+import Dropzone from 'react-dropzone';
 import { connect } from 'react-redux';
 import { setError, setMessage } from '../../actions/metaActions';
-import { setDataset } from '../../actions/datasetActions';
-import OneDataset from './oneDataset';
-
+import style from '../fileMetadata/style.css';
 const LOAD_DATASET = '/dataset_load';
+const LOAD_SAMPLE = '/datasetsample_load';
+
+const TIMEOUT = 300000;
 
 class LoadDataset extends Component {
   constructor(props) {
     super(props);
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleResetForm = this.handleResetForm.bind(this);
+    this.handleUpload = this.handleUpload.bind(this);
+    this.renderFileDrop = this.renderFileDrop.bind(this);
+    this.handleToggleDatasetOrSample = this.handleToggleDatasetOrSample.bind(this);
+
+    this.state = {
+      files: [],
+      isSample: false 
+    };
+  }
+
+  handleToggleDatasetOrSample() {
+    this.setState({ isSample: !this.state.isSample });
+  }
+   
+  handleClear(){
+    this.setState({ files: [] });
+  }
+
+  handleDrop(files){
+    this.setState({ files: files });
+  }
+
+  renderFileDrop() {
+    if(this.state.files.length){
+      let filenames = this.state.files.map( (file, index) => {
+        return <li key={index}>{file.name}</li>;
+      }); 
+      return(
+        <div>
+          <ul>{filenames}</ul>
+          <a onClick={this.handleClear.bind(this)}>Clear File(s)</a>
+        </div>
+      );
+    }	
+    return  (
+      <div className='row'>
+        <div className='columns medium-6 small-6'>
+          <Dropzone onDrop={this.handleDrop.bind(this)} multiple={true}>
+            <p className={style.uploadMsg}>Drop file here or click to select.</p>
+            <h3 className={style.uploadIcon}><i className='fa fa-cloud-upload' /></h3>
+          </Dropzone>
+        </div>
+        <div className='columns medium-6 small-6'>It will take a while to upload the files.
+        </div>
+      </div>);
+  }
     
-    // this.state = {};
-  }
-
-  handleChange() {
-    let currentDataset = {};
-    let data = new FormData(this.refs.form);
-    for (let key of data.entries()) {
-      currentDataset[key[0]] = key[1];
-    }
-    this.props.dispatch(setDataset(currentDataset));
-  }
-
-  handleSubmit(e) {
+  handleUpload(e) {
     e.preventDefault();
-    let formData = new FormData();
-    for(let key in this.props.dataset){
-      formData.append(key,this.props.dataset[key]);
+    let load_url = LOAD_DATASET;
+    if (this.state.isSample) {
+      load_url = LOAD_SAMPLE;
     }
-
-    fetchData(LOAD_DATASET, {
-      type: 'POST',
-      data: formData,
-      processData: false,
-      contentType: false
-    }).then((data) => {
-      this.props.dispatch(setMessage(data.success));
-    }).catch((err) => {
-      this.props.dispatch(setError(err.error));
+    let success_message = '';
+    let error_message = '';
+    this.state.files.map( (file, index) => {
+      console.log('uploading file: ' + index + ' ' + file.name);
+      let formData = new FormData();
+      formData.append('file', file);
+      fetchData(load_url, {
+        type: 'POST',
+        credentials: 'same-origin',
+        headers: {
+          'X-CSRF-Token': this.props.csrfToken
+        },
+        data: formData,
+        processData: false,
+        contentType: false,
+        timeout: TIMEOUT
+      }).then((data) => {
+        success_message = success_message + data.success;
+        this.props.dispatch(setMessage(success_message));
+      }).catch( (data) => {
+        let errorMessage = data ? data.error: 'Error occured: connection timed out';
+        error_message = error_message + errorMessage;
+        this.props.dispatch(setError(error_message));
+      });
     });
   }
 
-  handleResetForm() {
-    let currentDataset = {
-      dataset_id: 0,
-      format_name: '',
-      display_name: '',
-      obj_url: '',
-      dbxref_id:'',
-      dbxref_type: '',
-      date_public: '',
-      parent_dataset: '',
-      assay_id: '',
-      channel_count: '',
-      sample_count: '',
-      is_in_spell: '',
-      is_in_browser: '',
-      description: '',
-      filenames: '',
-      keywords: '',
-      pmids: '',
-      urls: '',
-      lab: '',
-      tracks: ''
-    };
-    this.props.dispatch(setDataset(currentDataset));
+  note() {
+    if (this.state.isSample) {
+      return (<div>Please upload one or more <strong>dataset</strong> file(s) and it will take a while to load the data into database.</div>);
+    }
+    else {
+      return (<div>Please upload one or more <strong>dataset sample</strong> file(s) and it will take a while to load the data into database.</div>);
+    }
   }
-
+    
   addButton() {
     return (
       <div>
         <div className='row'>
-          <div className='columns medium-6'>
-            <button type='submit' className="button expanded" >Add Dataset</button>
+          <div className='columns medium-6 small-6'>
+            <button type='submit' id='submit' value='0' className="button expanded" onClick={this.handleUpload.bind(this)} > Upload Files </button>
           </div>
         </div>
       </div>
     );
   }
-
-  addNote() {
-
+    
+  displayForm() {
     return (
-      <div className='row'>
-        <div> <h2> Note: </h2> </div>
-        <div>NOTE HERE </div>
+      <div>
+        <div className='row'>
+          <div className='columns medium-6 small-6'>
+            <button type="button" className="button expanded" onClick={this.handleToggleDatasetOrSample} disabled={!this.state.isSample}>Load Dataset</button>
+          </div>
+          <div className='columns medium-6 small-6 end'>
+            <button type="button" className="button expanded" onClick={this.handleToggleDatasetOrSample} disabled={this.state.isSample}>Load Dataset Sample</button>
+          </div>
+        </div>    
+        <form onSubmit={this.handleUpload} ref='form'>
+          {this.renderFileDrop()}
+          {this.note()}
+          <hr />
+          {this.addButton()}
+        </form>
       </div>
     );
   }
-    
+
   render() {
-
-    return (
-      <div>
-        <form onSubmit={this.handleSubmit} ref='form'>
-          <input name='id' value={this.props.dataset.id} className="hide" />
-
-          <OneDataset dataset={this.props.dataset} onOptionChange={this.handleChange} />
-
-          {this.addButton()}
-
-          {this.addNote()}
-	
-        </form>
-
-      </div>
-    );
+    return this.displayForm();
   }
 }
 
 LoadDataset.propTypes = {
   dispatch: PropTypes.func,
-  dataset: PropTypes.object
+  csrfToken: PropTypes.string
 };
 
 
 function mapStateToProps(state) {
   return {
-    dataset: state.dataset['currentDataset']
+    csrfToken: state.auth.get('csrfToken')
   };
 }
 
