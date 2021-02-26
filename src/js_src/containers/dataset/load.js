@@ -10,7 +10,7 @@ class LoadDataset extends Component {
   render() {
     return (
       <CurateLayout>
-        <h1>Load Dataset(s)</h1>
+        <h1>Load Dataset/Sample(s)</h1>
         <LoadDATASET />
       </CurateLayout>
     );
