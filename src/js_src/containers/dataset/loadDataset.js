@@ -96,10 +96,10 @@ class LoadDataset extends Component {
 
   note() {
     if (this.state.isSample) {
-      return (<div><p>Please upload one or more <strong>dataset</strong> file(s). Note that it will take a while to load the data rows from the file(s) into database.</p></div>);
+      return (<div>Please upload one or more <strong>dataset</strong> file(s). Note that it will take a while to load the data rows from the file(s) into database.</div>);
     }
     else {
-      return (<div><p>Please upload one or more <strong>dataset sample</strong> file(s). Note that it will take a while to load the data rows from the file(s) into database.</p></div>);
+      return (<div>Please upload one or more <strong>dataset sample</strong> file(s). Note that it will take a while to load the data rows from the file(s) into database.</div>);
     }
   }
     
@@ -128,6 +128,7 @@ class LoadDataset extends Component {
         </div>    
         <form onSubmit={this.handleUpload} ref='form'>
           {this.renderFileDrop()}
+          <hr />
           {this.note()}
           <hr />
           {this.addButton()}
