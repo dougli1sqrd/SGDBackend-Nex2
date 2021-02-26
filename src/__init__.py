@@ -227,6 +227,7 @@ def main(global_config, **settings):
     config.add_route('datasetsample_update','/datasetsample_update', request_method='POST')
     config.add_route('datasettrack_update','/datasettrack_update', request_method='POST')
     config.add_route('dataset_load','/dataset_load', request_method='POST')
+    config.add_route('datasetsample_load','/datasetsample_load', request_method='POST')
     config.add_route('dataset_delete','/dataset_delete', request_method='POST')
     config.add_route('datasetsample_delete','/datasetsample_delete', request_method='POST')
     config.add_route('datasettrack_delete','/datasettrack_delete', request_method='POST')
