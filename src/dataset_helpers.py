@@ -269,6 +269,26 @@ def load_dataset(request):
         if curator_session:
             curator_session.remove()
 
+def load_datasetsample(request):
+
+    try:
+        CREATED_BY = request.session['username']
+	curator_session = get_curator_session(request.session['username'])
+        sgd = DBSession.query(Source).filter_by(display_name='SGD').one_or_none()
+	source_id = sgd.source_id
+
+        success_message = ''
+
+
+
+        
+        transaction.commit()
+        return HTTPOk(body=json.dumps({'success': success_message, 'dataset_sample': "DATASET_SAMPLE"}), content_type='text/json')
+    except Exception as e:
+        return HTTPBadRequest(body=json.dumps({'error': str(e)}), content_type='text/json')
+    finally:
+        if curator_session:
+            curator_session.remove()
             
 def update_dataset(request):
 
