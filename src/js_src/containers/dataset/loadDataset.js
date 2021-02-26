@@ -50,13 +50,14 @@ class LoadDataset extends Component {
     }	
     return  (
       <div className='row'>
-        <div className='columns medium-6 small-6'>
+        <div className='columns medium-4 small-4'>
           <Dropzone onDrop={this.handleDrop.bind(this)} multiple={true}>
             <p className={style.uploadMsg}>Drop file here or click to select.</p>
             <h3 className={style.uploadIcon}><i className='fa fa-cloud-upload' /></h3>
           </Dropzone>
         </div>
-        <div className='columns medium-6 small-6'>It will take a while to upload the files.
+        <div className='columns medium-8 small-8'>
+          {this.note()}
         </div>
       </div>);
   }
@@ -128,8 +129,6 @@ class LoadDataset extends Component {
         </div>    
         <form onSubmit={this.handleUpload} ref='form'>
           {this.renderFileDrop()}
-          <hr />
-          {this.note()}
           <hr />
           {this.addButton()}
         </form>
