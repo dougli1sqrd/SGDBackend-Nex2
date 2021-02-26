@@ -61,7 +61,8 @@ from .allele_helpers import get_all_allele_types, get_one_allele, get_list_of_al
 from .metadata_helpers import get_list_of_file_metadata, get_metadata_for_one_file, update_metadata
 from .supplemental_file_helpers import add_metadata_upload_file
 from .dataset_helpers import get_list_of_dataset, get_one_dataset, update_dataset, update_datasetsample,\
-      update_datasettrack, load_dataset, delete_dataset, delete_datasetsample, delete_datasettrack
+      update_datasettrack, load_dataset, load_datasetsample, delete_dataset, delete_datasetsample,\
+      delete_datasettrack
 from .author_response_helpers import insert_author_response, get_author_responses, update_author_response
 from .litguide_helpers import get_list_of_papers, update_litguide, add_litguide
 from .disease_helpers import insert_update_disease_annotations, delete_disease_annotation, get_diseases_by_filters, upload_disease_file
@@ -1958,6 +1959,12 @@ def datasettrack_update(request):
 def dataset_load(request):
 
     return load_dataset(request)
+
+@view_config(route_name='datasetsample_load', renderer='json', request_method='POST')
+@authenticate
+def datasetsample_load(request):
+
+    return load_datasetsample(request)
 
 @view_config(route_name='upload_suppl_file', renderer='json', request_method='POST')
 @authenticate
