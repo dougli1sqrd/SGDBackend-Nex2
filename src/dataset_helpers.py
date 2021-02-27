@@ -260,9 +260,10 @@ def load_dataset(request):
         if fileObj != '':
             file = fileObj.file
             filename = fileObj.filename
+            
+        # return HTTPBadRequest(body=json.dumps({'error': "file="+str(file)}), content_type='text/json')
 
-        return HTTPBadRequest(body=json.dumps({'error': "file="+str(file)}), content_type='text/json')
-
+        # file=<_io.BufferedRandom name=20>
             
         if file is None or filename is None:
             return HTTPBadRequest(body=json.dumps({'error': "No dataset file is passed in."}), content_type='text/json')
@@ -278,7 +279,8 @@ def load_dataset(request):
 
         ### CHECK OUT def file_upload_to_dict(file_upload, delimiter="\t"): in src/helpers.py 
 
-
+        file.seek(0)
+        
         list_dict = file_upload_to_dict(file)
 
         return HTTPBadRequest(body=json.dumps({'error': "Dataset file dict="+str(list_dict)}), content_type='text/json')
