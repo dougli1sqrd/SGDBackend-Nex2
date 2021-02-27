@@ -20,12 +20,12 @@ class LoadDataset extends Component {
 
     this.state = {
       files: [],
-      isSample: true 
+      isDataset: true 
     };
   }
 
   handleToggleDatasetOrSample() {
-    this.setState({ isSample: !this.state.isSample });
+    this.setState({ isDataset: !this.state.isDataset });
   }
    
   handleClear(){
@@ -64,9 +64,9 @@ class LoadDataset extends Component {
     
   handleUpload(e) {
     e.preventDefault();
-    let load_url = LOAD_DATASET;
-    if (this.state.isSample) {
-      load_url = LOAD_SAMPLE;
+    let load_url = LOAD_SAMPLE;
+    if (this.state.isDataset) {
+      load_url = LOAD_DATASET;
     }
     let success_message = '';
     let error_message = '';
@@ -96,7 +96,7 @@ class LoadDataset extends Component {
   }
 
   note() {
-    if (this.state.isSample) {
+    if (this.state.isDataset) {
       return (<div>Please upload one or more <strong>dataset</strong> file(s). Note that it will take a while to load the data rows from the file(s) into database.</div>);
     }
     else {
@@ -121,10 +121,10 @@ class LoadDataset extends Component {
       <div>
         <div className='row'>
           <div className='columns medium-6 small-6'>
-            <button type="button" className="button expanded" onClick={this.handleToggleDatasetOrSample} disabled={this.state.isSample}>Load Dataset</button>
+            <button type="button" className="button expanded" onClick={this.handleToggleDatasetOrSample} disabled={this.state.isDataset}>Load Dataset</button>
           </div>
           <div className='columns medium-6 small-6 end'>
-            <button type="button" className="button expanded" onClick={this.handleToggleDatasetOrSample} disabled={!this.state.isSample}>Load Dataset Sample</button>
+            <button type="button" className="button expanded" onClick={this.handleToggleDatasetOrSample} disabled={!this.state.isDataset}>Load Dataset Sample</button>
           </div>
         </div>    
         <form onSubmit={this.handleUpload} ref='form'>
