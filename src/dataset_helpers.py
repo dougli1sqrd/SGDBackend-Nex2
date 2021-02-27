@@ -5,6 +5,7 @@ from sqlalchemy import or_
 from pyramid.httpexceptions import HTTPBadRequest, HTTPOk
 from sqlalchemy.exc import IntegrityError, DataError
 import transaction
+import pandas as pd
 import json
 from src.models import DBSession, Dataset, Datasetsample, Datasettrack, Datasetlab, DatasetFile, \
                        DatasetKeyword, DatasetReference, DatasetUrl, Referencedbentity, Source,\
@@ -252,6 +253,31 @@ def load_dataset(request):
         sgd = DBSession.query(Source).filter_by(display_name='SGD').one_or_none()
         source_id = sgd.source_id
 
+        fileObj = request.params.get('file')
+        file = None
+        filename = None
+        if fileObj != '':
+            file = fileObj.file
+            filename = fileObj.filename
+
+        if file is None or filename is None:
+            return HTTPBadRequest(body=json.dumps({'error': "No dataset file is passed in."}), content_type='text/json')
+
+        file_ext = os.path.splitext(filename)[1].replace('.','').strip()
+        # delimiter = '\t'
+        # if file_ext in ('csv', 'tsv', 'txt',):
+        #    delimiter = get_file_delimiter(file_upload)
+        # annotations = parse_tsv_annotations(DBSession, file, filename, template_type, username, delimiter)
+
+        message = ''
+        for line in file:
+            message = line.strip()
+            break
+
+        return HTTPBadRequest(body=json.dumps({'error': "Dataset first line="+message}), content_type='text/json')
+            
+
+        
         success_message = ''
 
 
@@ -277,6 +303,17 @@ def load_datasetsample(request):
         sgd = DBSession.query(Source).filter_by(display_name='SGD').one_or_none()
         source_id = sgd.source_id
 
+        fileObj = request.params.get('file')
+        file = None
+        filename = None
+        if fileObj != '':
+            file = fileObj.file
+            filename = fileObj.filename
+
+
+
+            
+        
         success_message = ''
 
 
