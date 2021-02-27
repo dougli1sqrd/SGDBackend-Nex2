@@ -292,7 +292,7 @@ def load_dataset(request):
 
         import csv
         
-        csv_obj = csv.DictReader(file, delimiter=delimiter)
+        csv_obj = csv.DictReader(file, delimiter="\t")
 
         return HTTPBadRequest(body=json.dumps({'error': "cvs_obj="+str(cvs_obj)}), content_type='text/json')
     
