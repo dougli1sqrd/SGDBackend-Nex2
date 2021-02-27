@@ -106,10 +106,10 @@ class LoadDataset extends Component {
 
   buttonName() {
     if (this.state.isDataset) {
-      return 'Load Dataset'
+      return 'Load Dataset';
     }
     else {
-      return 'Load Dataset Sample'
+      return 'Load Dataset Sample';
     }
   }
     
