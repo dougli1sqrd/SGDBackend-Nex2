@@ -12,6 +12,7 @@ from src.models import DBSession, Dataset, Datasetsample, Datasettrack, Datasetl
                        Filedbentity, FileKeyword, Colleague, Keyword, Expressionannotation
 from src.curation_helpers import get_curator_session
 from src.metadata_helpers import insert_keyword, insert_file_keyword, insert_dataset_keyword
+from src.helpers import file_upload_to_dict
 
 log = logging.getLogger('curation')
 
@@ -275,11 +276,23 @@ def load_dataset(request):
         #    delimiter = get_file_delimiter(file_upload)
         # annotations = parse_tsv_annotations(DBSession, file, filename, template_type, username, delimiter)
 
+        ### CHECK OUT def file_upload_to_dict(file_upload, delimiter="\t"): in src/helpers.py 
+
+
+        list_dict = file_upload_to_dict(file)
+
+        return HTTPBadRequest(body=json.dumps({'error': "Dataset file dict="+str(list_dict)}), content_type='text/json')
+
+
+        
+        file.seek(0)
+        
         message = ''
         for line in file:
             message = line.strip()
             break
 
+        # Can't convert 'bytes' object to str implicitly
         return HTTPBadRequest(body=json.dumps({'error': "Dataset first line="+message}), content_type='text/json')
             
 
