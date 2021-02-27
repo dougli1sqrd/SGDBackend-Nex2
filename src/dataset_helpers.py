@@ -264,6 +264,9 @@ def load_dataset(request):
             return HTTPBadRequest(body=json.dumps({'error': "No dataset file is passed in."}), content_type='text/json')
 
         file_ext = os.path.splitext(filename)[1].replace('.','').strip()
+
+        return HTTPBadRequest(body=json.dumps({'error': "File ext=" + file_ext}), content_type='text/json')
+    
         # delimiter = '\t'
         # if file_ext in ('csv', 'tsv', 'txt',):
         #    delimiter = get_file_delimiter(file_upload)
