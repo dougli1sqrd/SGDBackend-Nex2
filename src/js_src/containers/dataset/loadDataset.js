@@ -71,7 +71,7 @@ class LoadDataset extends Component {
     let success_message = '';
     let error_message = '';
     this.state.files.map( (file, index) => {
-      console.log('uploading file: ' + index + ' ' + file.name);
+      console.log('uploading file: ' + index + ' ' + file.type);
       let formData = new FormData();
       formData.append('file', file);
       fetchData(load_url, {
