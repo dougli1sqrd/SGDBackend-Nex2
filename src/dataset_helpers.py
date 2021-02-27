@@ -261,7 +261,7 @@ def load_dataset(request):
             file = fileObj.file
             filename = fileObj.filename
             
-        # return HTTPBadRequest(body=json.dumps({'error': "file="+str(file)}), content_type='text/json')
+        return HTTPBadRequest(body=json.dumps({'error': "file="+str(file)}), content_type='text/json')
 
         # file=<_io.BufferedRandom name=20>
             
@@ -302,9 +302,9 @@ def load_dataset(request):
                 )
             
         return HTTPBadRequest(body=json.dumps({'error': "list_dictionary="+str(list_dictionary)}), content_type='text/json')
+
+        # iterator should return strings, not bytes (did you open the file in text mode?)
     
-        file.seek(0)
-        
         message = ''
         for line in file:
             message = line.strip()
