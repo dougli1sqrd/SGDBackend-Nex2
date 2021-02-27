@@ -260,7 +260,7 @@ def load_dataset(request):
             file = fileObj.file
             filename = fileObj.filename
 
-        return HTTPBadRequest(body=json.dumps({'error': "file="+str(file)}), content_type='text/json')
+        # return HTTPBadRequest(body=json.dumps({'error': "file="+str(file)}), content_type='text/json')
 
             
         if file is None or filename is None:
