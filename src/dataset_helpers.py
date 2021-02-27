@@ -283,16 +283,19 @@ def load_dataset(request):
 
         # file  = open('sample.csv', "rt", encoding=<theencodingofthefile>)
 
-        import io
-        
-        f = file(io.BytesIO())
-        
-        list_dict = file_upload_to_dict(f)
 
-        return HTTPBadRequest(body=json.dumps({'error': "Dataset file dict="+str(list_dict)}), content_type='text/json')
-    
-        # iterator should return strings, not bytes (did you open the file in text mode?)
         
+        # list_dict = file_upload_to_dict(file)
+
+        # return HTTPBadRequest(body=json.dumps({'error': "Dataset file dict="+str(list_dict)}), content_type='text/json')    
+        # iterator should return strings, not bytes (did you open the file in text mode?)
+
+        import csv
+        
+        csv_obj = csv.DictReader(file, delimiter=delimiter)
+
+        return HTTPBadRequest(body=json.dumps({'error': "cvs_obj="+str(cvs_obj)}), content_type='text/json')
+    
         file.seek(0)
         
         message = ''
