@@ -79,7 +79,7 @@ class LoadDataset extends Component {
         credentials: 'same-origin',
         headers: {
           'X-CSRF-Token': this.props.csrfToken,
-          'Content-Type': mimetypes.guess_type(file.name)[0]
+          'Content-Type': file.type
         },
         data: formData,
         processData: false,
