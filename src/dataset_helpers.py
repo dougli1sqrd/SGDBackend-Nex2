@@ -294,7 +294,14 @@ def load_dataset(request):
         
         csv_obj = csv.DictReader(file, delimiter="\t")
 
-        return HTTPBadRequest(body=json.dumps({'error': "csv_obj="+str(csv_obj)}), content_type='text/json')
+        list_dictionary = []
+        for item in csv_obj:
+            list_dictionary.append(
+                {k.decode('utf-8-sig'): v
+                 for k, v in list(item.items()) if k not in (None, '')}
+                )
+            
+        return HTTPBadRequest(body=json.dumps({'error': "list_dictionary="+str(list_dictionary)}), content_type='text/json')
     
         file.seek(0)
         
