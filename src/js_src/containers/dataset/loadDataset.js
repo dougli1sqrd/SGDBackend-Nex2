@@ -20,7 +20,7 @@ class LoadDataset extends Component {
 
     this.state = {
       files: [],
-      isSample: false 
+      isSample: true 
     };
   }
 
