@@ -279,13 +279,19 @@ def load_dataset(request):
 
         ### CHECK OUT def file_upload_to_dict(file_upload, delimiter="\t"): in src/helpers.py 
 
-        file.seek(0)
+        # file.seek(0)
+
+        # file  = open('sample.csv', "rt", encoding=<theencodingofthefile>)
+
+        import io
         
-        list_dict = file_upload_to_dict(file)
+        f = file(io.BytesIO())
+        
+        list_dict = file_upload_to_dict(f)
 
         return HTTPBadRequest(body=json.dumps({'error': "Dataset file dict="+str(list_dict)}), content_type='text/json')
-
-
+    
+        # iterator should return strings, not bytes (did you open the file in text mode?)
         
         file.seek(0)
         
