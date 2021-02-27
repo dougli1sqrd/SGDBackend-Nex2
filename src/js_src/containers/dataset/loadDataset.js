@@ -103,13 +103,22 @@ class LoadDataset extends Component {
       return (<div>Please upload one or more <strong>dataset sample</strong> file(s). Note that it will take a while to load the data rows from the file(s) into database.</div>);
     }
   }
+
+  buttonName() {
+    if (this.state.isDataset) {
+      return 'Load Dataset'
+    }
+    else {
+      return 'Load Dataset Sample'
+    }
+  }
     
   addButton() {
     return (
       <div>
         <div className='row'>
           <div className='columns medium-6 small-6'>
-            <button type='submit' id='submit' value='0' className="button expanded" onClick={this.handleUpload.bind(this)} > Upload Files </button>
+            <button type='submit' id='submit' value='0' className="button expanded" onClick={this.handleUpload.bind(this)} > {this.buttonName()} </button>
           </div>
         </div>
       </div>
