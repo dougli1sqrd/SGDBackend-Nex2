@@ -255,6 +255,9 @@ def load_dataset(request):
         source_id = sgd.source_id
 
         fileObj = request.params.get('file')
+
+        return HTTPBadRequest(body=json.dumps({'error': "fileObj="+str(fileObj)}), content_type='text/json')
+    
         file = None
         filename = None
         if fileObj != '':
