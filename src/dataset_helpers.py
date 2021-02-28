@@ -275,11 +275,10 @@ def load_dataset(request):
         message = ''
         for index, row in df.iterrows(): 
             if index == 0:
-                message = row.iat[0] + " | " + row.iat[1] + " | " + row.iat[21]
+                message = row.iat[2] + " | " + row.iat[3] + " | " + row.iat[4] + row.iat[5] + " | " + row.iat[6] + " | " + row.iat[7] 
 
         return HTTPBadRequest(body=json.dumps({'error': "msg=" + message}), content_type='text/json')    
-
-
+        # msg=GSE104081 | ChIP-Seq for wild type strains arrested in metaphase with and without tension | GEO
     
         success_message = ''
 
