@@ -272,9 +272,14 @@ def load_dataset(request):
         # if df.iat[0,0].lower().startswith('dataset'):
         #    ## start from second row
 
-        for i, j in df.iterrows(): 
-            return HTTPBadRequest(body=json.dumps({'error': "i="+str(i) + ", j="+str(j)}), content_type='text/json')    
-        
+        message = ''
+        for index, row in df.iterrows(): 
+            if index == 0:
+                message = row.iat[0] + " | " + row.iat[1] + " | " + row.iat[21]
+
+        return HTTPBadRequest(body=json.dumps({'error': "msg=" + message}), content_type='text/json')    
+
+
     
         success_message = ''
 
