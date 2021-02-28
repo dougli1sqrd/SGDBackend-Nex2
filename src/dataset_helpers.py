@@ -271,51 +271,11 @@ def load_dataset(request):
         if file is None or filename is None:
             return HTTPBadRequest(body=json.dumps({'error': "No dataset file is passed in."}), content_type='text/json')
 
-        file_ext = os.path.splitext(filename)[1].replace('.','').strip()
-
+        # file_ext = os.path.splitext(filename)[1].replace('.','').strip()
         # return HTTPBadRequest(body=json.dumps({'error': "File ext=" + file_ext}), content_type='text/json')
-    
-        # delimiter = '\t'
-        # if file_ext in ('csv', 'tsv', 'txt',):
-        #    delimiter = get_file_delimiter(file_upload)
-        # annotations = parse_tsv_annotations(DBSession, file, filename, template_type, username, delimiter)
-
-        ### CHECK OUT def file_upload_to_dict(file_upload, delimiter="\t"): in src/helpers.py 
-
-        # file.seek(0)
-
-        # file  = open('sample.csv', "rt", encoding=<theencodingofthefile>)
 
 
         
-        # list_dict = file_upload_to_dict(file)
-
-        # return HTTPBadRequest(body=json.dumps({'error': "Dataset file dict="+str(list_dict)}), content_type='text/json')    
-        # iterator should return strings, not bytes (did you open the file in text mode?)
-
-        import csv
-        
-        csv_obj = csv.DictReader(file, delimiter="\t")
-
-        list_dictionary = []
-        for item in csv_obj:
-            list_dictionary.append(
-                {k.decode('utf-8-sig'): v
-                 for k, v in list(item.items()) if k not in (None, '')}
-                )
-            
-        return HTTPBadRequest(body=json.dumps({'error': "list_dictionary="+str(list_dictionary)}), content_type='text/json')
-
-        # iterator should return strings, not bytes (did you open the file in text mode?)
-    
-        message = ''
-        for line in file:
-            message = line.strip()
-            break
-
-        # Can't convert 'bytes' object to str implicitly
-        return HTTPBadRequest(body=json.dumps({'error': "Dataset first line="+message}), content_type='text/json')
-            
 
         
         success_message = ''
