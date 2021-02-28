@@ -268,7 +268,7 @@ def load_dataset(request):
 
         df = pd.read_csv(file, sep='\t')
 
-        cell = df.iat(0,0)
+        cell = df.iat[0,0] + " | " + df.iat[0,1] + " | " + df.iat[0,21]
         
         return HTTPBadRequest(body=json.dumps({'error': "df_cell="+str(cell)}), content_type='text/json')    
         
