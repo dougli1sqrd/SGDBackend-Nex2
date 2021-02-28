@@ -80,7 +80,7 @@ class LoadDataset extends Component {
         headers: {
           'X-CSRF-Token': this.props.csrfToken,
         },
-        contentType: { 'Content-Type': 'text/plain' },
+        // contentType: { 'Content-Type': 'text/plain' },
         data: formData,
         processData: false,
         // contentType: false,
