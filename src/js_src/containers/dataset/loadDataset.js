@@ -83,7 +83,7 @@ class LoadDataset extends Component {
         // contentType: { 'Content-Type': 'text/plain' },
         data: formData,
         processData: false,
-        // contentType: false,
+        contentType: false,
         timeout: TIMEOUT
       }).then((data) => {
         success_message = success_message + data.success;
