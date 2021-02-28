@@ -256,21 +256,23 @@ def load_dataset(request):
 
         fileObj = request.params.get('file')
 
-        return HTTPBadRequest(body=json.dumps({'error': "fileObj="+str(fileObj)}), content_type='text/json')
+        # return HTTPBadRequest(body=json.dumps({'error': "fileObj="+str(fileObj)}), content_type='text/json')
+        # fileObj=FieldStorage('file', 'dataset2020-08to2020-12.tsv')  
     
         file = None
         filename = None
         if fileObj != '':
             file = fileObj.file
             filename = fileObj.filename
-
+        
+        # return HTTPBadRequest(body=json.dumps({'error': "file="+str(file)}), content_type='text/json')
+        # file=<_io.BufferedRandom name=20>
+        
         import io
         f = io.open(file)
-        
-        return HTTPBadRequest(body=json.dumps({'error': "file="+str(f)}), content_type='text/json')
 
-        # file=<_io.BufferedRandom name=20>
-            
+        return HTTPBadRequest(body=json.dumps({'error': "f="+str(f)}), content_type='text/json') 
+        
         if file is None or filename is None:
             return HTTPBadRequest(body=json.dumps({'error': "No dataset file is passed in."}), content_type='text/json')
 
