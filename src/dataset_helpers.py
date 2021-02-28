@@ -263,8 +263,11 @@ def load_dataset(request):
         if fileObj != '':
             file = fileObj.file
             filename = fileObj.filename
-            
-        return HTTPBadRequest(body=json.dumps({'error': "file="+str(file)}), content_type='text/json')
+
+        import io
+        f = io.open(file)
+        
+        return HTTPBadRequest(body=json.dumps({'error': "file="+str(f)}), content_type='text/json')
 
         # file=<_io.BufferedRandom name=20>
             
