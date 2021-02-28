@@ -256,10 +256,6 @@ def load_dataset(request):
         source_id = sgd.source_id
 
         fileObj = request.params.get('file')
-
-        # return HTTPBadRequest(body=json.dumps({'error': "fileObj="+str(fileObj)}), content_type='text/json')
-        # fileObj=FieldStorage('file', 'dataset2020-08to2020-12.tsv')  
-
         
         file = None
         filename = None
@@ -267,21 +263,13 @@ def load_dataset(request):
             file = fileObj.file
             filename = fileObj.filename
 
-        # return HTTPBadRequest(body=json.dumps({'error': "mimetype="+mimetypes.guess_type(filename)[0]}), content_type='text/json')
-        # mimetype=text/tab-separated-values
-        
-        # return HTTPBadRequest(body=json.dumps({'error': "file="+str(file)}), content_type='text/json')
-        # file=<_io.BufferedRandom name=20>
-
         if file is None or filename is None:
             return HTTPBadRequest(body=json.dumps({'error': "No dataset file is passed in."}), content_type='text/json')
 
-        # file_ext = os.path.splitext(filename)[1].replace('.','').strip()
-        # return HTTPBadRequest(body=json.dumps({'error': "File ext=" + file_ext}), content_type='text/json')
-
         df = pd.read_csv(file, sep='\t')
 
-        return HTTPBadRequest(body=json.dumps({'error': "df="+str(df)}), content_type='text/json')    
+        for x in df:
+            return HTTPBadRequest(body=json.dumps({'error': "df_x="+str(x)}), content_type='text/json')    
         
 
         
