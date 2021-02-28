@@ -270,16 +270,18 @@ def load_dataset(request):
         # return HTTPBadRequest(body=json.dumps({'error': "mimetype="+mimetypes.guess_type(filename)[0]}), content_type='text/json')
         # mimetype=text/tab-separated-values
         
-        return HTTPBadRequest(body=json.dumps({'error': "file="+str(file)}), content_type='text/json')
+        # return HTTPBadRequest(body=json.dumps({'error': "file="+str(file)}), content_type='text/json')
         # file=<_io.BufferedRandom name=20>
-                
+
         if file is None or filename is None:
             return HTTPBadRequest(body=json.dumps({'error': "No dataset file is passed in."}), content_type='text/json')
 
         # file_ext = os.path.splitext(filename)[1].replace('.','').strip()
         # return HTTPBadRequest(body=json.dumps({'error': "File ext=" + file_ext}), content_type='text/json')
 
+        df = pd.read_csv(file, sep='\t')
 
+        return HTTPBadRequest(body=json.dumps({'error': "df="+str(df)}), content_type='text/json')    
         
 
         
