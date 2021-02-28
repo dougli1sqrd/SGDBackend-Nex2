@@ -267,7 +267,8 @@ def load_dataset(request):
             file = fileObj.file
             filename = fileObj.filename
 
-        return HTTPBadRequest(body=json.dumps({'error': "mimetype="+mimetypes.guess_type(filename)[0]}), content_type='text/json')
+        # return HTTPBadRequest(body=json.dumps({'error': "mimetype="+mimetypes.guess_type(filename)[0]}), content_type='text/json')
+        # mimetype=text/tab-separated-values
         
         return HTTPBadRequest(body=json.dumps({'error': "file="+str(file)}), content_type='text/json')
         # file=<_io.BufferedRandom name=20>

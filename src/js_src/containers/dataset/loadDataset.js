@@ -80,10 +80,10 @@ class LoadDataset extends Component {
         headers: {
           'X-CSRF-Token': this.props.csrfToken,
         },
-        // contentType: { 'Content-Type': 'text/plain' },
+        contentType: file.type,
         data: formData,
         processData: false,
-        contentType: false,
+        // contentType: false,
         timeout: TIMEOUT
       }).then((data) => {
         success_message = success_message + data.success;
