@@ -268,9 +268,9 @@ def load_dataset(request):
 
         df = pd.read_csv(file, sep='\t')
 
-        row1 = df.head(1)
+        cell = df.iat(0,0)
         
-        return HTTPBadRequest(body=json.dumps({'error': "df_head_3="+str(row1)}), content_type='text/json')    
+        return HTTPBadRequest(body=json.dumps({'error': "df_cell="+str(cell)}), content_type='text/json')    
         
 
         
