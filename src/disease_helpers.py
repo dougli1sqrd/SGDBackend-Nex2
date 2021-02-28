@@ -342,6 +342,9 @@ def upload_disease_file(request):
 
     try:
         file = request.POST['file'].file
+
+        return HTTPBadRequest(body=json.dumps({"error": "file="+str(file)}), content_type='text/json')
+        
         filename = request.POST['file'].filename
         CREATED_BY = request.session['username']
         xl = pd.ExcelFile(file)
