@@ -268,12 +268,15 @@ def load_dataset(request):
 
         df = pd.read_csv(file, sep='\t')
 
-        cell = df.iat[0,0] + " | " + df.iat[0,1] + " | " + df.iat[0,21]
-        
-        return HTTPBadRequest(body=json.dumps({'error': "df_cell="+str(cell)}), content_type='text/json')    
-        
+        # cell = df.iat[0,0] + " | " + df.iat[0,1] + " | " + df.iat[0,21]
+        # if df.iat[0,0].lower().startswith('dataset'):
+        #    ## start from second row
 
         
+        for i, j in df.iterrows(): 
+            return HTTPBadRequest(body=json.dumps({'error': "i="+str(i) + ", j="+str(j)}), content_type='text/json')    
+        
+    
         success_message = ''
 
 
@@ -305,6 +308,21 @@ def load_datasetsample(request):
         if fileObj != '':
             file = fileObj.file
             filename = fileObj.filename
+
+        fileObj = request.params.get('file')
+
+        if file is None or filename is None:
+            return HTTPBadRequest(body=json.dumps({'error': "No dataset file is passed in."}), content_type='text/json')
+
+        df = pd.read_csv(file, sep='\t')
+
+	cell = df.iat[0,0] + " | " + df.iat[0,1] + " | " + df.iat[0,21]
+
+	if df.iat[0,0].lower().startswith('dataset'):
+            ## start from second row                                                                            
+
+        return HTTPBadRequest(body=json.dumps({'error': "df_cell="+str(cell)}), content_type='text/json')
+
 
 
 
