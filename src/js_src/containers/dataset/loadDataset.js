@@ -71,7 +71,7 @@ class LoadDataset extends Component {
     let success_message = '';
     let error_message = '';
     this.state.files.map( (file, index) => {
-      console.log('uploading file: ' + index + ' ' + file.type);
+      console.log('uploading file: ' + index + ' ' + file.name);
       let formData = new FormData();
       formData.append('file', file);
       fetchData(load_url, {
@@ -79,7 +79,7 @@ class LoadDataset extends Component {
         credentials: 'same-origin',
         headers: {
           'X-CSRF-Token': this.props.csrfToken,
-          'Content-Type': file.type
+          // 'Content-Type': file.type
         },
         data: formData,
         processData: false,
