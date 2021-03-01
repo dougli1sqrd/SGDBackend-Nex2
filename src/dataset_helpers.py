@@ -1,6 +1,6 @@
 import logging
 import os
-import datetime
+from datetime import datetime
 from sqlalchemy import or_
 from pyramid.httpexceptions import HTTPBadRequest, HTTPOk
 from sqlalchemy.exc import IntegrityError, DataError
@@ -10,13 +10,14 @@ import json
 import mimetypes
 from src.models import DBSession, Dataset, Datasetsample, Datasettrack, Datasetlab, DatasetFile, \
                        DatasetKeyword, DatasetReference, DatasetUrl, Referencedbentity, Source,\
-                       Filedbentity, FileKeyword, Colleague, Keyword, Expressionannotation
+                       Filedbentity, FileKeyword, Colleague, Keyword, Expressionannotation, Obi
 from src.curation_helpers import get_curator_session
 from src.metadata_helpers import insert_keyword, insert_file_keyword, insert_dataset_keyword
 from src.helpers import file_upload_to_dict
 
 log = logging.getLogger('curation')
 
+DBXREF_URL = 'https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc='
 
 def insert_dataset_file(curator_session, CREATED_BY, source_id, dataset_id, file_id):
 
@@ -46,12 +47,7 @@ def insert_dataset_url(curator_session, CREATED_BY, source_id, dataset_id, displ
         if curator_session:
             curator_session.rollback()
 
-def insert_datasetlab(curator_session, CREATED_BY, source_id, dataset_id, lab_name, lab_location, colleague_format_name):
-
-    colleague_id = None
-    coll = curator_session.query(Colleague).filter_by(format_name = colleague_format_name).one_or_none()
-    if coll:
-        colleague_id = coll.colleague_id
+def insert_datasetlab(curator_session, CREATED_BY, source_id, dataset_id, lab_name, lab_location, colleague_id):
     
     try:
         x = Datasetlab(dataset_id = dataset_id,
@@ -79,6 +75,34 @@ def insert_dataset_reference(curator_session, CREATED_BY, source_id, dataset_id,
         if curator_session:
             curator_session.rollback()
 
+
+def insert_dataset(curator_session, CREATED_BY, x, parent_dataset_id):
+
+    try:
+        x = Dataset(format_name = x['format_name'],
+                    display_name = x['display_name'],
+                    obj_url = x['obj_url'],
+                    source_id = x['source_id'],
+                    dbxref_id = x['dbxref_id'],
+                    dbxref_type = x['dbxref_type'],
+                    date_public = x['date_public'],
+                    parent_dataset_id = parent_dataset_id,
+                    assay_id = x['assay_id'],
+                    channel_count = x['channel_count'],
+                    sample_count = x['sample_count'],
+                    is_in_spell = x['is_in_spell'],
+                    is_in_browser = x['is_in_browser'],
+                    description = x['description'],
+                    created_by = CREATED_BY)
+        curator_session.add(x)
+        transaction.commit()
+        return x.dataset_id
+    except Exception as e:
+        transaction.abort()
+        if curator_session:
+            curator_session.rollback()
+        return -1
+    
 def get_pmids(dataset_id):
     
     pmids = ''
@@ -247,8 +271,216 @@ def get_one_dataset(request):
         if DBSession:
             DBSession.remove()
             
-def load_dataset(request):
+def read_dataset_data_from_file(file):
 
+    try:
+        
+        dataset_to_id = dict([(x.display_name, x.dataset_id) for x in DBSession.query(Dataset).all()])
+        format_name_to_id = dict([(x.format_name, x.dataset_id) for x in DBSession.query(Dataset).all()])
+        file_to_id = dict([(x.display_name, x.dbentity_id) for x in DBSession.query(Filedbentity).all()])
+        obi_name_to_id = dict([(x.format_name, x.obi_id) for x in DBSession.query(Obi).all()])
+        source_to_id = dict([(x.display_name, x.source_id) for x in DBSession.query(Source).all()])
+        pmid_to_reference_id = dict([(x.pmid, x.dbentity_id) for x in DBSession.query(Referencedbentity).all()])
+        keyword_to_id = dict([(x.display_name, x.keyword_id) for x in BDSession.query(Keyword).all()])
+        coll_name_institution_to_id = dict([((x.display_name, x.institution), x.colleague_id) for x in DBSession.query(Colleague).all()])
+        coll_name_to_id = dict([(x.display_name, x.colleague_id) for x in DBSession.query(Colleague).all()])
+    
+        error_message = ''
+        
+        df = pd.read_csv(file, sep='\t')
+
+        # old_datasets = []
+        found = {}
+        data = []        
+        for index, row in df.iterrows(): 
+            if index == 0 and row.iat[0].lower().startswith('dataset'):
+                continue
+            format_name = row.iat[0].strip()
+            if format_name in found:
+                # error_message = error_message + "<br>" + format_name + " is in the file already.")
+                continue
+            found[format_name] = 1
+            if format_name in dataset_to_id:
+                # error_message = error_message + "<br>" + format_name + " is in the database already.")
+                continue
+            if format_name in format_name_to_id:
+                # old_datasets.append(format_name)
+                continue
+            dbxref_id = row.iat[3]
+            if dbxref_id != format_name and len(dbxref_id) > 40:
+                dbxref_id = format_name
+
+            obj_url = row.iat[20].strip()
+            obj_type = row.iat[21].strip()
+
+            display_name = row.iat[1].strip()
+            source = row.iat[2].strip()
+            if source == 'lab website':
+                source = 'Lab website'
+            if source not in ['GEO', 'ArrayExpress', 'Lab website']:
+                source = 'Publication'
+            source_id = source_to_id.get(source)
+            if source_id is None:
+                error_message = error_message + "<br>source=" + source + " is not in the database."
+                continue
+
+            if row.iat[11] == '' or row.iat[12] == '' or row.iat[13] == '':
+                error_message = error_message + "<br>MISSING sample_count or is_in_spell or is_in_browser data for the following line:<br>" + line
+                continue
+
+            sample_count = int(row.iat[11].strip())
+            is_in_spell = row.iat[12].strip()
+            is_in_browser = row.iat[13].strip()
+            if sample_count is None:
+                error_message = error_message + "<br>The sample_count column is None:<br>" + line
+                continue
+            if is_in_spell is None:
+                error_message = error_message + "<br>The is_in_spell column is None:<br>" + line
+                continue
+            elif int(is_in_spell) > 1:
+                is_in_spell = '1'
+            if is_in_browser is None:
+                error_message = error_message + "<br>The is_in_browser column is None:<br>" + line
+                continue
+            elif int(is_in_browser) > 1:
+                is_in_browser = '1'
+                
+            date_public = row.iat[5]
+            if date_public == '':
+                # no date provided
+                date_public = str(datetime.now()).split(" ")[0]
+            channel_count = None
+            if row.iat[10]:
+                channel_count = int(row.iat[10].strip())
+
+            file_id = None
+            if row.iat[19]:
+                file_id = file_to_id.get(row.iat[19].strip())
+                if file_id is None:
+                    error_message = error_message + "<br>The file display_name: " + row.iat[19] + " is not in the database"
+                    continue
+
+            description = row.iat[14]
+            if len(description) > 4000:
+                error_message = error_message + "<br>The desc is too long. length=" + str(len(description)) + " for " + format_name  
+                continue
+
+            assay_id = obi_name_to_id.get(row.iat[8].split('|')[0])
+            if assay_id is None:
+                error_message = error_message + "<br>The OBI format_name: " + row.iat[8] + " is not in the database."
+                continue
+
+            reference_ids = []
+            pmidStr = row.iat[18].strip().replace('|', '')
+            if pmidStr.isdigit():
+                pmids = row.iat[18].strip().replace(" ", "").split("|")
+                for pmid in pmids:
+                    reference_id = pmid_to_reference_id.get(int(pmid))
+                    if reference_id is None:
+                        error_message = error_message + "<br>The PMID: " + pmid + " is not in the database."
+                        continue
+                    reference_ids.append(reference_id)
+
+            keywords = pieces[17].strip(),replace('"', '')
+            keyword_ids = []
+            for keyword in keywords:
+                keyword = keyword.strip()
+                keyword_id = keyword_to_id.get(keyword)
+                if keyword_id is None:
+                    error_message = error_message + "<br>The keyword: '" + keyword + "' is not in the database."
+                    continue
+                keyword_ids.append(keyword_id)
+            
+            coll_institution = row.iat[16].strip().replace('"', '')
+            if len(coll_institution) > 100:
+                coll_institution = coll_institution.replace("National Institute of Environmental Health Sciences", "NIEHS")
+                if coll_institution.startswith('Department'):
+                    items = coll_institution.split(', ')
+                    items.pop(0)
+                    coll_institution = ', '.join(items)
+
+            lab_name = row.iat[15].strip().replace('"', '')
+            coll_display_name = lab_name
+            name = lab_name.split(' ')
+            lab_name = name[0]
+            if len(name) > 1:
+                first_name = name[1].replace(', ', '')
+                lab_name = lab_name + ' ' + first_name
+            colleague_id = coll_name_institution_to_id.get((coll_display_name, coll_institution))
+            if colleague_id is None:
+                colleague_id = coll_name_to_id.get(coll_display_name)
+            
+            entry = { "source_id": source_id,
+                      "format_name": format_name,
+                      "display_name": display_name.replace('"', ''),
+                      "obj_url": "/dataset/" + format_name,
+                      "sample_count": sample_count,
+                      "assay_id": assay_id,
+                      "is_in_spell": is_in_spell,
+                      "is_in_browser": is_in_browser,
+                      "dbxref_id": dbxref_id,
+                      "dbxref_type": pieces[4],
+                      "date_public": date_public,
+                      "channel_count": channel_count,
+                      "description": description.replace('"', ''),
+                      "lab_name": lab_name,
+                      "lab_location": coll_institution,
+                      "colleague_id": colleague_id,
+                      "keyword_ids": keyword_ids,
+                      "reference_ids": reference_ids,
+                      "file_id": file_id,
+                      "obj_url": obj_url,
+                      "url_type": url_type }
+            data.append(entry)
+        
+        return [data, error_message]
+            
+    except Exception as e:
+        return [[], str(e)]
+        
+
+def insert_datasets(curator_session, CREATED_BY, data):
+
+    dataset_added = 0
+    for x in data:
+
+        # dataset table
+        parent_dataset_id = None
+        dataset_id = insert_dataset(curator_session, CREATED_BY, x, parent_dataset_id)
+
+        if dataset_id == -1:
+            continue
+        dataset_added = dataset_added + 1
+        
+        # dataset_file
+        if x.get('file_id'):
+            insert_dataset_file(curator_session, CREATED_BY, x['source_id'], dataset_id, x['file_id'])
+            
+        # dataset_keyword
+        for keyword_id in x['keyword_ids']:
+            insert_dataset_keyword(curator_session, CREATED_BY, x['source_id'], dataset_id, keyword_id)
+
+        # dataset_reference
+        for reference_id in x['reference_ids']:
+            insert_dataset_reference(curator_session, CREATED_BY, x['source_id'], dataset_id, reference_id)
+            
+        # dataset_url
+        if x.get('obj_url') and x.get('url_type'):
+            urls = x.get('obj_url').split('|')
+            # only one url_type is provided...                                                                                      
+            type = x.get('url_type')
+            for url in urls:
+                insert_dataset_url(curator_session, CREATED_BY, x['source_id'], dataset_id, type, url)
+
+        # datasetlab
+        if x['lab_name'] and x['lab_location']:
+            insert_datasetlab(curator_session, CREATED_BY, x['source_id'], dataset_id,
+                              x['lab_name'], x['lab_location'], x['colleague_id'])
+
+    return dataset_added
+
+def load_dataset(request):
+    
     try:
         CREATED_BY = request.session['username']
         curator_session = get_curator_session(request.session['username'])
@@ -256,39 +488,26 @@ def load_dataset(request):
         source_id = sgd.source_id
 
         fileObj = request.params.get('file')
-        
         file = None
         filename = None
         if fileObj != '':
             file = fileObj.file
             filename = fileObj.filename
 
+        fileObj = request.params.get('file')
+
         if file is None or filename is None:
             return HTTPBadRequest(body=json.dumps({'error': "No dataset file is passed in."}), content_type='text/json')
 
-        df = pd.read_csv(file, sep='\t')
-
-        # cell = df.iat[0,0] + " | " + df.iat[0,1] + " | " + df.iat[0,21]
-        # if df.iat[0,0].lower().startswith('dataset'):
-        #    ## start from second row
-
-        message = ''
-        for index, row in df.iterrows(): 
-            if index == 0:
-                message = row.iat[2] + " | " + row.iat[3] + " | " + row.iat[4] + row.iat[5] + " | " + row.iat[6] + " | " + row.iat[7] 
-
-        return HTTPBadRequest(body=json.dumps({'error': "msg=" + message}), content_type='text/json')    
-        # msg=GSE104081 | ChIP-Seq for wild type strains arrested in metaphase with and without tension | GEO
-    
-        success_message = ''
-
-
-
-
-
-
         
+        [data, error_message] = read_dataset_data_from_file(file)    
+        if error_message != '':
+            return HTTPBadRequest(body=json.dumps({'error': error_message}), content_type='text/json') 
 
+        dataset_added = insert_datasets(curator_session, CREATED_BY, data)
+
+        success_message = "Total " + str(dataset_added) + " row(s) from " + filename + " have been added into dataset and its related tables." 
+                        
         transaction.commit()
         return HTTPOk(body=json.dumps({'success': success_message, 'dataset': "DATASET"}), content_type='text/json')
     except Exception as e:
@@ -297,6 +516,101 @@ def load_dataset(request):
         if curator_session:
             curator_session.remove()
 
+
+def read_dataset_sample_data_from_file(file):
+
+    try:
+        format_name_to_dataset_id_src = dict([(x.format_name, (x.dataset_id, x.source_id)) for x in nex_session.query(Dataset).all()])
+        taxid_to_taxonomy_id = dict([(x.taxid, x.taxonomy_id) for x in nex_session.query(Taxonomy).all()])
+        format_name_to_datasetsample_id = dict([(x.format_name, x.datasetsample_id) for x in nex_session.query(Datasetsample).all()])
+
+        format_name2display_name = {}
+        dataset2index = {}
+    
+        data = []
+        error_message = ''
+
+        df = pd.read_csv(file, sep='\t')
+        
+        for i, row in df.iterrows():
+            if i == 0 and row.iat[0].lower().startswith('dataset'):
+                continue
+            dataset_format_name = row.iat[0].strip()
+            if dataset_format_name not in format_name_to_dataset_id_src:
+                error_message = error_message + "<br>The dataset: " + dataset_format_name + " is not in DATASET table."
+                continue
+            (dataset_id, source_id) = format_name_to_dataset_id_src[dataset_format_name]
+            display_name = row.iat[1].replace('"', '')
+            description = ""
+            if row.iat[2] != '':
+                description = row.iat[2]
+                if len(description) > 500:
+                    description = display_name
+            entry = { "source_id": source_id,
+                      "dataset_id": dataset_id,
+                      "display_name": display_name,
+                      "sample_order": int(row.iat[8]),
+                      "description": description }
+            if row.iat[5] != '':
+                entry['biosample'] = row.iat[5]
+            if row.iat[7] != '':
+                entry['strain_name'] = row.iat[7]
+            if row.iat[9] != '':
+                taxonomy_id = taxid_to_taxonomy_id.get("TAX:"+row.iat[9])
+                if taxonomy_id is None:
+                    error_message = error_message + "<br>The taxid = " + row.iat[9] + " for: " + dataset_format_name + " is not in TAXONOMY table."
+                else:
+                    entry['taxonomy_id'] = taxonomy_id
+            GSM = row.iat[3]
+            if GSM == '':
+                index = dataset2index.get(dataset_format_name, 0) + 1
+                entry['format_name'] = dataset_format_name + "_sample_" + str(index)
+                if entry['format_name'] in format_name_to_datasetsample_id:
+                    error_message = error_message + "<br>format_name for Non GSM row: " + entry['format_name'] + " is used."
+                    continue
+                dataset2index[dataset_format_name] = index
+                entry['obj_url'] = "/datasetsample/" + entry['format_name']
+            else:
+                entry['dbxref_type'] = row.iat[4]
+                if format_name2display_name.get(GSM):
+                    error_message = error_message + "<br>The format_name: " + GSM + " has been used for other sample " + format_name2display_name.get(GSM)
+                    continue
+                format_name2display_name[GSM] = display_name
+                entry['format_name'] = dataset_format_name + "_" + GSM
+                if entry['format_name'] in format_name_to_datasetsample_id:
+                    error_message = error_message + "<br>format_name for GSM row: " + entry['format_name'] + " is used."
+                    continue
+                entry['obj_url'] = "/datasetsample/" + entry['format_name']
+                entry['dbxref_id'] = GSM
+            data.append(entry)
+        return [data, error_message]
+    except Exception as e:
+        return [[], str(e)]
+
+def insert_dataset_samples(curator_session, CREATED_BY, data):
+
+    dbxref_url = ''
+    if x.get('dbxref_id'):
+        dbxref_url = DBXREF_URL + x['dbxref_id']
+        
+    for x in data:
+        y = Datasetsample(format_name = x['format_name'],
+                          display_name = x['display_name'],
+                          obj_url = x['obj_url'],
+                          source_id = x['source_id'],
+                          dataset_id = x['dataset_id'],
+                          sample_order = x['sample_order'],
+                          description = x.get('description'),
+                          biosample = x.get('biosample'),
+                          strain_name = x.get('strain_name'),
+                          taxonomy_id = x.get('taxonomy_id'),
+                          dbxref_type = x.get('dbxref_type'),
+                          dbxref_id = x.get('dbxref_id'),
+                          dbxref_url = dbxref_url,
+                          created_by = CREATED_BY)
+        
+        curator_session.add(y)
+    
 def load_datasetsample(request):
 
     try:
@@ -315,26 +629,17 @@ def load_datasetsample(request):
         fileObj = request.params.get('file')
 
         if file is None or filename is None:
-            return HTTPBadRequest(body=json.dumps({'error': "No dataset file is passed in."}), content_type='text/json')
+            return HTTPBadRequest(body=json.dumps({'error': "No dataset sample file is passed in."}), content_type='text/json')
 
-        df = pd.read_csv(file, sep='\t')
+        [data, error_message] = read_dataset_sample_data_from_file(file)
+        if error_message != '':
+            return HTTPBadRequest(body=json.dumps({'error': error_message}), content_type='text/json')
 
-        cell = df.iat[0,0] + " | " + df.iat[0,1] + " | " + df.iat[0,21]
+        insert_dataset_samples(curator_session, CREATED_BY, data)
 
-	# if df.iat[0,0].lower().startswith('dataset'):
-        #    ## start from second row                                                                            
-
-        return HTTPBadRequest(body=json.dumps({'error': "df_cell="+str(cell)}), content_type='text/json')
-
-
-
-
-            
+        sample_added = len(data)
         
-        success_message = ''
-
-
-
+        success_message = "Total " + str(sample_added) + " row(s) from " + filename + " have been added into datasetsample table."
         
         transaction.commit()
         return HTTPOk(body=json.dumps({'success': success_message, 'dataset_sample': "DATASET_SAMPLE"}), content_type='text/json')
@@ -645,7 +950,8 @@ def update_dataset(request):
                     curator_session.add(lab)
                     success_message = success_message + "<br>lab info has been updated for this dataset." 
         elif lab_name and lab_location:
-            insert_datasetlab(curator_session, CREATED_BY, source_id, dataset_id, lab_name, lab_location, colleague_format_name)
+            coll = curator_session.query(Colleague).filter_by(format_name = colleague_format_name).one_or_none()
+            insert_datasetlab(curator_session, CREATED_BY, source_id, dataset_id, lab_name, lab_location, coll.colleague_id)
             success_message = success_message + "<br>lab '" + labNew + "' has been added for this dataset."        
 
             
