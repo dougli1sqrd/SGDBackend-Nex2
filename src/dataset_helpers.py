@@ -13,7 +13,7 @@ from src.models import DBSession, Dataset, Datasetsample, Datasettrack, Datasetl
                        DatasetKeyword, DatasetReference, DatasetUrl, Referencedbentity, Source,\
                        Filedbentity, FileKeyword, Colleague, Keyword, Expressionannotation, Obi
 from src.curation_helpers import get_curator_session
-from src.metadata_helpers import insert_keyword, insert_file_keyword, insert_dataset_keyword
+from src.metadata_helpers import insert_file_keyword, insert_dataset_keyword
 from src.helpers import file_upload_to_dict
 
 log = logging.getLogger('curation')
@@ -329,33 +329,30 @@ def read_dataset_data_from_file(file):
                 error_message = error_message + "<br>source=" + source + " is not in the database."
                 continue
 
-            if row.iat[11] == '' or row.iat[12] == '' or row.iat[13] == '':
+            if str(row.iat[11]) == 'nan' or str(row.iat[12]) == 'nan' or str(row.iat[13]) == 'nan':
                 error_message = error_message + "<br>MISSING sample_count or is_in_spell or is_in_browser data for the following line:<br>" + line
                 continue
 
             sample_count = int(row.iat[11])
             is_in_spell = row.iat[12]
             is_in_browser = row.iat[13]
-            if sample_count == '':
-                error_message = error_message + "<br>The sample_count column is None:<br>" + line
-                continue
-            if is_in_spell == '':
+            if str(is_in_spell) == 'nan':
                 error_message = error_message + "<br>The is_in_spell column is None:<br>" + line
                 continue
-            elif int(is_in_spell) > 1:
+            elif int(is_in_spell) >= 1:
                 is_in_spell = '1'
-            if is_in_browser == '':
+            if str(is_in_browser) == 'nan':
                 error_message = error_message + "<br>The is_in_browser column is None:<br>" + line
                 continue
-            elif int(is_in_browser) > 1:
+            elif int(is_in_browser) >= 1:
                 is_in_browser = '1'
                 
             date_public = row.iat[5]
-            if date_public == '':
+            if str(date_public) == 'nan':
                 # no date provided
                 date_public = str(datetime.now()).split(" ")[0]
             channel_count = None
-            if row.iat[10]:
+            if str(row.iat[10]) != 'nan':
                 channel_count = int(row.iat[10])
 
             file_id = None
@@ -365,8 +362,10 @@ def read_dataset_data_from_file(file):
                     error_message = error_message + "<br>The file display_name: " + str(row.iat[19]) + " is not in the database"
                     continue
 
-            description = row.iat[14]
-            if len(description) > 4000:
+            description = str(row.iat[14])
+            if description == 'nan':
+                description = ''
+            elif len(description) > 4000:
                 error_message = error_message + "<br>The desc is too long. length=" + str(len(description)) + " for " + format_name  
                 continue
 
@@ -399,6 +398,8 @@ def read_dataset_data_from_file(file):
                 keyword_ids.append(keyword_id)
             
             coll_institution = str(row.iat[16]).replace('"', '')
+            if coll_institution == 'nan':
+                coll_institution = ''
             if len(coll_institution) > 100:
                 coll_institution = coll_institution.replace("National Institute of Environmental Health Sciences", "NIEHS")
                 if coll_institution.startswith('Department'):
@@ -407,6 +408,8 @@ def read_dataset_data_from_file(file):
                     coll_institution = ', '.join(items)
 
             lab_name = str(row.iat[15]).replace('"', '')
+            if lab_name == 'nan':
+                lab_name = ''
             coll_display_name = lab_name
             name = lab_name.split(' ')
             lab_name = name[0]
@@ -813,18 +816,13 @@ def update_dataset(request):
         kws = keywords.split('|')
 
         all_keyword_ids_NEW = {}
+        keyword_to_id = {}
         for kw in kws:
             k = curator_session.query(Keyword).filter_by(display_name=kw).one_or_none()
-            keyword_id = None
             if k is None:
-                keyword_id = insert_keyword(curator_session, CREATED_BY, source_id, kw)
-                if str(keyword_id).isdigit():
-                    success_message = success_message + "<br>keyword '" + kw + "' has been added into database."
-                else:
-                    err_msg = keyword_id
-                    return HTTPBadRequest(body=json.dumps({'error': err_msg}), content_type='text/json')
-            else:
-                keyword_id = k.keyword_id
+                return HTTPBadRequest(body=json.dumps({'error': "The keyword: "+kw + " is not in the database."}), content_type='text/json')
+            keyword_id = k.keyword_id
+            keyword_to_id[kw] = keyword_id
             all_keyword_ids_NEW[keyword_id] = 1
             if keyword_id not in all_keyword_ids_DB:
                 insert_dataset_keyword(curator_session, CREATED_BY, source_id, dataset_id, keyword_id)
@@ -849,20 +847,15 @@ def update_dataset(request):
             for kw in all_file_kw:
                 keywords_file_db[kw.keyword.display_name.upper()] = kw.keyword_id
             for kw in kws:
-                kw = kw
                 if kw == '':
                     continue
                 if kw.upper() in keywords_file_db:
                     del keywords_file_db[kw.upper()]
                     continue
-                keyword_id = insert_keyword(curator_session, CREATED_BY, source_id, kw)
-                if str(keyword_id).isdigit():
-                    success_message = success_message + "<br>keyword '" + kw + "' has been added for the associated file."
-                    insert_file_keyword(curator_session, CREATED_BY, source_id, file_id, keyword_id)
-                else:
-                    err_msg = keyword_id
-                    return HTTPBadRequest(body=json.dumps({'error': err_msg}), content_type='text/json')
-
+                keyword_id = keyword_to_id[kw]
+                insert_file_keyword(curator_session, CREATED_BY, source_id, file_id, keyword_id)
+                success_message = success_message + "<br>keyword '" + kw + "' has been added for the associated file."
+                
             for kw in keywords_file_db:
                 keyword_id = keywords_file_db[kw]
                 fk = curator_session.query(FileKeyword).filter_by(file_id=file_id, keyword_id=keyword_id).one_or_none()
