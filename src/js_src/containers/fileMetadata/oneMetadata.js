@@ -18,7 +18,7 @@ class OneMetadata extends Component {
         <div><strong><a href={this.props.metadata.s3_url} target='new'>Download this file from s3</a></strong></div>
         <hr />	
         <div>
-          <strong>Search Keywords:</strong> <AutocompleteSection sec_title='' id='keyword_id' value1='display_name' value2='' selectedIdName='Keyword_id' placeholder='Search for keywords' onOptionChange={this.props.onOptionChange} selectedId={this.props.dataset.keyword_id} setNewValue={false} />
+          <strong>Search Keywords:</strong> <AutocompleteSection sec_title='' id='keyword_id' value1='display_name' value2='' selectedIdName='Keyword_id' placeholder='Search for keywords' onOptionChange={this.props.onOptionChange} selectedId={this.props.metadata.keyword_id} setNewValue={false} />
         </div>
         <div><strong>Update data fields below:</strong></div>
 
