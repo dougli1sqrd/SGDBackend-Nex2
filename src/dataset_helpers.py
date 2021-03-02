@@ -359,7 +359,7 @@ def read_dataset_data_from_file(file):
                 channel_count = int(row.iat[10])
 
             file_id = None
-            if str(row.iat[19]) == 'nan':
+            if !str(row.iat[19]):
                 file_id = file_to_id.get(row.iat[19])
                 if file_id is None:
                     error_message = error_message + "<br>The file display_name: " + str(row.iat[19]) + " is not in the database"
