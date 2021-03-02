@@ -296,7 +296,7 @@ def read_dataset_data_from_file(file):
         for index, row in df.iterrows(): 
             if index == 0 and row.iat[0].lower().startswith('dataset'):
                 continue
-            format_name = row.iat[0]
+            format_name = row.iat[0].strip()
 
             if format_name in found:
                 # error_message = error_message + "<br>" + format_name + " is in the file already.")
@@ -361,7 +361,7 @@ def read_dataset_data_from_file(file):
             if row.iat[19]:
                 file_id = file_to_id.get(row.iat[19])
                 if file_id is None:
-                    error_message = error_message + "<br>The file display_name: " + row.iat[19] + " is not in the database"
+                    error_message = error_message + "<br>The file display_name: " + str(row.iat[19]) + " is not in the database"
                     continue
 
             description = row.iat[14]
@@ -371,7 +371,7 @@ def read_dataset_data_from_file(file):
 
             assay_id = obi_name_to_id.get(row.iat[8].split('|')[0])
             if assay_id is None:
-                error_message = error_message + "<br>The OBI format_name: " + row.iat[8] + " is not in the database."
+                error_message = error_message + "<br>The OBI format_name: " + str(row.iat[8]) + " is not in the database."
                 continue
 
             reference_ids = []
@@ -381,7 +381,7 @@ def read_dataset_data_from_file(file):
                 for pmid in pmids:
                     reference_id = pmid_to_reference_id.get(int(pmid))
                     if reference_id is None:
-                        error_message = error_message + "<br>The PMID: " + pmid + " is not in the database."
+                        error_message = error_message + "<br>The PMID: " + str(pmid) + " is not in the database."
                         continue
                     reference_ids.append(reference_id)
 
