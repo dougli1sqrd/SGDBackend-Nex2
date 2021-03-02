@@ -370,15 +370,15 @@ def read_dataset_data_from_file(file):
                 error_message = error_message + "<br>The desc is too long. length=" + str(len(description)) + " for " + format_name  
                 continue
 
-            assay_id = obi_name_to_id.get(row.iat[8].split('|')[0])
+            assay_id = obi_name_to_id.get(str(row.iat[8]).split('|')[0])
             if assay_id is None:
                 error_message = error_message + "<br>The OBI format_name: " + str(row.iat[8]) + " is not in the database."
                 continue
 
             reference_ids = []
-            pmidStr = row.iat[18].replace('|', '')
+            pmidStr = str(row.iat[18]).replace('|', '')
             if pmidStr.isdigit():
-                pmids = row.iat[18].replace(" ", "").split("|")
+                pmids = str(row.iat[18]).replace(" ", "").split("|")
                 for pmid in pmids:
                     reference_id = pmid_to_reference_id.get(int(pmid))
                     if reference_id is None:
@@ -386,8 +386,10 @@ def read_dataset_data_from_file(file):
                         continue
                     reference_ids.append(reference_id)
 
-            keywords = pieces[17],replace('"', '')
+            
+            keywords = str(row.iat[17]).replace('"', '').split('|')
             keyword_ids = []
+            
             for keyword in keywords:
                 keyword = keyword
                 keyword_id = keyword_to_id.get(keyword)
@@ -396,7 +398,7 @@ def read_dataset_data_from_file(file):
                     continue
                 keyword_ids.append(keyword_id)
             
-            coll_institution = row.iat[16].replace('"', '')
+            coll_institution = str(row.iat[16]).replace('"', '')
             if len(coll_institution) > 100:
                 coll_institution = coll_institution.replace("National Institute of Environmental Health Sciences", "NIEHS")
                 if coll_institution.startswith('Department'):
@@ -404,12 +406,12 @@ def read_dataset_data_from_file(file):
                     items.pop(0)
                     coll_institution = ', '.join(items)
 
-            lab_name = row.iat[15].replace('"', '')
+            lab_name = str(row.iat[15]).replace('"', '')
             coll_display_name = lab_name
             name = lab_name.split(' ')
             lab_name = name[0]
             if len(name) > 1:
-                first_name = name[1].replace(', ', '')
+                first_name = str(name[1]).replace(', ', '')
                 lab_name = lab_name + ' ' + first_name
             colleague_id = coll_name_institution_to_id.get((coll_display_name, coll_institution))
             if colleague_id is None:
@@ -417,17 +419,17 @@ def read_dataset_data_from_file(file):
             
             entry = { "source_id": source_id,
                       "format_name": format_name,
-                      "display_name": display_name.replace('"', ''),
+                      "display_name": str(display_name).replace('"', ''),
                       "obj_url": "/dataset/" + format_name,
                       "sample_count": sample_count,
                       "assay_id": assay_id,
                       "is_in_spell": is_in_spell,
                       "is_in_browser": is_in_browser,
                       "dbxref_id": dbxref_id,
-                      "dbxref_type": pieces[4],
+                      "dbxref_type": row.iat[4],
                       "date_public": date_public,
                       "channel_count": channel_count,
-                      "description": description.replace('"', ''),
+                      "description": str(description).replace('"', ''),
                       "lab_name": lab_name,
                       "lab_location": coll_institution,
                       "colleague_id": colleague_id,
