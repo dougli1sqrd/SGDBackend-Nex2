@@ -307,6 +307,17 @@ def read_dataset_data_from_file(file):
             if format_name in format_name_to_id:
                 # old_datasets.append(format_name)
                 continue
+
+
+
+
+            
+            data.append(format_name)
+            continue
+            
+            
+
+            
             dbxref_id = row.iat[3]
             if dbxref_id != format_name and len(dbxref_id) > 40:
                 dbxref_id = format_name
