@@ -328,29 +328,29 @@ def read_dataset_data_from_file(file):
                 error_message = error_message + "<br>source=" + source + " is not in the database."
                 continue
 
-            if row.iat[11] == 'nan' or row.iat[12] == 'nan' or row.iat[13] == 'nan':
+            if row.iat[11] == '' or row.iat[12] == '' or row.iat[13] == '':
                 error_message = error_message + "<br>MISSING sample_count or is_in_spell or is_in_browser data for the following line:<br>" + line
                 continue
 
             sample_count = int(row.iat[11])
             is_in_spell = row.iat[12]
             is_in_browser = row.iat[13]
-            if sample_count == 'nan':
+            if sample_count == '':
                 error_message = error_message + "<br>The sample_count column is None:<br>" + line
                 continue
-            if is_in_spell == 'nan':
+            if is_in_spell == '':
                 error_message = error_message + "<br>The is_in_spell column is None:<br>" + line
                 continue
             elif int(is_in_spell) > 1:
                 is_in_spell = '1'
-            if is_in_browser == 'nan':
+            if is_in_browser == '':
                 error_message = error_message + "<br>The is_in_browser column is None:<br>" + line
                 continue
             elif int(is_in_browser) > 1:
                 is_in_browser = '1'
                 
             date_public = row.iat[5]
-            if date_public == 'nan':
+            if date_public == '':
                 # no date provided
                 date_public = str(datetime.now()).split(" ")[0]
             channel_count = None
@@ -358,7 +358,7 @@ def read_dataset_data_from_file(file):
                 channel_count = int(row.iat[10])
 
             file_id = None
-            if row.iat[19] != 'nan':
+            if !df.isnull(row.iat[19]):
                 file_id = file_to_id.get(row.iat[19])
                 if file_id is None:
                     error_message = error_message + "<br>The file display_name: " + str(row.iat[19]) + " is not in the database"
