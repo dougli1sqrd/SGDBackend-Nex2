@@ -125,9 +125,10 @@ def get_keywords(dataset_id):
 
 def get_lab(dataset_id):
                                                                                             
-    labInfo = DBSession.query(Datasetlab).filter_by(dataset_id=dataset_id).one_or_none()
+    all_labInfo = DBSession.query(Datasetlab).filter_by(dataset_id=dataset_id).all()
     lab = ''
-    if labInfo is not None:
+    if all_labInfo is not None:
+        labInfo = all_labInfo[0]
         lab = "lab_name: " + labInfo.lab_name + " | lab_location: " + labInfo.lab_location + " | colleague_format_name: "
         if labInfo.colleague_id:
             lab = lab + labInfo.colleague.format_name
