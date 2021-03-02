@@ -51,7 +51,7 @@ from .models import DBSession, Dbentity, Dbuser, CuratorActivity, Colleague,\
      LocusRelationReference,LocussummaryReference,PathwaysummaryReference,\
      Referenceauthor,StrainsummaryReference,ReferenceAlias,ReferenceUrl,\
      Referencedocument,Referencetype,Referenceunlink,ReferenceFile, Edam, Filedbentity,\
-     Path, Dataset, Obi
+     Path, Dataset, Obi, Keyword
 from .tsv_parser import parse_tsv_annotations
 from .models_helpers import ModelsHelper
 from .phenotype_helpers import add_phenotype_annotations, update_phenotype_annotations,\
