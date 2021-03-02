@@ -46,7 +46,7 @@ class LoadDataset extends Component {
           <ul>{filenames}</ul>
           <a onClick={this.handleClear.bind(this)}>Clear File(s)</a>
         </div>
-        <div>It will take a while to load data into database..</div>      
+        <div><strong>It will take a while to load data into database...</strong></div>      
       );
     }	
     return  (
