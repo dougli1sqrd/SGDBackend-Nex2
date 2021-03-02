@@ -46,6 +46,7 @@ class LoadDataset extends Component {
           <ul>{filenames}</ul>
           <a onClick={this.handleClear.bind(this)}>Clear File(s)</a>
         </div>
+        <div>It will take a while to load data into database..</div>      
       );
     }	
     return  (
@@ -98,10 +99,10 @@ class LoadDataset extends Component {
 
   note() {
     if (this.state.isDataset) {
-      return (<div>Please upload one or more <strong>dataset</strong> file(s). Note that it will take a while to load the data rows from the file(s) into database.</div>);
+      return (<div>Please upload one or more <strong>dataset</strong> file(s). </div>);
     }
     else {
-      return (<div>Please upload one or more <strong>dataset sample</strong> file(s). Note that it will take a while to load the data rows from the file(s) into database.</div>);
+      return (<div>Please upload one or more <strong>dataset sample</strong> file(s). </div>);
     }
   }
 
