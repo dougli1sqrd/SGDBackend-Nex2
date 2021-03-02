@@ -34,6 +34,11 @@ class EditTrack extends Component {
   }
 
   trackSections() {
+
+    if (this.state.tracks.length == 0) {
+      return (<strong>No track info associated with this dataset.</strong>);
+    }
+      
     let sections = this.state.tracks.map((track, i) => {
       return (<OneTrack data={track} index={i} />);
     });

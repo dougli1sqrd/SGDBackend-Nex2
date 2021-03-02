@@ -34,6 +34,11 @@ class EditSample extends Component {
   }
 
   sampleSections() {
+
+    if (this.state.samples.length == 0) {
+      return (<strong>No sample associated with this dataset.</strong>);
+    }
+	
     let sections = this.state.samples.map((sample, i) => {
       return (<OneSample data={sample} index={i} />);
     });
