@@ -42,11 +42,13 @@ class LoadDataset extends Component {
         return <li key={index}>{file.name}</li>;
       }); 
       return(
-        <div>
-          <ul>{filenames}</ul>
-          <a onClick={this.handleClear.bind(this)}>Clear File(s)</a>
+        <div className='row'>
+          <div>
+            <ul>{filenames}</ul>
+            <a onClick={this.handleClear.bind(this)}>Clear File(s)</a>
+          </div>
+          <div><strong>It will take a while to load data into database...</strong></div>
         </div>
-        <div><strong>It will take a while to load data into database...</strong></div>      
       );
     }	
     return  (
