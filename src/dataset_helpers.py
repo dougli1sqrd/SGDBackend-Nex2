@@ -290,6 +290,8 @@ def read_dataset_data_from_file(file):
         
         df = pd.read_csv(file, sep='\t')
 
+        return [df, "error"]
+    
         # old_datasets = []
         found = {}
         data = []        
