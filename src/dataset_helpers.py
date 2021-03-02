@@ -316,7 +316,7 @@ def read_dataset_data_from_file(file):
                 dbxref_id = format_name
 
             obj_url = row.iat[20]
-            obj_type = row.iat[21]
+            url_type = row.iat[21]
 
             display_name = row.iat[1]
             source = row.iat[2]
