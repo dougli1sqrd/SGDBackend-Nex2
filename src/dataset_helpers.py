@@ -282,7 +282,7 @@ def read_dataset_data_from_file(file):
         obi_name_to_id = dict([(x.format_name, x.obi_id) for x in DBSession.query(Obi).all()])
         source_to_id = dict([(x.display_name, x.source_id) for x in DBSession.query(Source).all()])
         pmid_to_reference_id = dict([(x.pmid, x.dbentity_id) for x in DBSession.query(Referencedbentity).all()])
-        keyword_to_id = dict([(x.display_name, x.keyword_id) for x in BDSession.query(Keyword).all()])
+        keyword_to_id = dict([(x.display_name, x.keyword_id) for x in DBSession.query(Keyword).all()])
         coll_name_institution_to_id = dict([((x.display_name, x.institution), x.colleague_id) for x in DBSession.query(Colleague).all()])
         coll_name_to_id = dict([(x.display_name, x.colleague_id) for x in DBSession.query(Colleague).all()])
     
