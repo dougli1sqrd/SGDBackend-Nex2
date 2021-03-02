@@ -14,6 +14,7 @@ const GET_PATH = '/get_path';
 const GET_README = '/get_readme';
 const GET_OBI = '/get_obi';
 const GET_DATASET = '/get_all_datasets';
+const GET_KEYWORD = '/get_keywords';
 
 class AutocompleteSection extends Component {
   constructor(props) {
@@ -56,6 +57,9 @@ class AutocompleteSection extends Component {
     }
     else if (this.props.id == 'parent_dataset_id') {
       this.getData(GET_DATASET);
+    }
+    else if (this.props.id == 'keyword_id') {
+      this.getData(GET_KEYWORD);
     }
     else {
       this.props.dispatch(setError('Unknown ID: ' + this.props.id));

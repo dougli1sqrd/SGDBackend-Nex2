@@ -1786,6 +1786,23 @@ def get_obi(request):
         if DBSession:
             DBSession.remove()
 
+@view_config(route_name='get_keywords', renderer='json', request_method='GET')
+def get_keywords(request):
+    try:
+        all_kw = DBSession.query(Keyword).order_by(Keyword.display_name).all()
+        data = []
+        for k in all_kw:
+            data.append({"keyword_id": k.keyword_id,
+                         "format_name": k.format_name,
+                         "display_name": k.display_name})
+        return HTTPOk(body=json.dumps(data), content_type='text/json')
+    except Exception as e:
+        log.error(e)
+        return HTTPBadRequest(body=json.dumps({'error': str(e)}))
+    finally:
+        if DBSession:
+            DBSession.remove()
+            
 @view_config(route_name='get_all_datasets', renderer='json', request_method='GET')
 def get_all_datasets(request):
     try:
