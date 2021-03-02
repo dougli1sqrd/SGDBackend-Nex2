@@ -298,18 +298,16 @@ def read_dataset_data_from_file(file):
                 continue
             format_name = row.iat[0].strip()
 
-
-            
-            data.append(format_name)
-            continue
-
-        
-            
-            
             if format_name in found:
                 # error_message = error_message + "<br>" + format_name + " is in the file already.")
                 continue
             found[format_name] = 1
+
+
+            data.append(format_name)
+            continue
+            
+            
             if format_name in dataset_to_id:
                 # error_message = error_message + "<br>" + format_name + " is in the database already.")
                 continue
