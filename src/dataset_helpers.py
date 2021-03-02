@@ -332,7 +332,7 @@ def read_dataset_data_from_file(file):
                 error_message = error_message + "<br>MISSING sample_count or is_in_spell or is_in_browser data for the following line:<br>" + line
                 continue
 
-            sample_count = int(row.iat[11].strip())
+            sample_count = int(row.iat[11])
             is_in_spell = row.iat[12].strip()
             is_in_browser = row.iat[13].strip()
             if sample_count is None:
@@ -355,7 +355,7 @@ def read_dataset_data_from_file(file):
                 date_public = str(datetime.now()).split(" ")[0]
             channel_count = None
             if row.iat[10]:
-                channel_count = int(row.iat[10].strip())
+                channel_count = int(row.iat[10])
 
             file_id = None
             if row.iat[19]:
