@@ -289,8 +289,6 @@ def read_dataset_data_from_file(file):
         error_message = ''
         
         df = pd.read_csv(file, sep='\t')
-
-        return [df, ""]
     
         # old_datasets = []
         found = {}
@@ -299,6 +297,15 @@ def read_dataset_data_from_file(file):
             if index == 0 and row.iat[0].lower().startswith('dataset'):
                 continue
             format_name = row.iat[0].strip()
+
+
+            
+            data.append(format_name)
+            continue
+
+        
+            
+            
             if format_name in found:
                 # error_message = error_message + "<br>" + format_name + " is in the file already.")
                 continue
