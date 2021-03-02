@@ -296,7 +296,7 @@ def read_dataset_data_from_file(file):
         for index, row in df.iterrows(): 
             if index == 0 and row.iat[0].lower().startswith('dataset'):
                 continue
-            format_name = row.iat[0].strip()
+            format_name = row.iat[0]
 
             if format_name in found:
                 # error_message = error_message + "<br>" + format_name + " is in the file already.")
@@ -314,11 +314,11 @@ def read_dataset_data_from_file(file):
             if dbxref_id != format_name and len(dbxref_id) > 40:
                 dbxref_id = format_name
 
-            obj_url = row.iat[20].strip()
-            obj_type = row.iat[21].strip()
+            obj_url = row.iat[20]
+            obj_type = row.iat[21]
 
-            display_name = row.iat[1].strip()
-            source = row.iat[2].strip()
+            display_name = row.iat[1]
+            source = row.iat[2]
             if source == 'lab website':
                 source = 'Lab website'
             if source not in ['GEO', 'ArrayExpress', 'Lab website']:
@@ -333,8 +333,8 @@ def read_dataset_data_from_file(file):
                 continue
 
             sample_count = int(row.iat[11])
-            is_in_spell = row.iat[12].strip()
-            is_in_browser = row.iat[13].strip()
+            is_in_spell = row.iat[12]
+            is_in_browser = row.iat[13]
             if sample_count is None:
                 error_message = error_message + "<br>The sample_count column is None:<br>" + line
                 continue
@@ -359,7 +359,7 @@ def read_dataset_data_from_file(file):
 
             file_id = None
             if row.iat[19]:
-                file_id = file_to_id.get(row.iat[19].strip())
+                file_id = file_to_id.get(row.iat[19])
                 if file_id is None:
                     error_message = error_message + "<br>The file display_name: " + row.iat[19] + " is not in the database"
                     continue
@@ -375,9 +375,9 @@ def read_dataset_data_from_file(file):
                 continue
 
             reference_ids = []
-            pmidStr = row.iat[18].strip().replace('|', '')
+            pmidStr = row.iat[18].replace('|', '')
             if pmidStr.isdigit():
-                pmids = row.iat[18].strip().replace(" ", "").split("|")
+                pmids = row.iat[18].replace(" ", "").split("|")
                 for pmid in pmids:
                     reference_id = pmid_to_reference_id.get(int(pmid))
                     if reference_id is None:
@@ -385,17 +385,17 @@ def read_dataset_data_from_file(file):
                         continue
                     reference_ids.append(reference_id)
 
-            keywords = pieces[17].strip(),replace('"', '')
+            keywords = pieces[17],replace('"', '')
             keyword_ids = []
             for keyword in keywords:
-                keyword = keyword.strip()
+                keyword = keyword
                 keyword_id = keyword_to_id.get(keyword)
                 if keyword_id is None:
                     error_message = error_message + "<br>The keyword: '" + keyword + "' is not in the database."
                     continue
                 keyword_ids.append(keyword_id)
             
-            coll_institution = row.iat[16].strip().replace('"', '')
+            coll_institution = row.iat[16].replace('"', '')
             if len(coll_institution) > 100:
                 coll_institution = coll_institution.replace("National Institute of Environmental Health Sciences", "NIEHS")
                 if coll_institution.startswith('Department'):
@@ -403,7 +403,7 @@ def read_dataset_data_from_file(file):
                     items.pop(0)
                     coll_institution = ', '.join(items)
 
-            lab_name = row.iat[15].strip().replace('"', '')
+            lab_name = row.iat[15].replace('"', '')
             coll_display_name = lab_name
             name = lab_name.split(' ')
             lab_name = name[0]
@@ -545,7 +545,7 @@ def read_dataset_sample_data_from_file(file):
         for i, row in df.iterrows():
             if i == 0 and row.iat[0].lower().startswith('dataset'):
                 continue
-            dataset_format_name = row.iat[0].strip()
+            dataset_format_name = row.iat[0]
             if dataset_format_name not in format_name_to_dataset_id_src:
                 error_message = error_message + "<br>The dataset: " + dataset_format_name + " is not in DATASET table."
                 continue
@@ -846,7 +846,7 @@ def update_dataset(request):
             for kw in all_file_kw:
                 keywords_file_db[kw.keyword.display_name.upper()] = kw.keyword_id
             for kw in kws:
-                kw = kw.strip()
+                kw = kw
                 if kw == '':
                     continue
                 if kw.upper() in keywords_file_db:
