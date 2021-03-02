@@ -43,11 +43,13 @@ class LoadDataset extends Component {
       }); 
       return(
         <div className='row'>
-          <div>
+          <div className='columns medium-4 small-4'>
             <ul>{filenames}</ul>
             <a onClick={this.handleClear.bind(this)}>Clear File(s)</a>
           </div>
-          <div><strong>It will take a while to load data into database...</strong></div>
+          <div className='columns medium-8 small-8'>
+            It will take a while to load data into database...
+          </div>
         </div>
       );
     }	
