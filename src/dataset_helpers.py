@@ -389,7 +389,7 @@ def read_dataset_data_from_file(file):
             keywords = str(row.iat[17]).replace('"', '').split('|')
             keyword_ids = []
             for keyword in keywords:
-                if str(keyword) == 'nan':
+                if str(keyword) == 'nan' or keyword == '':
                     continue
                 keyword_id = keyword_to_id.get(keyword)
                 if keyword_id is None:
