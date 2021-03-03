@@ -455,10 +455,13 @@ def insert_datasets(curator_session, CREATED_BY, data):
     
         # dataset table
         parent_dataset_id = None
-        dataset_id = insert_dataset(curator_session, CREATED_BY, x, parent_dataset_id)
-        
-        if !str(dataset_id).isdigit():
-            return dataset_id
+        check_code = insert_dataset(curator_session, CREATED_BY, x, parent_dataset_id)
+
+        dataset_id = None
+        if str(dataset_id).isdigit():
+            dataset_id = check_code
+        else:
+            return check_code
         
         dataset_added = dataset_added + 1
         
@@ -518,11 +521,12 @@ def load_dataset(request):
     
         dataset_added = insert_datasets(curator_session, CREATED_BY, data)
 
-        if !str(dataset_added).isdigit():
-            return HTTPBadRequest(body=json.dumps({'error': str(dataset_added)}), content_type='text/json') 
+        success_message = ''
+        if str(dataset_added).isdigit():
+            success_message = "Total " + str(dataset_added) + " row(s) from " + filename + " have been added into dataset and its related tables." 
+        else:
+            return HTTPBadRequest(body=json.dumps({'error': str(dataset_added)}), content_type='text/json')
         
-        success_message = "Total " + str(dataset_added) + " row(s) from " + filename + " have been added into dataset and its related tables." 
-                        
         transaction.commit()
         return HTTPOk(body=json.dumps({'success': success_message, 'dataset': "DATASET"}), content_type='text/json')
     except Exception as e:
