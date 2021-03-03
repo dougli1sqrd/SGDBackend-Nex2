@@ -300,11 +300,15 @@ def read_dataset_data_from_file(file):
                    
             format_name = row.iat[0].strip()
 
+            data.append("BEFORE: "+format_name)
+            
             if index == 0 and format_name.lower().startswith('dataset'):
                 continue
 
-            return [format_name, error_message]
-            
+            data.append("AFTER: " + format_name)
+
+            continue
+        
             if format_name in found:
                 # error_message = error_message + "<br>" + format_name + " is in the file already.")
                 continue
@@ -523,7 +527,12 @@ def load_dataset(request):
         if error_message != '':
             return HTTPBadRequest(body=json.dumps({'error': error_message}), content_type='text/json') 
 
-        # return HTTPBadRequest(body=json.dumps({'error': str(data)}), content_type='text/json')
+
+        
+        return HTTPBadRequest(body=json.dumps({'error': str(data)}), content_type='text/json')
+
+
+
     
         dataset_added = insert_datasets(curator_session, CREATED_BY, data)
 
