@@ -583,7 +583,7 @@ def read_dataset_sample_data_from_file(file):
                 entry['biosample'] = row.iat[5]
             if str(row.iat[7]) != 'nan':
                 entry['strain_name'] = row.iat[7]
-            if str(row.iat[9]) != 'nan':
+            if len(df.columns) == 10 and str(row.iat[9]) != 'nan':
                 taxonomy_id = taxid_to_taxonomy_id.get("TAX:"+row.iat[9])
                 if taxonomy_id is None:
                     error_message = error_message + "<br>The taxid = " + row.iat[9] + " for: " + dataset_format_name + " is not in TAXONOMY table."
