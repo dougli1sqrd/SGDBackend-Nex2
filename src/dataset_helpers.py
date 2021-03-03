@@ -566,13 +566,15 @@ def read_dataset_sample_data_from_file(file):
                 error_message = error_message + "<br>The dataset: " + dataset_format_name + " is not in DATASET table."
                 continue
 
+            ## good so far
+
+            (dataset_id, source_id) = format_name_to_dataset_id_src[dataset_format_name]
+            display_name = str(row.iat[1]).replace('"', '')
+
 
             continue
 
-        
             
-            (dataset_id, source_id) = format_name_to_dataset_id_src[dataset_format_name]
-            display_name = str(row.iat[1]).replace('"', '')
             sample_order = row.iat[8]
             if str(sample_order) == 'nan':
                 error_message = error_message + "<br>Missing sample order for one of the sample for dataset: " + dataset_format_name 
