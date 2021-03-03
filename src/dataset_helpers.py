@@ -297,8 +297,8 @@ def read_dataset_data_from_file(file):
         found = {}
         data = []        
         for index, row in df.iterrows(): 
-            if index == 0 and row.iat[0].lower().startswith('dataset'):
-                continue
+            # if index == 0 and row.iat[0].lower().startswith('dataset'):
+            #    continue
             format_name = row.iat[0].strip()
 
             if format_name in found:
@@ -510,8 +510,7 @@ def load_dataset(request):
         if fileObj != '':
             file = fileObj.file
             filename = fileObj.filename
-
-        fileObj = request.params.get('file')
+      fileObj = request.params.get('file')
 
         if file is None or filename is None:
             return HTTPBadRequest(body=json.dumps({'error': "No dataset file is passed in."}), content_type='text/json')
@@ -556,8 +555,8 @@ def read_dataset_sample_data_from_file(file):
         df = pd.read_csv(file, sep='\t')
         
         for i, row in df.iterrows():
-            if i == 0 and row.iat[0].lower().startswith('dataset'):
-                continue
+            # if i == 0 and row.iat[0].lower().startswith('dataset'):
+            #    continue
             dataset_format_name = row.iat[0]
             if dataset_format_name not in format_name_to_dataset_id_src:
                 error_message = error_message + "<br>The dataset: " + dataset_format_name + " is not in DATASET table."
