@@ -569,10 +569,14 @@ def read_dataset_sample_data_from_file(file):
             ## good so far
 
             (dataset_id, source_id) = format_name_to_dataset_id_src[dataset_format_name]
-            display_name = str(row.iat[1]).replace('"', '')
 
 
             continue
+
+        
+            display_name = str(row.iat[1]).replace('"', '')
+
+
 
             
             sample_order = row.iat[8]
