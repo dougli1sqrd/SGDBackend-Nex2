@@ -337,17 +337,15 @@ def read_dataset_data_from_file(file):
             sample_count = int(row.iat[11])
             is_in_spell = row.iat[12]
             is_in_browser = row.iat[13]
-            if str(is_in_spell) == 'nan':
-                error_message = error_message + "<br>The is_in_spell column is None:<br>" + line
-                continue
-            elif int(is_in_spell) >= 1:
+            
+            if int(is_in_spell) >= 1:
                 is_in_spell = '1'
-            if str(is_in_browser) == 'nan':
-                error_message = error_message + "<br>The is_in_browser column is None:<br>" + line
-                continue
-            elif int(is_in_browser) >= 1:
+            else:
+                is_in_spell = '0'
+            if int(is_in_browser) >= 1:
                 is_in_browser = '1'
-                
+            else:
+                is_in_browser = '0'
             date_public = row.iat[5]
             if str(date_public) == 'nan':
                 # no date provided
@@ -458,18 +456,10 @@ def insert_datasets(curator_session, CREATED_BY, data):
         # dataset table
         parent_dataset_id = None
         dataset_id = insert_dataset(curator_session, CREATED_BY, x, parent_dataset_id)
-
-
-
         
-        return dataset_id
-
-
-
-    
+        if !str(dataset_id).isdigit():
+            return dataset_id
         
-        if dataset_id == -1:
-            continue
         dataset_added = dataset_added + 1
         
         # dataset_file
@@ -528,7 +518,8 @@ def load_dataset(request):
     
         dataset_added = insert_datasets(curator_session, CREATED_BY, data)
 
-        return HTTPBadRequest(body=json.dumps({'error': str(dataset_added)}), content_type='text/json') 
+        if !str(dataset_added).isdigit():
+            return HTTPBadRequest(body=json.dumps({'error': str(dataset_added)}), content_type='text/json') 
         
         success_message = "Total " + str(dataset_added) + " row(s) from " + filename + " have been added into dataset and its related tables." 
                         
