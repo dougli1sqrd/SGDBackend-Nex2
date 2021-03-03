@@ -565,7 +565,9 @@ def read_dataset_sample_data_from_file(file):
                 found_missing_dataset[dataset_format_name] = 1
                 error_message = error_message + "<br>The dataset: " + dataset_format_name + " is not in DATASET table."
                 continue
-
+            elif dataset_format_name not in format_name_to_dataset_id_src:
+                continue
+            
             ## good so far
 
             ## the following is the problematic line
