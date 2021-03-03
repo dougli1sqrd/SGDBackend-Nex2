@@ -454,6 +454,8 @@ def insert_datasets(curator_session, CREATED_BY, data):
     dataset_added = 0
     for x in data:
 
+        return x
+    
         # dataset table
         parent_dataset_id = None
         dataset_id = insert_dataset(curator_session, CREATED_BY, x, parent_dataset_id)
@@ -518,6 +520,8 @@ def load_dataset(request):
     
         dataset_added = insert_datasets(curator_session, CREATED_BY, data)
 
+        return HTTPBadRequest(body=json.dumps({'error': str(dataset_added)}), content_type='text/json') 
+        
         success_message = "Total " + str(dataset_added) + " row(s) from " + filename + " have been added into dataset and its related tables." 
                         
         transaction.commit()
