@@ -558,7 +558,7 @@ def read_dataset_sample_data_from_file(file):
         for i, row in df.iterrows():
             
             dataset_format_name = row.iat[0]
-            if i == 0 and dataset_format_name.lower().startswith('dataset'):
+            if i == 0 and dataset_format_name.upper().startswith('DATASET'):
                 continue
             
             if dataset_format_name not in found_missing_dataset and dataset_format_name not in format_name_to_dataset_id_src:
@@ -568,8 +568,13 @@ def read_dataset_sample_data_from_file(file):
 
             ## good so far
 
-            (dataset_id, source_id) = format_name_to_dataset_id_src[dataset_format_name]
-
+            ## the following is the problematic line
+            dataset_id = None
+            source_id = None
+            if dataset_format_name in format_name_to_dataset_id_src:
+                (dataset_id, source_id) = format_name_to_dataset_id_src[dataset_format_name]
+            else:
+                error_message = error_message + "<br>The dataset format_name = " + dataset_format_name + " and source_id is not in DATASET table."
 
             continue
 
