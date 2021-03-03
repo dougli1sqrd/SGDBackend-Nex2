@@ -297,10 +297,11 @@ def read_dataset_data_from_file(file):
         found = {}
         data = []        
         for index, row in df.iterrows(): 
-            # if index == 0 and row.iat[0].lower().startswith('dataset'):
-            #    continue
+                   
             format_name = row.iat[0].strip()
-
+            if i == 0 and format_name.lower().startswith('dataset'):
+                continue
+            
             if format_name in found:
                 # error_message = error_message + "<br>" + format_name + " is in the file already.")
                 continue
@@ -551,16 +552,22 @@ def read_dataset_sample_data_from_file(file):
     
         data = []
         error_message = ''
-
+        found_dataset = {}
+        
         df = pd.read_csv(file, sep='\t')
         
         for i, row in df.iterrows():
-            # if i == 0 and row.iat[0].lower().startswith('dataset'):
-            #    continue
+            
             dataset_format_name = row.iat[0]
-            if dataset_format_name not in format_name_to_dataset_id_src:
+            if i == 0 and dataset_format_name.lower().startswith('dataset'):
+                continue
+            
+            if dataset_format_name not in found_dataset and dataset_format_name not in format_name_to_dataset_id_src:
                 error_message = error_message + "<br>The dataset: " + dataset_format_name + " is not in DATASET table."
                 continue
+            
+            found_dataset[dataset_format_name] = 1
+            
             (dataset_id, source_id) = format_name_to_dataset_id_src[dataset_format_name]
             display_name = str(row.iat[1]).replace('"', '')
             sample_order = row.iat[8]
