@@ -458,7 +458,7 @@ def insert_datasets(curator_session, CREATED_BY, data):
         check_code = insert_dataset(curator_session, CREATED_BY, x, parent_dataset_id)
 
         dataset_id = None
-        if str(dataset_id).isdigit():
+        if str(check_code).isdigit():
             dataset_id = check_code
         else:
             return check_code
