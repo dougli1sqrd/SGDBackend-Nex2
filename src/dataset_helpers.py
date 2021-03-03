@@ -303,10 +303,6 @@ def read_dataset_data_from_file(file):
             # if index == 0 and format_name.lower().startswith('dataset'):
             #    continue
 
-            if index == 0:
-                return [[format_name.lower()], error_message]
-
-            
             if format_name in found:
                 # error_message = error_message + "<br>" + format_name + " is in the file already.")
                 continue
