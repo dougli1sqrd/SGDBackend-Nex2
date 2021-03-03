@@ -565,14 +565,7 @@ def read_dataset_sample_data_from_file(file):
                 found_missing_dataset[dataset_format_name] = 1
                 error_message = error_message + "<br>The dataset: " + dataset_format_name + " is not in DATASET table."
                 continue
-
-
-            
-            data.append(dataset_format_name)
-            continue
-
-        
-            
+    
             (dataset_id, source_id) = format_name_to_dataset_id_src[dataset_format_name]
             display_name = str(row.iat[1]).replace('"', '')
             sample_order = row.iat[8]
