@@ -583,6 +583,13 @@ def read_dataset_sample_data_from_file(file):
                       "display_name": display_name,
                       "sample_order": sample_order,
                       "description": description }
+
+
+
+            continue
+
+        
+            
             if str(row.iat[5]) != 'nan':
                 entry['biosample'] = row.iat[5]
             if str(row.iat[7]) != 'nan':
