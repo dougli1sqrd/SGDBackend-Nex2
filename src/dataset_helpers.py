@@ -542,9 +542,9 @@ def load_dataset(request):
 def read_dataset_sample_data_from_file(file):
 
     try:
-        format_name_to_dataset_id_src = dict([(x.format_name, (x.dataset_id, x.source_id)) for x in nex_session.query(Dataset).all()])
-        taxid_to_taxonomy_id = dict([(x.taxid, x.taxonomy_id) for x in nex_session.query(Taxonomy).all()])
-        format_name_to_datasetsample_id = dict([(x.format_name, x.datasetsample_id) for x in nex_session.query(Datasetsample).all()])
+        format_name_to_dataset_id_src = dict([(x.format_name, (x.dataset_id, x.source_id)) for x in DBSession.query(Dataset).all()])
+        taxid_to_taxonomy_id = dict([(x.taxid, x.taxonomy_id) for x in DBSession.query(Taxonomy).all()])
+        format_name_to_datasetsample_id = dict([(x.format_name, x.datasetsample_id) for x in DBSession.query(Datasetsample).all()])
 
         format_name2display_name = {}
         dataset2index = {}
@@ -675,7 +675,7 @@ def load_datasetsample(request):
     finally:
         if curator_session:
             curator_session.remove()
-           
+            
 def update_dataset(request):
 
     try:
