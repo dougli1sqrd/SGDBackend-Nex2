@@ -299,8 +299,13 @@ def read_dataset_data_from_file(file):
         for index, row in df.iterrows(): 
                    
             format_name = row.iat[0].strip()
-            if index == 0 and format_name.lower().startswith('dataset'):
-                continue
+
+            # if index == 0 and format_name.lower().startswith('dataset'):
+            #    continue
+
+            if index == 0:
+                return [[format_name.lower()], error_message]
+
             
             if format_name in found:
                 # error_message = error_message + "<br>" + format_name + " is in the file already.")
@@ -578,13 +583,7 @@ def read_dataset_sample_data_from_file(file):
             else:
                 error_message = error_message + "<br>The dataset format_name = " + dataset_format_name + " and source_id is not in DATASET table."
 
-            continue
-
-        
             display_name = str(row.iat[1]).replace('"', '')
-
-
-
             
             sample_order = row.iat[8]
             if str(sample_order) == 'nan':
