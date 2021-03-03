@@ -461,7 +461,10 @@ def insert_datasets(curator_session, CREATED_BY, data):
         if str(check_code).isdigit():
             dataset_id = check_code
         else:
-            return check_code
+            if dataset_added > 0:
+                return "Total " + str(dataset_added) + " dataset rows has been added into database. Now an error occurred. See below" + check_code
+            else:
+                return check_code
         
         dataset_added = dataset_added + 1
         
@@ -559,29 +562,34 @@ def read_dataset_sample_data_from_file(file):
                 error_message = error_message + "<br>The dataset: " + dataset_format_name + " is not in DATASET table."
                 continue
             (dataset_id, source_id) = format_name_to_dataset_id_src[dataset_format_name]
-            display_name = row.iat[1].replace('"', '')
+            display_name = str(row.iat[1]).replace('"', '')
+            sample_order = row.iat[8]
+            if str(sample_order) == 'nan':
+                error_message = error_message + "<br>Missing sample order for one of the sample for dataset: " + dataset_format_name 
+                continue
+            sample_order = int(sample_order)
             description = ""
-            if row.iat[2] != '':
+            if str(row.iat[2]) != 'nan':
                 description = row.iat[2]
                 if len(description) > 500:
                     description = display_name
             entry = { "source_id": source_id,
                       "dataset_id": dataset_id,
                       "display_name": display_name,
-                      "sample_order": int(row.iat[8]),
+                      "sample_order": sample_order,
                       "description": description }
-            if row.iat[5] != '':
+            if str(row.iat[5]) != 'nan':
                 entry['biosample'] = row.iat[5]
-            if row.iat[7] != '':
+            if str(row.iat[7]) != 'nan':
                 entry['strain_name'] = row.iat[7]
-            if row.iat[9] != '':
+            if str(row.iat[9]) != 'nan':
                 taxonomy_id = taxid_to_taxonomy_id.get("TAX:"+row.iat[9])
                 if taxonomy_id is None:
                     error_message = error_message + "<br>The taxid = " + row.iat[9] + " for: " + dataset_format_name + " is not in TAXONOMY table."
                 else:
                     entry['taxonomy_id'] = taxonomy_id
-            GSM = row.iat[3]
-            if GSM == '':
+            GSM = str(row.iat[3])
+            if GSM == 'nan':
                 index = dataset2index.get(dataset_format_name, 0) + 1
                 entry['format_name'] = dataset_format_name + "_sample_" + str(index)
                 if entry['format_name'] in format_name_to_datasetsample_id:
@@ -590,7 +598,7 @@ def read_dataset_sample_data_from_file(file):
                 dataset2index[dataset_format_name] = index
                 entry['obj_url'] = "/datasetsample/" + entry['format_name']
             else:
-                entry['dbxref_type'] = row.iat[4]
+                entry['dbxref_type'] = str(row.iat[4])
                 if format_name2display_name.get(GSM):
                     error_message = error_message + "<br>The format_name: " + GSM + " has been used for other sample " + format_name2display_name.get(GSM)
                     continue
@@ -667,7 +675,7 @@ def load_datasetsample(request):
     finally:
         if curator_session:
             curator_session.remove()
-            
+           
 def update_dataset(request):
 
     try:
