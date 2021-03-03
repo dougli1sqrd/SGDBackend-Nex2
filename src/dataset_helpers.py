@@ -11,7 +11,8 @@ import math
 import mimetypes
 from src.models import DBSession, Dataset, Datasetsample, Datasettrack, Datasetlab, DatasetFile, \
                        DatasetKeyword, DatasetReference, DatasetUrl, Referencedbentity, Source,\
-                       Filedbentity, FileKeyword, Colleague, Keyword, Expressionannotation, Obi
+                       Filedbentity, FileKeyword, Colleague, Keyword, Expressionannotation, Obi,\
+                       Taxonomy
 from src.curation_helpers import get_curator_session
 from src.metadata_helpers import insert_file_keyword, insert_dataset_keyword
 from src.helpers import file_upload_to_dict
