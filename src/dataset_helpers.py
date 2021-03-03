@@ -102,7 +102,8 @@ def insert_dataset(curator_session, CREATED_BY, x, parent_dataset_id):
         transaction.abort()
         if curator_session:
             curator_session.rollback()
-        return -1
+        # return -1
+        return str(e)
     
 def get_pmids(dataset_id):
     
@@ -457,11 +458,7 @@ def insert_datasets(curator_session, CREATED_BY, data):
         # dataset table
         parent_dataset_id = None
         dataset_id = insert_dataset(curator_session, CREATED_BY, x, parent_dataset_id)
-
-        return dataset_id
-
-    
-        
+     
         if dataset_id == -1:
             continue
         dataset_added = dataset_added + 1
