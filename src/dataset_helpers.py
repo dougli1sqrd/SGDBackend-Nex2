@@ -511,8 +511,7 @@ def load_dataset(request):
         if fileObj != '':
             file = fileObj.file
             filename = fileObj.filename
-      fileObj = request.params.get('file')
-
+            
         if file is None or filename is None:
             return HTTPBadRequest(body=json.dumps({'error': "No dataset file is passed in."}), content_type='text/json')
 
