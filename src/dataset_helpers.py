@@ -299,7 +299,7 @@ def read_dataset_data_from_file(file):
         for index, row in df.iterrows(): 
                    
             format_name = row.iat[0].strip()
-            if i == 0 and format_name.lower().startswith('dataset'):
+            if index == 0 and format_name.lower().startswith('dataset'):
                 continue
             
             if format_name in found:
