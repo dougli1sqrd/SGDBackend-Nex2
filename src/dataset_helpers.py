@@ -338,11 +338,11 @@ def read_dataset_data_from_file(file):
             is_in_spell = row.iat[12]
             is_in_browser = row.iat[13]
             
-            if int(is_in_spell) >= 1:
+            if is_in_spell and int(is_in_spell) >= 1:
                 is_in_spell = '1'
             else:
                 is_in_spell = '0'
-            if int(is_in_browser) >= 1:
+            if is_in_browser and int(is_in_browser) >= 1:
                 is_in_browser = '1'
             else:
                 is_in_browser = '0'
