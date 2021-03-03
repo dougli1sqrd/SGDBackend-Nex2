@@ -567,7 +567,11 @@ def read_dataset_sample_data_from_file(file):
                 continue
 
 
-            return [data, error_message]
+            
+            data.append(dataset_format_name)
+            continue
+
+        
             
             (dataset_id, source_id) = format_name_to_dataset_id_src[dataset_format_name]
             display_name = str(row.iat[1]).replace('"', '')
@@ -670,14 +674,6 @@ def load_datasetsample(request):
         if error_message != '':
             return HTTPBadRequest(body=json.dumps({'error': error_message}), content_type='text/json')
 
-
-
-        
-        return HTTPBadRequest(body=json.dumps({'error': "Hello"}), content_type='text/json')
-        
-
-    
-        
         insert_dataset_samples(curator_session, CREATED_BY, data)
 
         sample_added = len(data)
