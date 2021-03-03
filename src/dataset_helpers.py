@@ -663,6 +663,11 @@ def load_datasetsample(request):
         if error_message != '':
             return HTTPBadRequest(body=json.dumps({'error': error_message}), content_type='text/json')
 
+        
+        return HTTPBadRequest(body=json.dumps({'error': "Hello"}), content_type='text/json')
+        
+
+        
         insert_dataset_samples(curator_session, CREATED_BY, data)
 
         sample_added = len(data)
