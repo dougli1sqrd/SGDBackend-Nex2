@@ -565,8 +565,6 @@ def read_dataset_sample_data_from_file(file):
         for i, row in df.iterrows():
             
             dataset_format_name = row.iat[0]
-            if i == 0 and dataset_format_name.upper().startswith('DATASET'):
-                continue
             
             if dataset_format_name not in found_missing_dataset and dataset_format_name not in format_name_to_dataset_id_src:
                 found_missing_dataset[dataset_format_name] = 1
@@ -575,8 +573,6 @@ def read_dataset_sample_data_from_file(file):
             elif dataset_format_name not in format_name_to_dataset_id_src:
                 continue
             
-            ## good so far
-
             ## the following is the problematic line
             dataset_id = None
             source_id = None
