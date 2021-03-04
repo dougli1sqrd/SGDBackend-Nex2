@@ -103,12 +103,36 @@ class LoadDataset extends Component {
 
   note() {
     if (this.state.isDataset) {
-      return (<div>Please upload one or more <strong>dataset</strong> file(s). </div>);
+      return (<div>Please upload one or more <strong>dataset</strong> file(s).
+        div>A dataset file has to contain the following tab-delimited fields and the 1st line of the file is the header line:</div>
+        <div>dataset.format_name</div>
+        <div>dataset.display_name</div>
+        <div>dataset.source</div>
+        <div>dataset.dbxref_id</div>
+        <div>dataset.dbxref_type</div>
+        <div>dataset.date_public</div>
+        <div>dataset.parent_dataset_id</div>
+        <div>assay_name</div>
+        <div>dataset.assay_id(obi_id)</div>
+        <div>taxon_id</div>
+        <div>dataset.channel_count</div>
+        <div>dataset.sample_count</div>
+        <div>dataset.is_in_spell</div>
+        <div>dataset.is_in_browser</div>
+        <div>dataset_description</div>
+        <div>datasetlab.lab_name</div>
+        <div>datasetlab.lab_location</div>
+        <div>keywords(pipe-delimited)</div>
+        <div>pmids(pipe-delimited)</div>
+        <div>dbentity.display_name</div>
+        <div>dataset_url.obj_url</div>
+        <div>dataset_url.url_type</div>
+      </div>);
     }
     else {
       return (<div>
         <div>Please upload one or more <strong>dataset sample</strong> file(s).</div>
-        <div>A dataset sample file has to contain the following tab-delimited fields:</div> 
+              <div>A dataset sample file has to contain the following tab-delimited fields and the 1st line of the file is the header line:</div> 
         <div>dataset.format_name</div>	
         <div>display_name(sample_title)</div>
         <div>description</div>		
