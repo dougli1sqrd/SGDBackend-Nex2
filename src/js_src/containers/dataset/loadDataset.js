@@ -41,7 +41,7 @@ class LoadDataset extends Component {
       return 'Submit Dataset File(s)';
     }
     else {
-      return 'Submit Dataset Sample File(s)';
+      return 'Submit Sample File(s)';
     }
   }
 
@@ -49,7 +49,7 @@ class LoadDataset extends Component {
     return (
       <div>
         <div className='row'>
-          <div className='columns medium-6 small-6'>
+          <div className='columns medium-12 small-12'>
             <button type='submit' id='submit' value='0' className="button expanded" onClick={this.handleUpload.bind(this)} > {this.buttonName()} </button>
           </div>
         </div>
@@ -64,13 +64,13 @@ class LoadDataset extends Component {
       }); 
       return(
         <div className='row'>
-          <div className='columns medium-4 small-4'>
+          <div className='columns medium-6 small-6'>
             <ul>{filenames}</ul>
             <a onClick={this.handleClear.bind(this)}>Clear File(s)</a>
             <hr />
             {this.addButton()}
           </div>
-          <div className='columns medium-8 small-8'>
+          <div className='columns medium-6 small-6'>
             It will take a while to load data into database...
           </div>
         </div>
