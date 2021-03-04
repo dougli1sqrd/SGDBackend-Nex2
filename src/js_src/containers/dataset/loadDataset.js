@@ -103,8 +103,9 @@ class LoadDataset extends Component {
 
   note() {
     if (this.state.isDataset) {
-      return (<div>Please upload one or more <strong>dataset</strong> file(s).
-        div>A dataset file has to contain the following tab-delimited fields and the 1st line of the file is the header line:</div>
+      return (<div>
+        <div>Please upload one or more <strong>dataset</strong> file(s).</div>
+        <div>A dataset file has to contain the following tab-delimited fields and the 1st line of the file is the header line:</div>
         <div>dataset.format_name</div>
         <div>dataset.display_name</div>
         <div>dataset.source</div>
