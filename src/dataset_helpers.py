@@ -78,7 +78,7 @@ def insert_dataset_reference(curator_session, CREATED_BY, source_id, dataset_id,
             curator_session.rollback()
 
 
-def insert_dataset(curator_session, CREATED_BY, x, parent_dataset_id):
+def insert_dataset(curator_session, CREATED_BY, x):
 
     try:
         x = Dataset(format_name = x['format_name'],
@@ -88,7 +88,7 @@ def insert_dataset(curator_session, CREATED_BY, x, parent_dataset_id):
                     dbxref_id = x['dbxref_id'],
                     dbxref_type = x['dbxref_type'],
                     date_public = x['date_public'],
-                    parent_dataset_id = parent_dataset_id,
+                    parent_dataset_id = x['parent_dataset_id'],
                     assay_id = x['assay_id'],
                     channel_count = x['channel_count'],
                     sample_count = x['sample_count'],
@@ -299,15 +299,9 @@ def read_dataset_data_from_file(file):
         for index, row in df.iterrows(): 
                    
             format_name = row.iat[0].strip()
-
-            data.append("BEFORE: "+format_name)
             
-            if index == 0 and format_name.lower().startswith('dataset'):
-                continue
-
-            data.append("AFTER: " + format_name)
-
-            continue
+            # if index == 0 and format_name.lower().startswith('dataset'):
+            #     continue
         
             if format_name in found:
                 # error_message = error_message + "<br>" + format_name + " is in the file already.")
@@ -325,7 +319,7 @@ def read_dataset_data_from_file(file):
             if dbxref_id != format_name and len(dbxref_id) > 40:
                 dbxref_id = format_name
 
-            obj_url = row.iat[20]
+            url = row.iat[20]
             url_type = row.iat[21]
 
             display_name = row.iat[1]
@@ -427,6 +421,11 @@ def read_dataset_data_from_file(file):
             colleague_id = coll_name_institution_to_id.get((coll_display_name, coll_institution))
             if colleague_id is None:
                 colleague_id = coll_name_to_id.get(coll_display_name)
+                
+            parent_dataset_id = None
+            if str(row.iat[6]) != 'nan' and str(row.iat[6]).isdigit():
+                parent_dataset_id = int(row.iat[6])
+
             
             entry = { "source_id": source_id,
                       "format_name": format_name,
@@ -447,8 +446,9 @@ def read_dataset_data_from_file(file):
                       "keyword_ids": keyword_ids,
                       "reference_ids": reference_ids,
                       "file_id": file_id,
-                      "obj_url": obj_url,
-                      "url_type": url_type }
+                      "url": url,
+                      "url_type": url_type,
+                      "parent_dataset_id": parent_dataset_id }
             data.append(entry)
         
         return [data, error_message]
@@ -463,8 +463,7 @@ def insert_datasets(curator_session, CREATED_BY, data):
     for x in data:
     
         # dataset table
-        parent_dataset_id = None
-        check_code = insert_dataset(curator_session, CREATED_BY, x, parent_dataset_id)
+        check_code = insert_dataset(curator_session, CREATED_BY, x)
 
         dataset_id = None
         if str(check_code).isdigit():
@@ -490,8 +489,8 @@ def insert_datasets(curator_session, CREATED_BY, data):
             insert_dataset_reference(curator_session, CREATED_BY, x['source_id'], dataset_id, reference_id)
             
         # dataset_url
-        if x.get('obj_url') and x.get('url_type'):
-            urls = x.get('obj_url').split('|')
+        if x.get('url') and x.get('url_type'):
+            urls = x.get('url').split('|')
             # only one url_type is provided...                                                                                      
             type = x.get('url_type')
             for url in urls:
@@ -526,13 +525,8 @@ def load_dataset(request):
         [data, error_message] = read_dataset_data_from_file(file)    
         if error_message != '':
             return HTTPBadRequest(body=json.dumps({'error': error_message}), content_type='text/json') 
-
-
         
-        return HTTPBadRequest(body=json.dumps({'error': str(data)}), content_type='text/json')
-
-
-
+        # return HTTPBadRequest(body=json.dumps({'error': str(data)}), content_type='text/json')
     
         dataset_added = insert_datasets(curator_session, CREATED_BY, data)
 
