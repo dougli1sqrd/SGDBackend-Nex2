@@ -106,7 +106,20 @@ class LoadDataset extends Component {
       return (<div>Please upload one or more <strong>dataset</strong> file(s). </div>);
     }
     else {
-      return (<div>Please upload one or more <strong>dataset sample</strong> file(s). </div>);
+      return (<div>
+        <div>Please upload one or more <strong>dataset sample</strong> file(s).</div>
+        <div>A dataset sample file has to contain the following tab-delimited fields:</div> 
+        <div>dataset.format_name</div>	
+        <div>display_name(sample_title)</div>
+        <div>description</div>		
+        <div>dbxref_id</div>	
+        <div>dbxref_type</div>	
+        <div>biosample_name</div>	
+        <div>biosample_id</div>	
+        <div>strain_name</div>	
+        <div>sample_order</div>
+        <div>taxon_id(optional)</div>
+      </div>);
     }
   }
 
