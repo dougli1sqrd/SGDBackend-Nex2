@@ -67,6 +67,8 @@ class LoadDataset extends Component {
           <div className='columns medium-4 small-4'>
             <ul>{filenames}</ul>
             <a onClick={this.handleClear.bind(this)}>Clear File(s)</a>
+            <hr />
+            {this.addButton()}
           </div>
           <div className='columns medium-8 small-8'>
             It will take a while to load data into database...
@@ -81,7 +83,6 @@ class LoadDataset extends Component {
             <p className={style.uploadMsg}>Drop file here or click to select.</p>
             <h3 className={style.uploadIcon}><i className='fa fa-cloud-upload' /></h3>
           </Dropzone>
-          {this.addButton()}
         </div>
         <div className='columns medium-8 small-8'>
           {this.note()}
