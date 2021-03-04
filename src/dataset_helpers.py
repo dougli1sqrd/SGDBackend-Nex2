@@ -636,12 +636,11 @@ def read_dataset_sample_data_from_file(file):
         return [[], str(e)]
 
 def insert_dataset_samples(curator_session, CREATED_BY, data):
-
-    dbxref_url = ''
-    if x.get('dbxref_id'):
-        dbxref_url = DBXREF_URL + x['dbxref_id']
         
     for x in data:
+        dbxref_url = ''
+        if x.get('dbxref_id'):
+            dbxref_url = DBXREF_URL + x['dbxref_id']
         y = Datasetsample(format_name = x['format_name'],
                           display_name = x['display_name'],
                           obj_url = x['obj_url'],
