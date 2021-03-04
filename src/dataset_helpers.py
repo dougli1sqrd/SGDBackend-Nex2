@@ -393,6 +393,7 @@ def read_dataset_data_from_file(file):
             for keyword in keywords:
                 if str(keyword) == 'nan' or keyword == '':
                     continue
+                keyword = keyword.strip()
                 keyword_id = keyword_to_id.get(keyword)
                 if keyword_id is None:
                     error_message = error_message + "<br>The keyword: '" + keyword + "' is not in the database."
