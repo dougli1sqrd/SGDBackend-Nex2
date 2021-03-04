@@ -36,6 +36,27 @@ class LoadDataset extends Component {
     this.setState({ files: files });
   }
 
+  buttonName() {
+    if (this.state.isDataset) {
+      return 'Submit Dataset File(s)';
+    }
+    else {
+      return 'Submit Dataset Sample File(s)';
+    }
+  }
+
+  addButton() {
+    return (
+      <div>
+        <div className='row'>
+          <div className='columns medium-6 small-6'>
+            <button type='submit' id='submit' value='0' className="button expanded" onClick={this.handleUpload.bind(this)} > {this.buttonName()} </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+	
   renderFileDrop() {
     if(this.state.files.length){
       let filenames = this.state.files.map( (file, index) => {
@@ -60,6 +81,7 @@ class LoadDataset extends Component {
             <p className={style.uploadMsg}>Drop file here or click to select.</p>
             <h3 className={style.uploadIcon}><i className='fa fa-cloud-upload' /></h3>
           </Dropzone>
+          {this.addButton()}
         </div>
         <div className='columns medium-8 small-8'>
           {this.note()}
@@ -147,27 +169,6 @@ class LoadDataset extends Component {
       </div>);
     }
   }
-
-  buttonName() {
-    if (this.state.isDataset) {
-      return 'Load Dataset';
-    }
-    else {
-      return 'Load Dataset Sample';
-    }
-  }
-    
-  addButton() {
-    return (
-      <div>
-        <div className='row'>
-          <div className='columns medium-6 small-6'>
-            <button type='submit' id='submit' value='0' className="button expanded" onClick={this.handleUpload.bind(this)} > {this.buttonName()} </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
     
   displayForm() {
     return (
@@ -183,7 +184,6 @@ class LoadDataset extends Component {
         <form onSubmit={this.handleUpload} ref='form'>
           {this.renderFileDrop()}
           <hr />
-          {this.addButton()}
         </form>
       </div>
     );
