@@ -5133,6 +5133,7 @@ class Locusdbentity(Dbentity):
             "sequence_tab": self.has_sequence,
             "history_tab": self.has_history,
             "protein_tab": self.has_protein,
+            "homology_tab": self.has_homology,
             "disease_tab": self.has_disease
         }
 
