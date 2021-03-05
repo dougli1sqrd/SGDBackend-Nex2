@@ -5132,7 +5132,6 @@ class Locusdbentity(Dbentity):
             "regulation_tab": self.has_regulation,
             "sequence_tab": self.has_sequence,
             "history_tab": self.has_history,
-            "protein_tab": self.has_protein,
             "homology_tab": self.has_homology,
             "disease_tab": self.has_disease
         }
@@ -5179,6 +5178,7 @@ class Locusdbentity(Dbentity):
             'regulation_tab': ['regulation_details', 'regulation_graph'],
             'sequence_tab': ['neighbor_sequence_details', 'sequence_details'],
             'history_tab': [],
+            'homology_tab': ['homology_details'],
             'disease_tab': ['disease_details', 'disease_graph'],
         }
         base_url = self.get_base_url() + '/'
