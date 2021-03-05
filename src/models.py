@@ -3098,6 +3098,7 @@ class Locusdbentity(Dbentity):
     has_expression = Column(Boolean, nullable=False)
     has_regulation = Column(Boolean, nullable=False)
     has_protein = Column(Boolean, nullable=False)
+    has_homology = Column(Boolean, nullable=False)
     has_sequence_section = Column(Boolean, nullable=False)
     not_in_s288c = Column(Boolean, nullable=False)
 
