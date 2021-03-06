@@ -7014,12 +7014,21 @@ class Functionalcomplementannotation(Base):
         if reference == None:
             reference = self.reference
 
+        strain = Straindbentity.get_strains_by_taxon_id(self.taxonomy_id)
+
+        strain_background = None
+        if len(strain) == 1:
+            strain_background = strain[0].display_name
+        else:
+            strain_background =	"Other"
+            
         ## todo: add data to gene_name
     
         obj = {
             "id": self.annotation_id,
             "obj_url": self.obj_url,
             "species": map_id_species(self.dbxref_id),
+            "strain_background": strain_background,
             "date_created": self.date_created.strftime("%Y-%m-%d"),
             "direction": self.direction,
             "dbxref_id": self.dbxref_id,
@@ -12002,14 +12011,14 @@ def map_id_species(id):
     elif self.dbxref_id.startswith('MGI:'):
         return 'Mus musculus'
     elif self.dbxref_id.startswith('FB::'):
-	return 'Drosophila melanogaster'
+        return 'Drosophila melanogaster'
     elif self.dbxref_id.startswith('RGD:'):
-	return 'Rattus norvegicus'
+        return 'Rattus norvegicus'
     elif self.dbxref_id.startswith('WB:'):
-	return 'Caenorhabditis elegans'
+        return 'Caenorhabditis elegans'
     elif self.dbxref_id.startswith('SGD:'):
-	return 'Saccharomyces cerevisiae'
+        return 'Saccharomyces cerevisiae'
     elif self.dbxref_id.startswith('ZFIN:'):
-	return 'Danio rerio'
+        return 'Danio rerio'
     else:
-	return ''
+        return ''
