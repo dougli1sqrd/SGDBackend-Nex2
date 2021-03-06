@@ -12006,19 +12006,19 @@ def get_transcript_so_id():
     return so.so_id
 
 def map_id_species(id):
-    if self.dbxref_id.startswith('HGNC:'):
+    if id.startswith('HGNC:'):
         return 'Homo sapiens'
-    elif self.dbxref_id.startswith('MGI:'):
+    elif id.startswith('MGI:'):
         return 'Mus musculus'
-    elif self.dbxref_id.startswith('FB::'):
+    elif id.startswith('FB::'):
         return 'Drosophila melanogaster'
-    elif self.dbxref_id.startswith('RGD:'):
+    elif id.startswith('RGD:'):
         return 'Rattus norvegicus'
-    elif self.dbxref_id.startswith('WB:'):
+    elif id.startswith('WB:'):
         return 'Caenorhabditis elegans'
-    elif self.dbxref_id.startswith('SGD:'):
+    elif id.startswith('SGD:'):
         return 'Saccharomyces cerevisiae'
-    elif self.dbxref_id.startswith('ZFIN:'):
+    elif id.startswith('ZFIN:'):
         return 'Danio rerio'
     else:
         return ''
