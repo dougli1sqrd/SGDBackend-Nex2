@@ -7014,12 +7014,16 @@ class Functionalcomplementannotation(Base):
         if reference == None:
             reference = self.reference
 
+        ## todo: add data to gene_name
+    
         obj = {
             "id": self.annotation_id,
             "obj_url": self.obj_url,
+            "species": map_id_species(self.dbxref_id),
             "date_created": self.date_created.strftime("%Y-%m-%d"),
             "direction": self.direction,
             "dbxref_id": self.dbxref_id,
+            "gene_name": '',
             "curator_comment": self.curator_comment,
             "locus": {
                 "display_name": self.dbentity.display_name,
@@ -11991,3 +11995,21 @@ def convert_space_separated_pmids_to_list(str_pmids):
 def get_transcript_so_id():
     so = DBSession.query(So).filter_by(display_name = 'primary transcript').one_or_none()
     return so.so_id
+
+def map_id_species(id):
+    if self.dbxref_id.startswith('HGNC:'):
+        return 'Homo sapiens'
+    elif self.dbxref_id.startswith('MGI:'):
+        return 'Mus musculus'
+    elif self.dbxref_id.startswith('FB::'):
+	return 'Drosophila melanogaster'
+    elif self.dbxref_id.startswith('RGD:'):
+	return 'Rattus norvegicus'
+    elif self.dbxref_id.startswith('WB:'):
+	return 'Caenorhabditis elegans'
+    elif self.dbxref_id.startswith('SGD:'):
+	return 'Saccharomyces cerevisiae'
+    elif self.dbxref_id.startswith('ZFIN:'):
+	return 'Danio rerio'
+    else:
+	return ''
