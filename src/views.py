@@ -1196,7 +1196,24 @@ def locus_expression_graph(request):
     finally:
         if DBSession:
             DBSession.remove()
-            
+
+            	
+@view_config(route_name='locus_complement_details', renderer='json', request_method='GET')
+def locus_complement_details(request):
+    try:
+        id = extract_id_request(request, 'locus')
+        locus = get_locus_by_id(id)
+        if locus:
+            return locus.complements_to_dict()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+
+        
 @view_config(route_name='locus_literature_details', renderer='json', request_method='GET')
 def locus_literature_details(request):
     try:
