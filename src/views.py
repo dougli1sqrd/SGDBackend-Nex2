@@ -1223,8 +1223,13 @@ def locus_homolog_details(request):
         req = Request(allianceAPI)
         res = urlopen(req)
         records = json.loads(res.read().decode('utf-8'))
+
+        return records
+    
+        return HTTPOk(body=json.dumps(records), content_type="text/json")
+        
         data = []
-        for record in records['results']:
+        for record in records['results']:r
             homolog = record['homologGene']
             data.append({ 'gene_id': homolog['id'],
                           'gene_name': homolog['symbol'],
