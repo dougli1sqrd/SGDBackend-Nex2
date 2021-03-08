@@ -1230,12 +1230,13 @@ def locus_homolog_details(request):
         data = []
         for record in records['results']:
             homolog = record['homologGene']
-            data.append(homolog)
-            continue
+            #data.append(homolog)
+            #continue
             data.append({ 'gene_id': homolog['id'],
                           'gene_name': homolog['symbol'],
                           'species': homolog['spieces']['name'],
-                          'source': 'Alliance' })
+                          'source': 'Alliance',
+                          'taxonId':homolog['taxonId'] })
         return HTTPOk(body=json.dumps(data), content_type="text/json")
     
     except Exception as e:
