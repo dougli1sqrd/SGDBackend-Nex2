@@ -1226,7 +1226,9 @@ def locus_homolog_details(request):
         req = Request(allianceAPI)
         res = urlopen(req)
         records = json.loads(res.read().decode('utf-8'))
-          
+
+        return records['results']
+
         data = []
         for record in records['results']:
             homolog = record['homologGene']
@@ -1235,6 +1237,7 @@ def locus_homolog_details(request):
                           'species': homolog['spieces']['name'],
                           'source': 'Alliance' })
         return HTTPOk(body=json.dumps(data), content_type="text/json")
+    
     except Exception as e:
         log.error(e)
     finally:
