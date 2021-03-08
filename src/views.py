@@ -1218,8 +1218,8 @@ def locus_complement_details(request):
 def locus_homolog_details(request):
     try:
         sgdid = request.matchdict['id']
-        # allianceAPI = "https://www.alliancegenome.org/api/gene/SGD:" + sgdid + "/homologs?filter.stringency=all&limit=10000"
-        allianceAPI = "https://www.alliancegenome.org/api/gene/SGD:" + sgdid + "/homologs?limit=10000"
+        allianceAPI = "https://www.alliancegenome.org/api/gene/SGD:" + sgdid + "/homologs?filter.stringency=all&limit=10000"
+        # allianceAPI = "https://www.alliancegenome.org/api/gene/SGD:" + sgdid + "/homologs?limit=10000"
         req = Request(allianceAPI)
         res = urlopen(req)
         records = json.loads(res.read().decode('utf-8'))
