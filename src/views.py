@@ -1227,11 +1227,11 @@ def locus_homolog_details(request):
         res = urlopen(req)
         records = json.loads(res.read().decode('utf-8'))
 
-        return records['results']
-
         data = []
         for record in records['results']:
             homolog = record['homologGene']
+            data.append(homolog)
+            continue
             data.append({ 'gene_id': homolog['id'],
                           'gene_name': homolog['symbol'],
                           'species': homolog['spieces']['name'],
