@@ -1220,9 +1220,10 @@ def locus_homolog_details(request):
         sgdid = request.matchdict['id']
         allianceAPI = "https://www.alliancegenome.org/api/gene/SGD:" + sgdid + "/homologs?filter.stringency=all&limit=10000"
 
-        return allianceAPI = "https://www.alliancegenome.org/api/gene/SGD:" + sgdid + "/homologs?filter.stringency=all&limit=10000"
+        # allianceAPI = "https://www.alliancegenome.org/api/gene/SGD:" + sgdid + "/homologs?filter.stringency=all&limit=10000"
+        allianceAPI = "https://www.alliancegenome.org/api/gene/SGD:" + sgdid + "/homologs?limit=10000"
+        return allianceAPI
     
-        # allianceAPI = "https://www.alliancegenome.org/api/gene/SGD:" + sgdid + "/homologs?limit=10000"
         req = Request(allianceAPI)
         res = urlopen(req)
         records = json.loads(res.read().decode('utf-8'))
@@ -1232,7 +1233,7 @@ def locus_homolog_details(request):
         return HTTPOk(body=json.dumps(records), content_type="text/json")
         
         data = []
-        for record in records['results']:r
+        for record in records['results']:
             homolog = record['homologGene']
             data.append({ 'gene_id': homolog['id'],
                           'gene_name': homolog['symbol'],
