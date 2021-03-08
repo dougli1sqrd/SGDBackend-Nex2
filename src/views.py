@@ -1213,6 +1213,45 @@ def locus_complement_details(request):
         if DBSession:
             DBSession.remove()
 
+
+@view_config(route_name='locus_homolog_details', renderer='json', request_method='GET')
+def locus_homolog_details(request):
+    try:
+        sgdid = request.matchdict['id']
+        # allianceAPI = "https://www.alliancegenome.org/api/gene/SGD:" + sgdid + "/homologs?filter.stringency=all&limit=10000"
+        allianceAPI = "https://www.alliancegenome.org/api/gene/SGD:" + sgdid + "/homologs?limit=10000"
+        req = Request(allianceAPI)
+        res = urlopen(req)
+        records = json.loads(res.read().decode('utf-8'))
+        data = []
+        for record in records['results']:
+            homolog = record['homologGene']
+            data.append({ 'gene_id': homolog['id'],
+                          'gene_name': homolog['symbol'],
+                          'species': homolog['spieces']['name'],
+                          'source': 'Alliance' })
+        return HTTPOk(body=json.dumps(data), content_type="text/json")
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+
+@view_config(route_name='locus_fungal_homolog_details', renderer='json', request_method='GET')
+def locus_fungal_homolog_details(request):
+    try:
+        id = extract_id_request(request, 'locus')
+        locus = get_locus_by_id(id)
+        if locus:
+            return locus.complements_to_dict()
+        else:
+            return HTTPNotFound()
+    except Exception as e:
+        log.error(e)
+    finally:
+        if DBSession:
+            DBSession.remove()
+        
         
 @view_config(route_name='locus_literature_details', renderer='json', request_method='GET')
 def locus_literature_details(request):
