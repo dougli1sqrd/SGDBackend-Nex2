@@ -1226,8 +1226,9 @@ def locus_homolog_details(request):
         data = []
         for record in records['results']:
             homolog = record['homologGene']
-            data.append(homolog)            
-        return HTTPOk(body=json.dumps(data), content_type="text/json")
+            data.append(homolog)
+        dataSortBySpecies = sorted(data, key=lambda d: d['species']['name'])
+        return HTTPOk(body=json.dumps(dataSortBySpecies), content_type="text/json")
     except Exception as e:
         log.error(e)
     
