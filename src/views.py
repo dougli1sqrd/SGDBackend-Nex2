@@ -1237,6 +1237,11 @@ def locus_fungal_homolog_details(request):
         sgdid = request.matchdict['id']
         service = Service("https://yeastmine.yeastgenome.org/yeastmine/service")
         query = service.new_query("Gene")
+
+        
+        return query
+
+    
         query.add_view(
             "secondaryIdentifier",
             "homologues.homologue.organism.shortName",
