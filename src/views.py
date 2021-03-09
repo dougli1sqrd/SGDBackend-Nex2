@@ -1259,8 +1259,8 @@ def locus_fungal_homolog_details(request):
                           'source': row["homologues.dataSets.dataSource.name"],
                           'description': row["homologues.homologue.briefDescription"] })
         
-        dataSortByID = sorted(data, key=lambda d: d['gene_id'])
-        dataSortBySpecies = sorted(dataSortByID, key=lambda d: d['species'])
+        #dataSortByID = sorted(data, key=lambda d: d['gene_id'])
+        dataSortBySpecies = sorted(data, key=lambda d: d['species'])
         return HTTPOk(body=json.dumps(dataSortBySpecies), content_type="text/json")        
     except Exception as e:
         log.error(e)        
