@@ -1257,7 +1257,10 @@ def locus_fungal_homolog_details(request):
                           'gene_name': row["homologues.homologue.symbol"],
                           'source': row["homologues.dataSets.dataSource.name"],
                           'description': row["homologues.homologue.briefDescription"] })
-        return HTTPOk(body=json.dumps(data), content_type="text/json")        
+        
+        dataSortByID = sorted(data, key=lambda d: d['gene_id'])
+        dataSortBySpecies = sorted(dataSortByID, key=lambda d: d['species'])
+        return HTTPOk(body=json.dumps(dataSortBySpecies), content_type="text/json")        
     except Exception as e:
         log.error(e)        
         
