@@ -1234,14 +1234,10 @@ def locus_homolog_details(request):
 @view_config(route_name='locus_fungal_homolog_details', renderer='json', request_method='GET')
 def locus_fungal_homolog_details(request):
     try:
-        sgdid = request.matchdict['id']
+        ## gene name can be gene name, orf name, sgdid
+        gene_name = request.matchdict['id']
         service = Service("https://yeastmine.yeastgenome.org/yeastmine/service")
         query = service.new_query("Gene")
-
-        
-        return query
-
-    
         query.add_view(
             "secondaryIdentifier",
             "homologues.homologue.organism.shortName",
