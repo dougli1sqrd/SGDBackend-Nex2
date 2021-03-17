@@ -377,7 +377,7 @@ def read_dataset_data_from_file(file):
                 continue
 
             reference_ids = []
-            pmidStr = str(row.iat[18]).replace('|', '')
+            pmidStr = str(row.iat[18]).replace('|', '').replace(' ', '')
             if pmidStr.isdigit():
                 pmids = str(row.iat[18]).replace(" ", "").split("|")
                 for pmid in pmids:
@@ -386,7 +386,8 @@ def read_dataset_data_from_file(file):
                         error_message = error_message + "<br>The PMID: " + str(pmid) + " is not in the database."
                         continue
                     reference_ids.append(reference_id)
-
+            elif pmidStr != '':
+                error_message = error_message + "<br>The PMID: " + pmidStr + " bad PMID format."
             
             keywords = str(row.iat[17]).replace('"', '').split('|')
             keyword_ids = []
