@@ -528,12 +528,8 @@ def load_dataset(request):
         if error_message != '':
             return HTTPBadRequest(body=json.dumps({'error': error_message}), content_type='text/json') 
         
-        return HTTPBadRequest(body=json.dumps({'error': str(data)}), content_type='text/json')
+        # return HTTPBadRequest(body=json.dumps({'error': str(data)}), content_type='text/json')
 
-
-
-    
-    
         dataset_added = insert_datasets(curator_session, CREATED_BY, data)
 
         success_message = ''
