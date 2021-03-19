@@ -82,13 +82,19 @@ def update_data():
                                                  'GENOMIC', coord_version, seq_version,
                                                  genomerelease_id, start, stop,
                                                  file_header, genomicSeq)
-    
+
+        
         # update coding seq
+        coding_file_header = file_header 
+        if len(cds_data) > 1:
+            (cds_start, cds_stop, cds_seq) = cds_data[0]
+            (cds_start2, cds_stop2, cds_seq2) = cds_data[1]
+            coding_file_header = file_header0 + str(cds_start) + ".." + str(cds_stop) + "," + str(cds_start2) + ".." + str(cds_stop2) + " intron sequence removed [Genome Release 64-3-1]"
         annotation_id_coding = update_dnasequenceannotation(nex_session,
                                                  dbentity_id, taxonomy_id,
                                                  'CODING', coord_version, seq_version,
                                                  genomerelease_id, start, stop,
-                                                 file_header, codingSeq)
+                                                 coding_file_header, codingSeq)
 
         ## update proteinsequenceannotation table                                                                     
         update_proteinsequenceannotation(nex_session, dbentity_id, taxonomy_id,
@@ -102,6 +108,10 @@ def update_data():
                                                  genomerelease_id, oneKBstart, oneKBstop,
                                                  file_header, oneKBseq)
       
+        continue
+
+    
+
         ## update dnasubsequence
         ## update first cds
         (cds_start, cds_stop, cds_seq) = cds_data[0]
