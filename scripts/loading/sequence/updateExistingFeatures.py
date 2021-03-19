@@ -154,7 +154,7 @@ def update_data():
 
 def update_proteinsequenceannotation(nex_session, dbentity_id, taxonomy_id, contig_id, seq_version, genomerelease_id, file_header, seq):
 
-    print ("Update protein:", dbentity_id, taxonomy_id, contig_id, seq_version, genomerelease_id, file_header)
+    print ("Update protein:", dbentity_id, taxonomy_id, contig_id, seq_version, genomerelease_id, file_header, seq)
     
     x = nex_session.query(Proteinsequenceannotation).filter_by(dbentity_id=dbentity_id, taxonomy_id=taxonomy_id, contig_id=contig_id).one_or_none()
     if x is None:
@@ -168,7 +168,7 @@ def update_proteinsequenceannotation(nex_session, dbentity_id, taxonomy_id, cont
     
 def insert_dnasubsequence(nex_session, dbentity_id, annotation_id, display_name, so_id, genomerelease_id, coord_version, seq_version, relative_start_index, relative_end_index, contig_start_index, contig_end_index, file_header, download_filename, seq):
 
-    print ("Insert dnasubsequence: ", dbentity_id, annotation_id, display_name, so_id, genomerelease_id, coord_version, seq_version, relative_start_index, relative_end_index, contig_start_index, contig_end_index, file_header, download_filename)
+    print ("Insert dnasubsequence: ", dbentity_id, annotation_id, display_name, so_id, genomerelease_id, coord_version, seq_version, relative_start_index, relative_end_index, contig_start_index, contig_end_index, file_header, download_filename, seq)
     
     x = Dnasubsequence(dbentity_id = dbentity_id,
                        annotation_id = annotation_id,
@@ -190,7 +190,7 @@ def insert_dnasubsequence(nex_session, dbentity_id, annotation_id, display_name,
     
 def update_dnasubsequence(nex_session, dbentity_id, annotation_id, display_name, genomerelease_id, coord_version, seq_version, relative_start_index, relative_end_index, contig_start_index, contig_end_index, file_header, seq):
 
-    print ("Update dnasubsequence: ", dbentity_id, annotation_id, display_name, genomerelease_id, coord_version, seq_version, relative_start_index, relative_end_index, contig_start_index, contig_end_index, file_header)
+    print ("Update dnasubsequence: ", dbentity_id, annotation_id, display_name, genomerelease_id, coord_version, seq_version, relative_start_index, relative_end_index, contig_start_index, contig_end_index, file_header, seq)
     
     x = nex_session.query(Dnasubsequence).filter_by(dbentity_id=dbentity_id, annotation_id=annotation_id, display_name=display_name).one_or_none()
 
@@ -210,7 +210,7 @@ def update_dnasubsequence(nex_session, dbentity_id, annotation_id, display_name,
     
 def update_dnasequenceannotation(nex_session, dbentity_id, taxonomy_id, dna_type, coord_version, seq_version, genomerelease_id, start, stop, file_header, seq):
 
-    print ("Update dnasequenceannotation: ", dbentity_id, taxonomy_id, dna_type, coord_version, seq_version, genomerelease_id, start, stop, file_header)
+    print ("Update dnasequenceannotation: ", dbentity_id, taxonomy_id, dna_type, coord_version, seq_version, genomerelease_id, start, stop, file_header, seq)
     
     x = nex_session.query(Dnasequenceannotation).filter_by(taxonomy_id=taxonomy_id, dbentity_id=dbentity_id, dna_type=dna_type).one_or_none()
     if x is None:
