@@ -103,11 +103,10 @@ def update_data():
                                                  file_header, oneKBseq)
       
         ## update dnasubsequence
-        #### loop through cds_list, intron_list
         ## update first cds
         (cds_start, cds_stop, cds_seq) = cds_data[0]
-        relative_start_index = 1
-        relative_end_index = cds_stop - cds_start + 1
+        relative_start_index = cds_start - start + 1
+        relative_end_index = cds_stop - start + 1
         if gene_name == '':
             gene_name = systematic_name
         file_header = ">" + systematic_name + " " + gene_name + " CDS:" + str(cds_start) + ".." + str(cds_stop)
@@ -122,8 +121,8 @@ def update_data():
         if len(cds_data) > 1:
             so_id = so_to_id.get(display_name)
             (cds_start, cds_stop, cds_seq) = cds_data[1]
-            relative_start_index = 1
-            relative_end_index = cds_stop - cds_start + 1
+            relative_start_index = cds_start - start + 1
+            relative_end_index = cds_stop - start + 1
             if gene_name == '':
                 gene_name = systematic_name
             file_header = ">" + systematic_name + " " + gene_name + " CDS:" + str(cds_start) + ".." + str(cds_stop)
@@ -138,8 +137,8 @@ def update_data():
             (intron_start, intron_stop, intron_seq) = intron_data
             display_name = 'intron'
             so_id = so_to_id.get(display_name)
-            relative_start_index = 1
-            relative_end_index = intron_stop - intron_start + 1
+            relative_start_index = intron_start - start + 1
+            relative_end_index = intron_stop - start + 1
             file_header = ">" + systematic_name + " " + gene_name + " intron:" + str(intron_start) + ".." + str(intron_stop)
             download_filename = systematic_name + "_intron.fsa"
             insert_dnasubsequence(nex_session, dbentity_id, annotation_id,
