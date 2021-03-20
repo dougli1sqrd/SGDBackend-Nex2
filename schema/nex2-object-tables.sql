@@ -507,6 +507,7 @@ CREATE TABLE nex.datasetsample (
 	source_id bigint NOT NULL,
 	taxonomy_id bigint,
 	dataset_id bigint NOT NULL,
+	assay_id bigint NOT NULL,
 	sample_order integer NOT NULL,
 	dbxref_id varchar(40),
 	dbxref_type varchar(40),
@@ -520,6 +521,7 @@ CREATE TABLE nex.datasetsample (
 ) ;
 COMMENT ON TABLE nex.datasetsample IS 'Samples or experiments in a dataset.';
 COMMENT ON COLUMN nex.datasetsample.dataset_id IS 'FK to DATASET.DATASET_ID.';
+COMMENT ON COLUMN nex.dataset.assay_id IS 'FK to OBI.OBI_ID.';
 COMMENT ON COLUMN nex.datasetsample.date_created IS 'Date the record was entered into the database.';
 COMMENT ON COLUMN nex.datasetsample.created_by IS 'Username of the person who entered the record into the database.';
 COMMENT ON COLUMN nex.datasetsample.format_name IS 'Unique name to create download files.';

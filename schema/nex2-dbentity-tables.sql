@@ -62,6 +62,7 @@ CREATE TABLE nex.locusdbentity (
 	has_regulation boolean NOT NULL,
 	has_protein boolean NOT NULL,
     has_disease boolean NOT NULL,
+	has_homology boolean NOT NULL,
 	has_sequence_section boolean NOT NULL,
     not_in_s288c boolean NOT NULL,
 	CONSTRAINT locusdbentity_pk PRIMARY KEY (dbentity_id)
@@ -74,6 +75,7 @@ COMMENT ON COLUMN nex.locusdbentity.headline IS 'An abbreviated version of the L
 COMMENT ON COLUMN nex.locusdbentity.has_summary IS 'Has a Locus web page.';
 COMMENT ON COLUMN nex.locusdbentity.has_phenotype IS 'Has a Phenotype tab page.';
 COMMENT ON COLUMN nex.locusdbentity.has_disease IS 'Has a Disease tab page.';
+COMMENT ON COLUMN nex.locusdbentity.has_homology IS 'Has a Homology tab page.';
 COMMENT ON COLUMN nex.locusdbentity.dbentity_id IS 'Unique identifier (serial number).';
 COMMENT ON COLUMN nex.locusdbentity.has_regulation IS 'Has a Regulation tab page.';
 COMMENT ON COLUMN nex.locusdbentity.has_go IS 'Has a Gene Ontology tab page.';
@@ -992,7 +994,7 @@ COMMENT ON COLUMN nex.reference_file.file_type IS 'Distinguish between Dataset a
 COMMENT ON COLUMN nex.reference_file.created_by IS 'Username of the person who entered the record into the database.';
 COMMENT ON COLUMN nex.reference_file.source_id IS 'FK to SOURCE.SOURCE_ID.';
 COMMENT ON COLUMN nex.reference_file.reference_id IS 'FK to REFERENCEDBENTITY.DBENTITY_ID.';
-ALTER TABLE nex.reference_file ADD CONSTRAINT reference_file_uk UNIQUE (reference_id,file_id);
+ALTER TABLE nex.reference_file ADD CONSTRAINT reference_file_uk UNIQUE (reference_id,file_id, file_type);
 ALTER TABLE nex.reference_file ADD CONSTRAINT reference_file_type_ck CHECK (FILE_TYPE IN ('Dataset','Supplemental'));
 CREATE INDEX referencefile_file_fk_index ON nex.reference_file (file_id);
 CREATE INDEX referencefile_source_fk_index ON nex.reference_file (source_id);

@@ -366,6 +366,7 @@ ALTER TABLE nex.dataset_reference ADD CONSTRAINT datasetreference_source_fk FORE
 ALTER TABLE nex.datasetsample ADD CONSTRAINT datasetsample_tax_fk FOREIGN KEY (taxonomy_id) REFERENCES taxonomy(taxonomy_id) ON DELETE RESTRICT NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE nex.datasetsample ADD CONSTRAINT datasetsample_dataset_fk FOREIGN KEY (dataset_id) REFERENCES dataset(dataset_id) ON DELETE RESTRICT NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE nex.datasetsample ADD CONSTRAINT datasetsample_source_fk FOREIGN KEY (source_id) REFERENCES source(source_id) ON DELETE RESTRICT NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE nex.datasetsample ADD CONSTRAINT datasetsample_assay_fk FOREIGN KEY (assay_id) REFERENCES obi(obi_id) ON DELETE RESTRICT NOT DEFERRABLE INITIALLY IMMEDIATE;
 
 ALTER TABLE nex.datasettrack ADD CONSTRAINT datasettrack_source_fk FOREIGN KEY (source_id) REFERENCES source(source_id) ON DELETE RESTRICT NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE nex.datasettrack ADD CONSTRAINT datasettrack_dataset_fk FOREIGN KEY (dataset_id) REFERENCES dataset(dataset_id) ON DELETE RESTRICT NOT DEFERRABLE INITIALLY IMMEDIATE;
