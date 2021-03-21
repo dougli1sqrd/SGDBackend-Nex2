@@ -266,7 +266,7 @@ def add_other_features(nex_session, source_id, taxonomy_id, start, stop, systema
     if gene_name == '':
         gene_name = systematic_name
     print (">>", systematic_name, gene_name, sgdid, chr)
-    file_header0 = ">" + systematic_name + " " + gene_name + " SGDID:" + sgdid + " " + "chr" + chr + ":"
+    file_header0 = ">" + systematic_name + " " + gene_name + " SGDID:" + sgdid + ", " + "chr" + chr + ":"
     file_header = file_header0 + str(start) + ".." + str(stop) + " [Genome Release 64-3-1]"
     download_filename = systematic_name + "-genomic.fsa"
     annotation_id = insert_dnasequenceannotation(nex_session, source_id, dbentity_id,
@@ -298,7 +298,7 @@ def add_ncRNAs(nex_session, source_id, taxonomy_id, start, stop, systematic_name
         insert_locus_alias(nex_session, source_id, dbentity_id, alias)
     
     ## add GENOMIC seq into dnasequenceannotation table
-    file_header0 = ">" + systematic_name + " " + gene_name + " SGDID:" + sgdid + " " + "chr" + chr + ":"
+    file_header0 = ">" + systematic_name + " " + gene_name + " SGDID:" + sgdid + ", " + "chr" + chr + ":"
     file_header = file_header0 + str(start) + ".." + str(stop) + " [Genome Release 64-3-1]"
     download_filename = systematic_name + "-genomic.fsa"
     annotation_id = insert_dnasequenceannotation(nex_session, source_id, dbentity_id,
