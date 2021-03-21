@@ -107,10 +107,7 @@ def update_data():
                                                  taxonomy_id, '1KB', coord_version, seq_version,
                                                  genomerelease_id, oneKBstart, oneKBstop,
                                                  file_header, oneKBseq)
-      
-        continue
-
-    
+          
 
         ## update dnasubsequence
         ## update first cds
