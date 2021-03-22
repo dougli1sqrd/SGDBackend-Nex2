@@ -190,6 +190,7 @@ def insert_locusdbentity(nex_session, source_id, systematic_name, gene_name, fea
                       dbentity_status = 'Active',
                       systematic_name = systematic_name,
                       gene_name = gene_name,
+                      description = '',
                       has_summary = has_summary,
                       has_sequence = has_sequence,
                       has_history = has_history,
