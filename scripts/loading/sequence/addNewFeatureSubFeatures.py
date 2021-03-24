@@ -66,10 +66,10 @@ def add_data():
         if proteinSeq is not None and proteinSeq != proteinSeq4check:
             print ("Error: protein seq is different for ", systematic_name)
 
-        # print ("genomic_seq=", genomicSeq)
-        # print ("coding_seq=", codingSeq)
-        # print ("oneKBseq=", oneKBseq)
-        # print ("proteinSeq=", proteinSeq)
+        print (systematic_name, "genomic_seq=", genomicSeq)
+        print (systematic_name, "coding_seq=", codingSeq)
+        print (systematic_name, "oneKBseq=", oneKBseq)
+        print (systematic_name, "proteinSeq=", proteinSeq)
 
         coord_version = str(datetime.now()).split(' ')[0]
         seq_version = coord_version
@@ -152,7 +152,8 @@ def insert_locusdbentity(nex_session, source_id, systematic_name, gene_name, fea
     display_name = gene_name
     if display_name == '':
         display_name = systematic_name
-
+        gene_name = None
+    
     has_summary = '1'
     has_sequence = '1'
     has_history = '1'
@@ -190,7 +191,6 @@ def insert_locusdbentity(nex_session, source_id, systematic_name, gene_name, fea
                       dbentity_status = 'Active',
                       systematic_name = systematic_name,
                       gene_name = gene_name,
-                      description = '',
                       has_summary = has_summary,
                       has_sequence = has_sequence,
                       has_history = has_history,
@@ -326,6 +326,8 @@ def add_orfs(nex_session, source_id, taxonomy_id, start, stop, systematic_name, 
     (dbentity_id, sgdid) = insert_locusdbentity(nex_session, source_id, systematic_name,
                                                 gene_name, feature_type)
 
+
+    
     ## add GENOMIC seq into dnasequenceannotation table
     file_header0 = ">" + systematic_name + " " + gene_name + " SGDID:" + sgdid + ", " + "chr" + chr + ":"
     file_header = file_header0 + str(start) + ".." + str(stop) + " [Genome Release 64-3-1]"
