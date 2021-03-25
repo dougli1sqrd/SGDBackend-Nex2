@@ -43,8 +43,11 @@ def read_data_and_update_database(nex_session, fw):
 
     f = open(domain_file)
 
+    dbentity_id_to_data = {}
+    
     i = 0
     found = {}
+    run_date = ''
     for line in f:
         items = line.strip().split("\t")
         IDs = items[0].split('_')
@@ -60,20 +63,34 @@ def read_data_and_update_database(nex_session, fw):
             continue
         start = int(items[6])
         end = int(items[7])
-        run_time = items[10].split('-')
-        run_date = run_time[2] + '-' + run_time[1] + '-' + run_time[0]
-        key = (dbentity_id, proteindomain_id, start, end)
-        if key not in key_to_annotation and key not in found:
-            i = i + 1
-            insert_annotation(nex_session, fw, dbentity_id, proteindomain_id,
-                              source_id, taxonomy_id, start, end, run_date)
-            nex_session.commit()
-            found[key] = 1
+        if run_date == '':
+            run_time = items[10].split('-')
+            run_date = run_time[2] + '-' + run_time[1] + '-' + run_time[0]
+        
+        data = []
+        if dbentity_id in dbentity_id_to_data:
+            data = dbentity_id_to_data[dbentity_id]
+        data.append((proteindomain_id, start, end))
+        dbentity_id_to_data[dbentity_id] = data
            
     f.close()
+
+    for dbentity_id in dbentity_id_to_data:
+        newData = dbentity_id_to_data[dbentity_id]
+        oldData = []
+        for x in nex_session.query(Proteindomainannotation).filter_by(taxonomy_id=taxonomy_id, dbentity_id=dbentity_id).all():
+            oldData.append((x.proteindomain_id, x.start_index, x.end_index))
+            if (x.proteindomain_id, x.start_index, x.end_index) not in newData:
+                nex_session.delete(x)
+        for (proteindomain_id, start_index, end_index) in newData:
+            if (proteindomain_id, start_index, end_index) not in oldData:
+                insert_annotation(nex_session, fw, dbentity_id, proteindomain_id,
+                                  source_id, taxonomy_id, start_index, end_index, run_date)
+                nex_session.commit() 
     
     nex_session.commit()
 
+    
 def insert_annotation(nex_session, fw, dbentity_id, proteindomain_id, source_id, taxonomy_id, start, end, run_date):
 
     x = Proteindomainannotation(dbentity_id = dbentity_id,

@@ -96,7 +96,8 @@ def update_data():
                                                  genomerelease_id, start, stop,
                                                  coding_file_header, codingSeq)
 
-        ## update proteinsequenceannotation table                                                                     
+        ## update proteinsequenceannotation table
+        
         update_proteinsequenceannotation(nex_session, dbentity_id, taxonomy_id,
                                          contig_id, seq_version, genomerelease_id,
                                          file_header, proteinSeq4check)
@@ -210,6 +211,7 @@ def update_dnasubsequence(nex_session, dbentity_id, annotation_id, display_name,
     x.relative_start_index = relative_start_index
     x.relative_end_index = relative_end_index
     x.contig_start_index = contig_start_index
+    x.contig_end_index = contig_end_index
     x.file_header = file_header
     x.residues = seq
     nex_session.add(x)
