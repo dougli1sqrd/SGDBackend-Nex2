@@ -35,6 +35,8 @@ found = {}
 for x in nex_session.query(Dnasequenceannotation).filter_by(dna_type='GENOMIC').filter(Dnasequenceannotation.taxonomy_id.in_(taxonomy_id_list)).all():
     # if so_id_to_type[x.so_id] not in ['ORF', 'blocked reading frame', 'pseudogene']:
     #    continue
+    if x.dbentity_id not in dbentity_id_to_name:
+        continue
     name = dbentity_id_to_name[x.dbentity_id]
     if name.startswith('Y') or name.startswith('Q'):
         seqID = name + "_" + taxonomy_id_to_strain[x.taxonomy_id]
