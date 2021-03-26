@@ -318,6 +318,23 @@ def add_ncRNAs(nex_session, source_id, taxonomy_id, start, stop, systematic_name
                                                      download_filename, oneKBseq, contig_id)
     
 
+    ## add noncoding_exon into dnasubsequence
+    relative_start_index = 1
+    relative_end_index = stop - start + 1
+    if gene_name == '':
+        gene_name = systematic_name
+    file_header = ">" + systematic_name + " " + gene_name + " noncoding_exon:" + str(start) + ".." + str(stop)
+    display_name = 'noncoding_exon'
+    so = nex_session.query(So).filter_by(term_name=display_name).one_or_none()
+    so_id = so.so_id
+    download_filename = systematic_name + "_noncoding_exon.fsa"
+    insert_dnasubsequence(nex_session, dbentity_id, annotation_id,
+                          display_name, so_id, genomerelease_id,
+                          coord_version, seq_version, relative_start_index,
+                          relative_end_index, start, stop, file_header,
+                          download_filename, genomicSeq)
+
+    
 def add_orfs(nex_session, source_id, taxonomy_id, start, stop, systematic_name, gene_name, oneKBstart, oneKBstop, so_id, strand, genomicSeq, codingSeq, proteinSeq, oneKBseq, coord_version, seq_version, genomerelease_id, feature_type, contig_id, chr):
 
     print ("Add ORF: ", source_id, taxonomy_id, contig_id, start, stop, systematic_name, gene_name, oneKBstart, oneKBstop, so_id, strand, genomicSeq, codingSeq, proteinSeq, oneKBseq, coord_version, seq_version, genomerelease_id, feature_type)
