@@ -42,7 +42,7 @@ for x in nex_session.query(Dnasequenceannotation).filter_by(dna_type='GENOMIC').
         seqID = name + "_" + taxonomy_id_to_strain[x.taxonomy_id]
         if seqID in found:
             continue
-        found[seqID] = 1
+        found[seqID] = 1        
         filename = dnaDir + name + "_dna.seq"
         fw = None
         if path.exists(filename):
