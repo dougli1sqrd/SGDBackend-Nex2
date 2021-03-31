@@ -175,7 +175,6 @@ def insert_locusdbentity(nex_session, source_id, systematic_name, gene_name, fea
         has_homology = '0'
     elif feature_type != 'ORF':
         has_history = '0'
-        has_literature = '0'
         has_go = '0'
         has_phenotype = '0'
         has_interaction = '0'
