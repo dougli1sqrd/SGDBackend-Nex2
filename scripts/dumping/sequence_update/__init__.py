@@ -47,7 +47,7 @@ def generate_protein_seq_file(nex_session, taxonomy_id, dbentity_id_to_defline, 
         if x.dbentity_id not in dbentity_id_to_defline:
             continue
         fw.write(dbentity_id_to_defline[x.dbentity_id] + "\n")
-        if file_type == 'blast':
+        if file_type == 'fasta':
             fw.write(format_fasta(x.residues) + "\n")
         else:
             fw.write(x.residues + "\n")
@@ -113,7 +113,7 @@ def generate_not_feature_seq_file(nex_session, taxonomy_id, dbentity_id_to_data,
         defline = ">" + chr2letter[chr] + ":" + seqID + ", Chr " + chr + " from " + seqID + ", Genome Release " + VERSION + ", between " + prevName + " and " + name 
         
         fw.write(defline + "\n")
-        if file_type == 'blast':
+        if file_type == 'fasta':
             fw.write(format_fasta(seq) + "\n")
         else:
             fw.write(seq + "\n")
@@ -140,7 +140,7 @@ def generate_dna_seq_file(nex_session, taxonomy_id, dbentity_id_to_data, contig_
         (systematic_name, gene_name, sgdid, qualifier, desc) = dbentity_id_to_data[x.dbentity_id]
         chr = contig_id_to_chr[x.contig_id].replace('Chromosome ', 'Chr ')
         if gene_name is None:
-            if file_type == 'blast':
+            if file_type == 'fasta':
                 gene_name = systematic_name
             else:
                 gene_name = ''
@@ -161,7 +161,7 @@ def generate_dna_seq_file(nex_session, taxonomy_id, dbentity_id_to_data, contig_
         if dbentity_id_to_defline is not None:
             dbentity_id_to_defline[x.dbentity_id] = defline
         fw.write(defline + "\n")
-        if file_type ==	'blast':
+        if file_type ==	'fasta':
             fw.write(format_fasta(x.residues) + "\n")
         else:
             fw.write(x.residues + "\n")

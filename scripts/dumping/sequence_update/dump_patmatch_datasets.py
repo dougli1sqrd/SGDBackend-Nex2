@@ -15,7 +15,7 @@ oneKBFile = "scripts/dumping/sequence_update/data/patmatch/orf_genomic_1000.seq"
 proteinFile = "scripts/dumping/sequence_update/data/patmatch/orf_pep.seq"
 
 TAXON = "TAX:559292"
-FILE_TYPE = 'patmatch'
+FILE_TYPE = 'plain'
 
 def dump_data():
 

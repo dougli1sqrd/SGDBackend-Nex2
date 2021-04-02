@@ -9,7 +9,7 @@ __author__ = 'sweng66'
 genomicFile = "scripts/dumping/sequence_update/data/restrictionMapper/orf_genomic.seq"
 
 TAXON = "TAX:559292"
-FILE_TYPE = 'restmapper'
+FILE_TYPE = 'plain'
 
 def dump_data():
 
