@@ -7,10 +7,10 @@ __author__ = 'sweng66'
 
 locusFile = "scripts/dumping/sequence_update/data/patmatch/locus.txt"
 notFeatFile = "scripts/dumping/sequence_update/data/patmatch/NotFeature.dna.seq"
-codingFile = "scripts/dumping/sequence_update/data/patmatch/orf_dna.txt"
-genomicFile = "scripts/dumping/sequence_update/data/patmatch/orf_genomic.txt"
-oneKBFile = "scripts/dumping/sequence_update/data/patmatch/orf_genomic_1000.txt"
-proteinFile = "scripts/dumping/sequence_update/data/patmatch/orf_pep.txt"
+codingFile = "scripts/dumping/sequence_update/data/patmatch/orf_dna.seq"
+genomicFile = "scripts/dumping/sequence_update/data/patmatch/orf_genomic.seq"
+oneKBFile = "scripts/dumping/sequence_update/data/patmatch/orf_genomic_1000.seq"
+proteinFile = "scripts/dumping/sequence_update/data/patmatch/orf_pep.seq"
 
 TAXON = "TAX:559292"
 VERSION = '64-3-1'
