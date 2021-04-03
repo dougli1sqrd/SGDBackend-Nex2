@@ -7,22 +7,8 @@ __author__ = 'sweng66'
 
 VERSION = '64-3-1'
 
-def clean_cell(cell):
-    if cell is None:
-        return ''
-    else:
-        if isinstance(cell, (int, float)):
-            cell = str(cell)
-        cell = cell.replace('<br>', ' ')
-        result = remove_html(cell)
-        while result is not None:
-            cell = result
-            result = remove_html(cell)
-        return cell
-
 def format_fasta(seq):
 
-    # return clean_cell("\n".join([seq[i:i+60] for i in range(0, len(seq), 60)]))
     return "\n".join([seq[i:i+60] for i in range(0, len(seq), 60)])
     
 def reverse_complement(seq):
@@ -39,7 +25,7 @@ def get_chr_letter():
              'VIII': 'H', 'IX': 'I', 'X': 'J', 'XI': 'K', 'XII': 'L', 'XIII': 'M',
              'XIV': 'N', 'XV': 'O', 'XVI': 'P', 'Mito': 'Q' }
 
-def generate_protein_seq_file(nex_session, taxonomy_id, dbentity_id_to_defline, seqFile, file_type):
+def generate_protein_seq_file(nex_session, taxonomy_id, dbentity_id_to_defline, seqFile, seq_format):
 
     fw = open(seqFile, "w")
 
@@ -47,14 +33,14 @@ def generate_protein_seq_file(nex_session, taxonomy_id, dbentity_id_to_defline, 
         if x.dbentity_id not in dbentity_id_to_defline:
             continue
         fw.write(dbentity_id_to_defline[x.dbentity_id] + "\n")
-        if file_type == 'fasta':
+        if seq_format == 'fasta':
             fw.write(format_fasta(x.residues) + "\n")
         else:
             fw.write(x.residues + "\n")
 
     fw.close
 
-def generate_not_feature_seq_file(nex_session, taxonomy_id, dbentity_id_to_data, so_id_to_display_name, seqFile, file_type):
+def generate_not_feature_seq_file(nex_session, taxonomy_id, dbentity_id_to_data, so_id_to_display_name, seqFile, seq_format):
 
     fw = open(seqFile, "w")
      
@@ -70,8 +56,6 @@ def generate_not_feature_seq_file(nex_session, taxonomy_id, dbentity_id_to_data,
         if x.dbentity_id not in dbentity_id_to_data:
             continue
         type = so_id_to_display_name.get(x.so_id)
-        # if type not in ['ORF', 'ncRNA gene', 'snoRNA gene', 'snRNA gene', 'tRNA gene', 'rRNA gene', 'telomerase RNA gene']:
-        #    continue
 
         (name, gene_name, sgdid, qualifier, desc) = dbentity_id_to_data[x.dbentity_id]
         
@@ -113,7 +97,7 @@ def generate_not_feature_seq_file(nex_session, taxonomy_id, dbentity_id_to_data,
         defline = ">" + chr2letter[chr] + ":" + seqID + ", Chr " + chr + " from " + seqID + ", Genome Release " + VERSION + ", between " + prevName + " and " + name 
         
         fw.write(defline + "\n")
-        if file_type == 'fasta':
+        if seq_format == 'fasta':
             fw.write(format_fasta(seq) + "\n")
         else:
             fw.write(seq + "\n")
@@ -123,9 +107,11 @@ def generate_not_feature_seq_file(nex_session, taxonomy_id, dbentity_id_to_data,
 
     fw.close()
 
-def generate_dna_seq_file(nex_session, taxonomy_id, dbentity_id_to_data, contig_id_to_chr, so_id_to_display_name, seqFile, dna_type, file_type, dbentity_id_to_defline=None):
+def generate_dna_seq_file(nex_session, taxonomy_id, dbentity_id_to_data, contig_id_to_chr, so_id_to_display_name, seqFile, dna_type, seq_format, file_type, dbentity_id_to_defline=None):
 
-    feature_to_include = ['ORF', 'transposable element gene', 'pseudogene', 'blocked reading frame']
+    feature_to_include = ['ORF', 'transposable_element_gene', 'pseudogene', 'blocked_reading_frame']
+    if file_type == 'RNA':
+        feature_to_include = ['ncRNA_gene', 'snoRNA_gene', 'snRNA_gene', 'tRNA_gene', 'rRNA_gene', 'telomerase_RNA_gene']
     
     fw = open(seqFile, "w")
     
@@ -140,7 +126,7 @@ def generate_dna_seq_file(nex_session, taxonomy_id, dbentity_id_to_data, contig_
         (systematic_name, gene_name, sgdid, qualifier, desc) = dbentity_id_to_data[x.dbentity_id]
         chr = contig_id_to_chr[x.contig_id].replace('Chromosome ', 'Chr ')
         if gene_name is None:
-            if file_type == 'fasta':
+            if seq_format == 'fasta':
                 gene_name = systematic_name
             else:
                 gene_name = ''
@@ -155,19 +141,20 @@ def generate_dna_seq_file(nex_session, taxonomy_id, dbentity_id_to_data, contig_
         if x.strand == '-':
             defline = defline + "reverse complement, "
         if qualifier is not None:
-            defline = defline + qualifier + " ORF, "
+            defline = defline + qualifier + " " + type + ", "
+        else:
+            defline = defline + type + ", "
         if desc is not None:
             defline = defline + '"' + desc + '"'
         if dbentity_id_to_defline is not None:
             dbentity_id_to_defline[x.dbentity_id] = defline
         fw.write(defline + "\n")
-        if file_type ==	'fasta':
+        if seq_format == 'fasta':
             fw.write(format_fasta(x.residues) + "\n")
         else:
             fw.write(x.residues + "\n")
     
     fw.close()
 
-
-
-
+        
+        

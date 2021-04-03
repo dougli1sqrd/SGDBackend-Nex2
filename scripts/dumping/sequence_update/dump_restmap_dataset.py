@@ -9,7 +9,8 @@ __author__ = 'sweng66'
 genomicFile = "scripts/dumping/sequence_update/data/restrictionMapper/orf_genomic.seq"
 
 TAXON = "TAX:559292"
-FILE_TYPE = 'plain'
+SEQ_FORMAT = 'plain'
+FILE_TYPE = 'DNA'
 
 def dump_data():
 
@@ -20,12 +21,12 @@ def dump_data():
 
     dbentity_id_to_data = dict([(x.dbentity_id, (x.systematic_name, x.gene_name, x.sgdid, x.qualifier, x.description)) for x in nex_session.query(Locusdbentity).filter_by(dbentity_status = 'Active').all()])
 
-    so_id_to_display_name = dict([(x.so_id, x.display_name) for x in nex_session.query(So).all()])
+    so_id_to_display_name = dict([(x.so_id, x.term_name) for x in nex_session.query(So).all()])
     
     contig_id_to_chr = dict([(x.contig_id, x.display_name) for x in nex_session.query(Contig).filter(Contig.display_name.like('Chromosome %')).all()])
         
     generate_dna_seq_file(nex_session, taxonomy_id, dbentity_id_to_data, contig_id_to_chr,
-                          so_id_to_display_name, genomicFile, 'GENOMIC', FILE_TYPE)
+                          so_id_to_display_name, genomicFile, 'GENOMIC', SEQ_FORMAT, FILE_TYPE)
 
     nex_session.close()
 
