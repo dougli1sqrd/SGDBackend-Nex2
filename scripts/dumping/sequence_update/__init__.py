@@ -25,6 +25,16 @@ def get_chr_letter():
              'VIII': 'H', 'IX': 'I', 'X': 'J', 'XI': 'K', 'XII': 'L', 'XIII': 'M',
              'XIV': 'N', 'XV': 'O', 'XVI': 'P', 'Mito': 'Q' }
 
+def clean_up_description(desc):
+
+    desc = desc.strip().replace('"', "'").replace('Matα', 'Mata').replace('-', '-')
+    desc = desc.replace("’", "'").replace('β', 'beta').replace('μm', 'um')
+    desc = desc.replace('α-', 'alpha-')
+    
+    encoded_desc = desc.encode("ascii", "ignore")
+
+    return encoded_desc.decode()
+    
 def generate_protein_seq_file(nex_session, taxonomy_id, dbentity_id_to_defline, seqFile, seq_format):
 
     fw = open(seqFile, "w")
@@ -124,6 +134,8 @@ def generate_dna_seq_file(nex_session, taxonomy_id, dbentity_id_to_data, contig_
         if type not in feature_to_include:
             continue
         (systematic_name, gene_name, sgdid, qualifier, desc) = dbentity_id_to_data[x.dbentity_id]
+        desc = clean_up_description(desc)
+        
         chr = contig_id_to_chr[x.contig_id].replace('Chromosome ', 'Chr ')
         if gene_name is None:
             if seq_format == 'fasta':
