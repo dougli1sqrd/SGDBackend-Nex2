@@ -7,6 +7,10 @@ __author__ = 'sweng66'
 
 VERSION = '64-3-1'
 
+orf_features = ['ORF', 'transposable_element_gene', 'pseudogene', 'blocked_reading_frame']
+rna_features = ['ncRNA_gene', 'snoRNA_gene', 'snRNA_gene', 'tRNA_gene', 'rRNA_gene',
+                'telomerase_RNA_gene']
+
 def format_fasta(seq):
 
     return "\n".join([seq[i:i+60] for i in range(0, len(seq), 60)])
@@ -118,10 +122,6 @@ def generate_not_feature_seq_file(nex_session, taxonomy_id, dbentity_id_to_data,
     fw.close()
 
 def generate_dna_seq_file(nex_session, taxonomy_id, dbentity_id_to_data, contig_id_to_chr, so_id_to_display_name, seqFile, dna_type, seq_format, file_type, dbentity_id_to_defline=None):
-
-    feature_to_include = ['ORF', 'transposable_element_gene', 'pseudogene', 'blocked_reading_frame']
-    if file_type == 'RNA':
-        feature_to_include = ['ncRNA_gene', 'snoRNA_gene', 'snRNA_gene', 'tRNA_gene', 'rRNA_gene', 'telomerase_RNA_gene']
     
     fw = open(seqFile, "w")
     
@@ -130,9 +130,15 @@ def generate_dna_seq_file(nex_session, taxonomy_id, dbentity_id_to_data, contig_
             continue
         if x.dbentity_id not in dbentity_id_to_data:
             continue
+        #######
         type = so_id_to_display_name[x.so_id]
-        if type not in feature_to_include:
+        if file_type == 'other' and (type in orf_features or type in rna_features):
             continue
+        elif file_type in ['rna', 'RNA'] and type not in rna_features:
+            continue
+        elif file_type in ['orf', 'ORF'] and type not in orf_features:
+            continue
+        #######
         (systematic_name, gene_name, sgdid, qualifier, desc) = dbentity_id_to_data[x.dbentity_id]
         desc = clean_up_description(desc)
         
@@ -168,5 +174,5 @@ def generate_dna_seq_file(nex_session, taxonomy_id, dbentity_id_to_data, contig_
     
     fw.close()
 
-        
+    
         

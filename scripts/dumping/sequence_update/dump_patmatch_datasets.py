@@ -16,7 +16,7 @@ proteinFile = "scripts/dumping/sequence_update/data/patmatch/orf_pep.seq"
 
 TAXON = "TAX:559292"
 SEQ_FORMAT = 'plain'
-FILE_TYPE = 'DNA'
+FILE_TYPE = 'ORF'
 
 def dump_data():
 
