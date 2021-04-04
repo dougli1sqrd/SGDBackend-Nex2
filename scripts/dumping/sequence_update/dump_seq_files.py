@@ -116,7 +116,7 @@ def generate_dubious_none_dubious_files(allSeqFile, seqFile, dubiousSeqFile):
     isDubious = 0
     for line in f:
         if line.startswith('>'):
-            if 'Dubious ORF' in line:
+            if ', Dubious ORF, ' in line:
                 fw2.write(line)
                 isDubious = 1
             else:
