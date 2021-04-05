@@ -31,9 +31,9 @@ def get_chr_letter():
 
 def clean_up_description(desc):
 
-    desc = desc.strip().replace('"', "'").replace('Matα', 'Mata').replace('-', '-')
+    desc = desc.strip().replace('"', "'").replace('-', '-')
     desc = desc.replace("’", "'").replace('β', 'beta').replace('μm', 'um')
-    desc = desc.replace('α-', 'alpha-')
+    desc = desc.replace('α', 'alpha')
     
     encoded_desc = desc.encode("ascii", "ignore")
 
