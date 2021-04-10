@@ -138,7 +138,7 @@ def generate_dna_seq_file(nex_session, taxonomy_id, dbentity_id_to_data, contig_
         if x.dbentity_id not in dbentity_id_to_data:
             continue
         #######
-        if type_type == 'other' and x.residues == 'No sequence available.':
+        if file_type == 'other' and x.residues == 'No sequence available.':
             continue
         type = so_id_to_display_name[x.so_id]
         if file_type == 'other' and (type in orf_features or type in rna_features):
