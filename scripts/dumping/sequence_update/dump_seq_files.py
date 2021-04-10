@@ -56,9 +56,10 @@ def dump_data():
                                   so_id_to_display_name, notFeatFile, SEQ_FORMAT)
     
     dbentity_id_to_defline = {}
+    dbentity_id_list = []
     generate_dna_seq_file(nex_session, taxonomy_id, dbentity_id_to_data, contig_id_to_chr,
                           so_id_to_display_name, allCodingFile, 'CODING', SEQ_FORMAT, FILE_TYPE,
-                          dbentity_id_to_defline)
+                          dbentity_id_to_defline, dbentity_id_list)
 
     generate_dubious_none_dubious_files(allCodingFile, codingFile, dubiousCodingFile)
     
@@ -72,8 +73,8 @@ def dump_data():
 
     generate_dubious_none_dubious_files(allGenomic1KFile, genomic1KFile, dubiousGenomic1KFile)
 
-    generate_protein_seq_file(nex_session, taxonomy_id, dbentity_id_to_defline, allProteinFile,
-                              SEQ_FORMAT)
+    generate_protein_seq_file(nex_session, taxonomy_id, dbentity_id_to_defline, dbentity_id_list,
+                              allProteinFile, SEQ_FORMAT)
 
     generate_dubious_none_dubious_files(allProteinFile, proteinFile, dubiousProteinFile)
 
