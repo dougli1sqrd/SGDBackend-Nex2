@@ -39,18 +39,25 @@ def clean_up_description(desc):
 
     return encoded_desc.decode()
     
-def generate_protein_seq_file(nex_session, taxonomy_id, dbentity_id_to_defline, seqFile, seq_format):
+def generate_protein_seq_file(nex_session, taxonomy_id, dbentity_id_to_defline, dbentity_id_list, seqFile, seq_format):
 
     fw = open(seqFile, "w")
 
+    dbentity_id_to_seq = {}
     for x in nex_session.query(Proteinsequenceannotation).filter_by(taxonomy_id=taxonomy_id).all():
-        if x.dbentity_id not in dbentity_id_to_defline:
+        dbentity_id_to_seq[x.dbentity_id] = x.residues
+
+    for dbentity_id in dbentity_id_list:
+        if dbentity_id not in dbentity_id_to_defline:
             continue
-        fw.write(dbentity_id_to_defline[x.dbentity_id] + "\n")
+        if dbentity_id not in dbentity_id_to_seq:
+            continue
+        fw.write(dbentity_id_to_defline[dbentity_id] + "\n")
+        seq = dbentity_id_to_seq[dbentity_id]
         if seq_format == 'fasta':
-            fw.write(format_fasta(x.residues) + "\n")
+            fw.write(format_fasta(seq) + "\n")
         else:
-            fw.write(x.residues + "\n")
+            fw.write(seq + "\n")
 
     fw.close
 
@@ -121,7 +128,7 @@ def generate_not_feature_seq_file(nex_session, taxonomy_id, dbentity_id_to_data,
 
     fw.close()
 
-def generate_dna_seq_file(nex_session, taxonomy_id, dbentity_id_to_data, contig_id_to_chr, so_id_to_display_name, seqFile, dna_type, seq_format, file_type, dbentity_id_to_defline=None):
+def generate_dna_seq_file(nex_session, taxonomy_id, dbentity_id_to_data, contig_id_to_chr, so_id_to_display_name, seqFile, dna_type, seq_format, file_type, dbentity_id_to_defline=None, dbentity_id_list=None):
     
     fw = open(seqFile, "w")
     
@@ -131,6 +138,8 @@ def generate_dna_seq_file(nex_session, taxonomy_id, dbentity_id_to_data, contig_
         if x.dbentity_id not in dbentity_id_to_data:
             continue
         #######
+        if type_type == 'other' and x.residues == 'No sequence available.':
+            continue
         type = so_id_to_display_name[x.so_id]
         if file_type == 'other' and (type in orf_features or type in rna_features):
             continue
@@ -166,6 +175,7 @@ def generate_dna_seq_file(nex_session, taxonomy_id, dbentity_id_to_data, contig_
             defline = defline + '"' + desc + '"'
         if dbentity_id_to_defline is not None:
             dbentity_id_to_defline[x.dbentity_id] = defline
+            dbentity_id_list.append(x.dbentity_id)
         fw.write(defline + "\n")
         if seq_format == 'fasta':
             fw.write(format_fasta(x.residues) + "\n")
