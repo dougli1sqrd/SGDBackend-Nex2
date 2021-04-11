@@ -11,6 +11,15 @@ orf_features = ['ORF', 'transposable_element_gene', 'pseudogene', 'blocked_readi
 rna_features = ['ncRNA_gene', 'snoRNA_gene', 'snRNA_gene', 'tRNA_gene', 'rRNA_gene',
                 'telomerase_RNA_gene']
 
+def get_sorted_dbentity_ids(nex_session, taxonomy_id):
+
+    all_dbentity_ids = []
+
+    for x in nex_session.query(Dnasequenceannotation).filter_by(dna_type='CODING', taxonomy_id=taxonomy_id).order_by(Dnasequenceannotation.contig_id, Dnasequenceannotation.start_index, Dnasequenceannotation.end_index).all():
+        all_dbentity_ids.append(x.dbentity_id)
+
+    return all_dbentity_ids
+
 def format_fasta(seq):
 
     return "\n".join([seq[i:i+60] for i in range(0, len(seq), 60)])

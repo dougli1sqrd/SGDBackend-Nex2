@@ -2,6 +2,7 @@ import sys
 from scripts.loading.database_session import get_session
 from src.models import Locusdbentity, ProteinsequenceDetail, Proteinsequenceannotation,\
                        Dnasequenceannotation, Taxonomy
+from scripts.dumping.sequence_update import get_sorted_dbentity_ids
 
 __author__ = 'sweng66'
 
@@ -9,8 +10,8 @@ datafile = "scripts/dumping/sequence_update/data/protein/protein_properties.tab"
 
 TAXON = "TAX:559292"
 
-strains = [ 'S288C', 'CEN.PK', 'D273-10B', 'FL100', 'JK9-3d', 'RM11-1a',
-            'SEY6210', 'Sigma1278b', 'SK1', 'W303', 'X2180-1A', 'Y55' ]
+# strains = [ 'S288C', 'CEN.PK', 'D273-10B', 'FL100', 'JK9-3d', 'RM11-1a',
+#            'SEY6210', 'Sigma1278b', 'SK1', 'W303', 'X2180-1A', 'Y55' ]
 
 def dump_data():
 
@@ -38,7 +39,7 @@ def dump_data():
 
         key_to_data[dbentity_id] = data
 
-    all_dbentity_ids = get_dbentity_ids(nex_session, taxonomy_id)
+    all_dbentity_ids = get_sorted_dbentity_ids(nex_session, taxonomy_id)
     
     fw = open(datafile, "w")
 
@@ -51,17 +52,6 @@ def dump_data():
         
     nex_session.close()
     fw.close()
-
-    
-def get_dbentity_ids(nex_session, taxonomy_id):
-
-    all_dbentity_ids = []
-    
-    for x in nex_session.query(Dnasequenceannotation).filter_by(dna_type='CODING', taxonomy_id=taxonomy_id).order_by(Dnasequenceannotation.contig_id, Dnasequenceannotation.start_index, Dnasequenceannotation.end_index).all():
-        all_dbentity_ids.append(x.dbentity_id)
-        
-    return all_dbentity_ids
-        
 
 if __name__ == '__main__':
 
