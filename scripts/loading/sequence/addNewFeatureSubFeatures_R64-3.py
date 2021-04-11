@@ -56,7 +56,9 @@ def add_data():
             codingSeq = genomicSeq
             seqObj = Seq(codingSeq)
             proteinSeq = seqObj.translate()
-        
+        elif feature_type.startswith('ncRNA'):
+            codingSeq = genomicSeq
+            
         print (">"+systematic_name)
                 
         if genomicSeq != genomicSeq4check:
@@ -90,7 +92,7 @@ def add_data():
         elif feature_type.startswith('ncRNA'):
             add_ncRNAs(nex_session, source_id, taxonomy_id, start, stop,
                        systematic_name, gene_name, oneKBstart, oneKBstop,
-                       soid_to_id[soid], strand, genomicSeq, oneKBseq,
+                       soid_to_id[soid], strand, genomicSeq, codingSeq, oneKBseq,
                        coord_version, seq_version, genomerelease_id,
                        feature_type, aliases, contig_id, chr)
         elif feature_type in ['recombination enhancer', 'long terminal repeat']:
@@ -285,7 +287,7 @@ def add_other_features(nex_session, source_id, taxonomy_id, start, stop, systema
                                                      download_filename, oneKBseq, contig_id)
 
 
-def add_ncRNAs(nex_session, source_id, taxonomy_id, start, stop, systematic_name, gene_name, oneKBstart, oneKBstop, so_id, strand, genomicSeq, oneKBseq, coord_version, seq_version, genomerelease_id, feature_type, aliases, contig_id, chr):
+def add_ncRNAs(nex_session, source_id, taxonomy_id, start, stop, systematic_name, gene_name, oneKBstart, oneKBstop, so_id, strand, genomicSeq, codingSeq, oneKBseq, coord_version, seq_version, genomerelease_id, feature_type, aliases, contig_id, chr):
     
     print ("Add ncRNA: ", source_id, taxonomy_id, start, stop, systematic_name, gene_name, oneKBstart, oneKBstop, so_id, strand, genomicSeq, oneKBseq, coord_version, seq_version, genomerelease_id, feature_type)
     
@@ -306,7 +308,14 @@ def add_ncRNAs(nex_session, source_id, taxonomy_id, start, stop, systematic_name
                                                  seq_version, genomerelease_id, start,
                                                  stop, strand, file_header,
                                                  download_filename, genomicSeq, contig_id)
-    
+
+    ## add CODING seq into dnasequenceannotation table
+    download_filename = systematic_name + "-coding.fsa"
+    annotation_id_coding = insert_dnasequenceannotation(nex_session, source_id, dbentity_id,
+                                    taxonomy_id, so_id, 'CODING', coord_version, seq_version,
+                                    genomerelease_id, start, stop, strand,
+                                    file_header, download_filename, codingSeq, contig_id)
+
     ## add 1KB seq into dnasequenceannotation table
     file_header = file_header0 + str(oneKBstart) + ".." + str(oneKBstop) + " +/- 1kb [Genome Release 64-3-1]"
     download_filename = systematic_name + "-1kb.fsa"
@@ -317,6 +326,8 @@ def add_ncRNAs(nex_session, source_id, taxonomy_id, start, stop, systematic_name
                                                      download_filename, oneKBseq, contig_id)
     
 
+
+    
     ## add noncoding_exon into dnasubsequence
     relative_start_index = 1
     relative_end_index = stop - start + 1
