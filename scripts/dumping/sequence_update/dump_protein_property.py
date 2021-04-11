@@ -1,7 +1,7 @@
 import sys
 from scripts.loading.database_session import get_session
 from src.models import Locusdbentity, ProteinsequenceDetail, Proteinsequenceannotation,\
-                       Dnasequenceannotation, Taxonomy
+                       Taxonomy
 from scripts.dumping.sequence_update import get_sorted_dbentity_ids
 
 __author__ = 'sweng66'
