@@ -102,8 +102,8 @@ def add_data():
                                oneKBseq, coord_version, seq_version,
                                genomerelease_id, feature_type, contig_id, chr)
 
-    nex_session.rollback()
-    # nex_session.commit()
+    # nex_session.rollback()
+    nex_session.commit()
     
     f.close()
 
@@ -163,7 +163,7 @@ def insert_locusdbentity(nex_session, source_id, systematic_name, gene_name, fea
     has_go = '1'
     has_phenotype = '1'
     has_interaction = '1'
-    has_expression = '1'
+    has_expression = '0'
     has_regulation = '1'
     has_protein = '1'
     has_sequence_section  = '1'
@@ -172,7 +172,6 @@ def insert_locusdbentity(nex_session, source_id, systematic_name, gene_name, fea
     has_homology = '1'
                              
     if feature_type.startswith('ncRNA'):
-        has_expression = '0'
         has_protein = '0'
         has_homology = '0'
     elif feature_type != 'ORF':
@@ -180,7 +179,6 @@ def insert_locusdbentity(nex_session, source_id, systematic_name, gene_name, fea
         has_go = '0'
         has_phenotype = '0'
         has_interaction = '0'
-        has_expression = '0'
         has_regulation = '0'
         has_protein = '0'
         has_homology = '0'
