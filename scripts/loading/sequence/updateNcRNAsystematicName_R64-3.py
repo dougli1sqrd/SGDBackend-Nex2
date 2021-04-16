@@ -36,8 +36,8 @@ def update_data():
             print (old_name, new_name, x.systematic_name) 
             nex_session.add(x)
             
-    nex_session.rollback()
-    # nex_session.commit()
+    # nex_session.rollback()
+    nex_session.commit()
     nex_session.close()
         
 if __name__ == '__main__':

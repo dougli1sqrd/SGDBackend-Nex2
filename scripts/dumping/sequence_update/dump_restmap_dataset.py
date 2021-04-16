@@ -10,7 +10,7 @@ genomicFile = "scripts/dumping/sequence_update/data/restrictionMapper/orf_genomi
 
 TAXON = "TAX:559292"
 SEQ_FORMAT = 'plain'
-FILE_TYPE = 'ORF'
+FILE_TYPE = 'ALL'
 
 def dump_data():
 
@@ -33,3 +33,4 @@ def dump_data():
 if __name__ == '__main__':
 
     dump_data()
+    

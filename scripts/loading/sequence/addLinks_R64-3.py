@@ -35,8 +35,8 @@ def update_data():
             continue
         add_internal_common_links(nex_session, name, source_id, locus.dbentity_id)
         
-    nex_session.rollback()
-    # nex_session.commit()
+    # nex_session.rollback()
+    nex_session.commit()
 
     nex_session.close()
 

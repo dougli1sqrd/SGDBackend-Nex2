@@ -155,8 +155,8 @@ def update_data():
                                   relative_end_index, intron_start, intron_stop,
                                   file_header, download_filename, intron_seq)
                 
-    nex_session.rollback()
-    # nex_session.commit()
+    # nex_session.rollback()
+    nex_session.commit()
 
     f.close()
 

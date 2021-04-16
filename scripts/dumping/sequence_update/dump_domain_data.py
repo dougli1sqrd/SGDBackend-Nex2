@@ -52,7 +52,7 @@ def dump_data():
         data = []
         if x.dbentity_id in key_to_data:
             data = key_to_data[x.dbentity_id]
-        data.append(systematic_name + "\t" + str(protein_length) + "\t" + source + "\t" + domain.display_name + "\t" + domain.description + "\t" + str(x.start_index) + "\t" + str(x.end_index) + "\t" + str(x.date_of_run) + "\t" + domain.interpro_id)
+        data.append(systematic_name + "\t" + str(protein_length) + "\t" + source + "\t" + domain.display_name + "\t" + domain.description + "\t" + str(x.start_index) + "\t" + str(x.end_index) + "\t" + str(x.date_of_run).split(' ')[0] + "\t" + domain.interpro_id)
         key_to_data[x.dbentity_id] = data
 
     all_dbentity_ids = get_sorted_dbentity_ids(nex_session, taxonomy_id)
