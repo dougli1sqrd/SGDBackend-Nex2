@@ -89,7 +89,6 @@ def insert_dataset(curator_session, CREATED_BY, x):
                     dbxref_type = x['dbxref_type'],
                     date_public = x['date_public'],
                     parent_dataset_id = x['parent_dataset_id'],
-                    assay_id = x['assay_id'],
                     channel_count = x['channel_count'],
                     sample_count = x['sample_count'],
                     is_in_spell = x['is_in_spell'],
@@ -207,7 +206,6 @@ def get_one_dataset(request):
         data['dbxref_type'] = x.dbxref_type
         data['date_public'] = str(x.date_public).split(' ')[0]
         data['parent_dataset_id'] = x.parent_dataset_id
-        data['assay_id'] = x.assay_id
         data['channel_count'] = x.channel_count
         data['sample_count'] = x.sample_count
         data['is_in_spell'] = x.is_in_spell
@@ -249,6 +247,7 @@ def get_one_dataset(request):
                              'taxonomy_id': s.taxonomy_id,
                              'sample_order': s.sample_order,
                              'dbxref_id': s.dbxref_id,
+                             'assay_id': s.assay_id,
                              'dbxref_type': s.dbxref_type,
                              'biosample': s.biosample,
                              'strain_name': s.strain_name,
@@ -371,11 +370,6 @@ def read_dataset_data_from_file(file):
                 error_message = error_message + "<br>The desc is too long. length=" + str(len(description)) + " for " + format_name  
                 continue
 
-            assay_id = obi_name_to_id.get(str(row.iat[8]).split('|')[0])
-            if assay_id is None:
-                error_message = error_message + "<br>The OBI format_name: " + str(row.iat[8]) + " is not in the database."
-                continue
-
             reference_ids = []
             pmidStr = str(row.iat[18]).replace('|', '')
             if pmidStr.isdigit():
@@ -386,7 +380,6 @@ def read_dataset_data_from_file(file):
                         error_message = error_message + "<br>The PMID: " + str(pmid) + " is not in the database."
                         continue
                     reference_ids.append(reference_id)
-
             
             keywords = str(row.iat[17]).replace('"', '').split('|')
             keyword_ids = []
@@ -433,7 +426,6 @@ def read_dataset_data_from_file(file):
                       "display_name": str(display_name).replace('"', ''),
                       "obj_url": "/dataset/" + format_name,
                       "sample_count": sample_count,
-                      "assay_id": assay_id,
                       "is_in_spell": is_in_spell,
                       "is_in_browser": is_in_browser,
                       "dbxref_id": dbxref_id,
@@ -583,11 +575,17 @@ def read_dataset_sample_data_from_file(file):
 
             display_name = str(row.iat[1]).replace('"', '')
             
-            sample_order = row.iat[8]
+            sample_order = row.iat[10]
             if str(sample_order) == 'nan':
                 error_message = error_message + "<br>Missing sample order for one of the sample for dataset: " + dataset_format_name 
                 continue
             sample_order = int(sample_order)
+
+            assay_id = obi_name_to_id.get(str(row.iat[8]).split('|')[0])
+            if assay_id is None:
+                error_message = error_message + "<br>The OBI format_name: " + str(row.iat[8]) + " is not in the database."
+	        continue
+            
             description = ""
             if str(row.iat[2]) != 'nan':
                 description = row.iat[2]
@@ -601,12 +599,12 @@ def read_dataset_sample_data_from_file(file):
             
             if str(row.iat[5]) != 'nan':
                 entry['biosample'] = row.iat[5]
-            if str(row.iat[7]) != 'nan':
-                entry['strain_name'] = row.iat[7]
-            if len(df.columns) == 10 and str(row.iat[9]) != 'nan':
-                taxonomy_id = taxid_to_taxonomy_id.get("TAX:"+row.iat[9])
+            if str(row.iat[9]) != 'nan':
+                entry['strain_name'] = row.iat[9]
+            if len(df.columns) == 12 and str(row.iat[11]) != 'nan':
+                taxonomy_id = taxid_to_taxonomy_id.get("TAX:"+row.iat[11])
                 if taxonomy_id is None:
-                    error_message = error_message + "<br>The taxid = " + row.iat[9] + " for: " + dataset_format_name + " is not in TAXONOMY table."
+                    error_message = error_message + "<br>The taxid = " + row.iat[11] + " for: " + dataset_format_name + " is not in TAXONOMY table."
                 else:
                     entry['taxonomy_id'] = taxonomy_id
             GSM = str(row.iat[3])
@@ -649,6 +647,7 @@ def insert_dataset_samples(curator_session, CREATED_BY, data):
                           sample_order = x['sample_order'],
                           description = x.get('description'),
                           biosample = x.get('biosample'),
+                          assay_id = x['assay_id'],
                           strain_name = x.get('strain_name'),
                           taxonomy_id = x.get('taxonomy_id'),
                           dbxref_type = x.get('dbxref_type'),

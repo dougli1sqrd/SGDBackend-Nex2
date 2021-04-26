@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import fetchData from '../../lib/fetchData';
 import { connect } from 'react-redux';
 import { setError, setMessage } from '../../actions/metaActions';
+import AutocompleteSection from '../phenotype/autocompleteSection';
 
 const UPDATE_SAMPLE = '/datasetsample_update';
 const DELETE_SAMPLE = '/datasetsample_delete';
@@ -122,6 +123,14 @@ class OneSample extends Component {
           </div>
         </div>
 
+        {/* assay_id */}
+        <div className='row'>
+          <div className='columns medium-12 small-12'>
+            <div> <label> assay_id (OBI Term) </label> </div>
+            <AutocompleteSection sec_title='' id='assay_id' value1='display_name' value2='' selectedIdName='assay_id' placeholder='Enter OBI Term' onOptionChange={this.props.onOptionChange} selectedId={this.props.dataset.assay_id} setNewValue={false} />
+          </div>
+        </div>
+	
         {/* update & delete button */}
         <div className='row'>	    
           <div className='columns medium-6 small-6'>
