@@ -584,7 +584,7 @@ def read_dataset_sample_data_from_file(file):
             assay_id = obi_name_to_id.get(str(row.iat[8]).split('|')[0])
             if assay_id is None:
                 error_message = error_message + "<br>The OBI format_name: " + str(row.iat[8]) + " is not in the database."
-	        continue
+                continue
             
             description = ""
             if str(row.iat[2]) != 'nan':
