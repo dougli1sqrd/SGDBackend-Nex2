@@ -1081,8 +1081,8 @@ def update_datasetsample(request):
         sample_order = request.params.get('sample_order', '') 
         description = request.params.get('description', '')
 
-        if format_name == '' or display_name == '' or sample_order == '':
-            return HTTPBadRequest(body=json.dumps({'error': "format_name, display_name, and sample_order are required fields."}), content_type='text/json')
+        if format_name == '' or display_name == '' or sample_order == '' or assay_id == '':
+            return HTTPBadRequest(body=json.dumps({'error': "format_name, display_name, sample_order, and assay_id are required fields."}), content_type='text/json')
         update = 0
         if format_name != d.format_name:
             d.format_name = format_name
@@ -1111,15 +1111,6 @@ def update_datasetsample(request):
         if description != d.description:
             d.description = description
             update = 1
-
-        if assay_id == '':
-            return HTTPBadRequest(body=json.dumps({'error': "assay_id is required."}), content_type='text/json')
-
-
-        
-        return HTTPBadRequest(body=json.dumps({'error': "assay_id = " + str(assay_id) + ", old assay_id=" + str(d.assay_id) }), content_type='text/json')
-
-        
 
         if str(assay_id).isdigit():
             assay_id = int(assay_id)
