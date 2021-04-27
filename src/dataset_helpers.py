@@ -1114,12 +1114,19 @@ def update_datasetsample(request):
 
         if assay_id == '':
             return HTTPBadRequest(body=json.dumps({'error': "assay_id is required."}), content_type='text/json')
+
+
+        
+        return HTTPBadRequest(body=json.dumps({'error': "assay_id = " + str(assay_id) + ", old assay_id=" + str(d.assay_id) }), content_type='text/json')
+
+        
+
         if str(assay_id).isdigit():
             assay_id = int(assay_id)
         if assay_id != d.assay_id:
             d.assay_id = assay_id
             update = 1
-        
+
         success_message = ''
         if update == 1:
             curator_session.add(d)
