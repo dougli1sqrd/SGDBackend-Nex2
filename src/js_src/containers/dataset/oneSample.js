@@ -115,19 +115,19 @@ class OneSample extends Component {
           </div>
         </div>
 
-        {/* description */}
-        <div className='row'>
-          <div className='columns medium-12 small-12'>
-            <div> <label> description </label> </div>
-            <input type='text' name='description' value={this.state.data.description} onChange={this.handleChange.bind(this)} />
-          </div>
-        </div>
-
         {/* assay_id */}
         <div className='row'>
           <div className='columns medium-12 small-12'>
             <div> <label> assay_id (OBI Term) </label> </div>
             <AutocompleteSection sec_title='' id='assay_id' value1='display_name' value2='' selectedIdName='assay_id' placeholder='Enter OBI Term' onOptionChange={this.props.onOptionChange} selectedId={this.state.data.assay_id} setNewValue={false} />
+          </div>
+        </div>
+
+        {/* description */}
+        <div className='row'>
+          <div className='columns medium-12 small-12'>
+            <div> <label> description </label> </div>
+            <input type='text' name='description' value={this.state.data.description} onChange={this.handleChange.bind(this)} />
           </div>
         </div>
 	
