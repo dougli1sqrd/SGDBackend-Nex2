@@ -908,14 +908,17 @@ def update_dataset(request):
         for pmid in pmid_list:
             if pmid == '':
                 continue
-            ref = curator_session.query(Referencedbentity).filter_by(pmid=int(pmid)).one_or_none()
-            if ref is None:
-                return HTTPBadRequest(body=json.dumps({'error': 'pmid = ' + pmid + ' is not in the database.'}), content_type='text/json')
-            reference_id = ref.dbentity_id
-            if reference_id not in all_ref_ids_DB:
-                insert_dataset_reference(curator_session, CREATED_BY, source_id, dataset_id, reference_id)
-                success_message = success_message + "<br>pmid '" + pmid + "' has been added for this dataset."
-            all_ref_ids_NEW[reference_id] = 1
+            if str(pmid).isdigit():
+                ref = curator_session.query(Referencedbentity).filter_by(pmid=int(pmid)).one_or_none()
+                if ref is None:
+                    return HTTPBadRequest(body=json.dumps({'error': 'pmid = ' + pmid + ' is not in the database.'}), content_type='text/json')
+                reference_id = ref.dbentity_id
+                if reference_id not in all_ref_ids_DB:
+                    insert_dataset_reference(curator_session, CREATED_BY, source_id, dataset_id, reference_id)
+                    success_message = success_message + "<br>pmid '" + pmid + "' has been added for this dataset."
+                all_ref_ids_NEW[reference_id] = 1
+            else:
+                return HTTPBadRequest(body=json.dumps({'error': 'pmid = ' + pmid + ' is not valid.'}), content_type='text/json')
                 
         for reference_id in all_ref_ids_DB:
             if reference_id not in all_ref_ids_NEW:
