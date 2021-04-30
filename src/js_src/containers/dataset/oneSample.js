@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import fetchData from '../../lib/fetchData';
 import { connect } from 'react-redux';
 import { setError, setMessage } from '../../actions/metaActions';
-import AutocompleteSection from '../phenotype/autocompleteSection';
+import AutocompleteSection from './autocompleteSection';
+
+const GET_OBI = '/get_obi';
 
 const UPDATE_SAMPLE = '/datasetsample_update';
 const DELETE_SAMPLE = '/datasetsample_delete';
@@ -18,6 +20,7 @@ class OneSample extends Component {
     this.handleDelete = this.handleDelete.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.state = {
+      obiOptions = [],	  
       data: {},
       format_name: null,
     };
@@ -25,6 +28,7 @@ class OneSample extends Component {
 
   componentDidMount() {
     this.setData();
+    this.getOBI();
   }	
     
   handleUpdate(e) {
@@ -64,6 +68,14 @@ class OneSample extends Component {
     this.setState({ data: currentSample });  
   }
 
+  getOBI() {
+    fetchData(GET_OBI, {
+      type: 'GET'
+    }).then(data => {
+      this.setState({ obiOptions: data});
+    }).catch(err => this.props.dispatch(setError(err.error)));
+  }
+	  
   setData() {
     this.setState({ data: this.props.data });
   }
@@ -119,7 +131,7 @@ class OneSample extends Component {
         <div className='row'>
           <div className='columns medium-12 small-12'>
             <div> <label> assay_id (OBI Term) </label> </div>
-            <AutocompleteSection sec_title='' id='assay_id' value1='display_name' value2='' selectedIdName='assay_id' placeholder='Enter OBI Term' onOptionChange={this.props.onOptionChange} selectedId={this.state.data.assay_id} setNewValue={false} />
+            <AutocompleteSection sec_title='' id='assay_id' value1='display_name' value2='' selectedIdName='assay_id' options={this.state.obiOptions} placeholder='Enter OBI Term' onOptionChange={this.props.onOptionChange} selectedId={this.state.data.assay_id} setNewValue={false} />
           </div>
         </div>
 
