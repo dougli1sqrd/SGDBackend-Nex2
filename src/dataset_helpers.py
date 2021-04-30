@@ -491,7 +491,11 @@ def insert_datasets(curator_session, CREATED_BY, data):
                 insert_dataset_url(curator_session, CREATED_BY, x['source_id'], dataset_id, type, url)
 
         # datasetlab
-        if x['lab_name'] and x['lab_location']:
+        if x['lab_name'] or x['lab_location']:
+            if x['lab_name'] == '' or  x['lab_name'] is None:
+                 x['lab_name'] = 'Unknown'
+            if x['lab_location'] == '' or x['lab_location'] is None:
+                x['lab_location'] = 'Unknown'
             insert_datasetlab(curator_session, CREATED_BY, x['source_id'], dataset_id,
                               x['lab_name'], x['lab_location'], x['colleague_id'])
 
