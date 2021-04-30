@@ -947,7 +947,8 @@ def update_dataset(request):
                 success_message = success_message + "<br>URL '" + url_set + "' has been removed for this dataset."
                 curator_session.delete(x)
 
-        # return HTTPBadRequest(body=json.dumps({'error': "dataset_url table"}), content_type='text/json')
+        return HTTPBadRequest(body=json.dumps({'error': "dataset_url table"}), content_type='text/json')
+
     
         ## datasetlab
         
