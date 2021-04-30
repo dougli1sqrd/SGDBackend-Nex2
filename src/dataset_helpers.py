@@ -383,7 +383,13 @@ def read_dataset_data_from_file(file):
                         error_message = error_message + "<br>The PMID: " + str(pmid) + " is not in the database."
                         continue
                     reference_ids.append(reference_id)
+
+
+            ###  testing here
+            reference_ids = pmids
+
             
+                    
             keywords = str(row.iat[15]).replace('"', '').split('|')
             keyword_ids = []
             for keyword in keywords:
