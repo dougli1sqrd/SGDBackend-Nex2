@@ -75,7 +75,7 @@ class OneSample extends Component {
       this.setState({ obiOptions: data});
     }).catch(err => this.props.dispatch(setError(err.error)));
   }
-	  
+
   setData() {
     this.setState({ data: this.props.data });
   }
