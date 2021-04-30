@@ -385,9 +385,9 @@ def read_dataset_data_from_file(file):
             keywords = str(row.iat[15]).replace('"', '').split('|')
             keyword_ids = []
             for keyword in keywords:
+                keyword = keyword.strip()
                 if str(keyword) == 'nan' or keyword == '':
                     continue
-                keyword = keyword.strip()
                 keyword_id = keyword_to_id.get(keyword)
                 if keyword_id is None:
                     error_message = error_message + "<br>The keyword: '" + keyword + "' is not in the database."
