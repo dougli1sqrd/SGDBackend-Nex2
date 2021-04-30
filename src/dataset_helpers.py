@@ -370,9 +370,6 @@ def read_dataset_data_from_file(file):
                 continue
 
             reference_ids = []
-            # pmidStr = str(row.iat[16]).replace('|', '')
-            #if pmidStr.isdigit():
-            #    pmids = str(row.iat[16]).replace(" ", "").split("|")
             pmids = str(row.iat[16]).replace(' ', '').split('|')
             for pmid in pmids:
                 if pmid == '':
@@ -523,10 +520,8 @@ def load_dataset(request):
         if error_message != '':
             return HTTPBadRequest(body=json.dumps({'error': error_message}), content_type='text/json') 
         
-        return HTTPBadRequest(body=json.dumps({'error': str(data)}), content_type='text/json')
+        # return HTTPBadRequest(body=json.dumps({'error': str(data)}), content_type='text/json')
 
-
-        
         dataset_added = insert_datasets(curator_session, CREATED_BY, data)
 
         success_message = ''
