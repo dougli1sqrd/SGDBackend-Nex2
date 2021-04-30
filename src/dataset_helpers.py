@@ -1080,11 +1080,6 @@ def update_datasetsample(request):
         assay_id = request.params.get('assay_id', '')
         sample_order = request.params.get('sample_order', '') 
         description = request.params.get('description', '')
-
-
-        return HTTPBadRequest(body=json.dumps({'error': "new assay_id="+str(assay_id) + ", db assay_id=" + str(d.assay_id)}), content_type='text/json')
-        
-    
         
         if format_name == '' or display_name == '' or sample_order == '' or assay_id == '':
             return HTTPBadRequest(body=json.dumps({'error': "format_name, display_name, sample_order, and assay_id are required fields."}), content_type='text/json')
