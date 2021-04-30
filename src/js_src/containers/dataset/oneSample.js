@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import fetchData from '../../lib/fetchData';
 import { connect } from 'react-redux';
 import { setError, setMessage } from '../../actions/metaActions';
-import AutocompleteSection from './autocompleteSection';
+// import AutocompleteSection from './autocompleteSection';
 
 const GET_OBI = '/get_obi';
 
