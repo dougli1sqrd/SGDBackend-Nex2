@@ -845,6 +845,9 @@ def update_dataset(request):
         all_keyword_ids_NEW = {}
         keyword_to_id = {}
         for kw in kws:
+            kw = kw.strip()
+            if kw == '':
+                continue
             k = curator_session.query(Keyword).filter_by(display_name=kw).one_or_none()
             if k is None:
                 return HTTPBadRequest(body=json.dumps({'error': "The keyword: "+kw + " is not in the database."}), content_type='text/json')
