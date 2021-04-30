@@ -1112,10 +1112,8 @@ def update_datasetsample(request):
             d.description = description
             update = 1
 
-        if str(assay_id).isdigit():
-            assay_id = int(assay_id)
-        if assay_id != d.assay_id:
-            d.assay_id = assay_id
+        if int(assay_id) != d.assay_id:
+            d.assay_id = int(assay_id)
             update = 1
 
         success_message = ''
