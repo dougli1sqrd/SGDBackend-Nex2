@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { setError } from '../../actions/metaActions';
 import { DataList } from 'react-datalist-field';
 
 class AutocompleteSection extends Component {
