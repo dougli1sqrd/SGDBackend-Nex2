@@ -906,6 +906,8 @@ def update_dataset(request):
 
         all_ref_ids_NEW = {}
         for pmid in pmid_list:
+            if pmid == '':
+                continue
             ref = curator_session.query(Referencedbentity).filter_by(pmid=int(pmid)).one_or_none()
             if ref is None:
                 return HTTPBadRequest(body=json.dumps({'error': 'pmid = ' + pmid + ' is not in the database.'}), content_type='text/json')
@@ -921,7 +923,11 @@ def update_dataset(request):
                 success_message = success_message + "<br>pmid '" + pmid + "' has been removed for this dataset."
                 curator_session.delete(x)
 
+
+                
         return HTTPBadRequest(body=json.dumps({'error': "dataset_reference table"}), content_type='text/json')
+
+
     
         ## dataset_url
 
