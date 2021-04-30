@@ -377,18 +377,13 @@ def read_dataset_data_from_file(file):
             for pmid in pmids:
                 if pmid == '':
                     continue
+                pmid = pmid.split('.')[0]
                 if str(pmid).isdigit():
                     reference_id = pmid_to_reference_id.get(int(pmid))
                     if reference_id is None:
                         error_message = error_message + "<br>The PMID: " + str(pmid) + " is not in the database."
                         continue
-                    reference_ids.append(reference_id)
-
-
-            ###  testing here
-            reference_ids = pmids
-
-            
+                    reference_ids.append(reference_id)            
                     
             keywords = str(row.iat[15]).replace('"', '').split('|')
             keyword_ids = []
