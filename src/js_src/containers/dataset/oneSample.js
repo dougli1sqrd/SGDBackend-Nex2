@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import fetchData from '../../lib/fetchData';
 import { connect } from 'react-redux';
 import { setError, setMessage } from '../../actions/metaActions';
-// import AutocompleteSection from './autocompleteSection';
+import AutocompleteSection from './autocompleteSection';
 
 const GET_OBI = '/get_obi';
 
@@ -75,7 +75,7 @@ class OneSample extends Component {
       this.setState({ obiOptions: data});
     }).catch(err => this.props.dispatch(setError(err.error)));
   }
-
+	  
   setData() {
     this.setState({ data: this.props.data });
   }
@@ -128,6 +128,12 @@ class OneSample extends Component {
         </div>
 
         {/* assay_id */}
+        <div className='row'>
+          <div className='columns medium-12 small-12'>
+            <div> <label> assay_id (OBI Term) </label> </div>
+            <AutocompleteSection sec_title='' id='assay_id' value1='display_name' value2='' selectedIdName='assay_id' options={this.state.obiOptions} placeholder='Enter OBI Term' onOptionChange={this.props.onOptionChange} selectedId={this.state.data.assay_id} setNewValue={false} />
+          </div>
+        </div>
 
         {/* description */}
         <div className='row'>
