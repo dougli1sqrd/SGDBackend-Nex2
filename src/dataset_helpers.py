@@ -925,12 +925,6 @@ def update_dataset(request):
                 x = all_ref_ids_DB[reference_id]
                 success_message = success_message + "<br>pmid '" + pmid + "' has been removed for this dataset."
                 curator_session.delete(x)
-
-
-                
-        return HTTPBadRequest(body=json.dumps({'error': "dataset_reference table"}), content_type='text/json')
-
-
     
         ## dataset_url
 
