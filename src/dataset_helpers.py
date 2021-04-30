@@ -370,10 +370,14 @@ def read_dataset_data_from_file(file):
                 continue
 
             reference_ids = []
-            pmidStr = str(row.iat[16]).replace('|', '')
-            if pmidStr.isdigit():
-                pmids = str(row.iat[16]).replace(" ", "").split("|")
-                for pmid in pmids:
+            # pmidStr = str(row.iat[16]).replace('|', '')
+            #if pmidStr.isdigit():
+            #    pmids = str(row.iat[16]).replace(" ", "").split("|")
+            pmids = str(row.iat[16]).replace(' ', '').split('|')
+            for pmid in pmids:
+                if pmid == '':
+                    continue
+                if str(pmid).isdigit():
                     reference_id = pmid_to_reference_id.get(int(pmid))
                     if reference_id is None:
                         error_message = error_message + "<br>The PMID: " + str(pmid) + " is not in the database."
