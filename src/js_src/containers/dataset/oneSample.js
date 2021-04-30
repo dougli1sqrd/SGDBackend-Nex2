@@ -20,7 +20,7 @@ class OneSample extends Component {
     this.handleDelete = this.handleDelete.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.state = {
-      obiOptions = [],	  
+      obiOptions: [],	  
       data: {},
       format_name: null,
     };
