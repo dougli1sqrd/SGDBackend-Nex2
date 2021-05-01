@@ -971,8 +971,8 @@ def update_dataset(request):
             if labNew is None or labNew == '':
                 continue
             [lab_name, lab_location, colleague_format_name] = labNew.split('|')
-            lab_name = lab_name.replace('lab_name: ', '')
-            lab_location = lab_location.replace('lab_location: ', '')
+            lab_name = lab_name.replace('lab_name: ', '').replace('Unknown', '')
+            lab_location = lab_location.replace('lab_location: ', '').replace('Unknown', '')
             if lab_name == '' and lab_location == '':
                 continue
             if lab_name == '':
