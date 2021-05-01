@@ -973,6 +973,12 @@ def update_dataset(request):
             [lab_name, lab_location, colleague_format_name] = labNew.split('|')
             lab_name = lab_name.replace('lab_name: ', '')
             lab_location = lab_location.replace('lab_location: ', '')
+            if lab_name == '' and lab_location == '':
+                continue
+            if lab_name == '':
+                lab_name = 'Unknown'
+            if lab_location == '':
+                lab_location = 'Unknown'
             colleague_format_name = colleague_format_name.replace('colleague_format_name: ', '')
             coll = curator_session.query(Colleague).filter_by(format_name=colleague_format_name).one_or_none()
             colleague_id = None
