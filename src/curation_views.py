@@ -3074,7 +3074,7 @@ def regulation_file(request):
                     regulation_existing['regulator_type'] = regulator_type_current
                 else:
                     # list_of_regulations_errors.append('Error in regulator type on row ' + str(index) + ', column ' + column)
-                    error = "The regulator type " + "'" + regulator_type_current + "' is not in the allowed list. Check 'regulator type' pulldown to see the allowded list."
+                    error = "The regulator type " + "'" + regulator_type_current + "' is not in the allowed list. Check 'regulator type' pulldown to see the allowed list."
                     if error not in list_of_regulations_errors:
                         list_of_regulations_errors.append(error)
                     continue
@@ -3093,7 +3093,7 @@ def regulation_file(request):
                 if regulation_type_current in list_of_regulation_types:
                     regulation_existing['regulation_type'] = regulation_type_current
                 else:
-                    error = "The regulation type " + "'" + regulation_type_current + "' is not in the allowed list. Check 'regulation type' pulldown to see the allowded list."
+                    error = "The regulation type " + "'" + regulation_type_current + "' is not in the allowed list. Check 'regulation type' pulldown to see the allowed list."
                     if error not in list_of_regulations_errors:
                         list_of_regulations_errors.append(error)
                     continue
